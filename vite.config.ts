@@ -10,5 +10,5 @@ export default defineConfig({
   define: {
     global: 'window',  // 필요 시 추가
   },
-  base: '/product-recall-info/',
+  base: '/web-hub/',
 });
