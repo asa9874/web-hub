@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Rocket, Code, Mail, Layers, Terminal, ExternalLink, X, Globe, Cpu, Music, Image as ImageIcon, Database, Cloud, Lock, Wifi, Zap, Anchor } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Rocket, Code, Mail, Layers, Terminal, ExternalLink, X, Cpu, Music, Image as ImageIcon, Database, Cloud, Lock, Wifi, Zap, Anchor, BookOpen } from 'lucide-react';
 
 // --- Types ---
 interface NodeData {
@@ -77,6 +78,18 @@ const generateNodes = (): NodeData[] => {
       size: 'sm',
       link: '#about',
       image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800', // Earth/Space
+    },
+    {
+      id: 'networkquiz',
+      title: 'NETWORK QUIZ',
+      subtitle: 'Learning Game',
+      description: '109개의 필수 네트워크 약어를 게임 형식으로 학습할 수 있습니다. 퀴즈 모드와 무한 단어장 모드로 효과적으로 암기하세요.',
+      icon: BookOpen,
+      x: 300,
+      y: 100,
+      size: 'md',
+      link: '/web-hub/network-quiz',
+      image: 'https://images.unsplash.com/photo-1562883676-8c6fbf064050?auto=format&fit=crop&q=80&w=800', // Education/Learning
     },
   ];
 
@@ -284,9 +297,17 @@ const NodeItem: React.FC<NodeItemProps> = React.memo(({ data, isSelected, onClic
 interface InfoPanelProps {
   data: NodeData | null;
   onClose: () => void;
+  onNavigate?: (path: string) => void;
 }
 
-const InfoPanel: React.FC<InfoPanelProps> = ({ data, onClose }) => {
+const InfoPanel: React.FC<InfoPanelProps> = ({ data, onClose, onNavigate }) => {
+  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    const link = data?.link || '';
+    if (link.startsWith('/')) {
+      e.preventDefault();
+      onNavigate?.(link);
+    }
+  };
   return (
     <div className={`
       fixed inset-y-0 left-0 z-40 h-full flex flex-col justify-center
@@ -350,8 +371,9 @@ const InfoPanel: React.FC<InfoPanelProps> = ({ data, onClose }) => {
 
             <a 
               href={data.link}
-              target="_blank"
-              rel="noopener noreferrer"
+              onClick={handleLinkClick}
+              target={data.link.startsWith('/') ? undefined : "_blank"}
+              rel={data.link.startsWith('/') ? undefined : "noopener noreferrer"}
               className="group relative inline-flex items-center justify-center px-10 py-5 bg-white text-black font-bold tracking-[0.2em] hover:bg-gray-200 transition-all overflow-hidden rounded-sm"
             >
               <span className="relative z-10 mr-4">INITIATE CONNECTION</span>
@@ -368,6 +390,7 @@ const InfoPanel: React.FC<InfoPanelProps> = ({ data, onClose }) => {
 // --- Main App Component ---
 
 const App: React.FC = () => {
+  const navigate = useNavigate();
   const [selectedNode, setSelectedNode] = useState<NodeData | null>(null);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [scale, setScale] = useState(1);
@@ -503,7 +526,11 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      <InfoPanel data={selectedNode} onClose={() => setSelectedNode(null)} />
+      <InfoPanel 
+        data={selectedNode} 
+        onClose={() => setSelectedNode(null)}
+        onNavigate={navigate}
+      />
 
       <div className={`absolute bottom-6 right-8 z-30 text-right font-mono text-[10px] text-white/30 transition-opacity ${selectedNode ? 'opacity-0' : 'opacity-100'}`}>
         <div className="mb-1">POS X: {Math.round(-pan.x)}</div>
