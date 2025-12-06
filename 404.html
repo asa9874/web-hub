@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/web-hub/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web Hub</title>
+    <script>
+      // GitHub Pages SPA 라우팅 해결
+      // 이 스크립트는 404 에러 페이지에서 실행되어
+      // 경로 정보를 저장한 후 index.html로 리다이렉트합니다
+      const fullPath = window.location.pathname;
+      if (fullPath !== '/') {
+        sessionStorage.setItem('redirect', fullPath);
+      }
+      
+      // index.html로 리다이렉트
+      window.location.replace('/');
+    </script>
+  </head>
+  <body>
+    Redirecting to home page...
+  </body>
+</html>
