@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
 import NetworkQuiz from './NetworkQuiz/NetworkQuiz.tsx'
+import NeonSpace from './NeonSpace/NeonSpace.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -11,6 +12,7 @@ createRoot(document.getElementById('root')!).render(
       <Routes>
         <Route path="/web-hub" element={<App />} />
         <Route path="/web-hub/network-quiz" element={<NetworkQuiz />} />
+        <Route path="/web-hub/neonspace" element={<NeonSpace />} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,

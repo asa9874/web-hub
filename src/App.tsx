@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Rocket, Code, Mail, Layers, Terminal, ExternalLink, X, Cpu, Music, Image as ImageIcon, Database, Cloud, Lock, Wifi, Zap, Anchor, BookOpen } from 'lucide-react';
+import { ExternalLink, X, Sparkles, BookOpen } from 'lucide-react';
 
 // --- Types ---
 interface NodeData {
@@ -20,66 +20,6 @@ interface NodeData {
 const generateNodes = (): NodeData[] => {
   const baseNodes: NodeData[] = [
     {
-      id: 'portfolio',
-      title: 'PORTFOLIO',
-      subtitle: 'Main Projects',
-      description: '지난 3년간 진행해온 주요 웹/앱 프로젝트 아카이브입니다. React와 Node.js를 활용한 풀스택 프로젝트들을 확인하실 수 있습니다.',
-      icon: Layers,
-      x: 0,
-      y: 0,
-      size: 'lg',
-      link: '#portfolio',
-      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800', // Business/Analytics
-    },
-    {
-      id: 'blog',
-      title: 'TECH BLOG',
-      subtitle: 'Dev Log & Thoughts',
-      description: '개발 과정에서의 트러블 슈팅, 신기술 리서치, 그리고 개인적인 회고를 기록하는 기술 블로그 공간입니다. 꾸준한 기록을 통해 성장 과정을 증명합니다.',
-      icon: Code,
-      x: -300,
-      y: -200,
-      size: 'md',
-      link: '#blog',
-      image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800', // Coding screen
-    },
-    {
-      id: 'contact',
-      title: 'CONTACT',
-      subtitle: 'Get in Touch',
-      description: '협업 제안이나 문의사항이 있으시다면 언제든 연락주세요. 새로운 기회와 만남을 항상 환영합니다.',
-      icon: Mail,
-      x: 350,
-      y: -150,
-      size: 'md',
-      link: '#contact',
-      image: 'https://images.unsplash.com/photo-1516387938699-a93567ec168e?auto=format&fit=crop&q=80&w=800', // Handshake/Connection
-    },
-    {
-      id: 'lab',
-      title: 'LABORATORY',
-      subtitle: 'Experiments',
-      description: '실험적인 UI/UX, Three.js 3D 인터랙션, AI 모델 테스트 등 정제되지 않은 날것의 코드들이 모여있는 실험실입니다.',
-      icon: Terminal,
-      x: -250,
-      y: 300,
-      size: 'sm',
-      link: '#lab',
-      image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=800', // Technology/Chip
-    },
-    {
-      id: 'about',
-      title: 'ABOUT ME',
-      subtitle: 'Profile',
-      description: '저는 우주를 사랑하는 프론트엔드 개발자입니다. 사용자 경험을 우주처럼 넓고 깊게 확장하는 것을 목표로 합니다.',
-      icon: Rocket,
-      x: 250,
-      y: 250,
-      size: 'sm',
-      link: '#about',
-      image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=800', // Earth/Space
-    },
-    {
       id: 'networkquiz',
       title: 'NETWORK QUIZ',
       subtitle: 'Learning Game',
@@ -91,36 +31,21 @@ const generateNodes = (): NodeData[] => {
       link: '/web-hub/network-quiz',
       image: 'https://images.unsplash.com/photo-1562883676-8c6fbf064050?auto=format&fit=crop&q=80&w=800', // Education/Learning
     },
+    {
+      id: 'neonspace',
+      title: 'NEON SPACE',
+      subtitle: 'Interactive Art',
+      description: '네온 글로우 효과와 상호작용 애니메이션을 통한 시각적 예술 공간입니다. 창의적인 UI/UX 표현의 경계를 탐험합니다.',
+      icon: Sparkles,
+      x: -200,
+      y: 200,
+      size: 'md',
+      link: '/web-hub/neonspace',
+      image: 'https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?auto=format&fit=crop&q=80&w=800', // Neon/Tech
+    },
   ];
 
-  const extraNodes: NodeData[] = [
-    { id: 'ai', title: 'AI MODEL', subtitle: 'Deep Learning', icon: Cpu, desc: 'TensorFlow.js를 활용한 브라우저 기반 이미지 인식 모델 데모입니다.', image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800' },
-    { id: 'music', title: 'LO-FI RADIO', subtitle: 'Streaming', icon: Music, desc: '코딩할 때 듣기 좋은 Lo-fi 음악 플레이어 사이드 프로젝트입니다.', image: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&q=80&w=800' },
-    { id: 'gallery', title: 'GALLERY', subtitle: 'Photography', icon: ImageIcon, desc: '취미로 찍은 필름 사진들을 전시해둔 가상 갤러리입니다.', image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&q=80&w=800' },
-    { id: 'server', title: 'SERVER STATUS', subtitle: 'Monitoring', icon: Database, desc: '홈 서버 및 AWS 인스턴스들의 상태를 실시간으로 모니터링하는 대시보드입니다.', image: 'https://images.unsplash.com/photo-1558494949-ef526b0042a0?auto=format&fit=crop&q=80&w=800' },
-    { id: 'cloud', title: 'CLOUD STORAGE', subtitle: 'File System', icon: Cloud, desc: 'AWS S3를 이용한 개인용 클라우드 스토리지 인터페이스입니다.', image: 'https://images.unsplash.com/photo-1544197150-b99a580bbc7f?auto=format&fit=crop&q=80&w=800' },
-    { id: 'security', title: 'SECURITY', subtitle: 'Auth System', icon: Lock, desc: 'JWT 및 OAuth 2.0을 구현한 인증 시스템 데모입니다.', image: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&q=80&w=800' },
-    { id: 'iot', title: 'SMART HOME', subtitle: 'IoT Control', icon: Wifi, desc: '라즈베리 파이를 이용한 홈 IoT 제어 패널입니다.', image: 'https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?auto=format&fit=crop&q=80&w=800' },
-    { id: 'perf', title: 'OPTIMIZATION', subtitle: 'Performance', icon: Zap, desc: '웹 성능 최적화 기법들을 테스트하고 기록한 문서입니다.', image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800' },
-    { id: 'arch', title: 'ARCHITECTURE', subtitle: 'System Design', icon: Anchor, desc: '마이크로서비스 아키텍처 설계 다이어그램 모음입니다.', image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&q=80&w=800' },
-  ].map((item, i) => {
-    const angle = (i / 9) * Math.PI * 2;
-    const distance = 500 + Math.random() * 400;
-    return {
-      id: item.id,
-      title: item.title,
-      subtitle: item.subtitle,
-      description: item.desc,
-      icon: item.icon,
-      x: Math.cos(angle) * distance,
-      y: Math.sin(angle) * distance,
-      size: Math.random() > 0.5 ? 'md' : 'sm',
-      link: `#${item.id}`,
-      image: item.image,
-    };
-  });
-
-  return [...baseNodes, ...extraNodes];
+  return baseNodes;
 };
 
 const NODES = generateNodes();
