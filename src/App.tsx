@@ -28,7 +28,7 @@ const generateNodes = (): NodeData[] => {
       x: 300,
       y: 100,
       size: 'md',
-      link: '/web-hub/network-quiz',
+      link: '/network-quiz',
       image: 'https://images.unsplash.com/photo-1562883676-8c6fbf064050?auto=format&fit=crop&q=80&w=800', // Education/Learning
     },
     {
@@ -40,7 +40,7 @@ const generateNodes = (): NodeData[] => {
       x: -200,
       y: 200,
       size: 'md',
-      link: '/web-hub/neonspace',
+      link: '/neonspace',
       image: 'https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?auto=format&fit=crop&q=80&w=800', // Neon/Tech
     },
   ];

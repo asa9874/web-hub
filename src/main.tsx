@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { HashRouter, Routes, Route } from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
 import NetworkQuiz from './NetworkQuiz/NetworkQuiz.tsx'
@@ -8,12 +8,12 @@ import NeonSpace from './NeonSpace/NeonSpace.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
-        <Route path="/web-hub" element={<App />} />
-        <Route path="/web-hub/network-quiz" element={<NetworkQuiz />} />
-        <Route path="/web-hub/neonspace" element={<NeonSpace />} />
+        <Route path="/" element={<App />} />
+        <Route path="/network-quiz" element={<NetworkQuiz />} />
+        <Route path="/neonspace" element={<NeonSpace />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   </StrictMode>,
 )
