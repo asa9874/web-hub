@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ExternalLink, X, Sparkles, BookOpen } from 'lucide-react';
+import { ExternalLink, X, Sparkles, BookOpen, Wand2, Skull, Zap, Clock } from 'lucide-react';
 
 // --- Types ---
 interface NodeData {
@@ -42,6 +42,54 @@ const generateNodes = (): NodeData[] => {
       size: 'md',
       link: '/neonspace',
       image: 'https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?auto=format&fit=crop&q=80&w=800', // Neon/Tech
+    },
+    {
+      id: 'pixelsort',
+      title: 'PIXEL SORT',
+      subtitle: 'Audio Visualizer',
+      description: '이미지를 정렬 알고리즘으로 정렬하면서 시각화합니다. 오디오를 업로드하면 정렬 과정에 맞춰 사운드가 재생되어 독특한 경험을 만듭니다.',
+      icon: Wand2,
+      x: 200,
+      y: -200,
+      size: 'md',
+      link: '/pixel-sort',
+      image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800&q=80', // Pixel/Art
+    },
+    {
+      id: 'cthulhu',
+      title: 'FORBIDDEN LOG',
+      subtitle: 'Ancient Knowledge',
+      description: '광기의 일지... 옛 지배자의 각성을 기록하는 신성 모독적 문서. 당신의 이성을 잃어버릴 준비가 되었나요? 읽으면 돌이킬 수 없습니다.',
+      icon: Skull,
+      x: -300,
+      y: -100,
+      size: 'md',
+      link: '/cthulhu',
+      image: 'https://images.unsplash.com/photo-1580695287070-40c6b3b83b65?auto=format&fit=crop&q=80&w=800', // Dark/Horror
+    },
+    {
+      id: 'speedclicker',
+      title: 'SPEED CLICKER',
+      subtitle: 'Reaction Game',
+      description: 'AI와의 반사신경 대결! 떨어지는 타겟을 클릭하여 AI를 이기세요. 난이도를 조절하여 도전할 수 있으며, 당신의 반응속도를 테스트하는 재미있는 게임입니다.',
+      icon: Zap,
+      x: 100,
+      y: 250,
+      size: 'md',
+      link: '/speed-clicker',
+      image: 'https://images.unsplash.com/photo-1538481143235-a1a1f0eb3e99?auto=format&fit=crop&q=80&w=800', // Gaming/Action
+    },
+    {
+      id: 'schedule',
+      title: 'MY SCHEDULE',
+      subtitle: 'Time Management',
+      description: '일주일의 일정을 한눈에 보고 현재 진행중인 활동을 확인하세요. 실시간 시간표와 진행률을 통해 효율적인 시간 관리를 할 수 있습니다.',
+      icon: Clock,
+      x: -100,
+      y: -300,
+      size: 'md',
+      link: '/schedule',
+      image: 'https://images.unsplash.com/photo-1456365174547-68f85bca6905?auto=format&fit=crop&q=80&w=800', // Time/Schedule
     },
   ];
 

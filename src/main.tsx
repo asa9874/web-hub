@@ -5,6 +5,10 @@ import './index.css'
 import App from './App.tsx'
 import NetworkQuiz from './NetworkQuiz/NetworkQuiz.tsx'
 import NeonSpace from './NeonSpace/NeonSpace.tsx'
+import PixelSortVisualizer from './PixelSortVisualizer/PixelSortVisualizer.tsx'
+import CthulhuPage from './CthulhuPage/CthulhuPage.tsx'
+import SpeedClickerDuel from './SpeedClickerDuel/SpeedClickerDuel.tsx'
+import Scedule from './Scedule/Scedule.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -13,6 +17,10 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/" element={<App />} />
         <Route path="/network-quiz" element={<NetworkQuiz />} />
         <Route path="/neonspace" element={<NeonSpace />} />
+        <Route path="/pixel-sort" element={<PixelSortVisualizer />} />
+        <Route path="/cthulhu" element={<CthulhuPage />} />
+        <Route path="/speed-clicker" element={<SpeedClickerDuel />} />
+        <Route path="/schedule" element={<Scedule />} />
       </Routes>
     </HashRouter>
   </StrictMode>,
