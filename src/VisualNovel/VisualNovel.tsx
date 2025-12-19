@@ -5,7 +5,7 @@ import DialogueBox from './Components/DialogueBox';
 import ChoiceButtons from './Components/ChoiceButtons';
 import DialogueLog, { type DialogueLogEntry } from './Components/DialogueLog';
 import StoryEditor from './StoryEditor';
-import type { ScriptLine, ScriptScene, Character } from './types';
+import type { ScriptLine, ScriptScene } from './types';
 import config from './Script/config.json';
 
 const VisualNovel: React.FC = () => {
@@ -28,6 +28,10 @@ const VisualNovel: React.FC = () => {
   
   // Auto 모드 타이머
   const autoTimerRef = useRef<number | null>(null);
+  
+  // 오디오 관리
+  const bgmRef = useRef<HTMLAudioElement | null>(null);
+  const currentMusicRef = useRef<string | null>(null);
 
   // 씬 파일 로드
   useEffect(() => {
@@ -64,6 +68,39 @@ const VisualNovel: React.FC = () => {
           }]);
         }
 
+        // 배경음악 처리
+        if (line.music !== undefined) {
+          if (line.music === 'none') {
+            // 음악 정지
+            if (bgmRef.current) {
+              bgmRef.current.pause();
+              bgmRef.current.currentTime = 0;
+              bgmRef.current = null;
+              currentMusicRef.current = null;
+            }
+          } else if (line.music !== currentMusicRef.current) {
+            // 새로운 음악 재생
+            if (bgmRef.current) {
+              bgmRef.current.pause();
+              bgmRef.current = null;
+            }
+            
+            const audio = new Audio(`/web-hub/VisualNovel/Sound/music/${line.music}`);
+            audio.loop = true;
+            audio.volume = 0.5;
+            audio.play().catch(err => console.error('BGM 재생 실패:', err));
+            bgmRef.current = audio;
+            currentMusicRef.current = line.music;
+          }
+        }
+
+        // 효과음 처리
+        if (line.effectSound) {
+          const sfx = new Audio(`/web-hub/VisualNovel/Sound/effect/${line.effectSound}`);
+          sfx.volume = 0.5;
+          sfx.play().catch(err => console.error('효과음 재생 실패:', err));
+        }
+
         // 엔딩 처리
         if (line.isEnding) {
           // 엔딩 화면 표시 후 타이틀로 돌아가기 등의 처리 가능
@@ -88,6 +125,16 @@ const VisualNovel: React.FC = () => {
       };
     }
   }, [isAutoMode, currentLine, currentLineId]);
+
+  // 컴포넌트 언마운트 시 BGM 정리
+  useEffect(() => {
+    return () => {
+      if (bgmRef.current) {
+        bgmRef.current.pause();
+        bgmRef.current = null;
+      }
+    };
+  }, []);
 
   // 다음 대화로 진행
   const handleNext = useCallback(() => {

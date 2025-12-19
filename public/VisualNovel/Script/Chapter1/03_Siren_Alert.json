@@ -9,6 +9,8 @@
       "type": "dialogue",
       "character": "내레이터",
       "background": "school_hallway.svg",
+      "music": "battle_theme.mp3",
+      "effectSound": "siren.mp3",
       "text": "갑자기 학교 전체에 사이렌이 울려퍼졌다!",
       "nextScriptId": "sakura_reaction"
     },

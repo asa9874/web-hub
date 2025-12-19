@@ -23,6 +23,8 @@ export interface ScriptLine {
   characterImage?: string; // 캐릭터 이미지
   characterPosition?: CharacterPosition; // 캐릭터 위치
   text: string; // 대사 또는 선택지 질문
+  music?: string; // 배경음악 파일명 ("none"이면 음악 정지)
+  effectSound?: string; // 효과음 파일명
   choices?: Choice[]; // 선택지 배열 (type이 'choice'일 때)
   nextScriptId?: string; // 씬 파일 내 다음 라인
   nextSceneFile?: string; // 다음 씬 파일 경로

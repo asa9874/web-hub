@@ -9,6 +9,7 @@
       "type": "dialogue",
       "character": "내레이터",
       "background": "school_entrance.svg",
+      "music": "peaceful_theme.mp3",
       "text": "봄바람이 살랑이는 4월, 새로운 학교 생활이 시작되었다.",
       "nextScriptId": "look_around"
     },
