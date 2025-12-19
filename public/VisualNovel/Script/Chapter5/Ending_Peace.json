@@ -1,0 +1,32 @@
+{
+  "sceneId": "ending_peace",
+  "title": "평화 엔딩",
+  "chapter": 5,
+  "startId": "peaceful_solution",
+  "lines": [
+    {
+      "id": "peaceful_solution",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "sunset.svg",
+      "text": "싸우지 않고도 모든 문제를 해결할 수 있었다.",
+      "nextScriptId": "wisdom"
+    },
+    {
+      "id": "wisdom",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "sunset.svg",
+      "text": "진정한 강함은 힘이 아니라 지혜에서 나온다는 것을 배웠다.",
+      "nextScriptId": "ending_text"
+    },
+    {
+      "id": "ending_text",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "sunset.svg",
+      "text": "평화로운 해결책을 찾아 모두가 행복한 결말을 맞이했다.\n\n【 평화 엔딩 】",
+      "isEnding": true
+    }
+  ]
+}

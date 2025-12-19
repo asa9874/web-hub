@@ -5,13 +5,13 @@ import DialogueBox from './Components/DialogueBox';
 import ChoiceButtons from './Components/ChoiceButtons';
 import DialogueLog, { type DialogueLogEntry } from './Components/DialogueLog';
 import StoryEditor from './StoryEditor';
-import type { ScriptLine, ScriptBlock } from './types';
+import type { ScriptLine, ScriptScene, Character } from './types';
 import config from './Script/config.json';
 
 const VisualNovel: React.FC = () => {
-  const [currentBlockId, setCurrentBlockId] = useState<string>(config.startBlockId);
-  const [currentBlock, setCurrentBlock] = useState<ScriptBlock | null>(null);
-  const [currentScriptId, setCurrentScriptId] = useState<string>('');
+  const [currentSceneFile, setCurrentSceneFile] = useState<string>(config.startSceneFile);
+  const [currentScene, setCurrentScene] = useState<ScriptScene | null>(null);
+  const [currentLineId, setCurrentLineId] = useState<string>('');
   const [currentLine, setCurrentLine] = useState<ScriptLine | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   
@@ -29,48 +29,54 @@ const VisualNovel: React.FC = () => {
   // Auto 모드 타이머
   const autoTimerRef = useRef<number | null>(null);
 
-  // 블록 로드
+  // 씬 파일 로드
   useEffect(() => {
-    const loadBlock = async () => {
+    const loadScene = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(`/web-hub/VisualNovel/Script/blocks/${currentBlockId}.json`);
-        const block = await response.json() as ScriptBlock;
-        setCurrentBlock(block);
-        setCurrentScriptId(block.startId);
+        const response = await fetch(`/web-hub/VisualNovel/Script/${currentSceneFile}`);
+        const scene = await response.json() as ScriptScene;
+        setCurrentScene(scene);
+        setCurrentLineId(scene.startId);
       } catch (error) {
-        console.error('블록 로드 실패:', error);
+        console.error('씬 로드 실패:', error);
       } finally {
         setIsLoading(false);
       }
     };
     
-    loadBlock();
-  }, [currentBlockId]);
+    loadScene();
+  }, [currentSceneFile]);
 
-  // 현재 스크립트 라인 로드
+  // 현재 라인 로드
   useEffect(() => {
-    if (currentBlock && currentScriptId) {
-      const line = currentBlock.lines[currentScriptId];
+    if (currentScene && currentLineId) {
+      const line = currentScene.lines.find(l => l.id === currentLineId);
       if (line) {
         setCurrentLine(line);
       
-        // 대화 로그에 추가 (선택지가 아닌 경우)
-        if (line.dialogue && !line.choices) {
+        // 대화 로그에 추가 (dialogue 타입인 경우)
+        if (line.type === 'dialogue' && line.text) {
           setDialogueLog(prev => [...prev, {
-            speaker: line.speaker,
-            dialogue: line.dialogue,
+            speaker: line.character || '내레이터',
+            dialogue: line.text,
             timestamp: Date.now()
           }]);
         }
+
+        // 엔딩 처리
+        if (line.isEnding) {
+          // 엔딩 화면 표시 후 타이틀로 돌아가기 등의 처리 가능
+          console.log('엔딩 도달');
+        }
       }
     }
-  }, [currentBlock, currentScriptId]);
+  }, [currentScene, currentLineId]);
 
   // Auto 모드 처리
   useEffect(() => {
-    if (isAutoMode && currentLine && !currentLine.choices) {
-      // 선택지가 없을 때만 Auto 모드 작동
+    if (isAutoMode && currentLine && currentLine.type === 'dialogue') {
+      // dialogue 타입일 때만 Auto 모드 작동
       autoTimerRef.current = setTimeout(() => {
         handleNext();
       }, 3000); // 3초 후 자동 진행
@@ -81,27 +87,27 @@ const VisualNovel: React.FC = () => {
         }
       };
     }
-  }, [isAutoMode, currentLine, currentScriptId]);
+  }, [isAutoMode, currentLine, currentLineId]);
 
   // 다음 대화로 진행
   const handleNext = useCallback(() => {
-    if (currentLine?.nextScriptId) {
-      // 블록 내 다음 씬으로 이동
-      setCurrentScriptId(currentLine.nextScriptId);
-    } else if (currentLine?.nextBlockId) {
-      // 다음 블록으로 이동
-      setCurrentBlockId(currentLine.nextBlockId);
+    if (currentLine?.nextSceneFile) {
+      // 다음 씬 파일로 이동
+      setCurrentSceneFile(currentLine.nextSceneFile);
+    } else if (currentLine?.nextScriptId) {
+      // 씬 파일 내 다음 라인으로 이동
+      setCurrentLineId(currentLine.nextScriptId);
     }
   }, [currentLine]);
 
   // 선택지 선택 처리
-  const handleChoice = useCallback((choice: { nextScriptId?: string; nextBlockId?: string }) => {
-    if (choice.nextScriptId) {
-      // 블록 내 씬으로 이동
-      setCurrentScriptId(choice.nextScriptId);
-    } else if (choice.nextBlockId) {
-      // 다음 블록으로 이동
-      setCurrentBlockId(choice.nextBlockId);
+  const handleChoice = useCallback((choice: { nextScriptId?: string; nextSceneFile?: string }) => {
+    if (choice.nextSceneFile) {
+      // 다음 씬 파일로 이동
+      setCurrentSceneFile(choice.nextSceneFile);
+    } else if (choice.nextScriptId) {
+      // 씬 파일 내 라인으로 이동
+      setCurrentLineId(choice.nextScriptId);
     }
     // 선택지 선택 시 Auto 모드 해제
     setIsAutoMode(false);
@@ -114,8 +120,10 @@ const VisualNovel: React.FC = () => {
 
   // Skip 기능
   const handleSkip = useCallback(() => {
-    if (currentLine?.nextScriptId) {
-      setCurrentScriptId(currentLine.nextScriptId);
+    if (currentLine?.nextSceneFile) {
+      setCurrentSceneFile(currentLine.nextSceneFile);
+    } else if (currentLine?.nextScriptId) {
+      setCurrentLineId(currentLine.nextScriptId);
     }
   }, [currentLine]);
 
@@ -142,7 +150,7 @@ const VisualNovel: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [isLogOpen, handleToggleUI]);
 
-  if (isLoading || !currentBlock || !currentLine) {
+  if (isLoading || !currentScene || !currentLine) {
     return (
       <div className="w-full h-screen flex items-center justify-center bg-[#2D1115]">
         <div className="text-center">
@@ -178,26 +186,33 @@ const VisualNovel: React.FC = () => {
       {/* 레터박스 메인 컨테이너 (16:9 비율) */}
       <div className="relative w-full max-w-[177.78vh] h-full max-h-[56.25vw] bg-pink-50 shadow-2xl">
         {/* 배경 이미지 */}
-        <BackgroundImage image={currentLine.background} />
+        <BackgroundImage image={currentLine.background || ''} />
         
-        {/* 캐릭터 스프라이트들 (0~4개) */}
-        {!isUIHidden && currentLine.characters?.map((character) => (
-          <CharacterSprite key={character.id} character={character} />
-        ))}
+        {/* 캐릭터 스프라이트 (단일 캐릭터) */}
+        {!isUIHidden && currentLine.characterImage && currentLine.characterPosition && (
+          <CharacterSprite 
+            character={{
+              id: 'current',
+              name: currentLine.character || '',
+              image: currentLine.characterImage,
+              position: currentLine.characterPosition
+            }} 
+          />
+        )}
         
         {/* 대화창 또는 선택지 */}
         {!isUIHidden && (
           <>
-            {currentLine.choices && currentLine.choices.length > 0 ? (
+            {currentLine.type === 'choice' && currentLine.choices && currentLine.choices.length > 0 ? (
               <ChoiceButtons 
                 choices={currentLine.choices} 
                 onChoice={handleChoice}
               />
             ) : (
               <DialogueBox 
-                speaker={currentLine.speaker}
-                speakerImage={currentLine.speakerImage}
-                dialogue={currentLine.dialogue}
+                speaker={currentLine.character}
+                speakerImage={currentLine.characterImage}
+                dialogue={currentLine.text}
                 onNext={handleNext}
                 isAutoMode={isAutoMode}
                 onToggleAuto={handleToggleAuto}

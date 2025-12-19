@@ -1,0 +1,32 @@
+{
+  "sceneId": "chapter4_solo_resolution",
+  "title": "혼자서 걷는 길",
+  "chapter": 4,
+  "startId": "alone_decision",
+  "lines": [
+    {
+      "id": "alone_decision",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "library.svg",
+      "text": "혼자서 모든 것을 감당하기로 했다. 친구들을 위험에 빠뜨릴 수는 없다.",
+      "nextScriptId": "solo_battle"
+    },
+    {
+      "id": "solo_battle",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "school_hallway.svg",
+      "text": "홀로 싸우는 것은 외롭지만... 이것이 내가 선택한 길이다.",
+      "nextScriptId": "victory"
+    },
+    {
+      "id": "victory",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "sunset.svg",
+      "text": "모든 것이 끝났다. 혼자였지만... 해냈다.",
+      "nextSceneFile": "Chapter5/Ending_Solo.json"
+    }
+  ]
+}

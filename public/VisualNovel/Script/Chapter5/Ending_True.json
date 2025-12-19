@@ -1,0 +1,52 @@
+{
+  "sceneId": "ending_true",
+  "title": "트루 엔딩",
+  "chapter": 5,
+  "startId": "together_forever",
+  "lines": [
+    {
+      "id": "together_forever",
+      "type": "dialogue",
+      "character": "사쿠라",
+      "characterImage": "sakura_happy.svg",
+      "characterPosition": "center-left",
+      "background": "sunset.svg",
+      "text": "우리 셋이 함께라서 이길 수 있었어!",
+      "nextScriptId": "yuki_agrees"
+    },
+    {
+      "id": "yuki_agrees",
+      "type": "dialogue",
+      "character": "유키",
+      "characterImage": "yuki_happy.svg",
+      "characterPosition": "center-right",
+      "background": "sunset.svg",
+      "text": "맞아. 진정한 힘은 우정에서 나온다는 걸 배웠어.",
+      "nextScriptId": "promise_together"
+    },
+    {
+      "id": "promise_together",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "sunset.svg",
+      "text": "세 사람은 앞으로도 함께 하기로 약속했다.",
+      "nextScriptId": "epilogue"
+    },
+    {
+      "id": "epilogue",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "school_entrance.svg",
+      "text": "새로운 학기가 시작됐다. 이제 우리는 무엇이든 할 수 있다. 함께라면!",
+      "nextScriptId": "ending_text"
+    },
+    {
+      "id": "ending_text",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "sunset.svg",
+      "text": "우정과 용기로 모든 것을 극복한 세 친구의 이야기.\n\n【 트루 엔딩 - 영원한 우정 】",
+      "isEnding": true
+    }
+  ]
+}

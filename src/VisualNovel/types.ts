@@ -11,22 +11,33 @@ export interface Character {
 
 export interface Choice {
   text: string;
-  nextScriptId?: string;  // 블록 내 다음 씬
-  nextBlockId?: string;   // 다음 블록으로 이동
+  nextScriptId?: string;    // 씬 파일 내 다음 라인
+  nextSceneFile?: string;   // 다음 씬 파일 경로 (예: "Chapter2/01_Scene.json")
 }
 
 export interface ScriptLine {
   id: string;
-  background: string; // Background 디렉토리의 이미지 경로
-  characters: Character[]; // 0~4개의 캐릭터
-  speaker?: string; // 대화하는 캐릭터 이름
-  speakerImage?: string; // 대화창 우측에 표시될 캐릭터 이미지
-  dialogue: string;
-  choices?: Choice[]; // 2~4개의 선택지 (선택지가 있는 경우)
-  nextScriptId?: string; // 블록 내 다음 씬
-  nextBlockId?: string;  // 다음 블록으로 이동
+  type: 'dialogue' | 'choice';
+  background?: string; // Background 디렉토리의 이미지 경로
+  character?: string; // 대화하는 캐릭터 이름
+  characterImage?: string; // 캐릭터 이미지
+  characterPosition?: CharacterPosition; // 캐릭터 위치
+  text: string; // 대사 또는 선택지 질문
+  choices?: Choice[]; // 선택지 배열 (type이 'choice'일 때)
+  nextScriptId?: string; // 씬 파일 내 다음 라인
+  nextSceneFile?: string; // 다음 씬 파일 경로
+  isEnding?: boolean; // 엔딩 여부
 }
 
+export interface ScriptScene {
+  sceneId: string;
+  title: string;
+  chapter: number;
+  startId: string;
+  lines: ScriptLine[];
+}
+
+// 하위 호환성을 위한 타입 (구 형식)
 export interface ScriptBlock {
   blockId: string;
   title: string;

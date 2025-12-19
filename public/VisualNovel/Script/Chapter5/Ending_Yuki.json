@@ -1,0 +1,36 @@
+{
+  "sceneId": "ending_yuki",
+  "title": "유키 엔딩",
+  "chapter": 5,
+  "startId": "truth_prevails",
+  "lines": [
+    {
+      "id": "truth_prevails",
+      "type": "dialogue",
+      "character": "유키",
+      "characterImage": "yuki_happy.svg",
+      "characterPosition": "center",
+      "background": "sunset.svg",
+      "text": "진실은 항상 승리해. 우리가 그걸 증명했어.",
+      "nextScriptId": "new_beginning"
+    },
+    {
+      "id": "new_beginning",
+      "type": "dialogue",
+      "character": "유키",
+      "characterImage": "yuki_happy.svg",
+      "characterPosition": "center",
+      "background": "sunset.svg",
+      "text": "이제 모두가 진실을 알게 됐어. 함께 더 나은 미래를 만들어가자.",
+      "nextScriptId": "ending_text"
+    },
+    {
+      "id": "ending_text",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "sunset.svg",
+      "text": "유키와 함께 진실의 길을 걸어간다. 어떤 어려움이 와도 함께라면 이겨낼 수 있다.\n\n【 유키 엔딩 】",
+      "isEnding": true
+    }
+  ]
+}

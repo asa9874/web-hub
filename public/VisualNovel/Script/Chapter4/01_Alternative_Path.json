@@ -1,0 +1,32 @@
+{
+  "sceneId": "chapter4_alternative",
+  "title": "다른 길",
+  "chapter": 4,
+  "startId": "seek_alternative",
+  "lines": [
+    {
+      "id": "seek_alternative",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "library.svg",
+      "text": "힘으로만 해결할 수 없는 문제도 있다. 다른 방법을 찾기 시작했다.",
+      "nextScriptId": "discover_solution"
+    },
+    {
+      "id": "discover_solution",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "library.svg",
+      "text": "오랜 연구 끝에 평화적인 해결책을 찾아냈다!",
+      "nextScriptId": "resolution"
+    },
+    {
+      "id": "resolution",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "sunset.svg",
+      "text": "싸우지 않고도 문제를 해결할 수 있었다. 이것이 진정한 승리다.",
+      "nextSceneFile": "Chapter5/Ending_Peace.json"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "sceneId": "chapter1_first_meeting",
+  "title": "첫 만남",
+  "chapter": 1,
+  "startId": "auditorium",
+  "lines": [
+    {
+      "id": "auditorium",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "classroom.svg",
+      "text": "입학식이 끝나고 교실로 향했다. 낯선 얼굴들이 가득하다.",
+      "nextScriptId": "meet_sakura"
+    },
+    {
+      "id": "meet_sakura",
+      "type": "dialogue",
+      "character": "사쿠라",
+      "characterImage": "sakura_happy.svg",
+      "characterPosition": "center-left",
+      "background": "classroom.svg",
+      "text": "안녕! 나는 사쿠라야. 너는 이름이 뭐야?",
+      "nextScriptId": "meet_yuki"
+    },
+    {
+      "id": "meet_yuki",
+      "type": "dialogue",
+      "character": "유키",
+      "characterImage": "yuki_normal.svg",
+      "characterPosition": "center-right",
+      "background": "classroom.svg",
+      "text": "...안녕. 나는 유키. 잘 부탁해.",
+      "nextScriptId": "classmate_chat"
+    },
+    {
+      "id": "classmate_chat",
+      "type": "dialogue",
+      "character": "여학생",
+      "characterImage": "female_silhouette.svg",
+      "characterPosition": "left",
+      "background": "classroom.svg",
+      "text": "와, 신입생들 진짜 많네! 올해는 정말 활기찰 것 같아!",
+      "nextSceneFile": "Chapter1/03_Siren_Alert.json"
+    }
+  ]
+}

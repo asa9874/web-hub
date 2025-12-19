@@ -1,0 +1,43 @@
+{
+  "sceneId": "chapter2_solo_route",
+  "title": "혼자서",
+  "chapter": 2,
+  "startId": "alone_start",
+  "lines": [
+    {
+      "id": "alone_start",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "garden.svg",
+      "text": "혼자서 조용히 정원으로 향했다. 여기서라면 상황을 객관적으로 볼 수 있을 것 같다.",
+      "nextScriptId": "observe"
+    },
+    {
+      "id": "observe",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "garden.svg",
+      "text": "높은 곳에서 학교 전체를 내려다본다. 학생들이 우왕좌왕하고 있다.",
+      "nextScriptId": "mysterious_voice"
+    },
+    {
+      "id": "mysterious_voice",
+      "type": "dialogue",
+      "character": "???",
+      "characterPosition": "center",
+      "background": "garden.svg",
+      "text": "혼자서 움직이다니... 용감하네요.",
+      "nextScriptId": "stranger_appears"
+    },
+    {
+      "id": "stranger_appears",
+      "type": "dialogue",
+      "character": "남학생",
+      "characterImage": "male_silhouette.svg",
+      "characterPosition": "center",
+      "background": "garden.svg",
+      "text": "나는 선배야. 이 상황을 해결할 방법을 알고 있어. 도와줄까?",
+      "nextSceneFile": "Chapter3/01_Solo_Mystery.json"
+    }
+  ]
+}
