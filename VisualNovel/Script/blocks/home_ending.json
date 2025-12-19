@@ -1,0 +1,24 @@
+﻿{
+  "blockId": "home_ending",
+  "title": "귀가 엔딩",
+  "startId": "home_ending",
+  "lines": {
+    "home_ending": {
+      "id": "home_ending",
+      "background": "sunset.svg",
+      "characters": [
+        {
+          "id": "char1",
+          "name": "사쿠라",
+          "image": "sakura_normal.svg",
+          "position": "center"
+        }
+      ],
+      "speaker": "사쿠라",
+      "speakerImage": "sakura_normal.svg",
+      "dialogue": "오늘 하루도 정말 즐거웠어요. 내일 또 만나요, 유키!",
+      "nextBlockId": "ending"
+    }
+  }
+}
+

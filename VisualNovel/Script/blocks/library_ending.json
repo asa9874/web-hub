@@ -1,0 +1,30 @@
+﻿{
+  "blockId": "library_ending",
+  "title": "도서관 엔딩",
+  "startId": "library_ending",
+  "lines": {
+    "library_ending": {
+      "id": "library_ending",
+      "background": "library.svg",
+      "characters": [
+        {
+          "id": "char1",
+          "name": "사쿠라",
+          "image": "sakura_normal.svg",
+          "position": "left"
+        },
+        {
+          "id": "char2",
+          "name": "유키",
+          "image": "yuki_normal.svg",
+          "position": "right"
+        }
+      ],
+      "speaker": "유키",
+      "speakerImage": "yuki_normal.svg",
+      "dialogue": "좋아! 오늘 수학 과제 같이 하자. 내가 도와줄게!",
+      "nextBlockId": "ending"
+    }
+  }
+}
+
