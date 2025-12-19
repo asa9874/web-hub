@@ -91,16 +91,19 @@ const StoryEditor: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       nodesByLevel[level].push(blockId);
     });
 
-    // 노드 위치 계산
+    // 노드 위치 계산 (상->하 방향, 가운데 정렬)
     Object.entries(nodesByLevel).forEach(([level, blockIds]) => {
+      const levelWidth = blockIds.length * 250;
+      const startX = (2000 - levelWidth) / 2;
+      
       blockIds.forEach((blockId, index) => {
         const block = loadedBlocks[blockId];
         if (block) {
           graphNodes.push({
             id: blockId,
             title: block.title,
-            x: 200 + parseInt(level) * 300,
-            y: 100 + index * 150,
+            x: startX + index * 250,
+            y: 100 + parseInt(level) * 200,
             connections: Array.from(connections[blockId] || [])
           });
         }
@@ -142,37 +145,55 @@ const StoryEditor: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       {/* 그래프 영역 */}
       <div className="relative" style={{ width: '2000px', height: '1500px' }}>
         <svg className="absolute inset-0" style={{ width: '100%', height: '100%' }}>
-          {/* 연결선 그리기 */}
+          <defs>
+            <marker
+              id="arrowhead"
+              markerWidth="10"
+              markerHeight="10"
+              refX="9"
+              refY="3"
+              orient="auto"
+              markerUnits="strokeWidth"
+            >
+              <path d="M0,0 L0,6 L9,3 z" fill="#ec4899" />
+            </marker>
+          </defs>
+          
+          {/* 연결선 그리기 (곡선) */}
           {nodes.map(node => 
             node.connections.map(targetId => {
               const target = nodes.find(n => n.id === targetId);
               if (!target) return null;
 
+              const startX = node.x + 60;
+              const startY = node.y + 120;
+              const endX = target.x + 60;
+              const endY = target.y;
+              
+              // 베지어 곡선 제어점 계산 (상->하)
+              const dx = endX - startX;
+              const dy = endY - startY;
+              const controlX1 = startX;
+              const controlY1 = startY + dy * 0.5;
+              const controlX2 = endX;
+              const controlY2 = startY + dy * 0.5;
+              
+              // ending -> intro처럼 뒤로 가는 경우 특별 처리
+              const isBackward = dy < 0;
+              const path = isBackward
+                ? `M ${startX} ${startY} C ${startX - 100} ${startY + 50}, ${startX - 100} ${endY - 50}, ${endX} ${endY}`
+                : `M ${startX} ${startY} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${endX} ${endY}`;
+
               return (
-                <g key={`${node.id}-${targetId}`}>
-                  <defs>
-                    <marker
-                      id={`arrow-${node.id}-${targetId}`}
-                      markerWidth="10"
-                      markerHeight="10"
-                      refX="9"
-                      refY="3"
-                      orient="auto"
-                      markerUnits="strokeWidth"
-                    >
-                      <path d="M0,0 L0,6 L9,3 z" fill="#ec4899" />
-                    </marker>
-                  </defs>
-                  <line
-                    x1={node.x + 120}
-                    y1={node.y + 40}
-                    x2={target.x}
-                    y2={target.y + 40}
-                    stroke="#ec4899"
-                    strokeWidth="2"
-                    markerEnd={`url(#arrow-${node.id}-${targetId})`}
-                  />
-                </g>
+                <path
+                  key={`${node.id}-${targetId}`}
+                  d={path}
+                  stroke="#ec4899"
+                  strokeWidth="2"
+                  fill="none"
+                  markerEnd="url(#arrowhead)"
+                  className="transition-all duration-300 hover:stroke-pink-600 hover:stroke-[3]"
+                />
               );
             })
           )}
@@ -183,28 +204,40 @@ const StoryEditor: React.FC<{ onClose: () => void }> = ({ onClose }) => {
           <div
             key={node.id}
             onClick={() => setSelectedBlock(blocks[node.id])}
-            className="absolute bg-gradient-to-br from-pink-50 to-white border-4 border-pink-300 
-              rounded-xl shadow-xl p-4 cursor-pointer hover:shadow-2xl hover:scale-105 
-              transition-all duration-200"
+            className="absolute cursor-pointer group"
             style={{
               left: node.x,
               top: node.y,
-              width: '240px'
+              width: '120px',
+              height: '120px'
             }}
           >
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-500 
-                rounded-full flex items-center justify-center text-white font-bold shadow-lg">
-                {node.id.charAt(0).toUpperCase()}
-              </div>
-              <div className="flex-1">
-                <div className="text-xs text-pink-600 font-semibold mb-1">{node.id}</div>
-                <div className="text-sm font-bold text-gray-800">{node.title}</div>
-                {node.connections.length > 0 && (
-                  <div className="text-xs text-gray-500 mt-2">
-                    → {node.connections.length}개 연결
+            {/* 동그라미 노드 */}
+            <div className="relative w-full h-full">
+              {/* 외곽 글로우 */}
+              <div className="absolute inset-0 bg-gradient-to-br from-pink-300 to-pink-400 
+                rounded-full opacity-0 group-hover:opacity-100 blur-md transition-opacity duration-300" />
+              
+              {/* 메인 원 */}
+              <div className="absolute inset-2 bg-gradient-to-br from-pink-50 to-white 
+                border-4 border-pink-300 rounded-full shadow-xl 
+                group-hover:border-pink-400 group-hover:scale-110 
+                transition-all duration-200 flex items-center justify-center p-2">
+                
+                {/* 제목 텍스트 */}
+                <div className="text-center">
+                  <div className="text-sm font-bold text-gray-800 leading-tight">
+                    {node.title}
                   </div>
-                )}
+                </div>
+              </div>
+              
+              {/* 라벨 */}
+              <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                <div className="bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full 
+                  border-2 border-pink-200 shadow-md">
+                  <div className="text-xs text-pink-600 font-semibold">{node.id}</div>
+                </div>
               </div>
             </div>
           </div>
