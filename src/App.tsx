@@ -91,6 +91,18 @@ const generateNodes = (): NodeData[] => {
       link: '/schedule',
       image: 'https://images.unsplash.com/photo-1456365174547-68f85bca6905?auto=format&fit=crop&q=80&w=800', // Time/Schedule
     },
+    {
+      id: 'visualnovel',
+      title: 'VISUAL NOVEL',
+      subtitle: 'Storytelling Game',
+      description: '매력적인 스토리와 선택지로 진행되는 인터랙티브 비주얼 노벨입니다. 다양한 캐릭터와 배경, 그리고 감동적인 이야기를 경험하세요.',
+      icon: BookOpen,
+      x: 0,
+      y: 0,
+      size: 'lg',
+      link: '/visual-novel',
+      image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=800', // Story/Art
+    }
   ];
 
   return baseNodes;

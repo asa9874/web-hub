@@ -1,0 +1,30 @@
+﻿{
+  "blockId": "park_ending",
+  "title": "공원 엔딩",
+  "startId": "park_ending",
+  "lines": {
+    "park_ending": {
+      "id": "park_ending",
+      "background": "park.svg",
+      "characters": [
+        {
+          "id": "char1",
+          "name": "사쿠라",
+          "image": "sakura_normal.svg",
+          "position": "center-left"
+        },
+        {
+          "id": "char2",
+          "name": "유키",
+          "image": "yuki_normal.svg",
+          "position": "center-right"
+        }
+      ],
+      "speaker": "유키",
+      "speakerImage": "yuki_normal.svg",
+      "dialogue": "날씨 정말 좋다! 이렇게 산책하니까 기분이 상쾌해지네.",
+      "nextBlockId": "ending"
+    }
+  }
+}
+

@@ -1,0 +1,68 @@
+﻿{
+  "blockId": "cafe_route",
+  "title": "카페테리아 투어",
+  "startId": "cafe_intro",
+  "lines": {
+    "cafe_intro": {
+      "id": "cafe_intro",
+      "background": "cafe.svg",
+      "characters": [
+        {
+          "id": "char2",
+          "name": "유키",
+          "image": "yuki_normal.svg",
+          "position": "center"
+        }
+      ],
+      "speaker": "유키",
+      "speakerImage": "yuki_normal.svg",
+      "dialogue": "우리 학교 카페테리아는 음식이 정말 맛있어! 특히 케이크가 최고야.",
+      "nextScriptId": "cafe_2"
+    },
+    "cafe_2": {
+      "id": "cafe_2",
+      "background": "cafe.svg",
+      "characters": [
+        {
+          "id": "char1",
+          "name": "사쿠라",
+          "image": "sakura_normal.svg",
+          "position": "center-left"
+        },
+        {
+          "id": "char2",
+          "name": "유키",
+          "image": "yuki_normal.svg",
+          "position": "center-right"
+        }
+      ],
+      "speaker": "사쿠라",
+      "speakerImage": "sakura_normal.svg",
+      "dialogue": "정말요? 저 케이크 정말 좋아해요! 딸기 케이크 있나요?",
+      "nextScriptId": "cafe_3"
+    },
+    "cafe_3": {
+      "id": "cafe_3",
+      "background": "cafe.svg",
+      "characters": [
+        {
+          "id": "char1",
+          "name": "사쿠라",
+          "image": "sakura_normal.svg",
+          "position": "center-left"
+        },
+        {
+          "id": "char2",
+          "name": "유키",
+          "image": "yuki_normal.svg",
+          "position": "center-right"
+        }
+      ],
+      "speaker": "유키",
+      "speakerImage": "yuki_normal.svg",
+      "dialogue": "당연하지! 오늘 방과 후에 같이 먹으러 가자!",
+      "nextBlockId": "after_tour"
+    }
+  }
+}
+

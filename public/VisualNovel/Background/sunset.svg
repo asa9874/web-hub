@@ -1,0 +1,20 @@
+<!-- SVG 플레이스홀더: 석양 배경 -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+  <defs>
+    <linearGradient id="sunset" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6B6B;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#FFA07A;stop-opacity:1" />
+      <stop offset="60%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FF8C00;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="1920" height="1080" fill="url(#sunset)"/>
+  <!-- 태양 -->
+  <circle cx="1500" cy="300" r="180" fill="#FFD700" opacity="0.8"/>
+  <circle cx="1500" cy="300" r="200" fill="#FFA500" opacity="0.4"/>
+  <!-- 구름 -->
+  <ellipse cx="400" cy="200" rx="120" ry="60" fill="#FFB6C1" opacity="0.6"/>
+  <ellipse cx="500" cy="220" rx="140" ry="70" fill="#FFB6C1" opacity="0.6"/>
+  <ellipse cx="800" cy="150" rx="100" ry="50" fill="#FFB6C1" opacity="0.5"/>
+  <text x="960" y="540" font-family="Arial" font-size="120" fill="#FFFFFF" text-anchor="middle" opacity="0.8">석양</text>
+</svg>

@@ -1,0 +1,68 @@
+﻿{
+  "blockId": "library_route",
+  "title": "도서관 투어",
+  "startId": "library_intro",
+  "lines": {
+    "library_intro": {
+      "id": "library_intro",
+      "background": "library.svg",
+      "characters": [
+        {
+          "id": "char2",
+          "name": "유키",
+          "image": "yuki_normal.svg",
+          "position": "center"
+        }
+      ],
+      "speaker": "유키",
+      "speakerImage": "yuki_normal.svg",
+      "dialogue": "여기가 우리 학교 도서관이야. 정말 조용하고 아늑하지?",
+      "nextScriptId": "library_2"
+    },
+    "library_2": {
+      "id": "library_2",
+      "background": "library.svg",
+      "characters": [
+        {
+          "id": "char1",
+          "name": "사쿠라",
+          "image": "sakura_normal.svg",
+          "position": "left"
+        },
+        {
+          "id": "char2",
+          "name": "유키",
+          "image": "yuki_normal.svg",
+          "position": "right"
+        }
+      ],
+      "speaker": "사쿠라",
+      "speakerImage": "sakura_normal.svg",
+      "dialogue": "와... 책이 정말 많네요! 여기서 공부하면 집중 잘 될 것 같아요.",
+      "nextScriptId": "library_3"
+    },
+    "library_3": {
+      "id": "library_3",
+      "background": "library.svg",
+      "characters": [
+        {
+          "id": "char1",
+          "name": "사쿠라",
+          "image": "sakura_normal.svg",
+          "position": "left"
+        },
+        {
+          "id": "char2",
+          "name": "유키",
+          "image": "yuki_normal.svg",
+          "position": "right"
+        }
+      ],
+      "speaker": "유키",
+      "speakerImage": "yuki_normal.svg",
+      "dialogue": "나도 자주 여기 와. 시험 기간에는 같이 공부하자!",
+      "nextBlockId": "after_tour"
+    }
+  }
+}
+

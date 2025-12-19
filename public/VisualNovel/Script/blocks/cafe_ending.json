@@ -1,0 +1,30 @@
+﻿{
+  "blockId": "cafe_ending",
+  "title": "카페 엔딩",
+  "startId": "cafe_ending",
+  "lines": {
+    "cafe_ending": {
+      "id": "cafe_ending",
+      "background": "cafe.svg",
+      "characters": [
+        {
+          "id": "char1",
+          "name": "사쿠라",
+          "image": "sakura_normal.svg",
+          "position": "center-left"
+        },
+        {
+          "id": "char2",
+          "name": "유키",
+          "image": "yuki_normal.svg",
+          "position": "center-right"
+        }
+      ],
+      "speaker": "사쿠라",
+      "speakerImage": "sakura_normal.svg",
+      "dialogue": "이 딸기 케이크 정말 맛있어요! 유키 덕분에 좋은 친구도 사귀고 맛있는 것도 먹네요!",
+      "nextBlockId": "ending"
+    }
+  }
+}
+
