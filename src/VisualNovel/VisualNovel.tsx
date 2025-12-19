@@ -147,6 +147,23 @@ const VisualNovel: React.FC = () => {
     }
   }, [currentLine]);
 
+  // 선택지 유효성 검사
+  const checkChoiceValidity = useCallback(async (choice: { nextScriptId?: string; nextSceneFile?: string }): Promise<boolean> => {
+    if (choice.nextSceneFile) {
+      // 씬 파일 존재 여부 확인
+      try {
+        const response = await fetch(`/web-hub/VisualNovel/Script/${choice.nextSceneFile}`, { method: 'HEAD' });
+        return response.ok;
+      } catch {
+        return false;
+      }
+    } else if (choice.nextScriptId && currentScene) {
+      // 씬 내 라인 ID 존재 여부 확인
+      return currentScene.lines.some(line => line.id === choice.nextScriptId);
+    }
+    return false;
+  }, [currentScene]);
+
   // 선택지 선택 처리
   const handleChoice = useCallback((choice: { nextScriptId?: string; nextSceneFile?: string }) => {
     if (choice.nextSceneFile) {
@@ -254,6 +271,18 @@ const VisualNovel: React.FC = () => {
               <ChoiceButtons 
                 choices={currentLine.choices} 
                 onChoice={handleChoice}
+                lockedChoices={currentLine.choices.map(choice => {
+                  // nextSceneFile이 있는 경우: 파일 존재 여부는 실시간으로 확인할 수 없으므로 기본적으로 잠금 해제
+                  if (choice.nextSceneFile) {
+                    return false; // 실제 파일 존재 여부는 클릭 시 확인
+                  }
+                  // nextScriptId가 있는 경우: 현재 씬에 해당 ID가 있는지 확인
+                  if (choice.nextScriptId && currentScene) {
+                    return !currentScene.lines.some(line => line.id === choice.nextScriptId);
+                  }
+                  // 둘 다 없으면 잠금
+                  return true;
+                })}
               />
             ) : (
               <DialogueBox 
