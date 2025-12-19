@@ -1,0 +1,169 @@
+{
+  "sceneId": "chapter1_roof_battle",
+  "title": "옥상의 무녀: 푸른 연꽃의 춤",
+  "chapter": 1,
+  "startId": "roof_01",
+  "lines": [
+    {
+      "id": "roof_01",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "비오는밤옥상.png",
+      "music": "none",
+      "text": "숨을 헐떡이며 도착한 옥상. 하늘에는 거대한 균열이 생겨 있었고, 그 사이로 보랏빛 안개 같은 불길한 기운이 쏟아지고 있었다.",
+      "nextScriptId": "sohee_01"
+    },
+    {
+      "id": "sohee_01",
+      "type": "dialogue",
+      "character": "연소희",
+      "characterImage": "연소희_normal.png",
+      "characterPosition": "center",
+      "background": "비오는밤옥상.png",
+      "text": "예서 멈추시오. 더 가까이 오면 소년의 혼까지 오염될까 저어되오.",
+      "nextScriptId": "sohee_02"
+    },
+    {
+      "id": "sohee_02",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "비오는밤옥상.png",
+      "text": "소희는 허리까지 오는 긴 흑발을 찰랑이며 균열을 정면으로 마주했다. 그녀의 손에 들린 대나무 부채가 미세하게 떨리고 있었다.",
+      "nextScriptId": "protagonist_01"
+    },
+    {
+      "id": "protagonist_01",
+      "type": "dialogue",
+      "character": "주인공",
+      "background": "비오는밤옥상.png",
+      "text": "소희야, 위험해! 어서 대피소로 가야 해!",
+      "nextScriptId": "sohee_03"
+    },
+    {
+      "id": "sohee_03",
+      "type": "dialogue",
+      "character": "연소희",
+      "characterImage": "연소희_normal.png",
+      "characterPosition": "center",
+      "background": "비오는밤옥상.png",
+      "text": "대피라니요. 대대로 이 땅의 부정을 정화해 온 우리 가문의 명예가 용납지 않소. 소년, 잠시 눈을 감고 계시겠소? 부끄러운 모습을 보이고 싶지 않구려.",
+      "nextScriptId": "sohee_transform"
+    },
+    {
+      "id": "sohee_transform",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "비오는밤옥상.png",
+      "music": "잔잔한음악.mp3",
+      "effectSound": "notification.mp3",
+      "text": "소희가 부채를 촤악 펼치자, 푸른 연꽃 잎이 그녀의 몸을 감싸 안듯 피어올랐다.",
+      "nextScriptId": "biryeon_01"
+    },
+    {
+      "id": "biryeon_01",
+      "type": "dialogue",
+      "character": "비련",
+      "characterImage": "연소희.png",
+      "characterPosition": "center",
+      "background": "비오는밤옥상.png",
+      "text": "연씨 가문의 적통, 비련(Blue Lotus)…… 예법에 따라 이 땅의 부정을 멸하겠소.",
+      "nextScriptId": "biryeon_02"
+    },
+    {
+      "id": "biryeon_02",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "비오는밤옥상.png",
+      "text": "그녀의 평상복은 사라지고, 푸른 연꽃 문양이 수놓아진 반투명한 한복 스타일의 의상이 그 자리를 대신했다. 공중에는 종이 부적들이 날카롭게 회전하며 그녀를 호위했다.",
+      "nextScriptId": "impurity_01"
+    },
+    {
+      "id": "impurity_01",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "비오는밤옥상.png",
+      "effectSound": "siren.mp3",
+      "text": "균열 속에서 기괴한 비명과 함께 하급 개체인 '부정'들이 쏟아져 나오기 시작했다.",
+      "nextScriptId": "biryeon_03"
+    },
+    {
+      "id": "biryeon_03",
+      "type": "dialogue",
+      "character": "비련",
+      "characterImage": "연소희.png",
+      "characterPosition": "center",
+      "background": "비오는밤옥상.png",
+      "text": "무례하군요! 감히 신성한 학당에 발을 들이다니, 이 고약한 것들! ",
+      "nextScriptId": "biryeon_04"
+    },
+    {
+      "id": "biryeon_04",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "비오는밤옥상.png",
+      "text": "비련은 우아한 몸짓으로 부채를 휘둘렀다. 부적들이 빛을 내뿜으며 부정의 괴수들을 타격했다. 하지만 그 숫자가 만만치 않았다.",
+      "nextScriptId": "biryeon_05"
+    },
+    {
+      "id": "biryeon_05",
+      "type": "dialogue",
+      "character": "비련",
+      "characterImage": "연소희_panic.png",
+      "characterPosition": "center",
+      "background": "비오는밤옥상.png",
+      "text": "하앗! ……소년, 위험하니 제 뒤로 숨으시오! 내 반드시 그대를 지켜낼 것이오! ",
+      "nextScriptId": "choice_01"
+    },
+    {
+      "id": "choice_01",
+      "type": "choice",
+      "character": "내레이터",
+      "background": "비오는밤옥상.png",
+      "text": "밀려오는 부정의 무리 속에서 비련이 고전하고 있다. 당신은 어떻게 하겠습니까?",
+      "choices": [
+        {
+          "text": "주변의 잔해를 던져 부정의 시선을 분산시킨다.",
+          "nextScriptId": "distract_impurity"
+        },
+        {
+          "text": "비련의 뒤에서 그녀가 집중할 수 있도록 응원한다.",
+          "nextScriptId": "cheer_sohee"
+        },
+        {
+          "text": "위험을 무릅쓰고 비련의 손을 잡아 마력을 안정시킨다.",
+          "nextScriptId": "touch_sohee"
+        }
+      ]
+    },
+    {
+      "id": "distract_impurity",
+      "type": "dialogue",
+      "character": "비련",
+      "characterImage": "연소희_smile.png",
+      "characterPosition": "center",
+      "background": "비오는밤옥상.png",
+      "text": "소년! 위험하오! 하지만 그대의 용기 덕분에 틈이 생겼구려. 고맙소! ",
+      "nextSceneFile": "Chapter1/chapter1_sohee_victory.json"
+    },
+    {
+      "id": "cheer_sohee",
+      "type": "dialogue",
+      "character": "비련",
+      "characterImage": "연소희_embarrassed.png",
+      "characterPosition": "center",
+      "background": "비오는밤옥상.png",
+      "text": "그, 그렇게 뚫어지라 보시면 집중이……! 하오나 그대의 목소리가 힘이 되는구려. 지켜봐 주시오! ",
+      "nextSceneFile": "Chapter1/chapter1_sohee_victory.json"
+    },
+    {
+      "id": "touch_sohee",
+      "type": "dialogue",
+      "character": "비련",
+      "characterImage": "연소희_embarrassed.png",
+      "characterPosition": "center",
+      "background": "비오는밤옥상.png",
+      "text": "와앗?! 소, 소년! 어찌 이리 갑자기 손을……! 무, 무례하오! 하오나…… 기운이 맑아지는 느낌이오. ",
+      "nextSceneFile": "Chapter1/chapter1_sohee_bond.json"
+    }
+  ]
+}

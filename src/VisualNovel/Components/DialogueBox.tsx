@@ -81,8 +81,8 @@ const DialogueBox: React.FC<DialogueBoxProps> = ({
               
               {/* 우측: 이름 + 대사 영역 */}
               <div className="flex-1 min-h-[120px] flex flex-col justify-center">
-                {/* 캐릭터 이름 */}
-                {speaker && (
+                {/* 캐릭터 이름 (나레이션/내레이터 제외) */}
+                {speaker && speaker !== '나레이션' && speaker !== '내레이터' && (
                   <div className="mb-3 -mt-1">
                     <div className="inline-block relative group/name">
                       {/* 이름 글로우 */}

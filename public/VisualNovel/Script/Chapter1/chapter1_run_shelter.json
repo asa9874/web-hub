@@ -1,0 +1,205 @@
+{
+  "sceneId": "chapter1_run_shelter",
+  "title": "대피소로 향하는 길",
+  "chapter": 1,
+  "startId": "run_01",
+  "lines": [
+    {
+      "id": "run_01",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "아침교실.png",
+      "music": "발랄한음악.mp3",
+      "effectSound": "footsteps.mp3",
+      "text": "복도는 대피소로 향하는 학생들로 북새통을 이뤘다. 나는 인파에 밀려 설아를 놓치지 않기 위해 그녀의 작은 손을 꼭 맞잡았다.",
+      "nextScriptId": "seolah_01"
+    },
+    {
+      "id": "seolah_01",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_panic.png",
+      "characterPosition": "center",
+      "background": "아침교실.png",
+      "text": "와아아, 사람 정말 많네요! 주인공 군, 손 놓으면 안 돼요? 저, 저 길치라서 금방 미아가 될지도 몰라요! ",
+      "nextScriptId": "protagonist_01"
+    },
+    {
+      "id": "protagonist_01",
+      "type": "dialogue",
+      "character": "주인공",
+      "background": "아침교실.png",
+      "text": "걱정 마, 절대 안 놓칠 테니까. 그런데 설아 너, 손이 엄청 떨리고 있어.",
+      "nextScriptId": "seolah_02"
+    },
+    {
+      "id": "seolah_02",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_embarrassed.png",
+      "characterPosition": "center",
+      "background": "아침교실.png",
+      "text": "에헤헤... 들켰나? 사실 조금 무섭거든요. 하지만 괜찮아요! 주인공 군이 이렇게 잡아주고 있으니까! ",
+      "nextScriptId": "seolah_03"
+    },
+    {
+      "id": "seolah_03",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "아침교실.png",
+      "text": "152cm의 작은 체구를 가진 그녀는 나를 올려다보며 보랏빛 눈동자를 반짝였다.  공포 속에서도 애써 웃으려는 모습이 오히려 보호 본능을 자극했다.",
+      "nextScriptId": "event_trip"
+    },
+    {
+      "id": "event_trip",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "아침교실.png",
+      "text": "그때였다. 급하게 계단을 내려가던 설아가 자신의 신발 끈에 걸려 크게 휘청였다.",
+      "nextScriptId": "seolah_04"
+    },
+    {
+      "id": "seolah_04",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_panic.png",
+      "characterPosition": "center",
+      "background": "아침교실.png",
+      "text": "와앗?! 또, 또 시작이다아아—!",
+      "nextScriptId": "protagonist_02"
+    },
+    {
+      "id": "protagonist_02",
+      "type": "dialogue",
+      "character": "주인공",
+      "background": "아침교실.png",
+      "text": "설아 소심해! 조심해!",
+      "nextScriptId": "event_catch"
+    },
+    {
+      "id": "event_catch",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "아침교실.png",
+      "text": "나는 반사적으로 설아의 허리를 감싸 안아 끌어당겼다. 설아의 등이 내 가슴팍에 닿았고, 그녀의 은색 단발머리에서 달콤한 샴푸 향기가 훅 끼쳐왔다. ",
+      "nextScriptId": "seolah_05"
+    },
+    {
+      "id": "seolah_05",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_embarrassed.png",
+      "characterPosition": "center",
+      "background": "아침교실.png",
+      "music": "잔잔한음악.mp3",
+      "text": "앗... 아... 고, 고마워요. 에헤헤... 0.5초 만에 사과할게요! 미안해요, 주인공 군! ",
+      "nextScriptId": "seolah_06"
+    },
+    {
+      "id": "seolah_06",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_embarrassed.png",
+      "characterPosition": "center",
+      "background": "아침교실.png",
+      "text": "심장이... 너무 크게 뛰어서, 다른 사람들에게 들릴 것만 같아요.",
+      "nextScriptId": "protagonist_03"
+    },
+    {
+      "id": "protagonist_03",
+      "type": "dialogue",
+      "character": "주인공",
+      "background": "아침교실.png",
+      "text": "나도 그래. 긴박한 상황이니까... 그럴 수 있지.",
+      "nextScriptId": "seolah_07"
+    },
+    {
+      "id": "seolah_07",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_smile.png",
+      "characterPosition": "center",
+      "background": "아침교실.png",
+      "text": "그럴까요...? 그럴지도 모르겠네요! 에헤헤.",
+      "nextScriptId": "shelter_arrival"
+    },
+    {
+      "id": "shelter_arrival",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "아침교실.png",
+      "text": "우리는 무사히 지하 대피소 입구에 도착했다. 대피소 내부의 대형 스크린에는 이미 교전 중인 마법소녀의 라이브 중계가 흐르고 있었다. ",
+      "nextScriptId": "screen_rina"
+    },
+    {
+      "id": "screen_rina",
+      "type": "dialogue",
+      "character": "강리나",
+      "characterImage": "강리나.png",
+      "characterPosition": "center",
+      "background": "네온빛밤길거리.png",
+      "music": "톡톡튕기는음악.mp3",
+      "text": "여러분~ 샤이니 하트가 왔어요! 사랑의 빛으로 정화해 드릴게요~♡ ",
+      "nextScriptId": "seolah_08"
+    },
+    {
+      "id": "seolah_08",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_smile.png",
+      "characterPosition": "center",
+      "background": "아침교실.png",
+      "text": "와아! 샤이니 하트 님이다! 역시 멋있어...  아, 부러워하고 있을 때가 아니지!",
+      "nextScriptId": "choice_shelter"
+    },
+    {
+      "id": "choice_shelter",
+      "type": "choice",
+      "character": "내레이터",
+      "background": "아침교실.png",
+      "text": "대피소 안은 사람들로 가득 차 매우 혼잡하다. 설아는 여전히 내 손을 꼭 잡고 있다. 어떻게 할까?",
+      "choices": [
+        {
+          "text": "사람이 적은 구석 자리를 찾아 설아를 앉힌다.",
+          "nextScriptId": "choice_rest"
+        },
+        {
+          "text": "스크린 속 마법소녀의 전투를 좀 더 자세히 지켜본다.",
+          "nextScriptId": "choice_watch"
+        },
+        {
+          "text": "밖에서 들려오는 굉음이 걱정되어 입구 쪽 상황을 살핀다.",
+          "nextScriptId": "choice_lookout"
+        }
+      ]
+    },
+    {
+      "id": "choice_rest",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_smile.png",
+      "characterPosition": "center",
+      "background": "아침교실.png",
+      "text": "고마워요, 주인공 군. 역시 주인공 군은 다정하네요! ",
+      "nextSceneFile": "Chapter1/chapter1_shelter_rest.json"
+    },
+    {
+      "id": "choice_watch",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_serious.png",
+      "characterPosition": "center",
+      "background": "아침교실.png",
+      "text": "전투... 정말 치열하네요. 나도 저렇게 멋지게 해낼 수 있을까... 앗! 아무것도 아니에요! ",
+      "nextSceneFile": "Chapter1/chapter1_battle_watch.json"
+    },
+    {
+      "id": "choice_lookout",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "아침교실.png",
+      "text": "입구 쪽으로 다가가자, 무거운 공기와 함께 '부정'의 기운이 대피소 안까지 스며드는 것이 느껴졌다.",
+      "nextSceneFile": "Chapter1/chapter1_danger_near.json"
+    }
+  ]
+}

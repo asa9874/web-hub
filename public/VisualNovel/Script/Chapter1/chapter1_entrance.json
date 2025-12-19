@@ -8,181 +8,222 @@
       "id": "intro_01",
       "type": "dialogue",
       "character": "내레이터",
-      "background": "벚꽃핀_학교정문.png",
+      "background": "아침교실.png",
       "music": "발랄한음악.mp3",
-      "text": "흩날리는 벚꽃 잎이 어깨 위에 내려앉는 4월의 아침. 오늘은 기다리고 기다리던 고등학교 입학식 날이다. ",
+      "text": "2025년의 봄, 세계는 '대변동' 이후 25년이라는 시간을 지나며 기묘한 평화를 유지하고 있었다. ",
       "nextScriptId": "intro_02"
     },
     {
       "id": "intro_02",
       "type": "dialogue",
-      "character": "주인공",
-      "text": "(새로운 교복, 새로운 환경... 조금 긴장되지만, 왠지 좋은 일이 생길 것만 같은 기분이야.) ",
+      "character": "내레이터",
+      "background": "아침교실.png",
+      "text": "하늘에서 '부정'이 내려오는 것은 이제 일기예보만큼이나 일상적인 일이 되었고, 사람들은 그 위험 속에서도 각자의 삶을 살아간다. ",
       "nextScriptId": "intro_03"
     },
     {
       "id": "intro_03",
       "type": "dialogue",
       "character": "내레이터",
-      "effectSound": "footsteps_fast.mp3",
-      "text": "그때, 뒤쪽에서 다급한 발소리가 들려왔다.",
-      "nextScriptId": "seolah_bump_01"
+      "background": "아침교실.png",
+      "text": "흩날리는 벚꽃 잎 사이로 교복을 입은 학생들이 분주히 움직이는 오늘, 나는 고등학교 입학식이라는 새로운 시작 앞에 서 있다. ",
+      "nextScriptId": "protagonist_01"
     },
     {
-      "id": "seolah_bump_01",
-      "type": "dialogue",
-      "character": "???",
-      "text": "와와앗! 비켜주세요! 제어 불능이에요~!!",
-      "nextScriptId": "seolah_bump_02"
-    },
-    {
-      "id": "seolah_bump_02",
-      "type": "dialogue",
-      "character": "내레이터",
-      "effectSound": "collision.mp3",
-      "text": "콰당! 소리와 함께 누군가 강하게 부딪혀왔고, 내 몸은 그대로 바닥으로 쏠렸다.",
-      "nextScriptId": "seolah_bump_03"
-    },
-    {
-      "id": "seolah_bump_03",
-      "type": "dialogue",
-      "character": "내레이터",
-      "background": "컷씬_넘어진설아와주인공.png",
-      "text": "눈을 뜨자, 코끝에 은은한 비누 향기가 맴돌았다. 그리고 바로 눈앞에... 놀란 토끼 눈을 한 소녀가 있었다. ",
-      "nextScriptId": "seolah_intro_01"
-    },
-    {
-      "id": "seolah_intro_01",
-      "type": "dialogue",
-      "character": "한설아",
-      "characterImage": "한설아_당황.png",
-      "characterPosition": "center",
-      "text": "에헤헤... 아고고... 아, 정말 죄송해요! 괜찮으세요? ",
-      "nextScriptId": "seolah_intro_02"
-    },
-    {
-      "id": "seolah_intro_02",
-      "type": "dialogue",
-      "character": "내레이터",
-      "text": "백은색 단발머리에 신비로운 보랏빛 눈동자를 가진 소녀였다. 그녀는 당황한 듯 내 손을 잡고 일으켜 세워주려 했지만... ",
-      "nextScriptId": "seolah_intro_03"
-    },
-    {
-      "id": "seolah_intro_03",
-      "type": "dialogue",
-      "character": "내레이터",
-      "effectSound": "cloth_rustle.mp3",
-      "text": "소녀의 서두르는 몸짓에 가방 안의 소지품들이 바닥으로 쏟아져 나와 뒤섞여 버렸다.",
-      "nextScriptId": "seolah_intro_04"
-    },
-    {
-      "id": "seolah_intro_04",
-      "type": "dialogue",
-      "character": "한설아",
-      "characterImage": "한설아_울먹.png",
-      "characterPosition": "center",
-      "text": "어어? 어떡해! 입학식 날부터 물건이 다 섞여버렸어... 죄송해요, 제가 금방 주울게요! ",
-      "nextScriptId": "seolah_intro_05"
-    },
-    {
-      "id": "seolah_intro_05",
+      "id": "protagonist_01",
       "type": "dialogue",
       "character": "주인공",
-      "text": "아냐, 나도 같이 주울게. 너야말로 다친 데는 없어?",
-      "nextScriptId": "seolah_intro_06"
+      "background": "아침교실.png",
+      "text": "후우... 긴장되네. 평범한 고등학교 생활을 보낼 수 있으면 좋을 텐데.",
+      "nextScriptId": "seolah_crash"
     },
     {
-      "id": "seolah_intro_06",
-      "type": "dialogue",
-      "character": "한설아",
-      "characterImage": "한설아_미소.png",
-      "characterPosition": "center",
-      "text": "전 멀쩡해요! 이래 봬도 몸은 튼튼하거든요! 에헤헤, 당신은 정말 친절하시네요. ",
-      "nextScriptId": "seolah_intro_07"
-    },
-    {
-      "id": "seolah_intro_07",
-      "type": "dialogue",
-      "character": "내레이터",
-      "text": "소녀는 쏟아진 물건들을 서둘러 가방에 쑤셔 넣더니, 손목시계를 보고는 소리를 질렀다.",
-      "nextScriptId": "seolah_intro_08"
-    },
-    {
-      "id": "seolah_intro_08",
-      "type": "dialogue",
-      "character": "한설아",
-      "characterImage": "한설아_놀람.png",
-      "characterPosition": "center",
-      "text": "허억! 시간이 벌써 이렇게! 저, 저 먼저 가볼게요! 아, 제 이름은 한설아예요! 나중에 꼭 다시 봐요! ",
-      "nextScriptId": "move_to_hallway"
-    },
-    {
-      "id": "move_to_hallway",
+      "id": "seolah_crash",
       "type": "dialogue",
       "character": "내레이터",
       "background": "아침교실.png",
-      "music": "잔잔한음악.mp3",
-      "effectSound": "footsteps.mp3",
-      "text": "폭풍 같은 만남이 지나가고, 나는 간신히 교실 건물로 들어섰다. 하지만 복도 끝에서 차가운 기운이 느껴졌다. ",
-      "nextScriptId": "seoyoon_intro_01"
+      "text": "교문으로 향하던 그때, 뒤쪽에서 급박한 발소리와 함께 누군가 외치는 소리가 들려왔다.",
+      "nextScriptId": "seolah_01"
     },
     {
-      "id": "seoyoon_intro_01",
+      "id": "seolah_01",
       "type": "dialogue",
-      "character": "신서윤",
-      "characterImage": "신서윤.png",
+      "character": "???",
+      "characterImage": "한설아_panic.png",
       "characterPosition": "center",
-      "text": "거기 신입생. 잠시 멈추도록 하세요. ",
-      "nextScriptId": "seoyoon_intro_02"
+      "background": "아침교실.png",
+      "text": "와아아아?! 비, 비켜주세요~! 멈출 수가 없어요오오!",
+      "nextScriptId": "seolah_02"
     },
     {
-      "id": "seoyoon_intro_02",
+      "id": "seolah_02",
       "type": "dialogue",
       "character": "내레이터",
-      "text": "단정한 교복 차림에 학생회장 완장을 찬 선배가 내 앞을 막아섰다. 날카로운 청회색 눈동자가 안경 너머로 나를 꿰뚫어 보는 듯했다. ",
-      "nextScriptId": "seoyoon_intro_03"
+      "background": "아침교실.png",
+      "text": "눈부신 백은색 단발머리를 휘날리며 달려오던 소녀는, 자신의 발에 걸려 그대로 내 등 뒤로 넘어져 버렸다. ",
+      "nextScriptId": "seolah_03"
     },
     {
-      "id": "seoyoon_intro_03",
+      "id": "seolah_03",
       "type": "dialogue",
-      "character": "신서윤",
-      "characterImage": "신서윤.png",
+      "character": "소녀",
+      "characterImage": "한설아_sad.png",
       "characterPosition": "center",
-      "text": "넥타이가 비뚤어져 있고, 무릎에 흙이 묻어 있군요. 입학식 날부터 복장이 그게 뭡니까? 품행을 단정히 하세요.",
-      "nextScriptId": "seoyoon_intro_04"
+      "background": "아침교실.png",
+      "text": "아구구... 에헤헤... 또 넘어졌네. ",
+      "nextScriptId": "seolah_04"
     },
     {
-      "id": "seoyoon_intro_04",
+      "id": "seolah_04",
+      "type": "dialogue",
+      "character": "소녀",
+      "characterImage": "한설아_smile.png",
+      "characterPosition": "center",
+      "background": "아침교실.png",
+      "text": "하지만 괜찮아! 다시 일어나면 되니까!...앗, 혹시 부딪히셨나요? 죄송합니다!",
+      "nextScriptId": "protagonist_02"
+    },
+    {
+      "id": "protagonist_02",
       "type": "dialogue",
       "character": "주인공",
-      "text": "아... 오다가 조금 일이 있어서요. 죄송합니다.",
-      "nextScriptId": "seoyoon_intro_05"
+      "background": "아침교실.png",
+      "text": "아, 괜찮아. 그보다 무릎은 괜찮니? 피가 나는 것 같은데.",
+      "nextScriptId": "seolah_05"
     },
     {
-      "id": "seoyoon_intro_05",
+      "id": "seolah_05",
+      "type": "dialogue",
+      "character": "소녀",
+      "characterImage": "한설아_panic.png",
+      "characterPosition": "center",
+      "background": "아침교실.png",
+      "text": "어라? 0.5초 만에 사과 완료!  정말 괜찮아요! 저는 이래 봬도 튼튼하니까요!",
+      "nextScriptId": "seolah_06"
+    },
+    {
+      "id": "seolah_06",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "아침교실.png",
+      "text": "소녀는 보랏빛 눈동자를 반짝이며 활짝 웃어 보였다.  키가 152cm 정도일까, 우리 반에서 가장 작은 편에 속할 것 같은 아담한 체구였다. ",
+      "nextScriptId": "seoyoon_01"
+    },
+    {
+      "id": "seoyoon_01",
+      "type": "dialogue",
+      "character": "???",
+      "characterImage": "신서윤_serious.png",
+      "characterPosition": "right",
+      "background": "아침교실.png",
+      "music": "잔잔한음악.mp3",
+      "text": "거기, 입구에서 소란 피우지 마세요. 통행에 방해가 됩니다.",
+      "nextScriptId": "seoyoon_02"
+    },
+    {
+      "id": "seoyoon_02",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "아침교실.png",
+      "text": "차가운 느낌의 청회색 눈동자를 가진 선배가 우리를 내려다보고 있었다.  학생회장 완장을 차고 있는 그녀는 지적인 이미지를 주는 은테 안경을 쓰고 있었다. ",
+      "nextScriptId": "seoyoon_03"
+    },
+    {
+      "id": "seoyoon_03",
+      "type": "dialogue",
+      "character": "학생회장",
+      "characterImage": "신서윤_normal.png",
+      "characterPosition": "right",
+      "background": "아침교실.png",
+      "text": "신입생인가요? 입학식은 강당에서 곧 시작될 예정입니다. 불필요한 행동은 배제하고 이동하도록 하세요. ",
+      "nextScriptId": "seolah_07"
+    },
+    {
+      "id": "seolah_07",
+      "type": "dialogue",
+      "character": "소녀",
+      "characterImage": "한설아_panic.png",
+      "characterPosition": "center",
+      "background": "아침교실.png",
+      "text": "와앗, 학생회장님! 죄송합니다! 바로 갈게요! 자, 주인공 군도 어서 가요!",
+      "nextScriptId": "protagonist_03"
+    },
+    {
+      "id": "protagonist_03",
+      "type": "dialogue",
+      "character": "주인공",
+      "background": "아침교실.png",
+      "text": "응? 내 이름을 어떻게 알아?",
+      "nextScriptId": "seolah_08"
+    },
+    {
+      "id": "seolah_08",
+      "type": "dialogue",
+      "character": "소녀",
+      "characterImage": "한설아_smile.png",
+      "characterPosition": "center",
+      "background": "아침교실.png",
+      "text": "에헤헤, 명찰 보고 알았죠! 나는 한설아예요. 잘 부탁해! ",
+      "nextScriptId": "seoyoon_04"
+    },
+    {
+      "id": "seoyoon_04",
       "type": "dialogue",
       "character": "신서윤",
-      "characterImage": "신서윤.png",
-      "characterPosition": "center",
-      "effectSound": "sigh.mp3",
-      "text": "후우... 변명은 필요 없습니다. 다음부터는 주의하도록. 어서 교실로 들어가 보세요. ",
+      "characterImage": "신서윤_normal.png",
+      "characterPosition": "right",
+      "background": "아침교실.png",
+      "text": "(한숨을 쉬며) 설아 너는 여전하구나... 한심하다고 말하고 싶지만, 일단은 들어가 봐. ",
       "nextScriptId": "choice_01"
     },
     {
       "id": "choice_01",
       "type": "choice",
       "character": "내레이터",
-      "text": "입학식 시작 전, 잠시 시간이 남았다. 무엇을 하는 게 좋을까?",
+      "background": "아침교실.png",
+      "text": "두 사람과 함께 강당으로 향하려는데, 복도 저편에서 누군가 나를 부르는 것 같다. 어떻게 할까?",
       "choices": [
         {
-          "text": "교실 자리에 앉아 설아와 섞인 물건이 있는지 확인한다",
-          "nextScriptId": "route_check_items"
+          "text": "한설아를 따라 강당으로 급히 뛰어간다.",
+          "nextScriptId": "route_seolah"
         },
         {
-          "text": "복도에 서서 차가운 분위기의 신서윤 선배를 조금 더 관찰한다",
-          "nextScriptId": "route_watch_seoyoon"
+          "text": "신서윤 선배에게 학교 규칙에 대해 좀 더 물어본다.",
+          "nextScriptId": "route_seoyoon"
+        },
+        {
+          "text": "복도 저편에서 느껴지는 시선을 확인하러 간다.",
+          "nextScriptId": "route_unknown"
         }
       ]
+    },
+    {
+      "id": "route_seolah",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_smile.png",
+      "characterPosition": "center",
+      "background": "아침교실.png",
+      "text": "와아, 같이 가주는 거예요? 고마워요! 우리 1학년 1반 친구가 되면 좋겠다!",
+      "nextSceneFile": "Chapter1/chapter1_seolah_path.json"
+    },
+    {
+      "id": "route_seoyoon",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_normal.png",
+      "characterPosition": "right",
+      "background": "아침교실.png",
+      "text": "호기심이 많은 신입생이군요. 좋아요, 기본적인 수칙 정도는 설명해 줄 수 있습니다. ",
+      "nextSceneFile": "Chapter1/chapter1_seoyoon_path.json"
+    },
+    {
+      "id": "route_unknown",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "아침교실.png",
+      "text": "인파에서 조금 벗어나 복도 끝을 바라보자, 개량 한복 스타일의 교복을 입은 소녀가 부채로 입가를 가린 채 나를 보고 있었다. ",
+      "nextSceneFile": "Chapter1/chapter1_sohee_path.json"
     }
   ]
 }

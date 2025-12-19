@@ -26,6 +26,9 @@ const VisualNovel: React.FC = () => {
   // 대화 로그
   const [dialogueLog, setDialogueLog] = useState<DialogueLogEntry[]>([]);
   
+  // 선택지 잠금 상태
+  const [choiceLocks, setChoiceLocks] = useState<boolean[]>([]);
+  
   // Auto 모드 타이머
   const autoTimerRef = useRef<number | null>(null);
   
@@ -66,6 +69,25 @@ const VisualNovel: React.FC = () => {
             dialogue: line.text,
             timestamp: Date.now()
           }]);
+        }
+
+        // 선택지 잠금 상태 확인 (choice 타입인 경우)
+        if (line.type === 'choice' && line.choices) {
+          console.log('🎯 선택지 라인 감지, 유효성 검사 시작');
+          const checkAllChoices = async () => {
+            const locks = await Promise.all(
+              line.choices!.map(async (choice, index) => {
+                console.log(`\n--- 선택지 ${index + 1}: "${choice.text}" ---`);
+                const isValid = await checkChoiceValidity(choice);
+                const locked = !isValid;
+                console.log(`결과: ${locked ? '🔒 잠금' : '🔓 해제'}\n`);
+                return locked; // valid하면 잠금 해제(false), invalid하면 잠금(true)
+              })
+            );
+            console.log('🎯 최종 잠금 상태:', locks);
+            setChoiceLocks(locks);
+          };
+          checkAllChoices();
         }
 
         // 배경음악 처리
@@ -147,20 +169,64 @@ const VisualNovel: React.FC = () => {
     }
   }, [currentLine]);
 
-  // 선택지 유효성 검사
+  // 선택지 유효성 검사 (재귀적으로 최종 도달 지점까지 확인)
   const checkChoiceValidity = useCallback(async (choice: { nextScriptId?: string; nextSceneFile?: string }): Promise<boolean> => {
+    console.log('🔍 선택지 검사:', choice);
+    
     if (choice.nextSceneFile) {
-      // 씬 파일 존재 여부 확인
+      // 씬 파일 존재 여부 확인 - 실제 JSON 파싱으로 검증
       try {
-        const response = await fetch(`/web-hub/VisualNovel/Script/${choice.nextSceneFile}`, { method: 'HEAD' });
-        return response.ok;
-      } catch {
+        const response = await fetch(`/web-hub/VisualNovel/Script/${choice.nextSceneFile}`);
+        if (!response.ok) {
+          console.log(`📄 파일 확인 [${choice.nextSceneFile}]: ❌ HTTP ${response.status}`);
+          return false;
+        }
+        
+        // 실제로 JSON을 파싱해서 유효한 씬 파일인지 확인
+        const data = await response.json();
+        const isValid = data && typeof data === 'object' && 'sceneId' in data && 'lines' in data;
+        console.log(`📄 파일 확인 [${choice.nextSceneFile}]:`, isValid ? '✅ 유효한 씬 파일' : '❌ 유효하지 않은 JSON');
+        return isValid;
+      } catch (error) {
+        console.log(`📄 파일 확인 [${choice.nextSceneFile}]: ❌ 파싱 오류`, error);
         return false;
       }
     } else if (choice.nextScriptId && currentScene) {
       // 씬 내 라인 ID 존재 여부 확인
-      return currentScene.lines.some(line => line.id === choice.nextScriptId);
+      const targetLine = currentScene.lines.find(line => line.id === choice.nextScriptId);
+      if (!targetLine) {
+        console.log(`🔗 라인 확인 [${choice.nextScriptId}]: ❌ 라인 없음`);
+        return false; // 라인이 존재하지 않음
+      }
+      
+      console.log(`🔗 라인 확인 [${choice.nextScriptId}]: ✅ 라인 존재`);
+      
+      // 해당 라인이 nextSceneFile을 가지고 있으면 그 파일도 확인
+      if (targetLine.nextSceneFile) {
+        console.log(`  ↳ 다음 파일 확인 필요: ${targetLine.nextSceneFile}`);
+        try {
+          const response = await fetch(`/web-hub/VisualNovel/Script/${targetLine.nextSceneFile}`);
+          if (!response.ok) {
+            console.log(`  📄 파일 확인 [${targetLine.nextSceneFile}]: ❌ HTTP ${response.status}`);
+            return false;
+          }
+          
+          // 실제로 JSON을 파싱해서 유효한 씬 파일인지 확인
+          const data = await response.json();
+          const isValid = data && typeof data === 'object' && 'sceneId' in data && 'lines' in data;
+          console.log(`  📄 파일 확인 [${targetLine.nextSceneFile}]:`, isValid ? '✅ 유효한 씬 파일' : '❌ 유효하지 않은 JSON');
+          return isValid;
+        } catch (error) {
+          console.log(`  📄 파일 확인 [${targetLine.nextSceneFile}]: ❌ 파싱 오류`, error);
+          return false;
+        }
+      }
+      
+      // nextSceneFile이 없으면 라인만 있으면 OK
+      console.log(`  ✅ 더 이상 확인할 파일 없음 - 유효`);
+      return true;
     }
+    console.log('⚠️ nextScriptId와 nextSceneFile 둘 다 없음');
     return false;
   }, [currentScene]);
 
@@ -271,18 +337,7 @@ const VisualNovel: React.FC = () => {
               <ChoiceButtons 
                 choices={currentLine.choices} 
                 onChoice={handleChoice}
-                lockedChoices={currentLine.choices.map(choice => {
-                  // nextSceneFile이 있는 경우: 파일 존재 여부는 실시간으로 확인할 수 없으므로 기본적으로 잠금 해제
-                  if (choice.nextSceneFile) {
-                    return false; // 실제 파일 존재 여부는 클릭 시 확인
-                  }
-                  // nextScriptId가 있는 경우: 현재 씬에 해당 ID가 있는지 확인
-                  if (choice.nextScriptId && currentScene) {
-                    return !currentScene.lines.some(line => line.id === choice.nextScriptId);
-                  }
-                  // 둘 다 없으면 잠금
-                  return true;
-                })}
+                lockedChoices={choiceLocks}
               />
             ) : (
               <DialogueBox 

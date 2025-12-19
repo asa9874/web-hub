@@ -25,36 +25,68 @@ const StoryEditor: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const [nodes, setNodes] = useState<SceneNode[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedScene, setSelectedScene] = useState<ScriptScene | null>(null);
-
-  // 챕터별 씬 파일 경로
-  const sceneFiles = {
-    1: ['01_Entrance.json', '02_First_Meeting.json', '03_Siren_Alert.json'],
-    2: ['01_Sakura_Route.json', '01_Yuki_Route.json', '01_Solo_Route.json'],
-    3: ['01_Sakura_Training.json', '01_Yuki_Investigation.json', '01_Solo_Mystery.json'],
-    4: ['01_Sakura_Partnership.json', '01_Yuki_Truth.json', '01_Solo_Resolution.json', 
-        '01_Team_Up.json', '01_Alternative_Path.json', '01_Hidden_Truth.json'],
-    5: ['Ending_Sakura.json', 'Ending_Yuki.json', 'Ending_Solo.json', 
-        'Ending_True.json', 'Ending_Peace.json', 'Ending_Normal.json']
-  };
+  
+  // Pan & Zoom 상태
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const [scale, setScale] = useState(1);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const loadScenes = async () => {
       setIsLoading(true);
       const loadedScenes: Record<string, ScriptScene> = {};
-      
-      for (const [chapter, files] of Object.entries(sceneFiles)) {
-        for (const file of files) {
-          const sceneFile = `Chapter${chapter}/${file}`;
-          try {
-            const response = await fetch(`/web-hub/VisualNovel/Script/${sceneFile}`);
-            const scene = await response.json() as ScriptScene;
-            loadedScenes[sceneFile] = scene;
-          } catch (error) {
-            console.error(`씬 로드 실패: ${sceneFile}`, error);
+      const toLoad: string[] = ['Chapter1/chapter1_entrance.json']; // 시작점
+      const loaded = new Set<string>();
+
+      console.log('🎬 스토리 그래프 로딩 시작...');
+
+      // BFS 방식으로 연결된 모든 씬 탐색
+      while (toLoad.length > 0) {
+        const sceneFile = toLoad.shift()!;
+        
+        // 이미 로드했거나 로드 중이면 스킵
+        if (loaded.has(sceneFile)) continue;
+        loaded.add(sceneFile);
+
+        try {
+          console.log(`📄 로딩 시도: ${sceneFile}`);
+          const response = await fetch(`/web-hub/VisualNovel/Script/${sceneFile}`);
+          
+          if (!response.ok) {
+            console.warn(`⚠️ 씬 로드 실패 (${response.status}): ${sceneFile}`);
+            continue;
           }
+          
+          const scene = await response.json() as ScriptScene;
+          loadedScenes[sceneFile] = scene;
+          console.log(`✅ 로드 완료: ${sceneFile} (${scene.title})`);
+
+          // 이 씬에서 연결된 다른 씬들을 찾아서 큐에 추가
+          scene.lines.forEach(line => {
+            // 직접 연결된 씬
+            if (line.nextSceneFile && !loaded.has(line.nextSceneFile)) {
+              console.log(`  → 다음 씬 발견: ${line.nextSceneFile}`);
+              toLoad.push(line.nextSceneFile);
+            }
+            
+            // 선택지를 통해 연결된 씬들
+            if (line.choices) {
+              line.choices.forEach(choice => {
+                if (choice.nextSceneFile && !loaded.has(choice.nextSceneFile)) {
+                  console.log(`  → 선택지 씬 발견: ${choice.nextSceneFile}`);
+                  toLoad.push(choice.nextSceneFile);
+                }
+              });
+            }
+          });
+        } catch (error) {
+          console.error(`❌ 씬 로드 에러: ${sceneFile}`, error);
         }
       }
       
+      console.log(`🎉 총 ${Object.keys(loadedScenes).length}개의 씬을 로드했습니다.`);
+      console.log('로드된 씬 목록:', Object.keys(loadedScenes));
       setScenes(loadedScenes);
       generateGraph(loadedScenes);
       setIsLoading(false);
@@ -66,59 +98,170 @@ const StoryEditor: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const generateGraph = (loadedScenes: Record<string, ScriptScene>) => {
     const graphNodes: SceneNode[] = [];
     const connections: Record<string, Set<string>> = {};
+    const parentMap: Record<string, Set<string>> = {}; // child -> parents
+    const childrenMap: Record<string, Set<string>> = {}; // parent -> children
 
     // 각 씬의 연결 관계 파싱
     Object.entries(loadedScenes).forEach(([sceneFile, scene]) => {
       if (!connections[sceneFile]) {
         connections[sceneFile] = new Set();
       }
+      if (!childrenMap[sceneFile]) {
+        childrenMap[sceneFile] = new Set();
+      }
 
       scene.lines.forEach(line => {
         if (line.nextSceneFile) {
           connections[sceneFile].add(line.nextSceneFile);
+          childrenMap[sceneFile].add(line.nextSceneFile);
+          if (!parentMap[line.nextSceneFile]) {
+            parentMap[line.nextSceneFile] = new Set();
+          }
+          parentMap[line.nextSceneFile].add(sceneFile);
         }
         if (line.choices) {
           line.choices.forEach(choice => {
             if (choice.nextSceneFile) {
               connections[sceneFile].add(choice.nextSceneFile);
+              childrenMap[sceneFile].add(choice.nextSceneFile);
+              if (!parentMap[choice.nextSceneFile]) {
+                parentMap[choice.nextSceneFile] = new Set();
+              }
+              parentMap[choice.nextSceneFile].add(sceneFile);
             }
           });
         }
       });
     });
 
-    // 챕터별 노드 그룹화 및 위치 계산
-    const nodesByChapter: Record<number, string[]> = {};
-    Object.entries(loadedScenes).forEach(([sceneFile, scene]) => {
-      const chapter = scene.chapter;
-      if (!nodesByChapter[chapter]) nodesByChapter[chapter] = [];
-      nodesByChapter[chapter].push(sceneFile);
-    });
+    // BFS로 깊이 계산
+    const depths: Record<string, number> = {};
+    const startNode = 'Chapter1/chapter1_entrance.json';
+    const queue: Array<{ sceneFile: string; depth: number }> = [{ sceneFile: startNode, depth: 0 }];
+    const visited = new Set<string>();
 
-    // 노드 위치 계산 (챕터별 세로 배치, 챕터 내 가로 배치)
-    Object.entries(nodesByChapter).forEach(([chapter, sceneFiles]) => {
-      const chapterNum = parseInt(chapter);
-      const y = 100 + (chapterNum - 1) * 250; // 챕터별 세로 간격
-      const chapterWidth = sceneFiles.length * 280;
-      const startX = (2000 - chapterWidth) / 2; // 가운데 정렬
-      
-      sceneFiles.forEach((sceneFile, index) => {
-        const scene = loadedScenes[sceneFile];
-        if (scene) {
-          graphNodes.push({
-            id: scene.sceneId,
-            sceneFile: sceneFile,
-            title: scene.title,
-            chapter: scene.chapter,
-            x: startX + index * 280,
-            y: y,
-            connections: Array.from(connections[sceneFile] || [])
-          });
+    while (queue.length > 0) {
+      const { sceneFile, depth } = queue.shift()!;
+      if (visited.has(sceneFile)) continue;
+      visited.add(sceneFile);
+      depths[sceneFile] = depth;
+
+      const children = childrenMap[sceneFile] || new Set();
+      children.forEach(child => {
+        if (!visited.has(child)) {
+          queue.push({ sceneFile: child, depth: depth + 1 });
         }
       });
+    }
+
+    // 깊이별로 노드 그룹화
+    const nodesByDepth: Record<number, string[]> = {};
+    Object.entries(depths).forEach(([sceneFile, depth]) => {
+      if (!nodesByDepth[depth]) nodesByDepth[depth] = [];
+      nodesByDepth[depth].push(sceneFile);
     });
 
+    const nodeWidth = 280;
+    const nodeHeight = 250;
+    const positions: Record<string, { x: number; y: number }> = {};
+
+    // 깊이별로 노드 배치
+    Object.entries(nodesByDepth).forEach(([depthStr, sceneFiles]) => {
+      const depth = parseInt(depthStr);
+      const y = 100 + depth * nodeHeight;
+
+      if (depth === 0) {
+        // 루트 노드는 중앙에 배치
+        const rootX = 1000;
+        sceneFiles.forEach(sceneFile => {
+          positions[sceneFile] = { x: rootX, y };
+        });
+      } else {
+        // 부모별로 자식들을 그룹화
+        const parentGroups: Record<string, string[]> = {};
+        sceneFiles.forEach(sceneFile => {
+          const parents = Array.from(parentMap[sceneFile] || []);
+          const parentKey = parents.sort().join(',') || 'orphan';
+          if (!parentGroups[parentKey]) {
+            parentGroups[parentKey] = [];
+          }
+          parentGroups[parentKey].push(sceneFile);
+        });
+
+        // 각 그룹별로 부모 중심으로 배치
+        Object.entries(parentGroups).forEach(([parentKey, children]) => {
+          const parents = parentKey === 'orphan' ? [] : parentKey.split(',');
+          
+          // 부모들의 평균 x 위치 계산
+          let centerX = 1000; // 기본값
+          if (parents.length > 0) {
+            const parentXs = parents.map(p => positions[p]?.x).filter(x => x !== undefined) as number[];
+            if (parentXs.length > 0) {
+              centerX = parentXs.reduce((a, b) => a + b, 0) / parentXs.length;
+            }
+          }
+
+          // 자식들을 부모 중심으로 좌우 대칭 배치
+          const totalWidth = children.length * nodeWidth;
+          const startX = centerX - totalWidth / 2 + nodeWidth / 2;
+
+          children.forEach((sceneFile, index) => {
+            positions[sceneFile] = {
+              x: startX + index * nodeWidth,
+              y: y
+            };
+          });
+        });
+      }
+    });
+
+    // 그래프 노드 생성
+    Object.entries(loadedScenes).forEach(([sceneFile, scene]) => {
+      const pos = positions[sceneFile];
+      if (pos) {
+        graphNodes.push({
+          id: scene.sceneId,
+          sceneFile: sceneFile,
+          title: scene.title,
+          chapter: scene.chapter,
+          x: pos.x,
+          y: pos.y,
+          connections: Array.from(connections[sceneFile] || [])
+        });
+      }
+    });
+
+    console.log('📊 그래프 생성 완료:', graphNodes.length, '개의 노드');
     setNodes(graphNodes);
+  };
+
+  // 마우스 드래그 핸들러
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (e.button === 0) { // 왼쪽 마우스 버튼
+      setIsDragging(true);
+      setDragStart({ x: e.clientX - offset.x, y: e.clientY - offset.y });
+    }
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (isDragging) {
+      setOffset({
+        x: e.clientX - dragStart.x,
+        y: e.clientY - dragStart.y
+      });
+    }
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  // 줌 핸들러
+  const handleWheel = (e: React.WheelEvent) => {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? 0.9 : 1.1;
+    const newScale = Math.min(Math.max(0.1, scale * delta), 3);
+    setScale(newScale);
   };
 
   if (isLoading) {
@@ -162,8 +305,25 @@ const StoryEditor: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       </div>
 
       {/* 그래프 영역 */}
-      <div className="relative" style={{ width: '2000px', height: '1500px' }}>
-        <svg className="absolute inset-0" style={{ width: '100%', height: '100%' }}>
+      <div 
+        className="relative w-full h-[calc(100vh-80px)] overflow-hidden cursor-grab active:cursor-grabbing"
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseUp}
+        onWheel={handleWheel}
+      >
+        <div 
+          style={{
+            transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,
+            transformOrigin: '0 0',
+            transition: isDragging ? 'none' : 'transform 0.1s ease-out',
+            width: '4000px',
+            height: '3000px',
+            position: 'relative'
+          }}
+        >
+          <svg className="absolute inset-0" style={{ width: '100%', height: '100%' }}>
           <defs>
             {/* 챕터별 화살표 마커 */}
             {[1, 2, 3, 4, 5].map(chapter => {
@@ -288,6 +448,7 @@ const StoryEditor: React.FC<{ onClose: () => void }> = ({ onClose }) => {
             </div>
           );
         })}
+        </div>
       </div>
 
       {/* 스크립트 상세 모달 */}
@@ -405,21 +566,31 @@ const StoryEditor: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       {/* 범례 */}
       <div className="fixed bottom-6 right-6 bg-white/95 backdrop-blur-sm rounded-xl 
         border-4 border-pink-300 p-4 shadow-xl max-w-xs">
-        <h3 className="font-bold text-gray-800 mb-3">범례</h3>
+        <h3 className="font-bold text-gray-800 mb-3">컨트롤</h3>
         <div className="space-y-2 text-sm">
           <div className="flex items-center gap-2">
-            <div className="w-4 h-4 bg-gradient-to-br from-pink-50 to-white border-2 border-pink-300 rounded" />
-            <span>씬 노드</span>
+            <span className="font-semibold">🖱️ 드래그</span>
+            <span>화면 이동</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-8 h-0.5 bg-pink-500" />
-            <span>→</span>
-            <span>씬 내부 연결</span>
+            <span className="font-semibold">🔍 휠</span>
+            <span>확대/축소</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-8 h-0.5 bg-pink-500 border-dashed border-2" style={{ borderTop: '2px dashed' }} />
-            <span>→</span>
-            <span>챕터간 연결</span>
+            <span className="font-semibold text-pink-600">배율: {(scale * 100).toFixed(0)}%</span>
+          </div>
+        </div>
+        <div className="mt-3 pt-3 border-t-2 border-pink-200">
+          <h4 className="font-bold text-gray-800 mb-2 text-sm">범례</h4>
+          <div className="space-y-1 text-xs">
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 bg-gradient-to-br from-pink-50 to-white border-2 border-pink-300 rounded" />
+              <span>씬 노드</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-0.5 bg-pink-500" />
+              <span>→ 씬 연결</span>
+            </div>
           </div>
         </div>
       </div>
