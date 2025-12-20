@@ -1,10 +1,12 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface CoverPageProps {
   onStartGame: () => void;
 }
 
 const CoverPage: React.FC<CoverPageProps> = ({ onStartGame }) => {
+  const navigate = useNavigate();
   const [imageReady, setImageReady] = React.useState(false);
 
   return (
@@ -32,6 +34,14 @@ const CoverPage: React.FC<CoverPageProps> = ({ onStartGame }) => {
             className="w-full px-8 py-4 bg-gradient-to-r from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white text-lg font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95"
           >
             게임 시작
+          </button>
+
+          {/* 히로인 정보 버튼 */}
+          <button 
+            onClick={() => navigate('/heroin-info')}
+            className="w-full px-8 py-3 bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 border border-purple-400 hover:border-purple-300"
+          >
+            🎀 히로인 정보
           </button>
 
           {/* 설정 버튼 */}

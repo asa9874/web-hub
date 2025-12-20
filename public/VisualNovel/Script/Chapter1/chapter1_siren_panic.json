@@ -1,0 +1,148 @@
+{
+  "sceneId": "chapter1_siren_panic",
+  "title": "맞잡은 손과 흔들리는 눈동자",
+  "chapter": 1,
+  "startId": "panic_01",
+  "lines": [
+    {
+      "id": "panic_01",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "학교_교실_내부.png",
+      "music": "tense_emergency.mp3",
+      "text": "나는 떨고 있는 설아의 손을 꽉 맞잡았다. 16세 소년의 투박한 손 안으로 느껴지는 그녀의 손은 차갑게 식어 있었다.",
+      "nextScriptId": "panic_02"
+    },
+    {
+      "id": "panic_02",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_surprised",
+      "characterPosition": "center",
+      "text": "어...?!",
+      "nextScriptId": "panic_03"
+    },
+    {
+      "id": "panic_03",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "갑작스러운 스킨십에 설아의 보랏빛 눈동자가 크게 흔들렸다. 그녀의 눈동자 속 은색 별 모양 하이라이트가 당혹감으로 반짝였다.",
+      "nextScriptId": "panic_04"
+    },
+    {
+      "id": "panic_04",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_embarrassed",
+      "text": "아, 저기... 에헤헤. 갑자기 손을 잡으면 부끄럽잖아... 하지만...",
+      "nextScriptId": "panic_05"
+    },
+    {
+      "id": "panic_05",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "text": "고마워. 네가 잡아주니까 조금... 아니, 아주 많이 안심이 돼.",
+      "nextScriptId": "panic_06"
+    },
+    {
+      "id": "panic_06",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "컷씬_맞잡은_두_손.png",
+      "text": "설아는 맞잡은 내 손에 힘을 주었다. 그녀의 은색 별 머리핀이 약하게 빛을 내며 그녀의 불안한 마음에 반응하고 있었다.",
+      "nextScriptId": "panic_07"
+    },
+    {
+      "id": "panic_07",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "학교_교실_내부.png",
+      "effectSound": "siren_loud.mp3",
+      "text": "창밖에서 울려 퍼지는 사이렌은 인간의 절망과 슬픔이 실체화된 괴수, '부정'의 출현을 알리는 경고였다.",
+      "nextScriptId": "panic_08"
+    },
+    {
+      "id": "panic_08",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_serious",
+      "text": "(나직하게) '부정'이 가까이 있어... 느껴져. 이 정도의 기운이라면 적어도 C급은 될 거야.",
+      "nextScriptId": "panic_09"
+    },
+    {
+      "id": "panic_09",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "평소의 허당스러운 모습은 온데간데없었다. 설아는 마치 전장으로 향하는 전사와 같은 진지한 눈빛을 하고 있었다.",
+      "nextScriptId": "panic_10"
+    },
+    {
+      "id": "panic_10",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_panic",
+      "text": "아, 아와와! 방금 그건 혼잣말이야! 마법소녀의 직감이라든가 그런 거 절대 아니니까!",
+      "nextScriptId": "panic_11"
+    },
+    {
+      "id": "panic_11",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "설아는 황급히 입을 막으며 당황했다. 비밀 유지에 취약한 그녀의 버릇이 또 튀어나온 모양이다.",
+      "nextScriptId": "panic_12"
+    },
+    {
+      "id": "panic_12",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_serious",
+      "characterPosition": "right",
+      "text": "전원 조용히! 학생회와 교직원의 안내에 따라 신속하게 지하 대피소로 이동하세요.",
+      "nextScriptId": "panic_13"
+    },
+    {
+      "id": "panic_13",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "교실 문을 열고 나타난 신서윤 선배의 목소리가 소란스러운 교실을 단숨에 평정했다.",
+      "nextScriptId": "panic_14"
+    },
+    {
+      "id": "panic_14",
+      "type": "dialogue",
+      "character": "신서윤",
+      "text": "당황하지 말고 열을 맞춰 이동하도록. 한설아 학생, 특히 당신은 넘어지지 않게 조심하세요.",
+      "nextScriptId": "panic_15"
+    },
+    {
+      "id": "panic_15",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_serious",
+      "characterPosition": "left",
+      "text": "네, 선배님. ...하지만 상황이 좋지 않아 보여요. 저기, 나...",
+      "nextScriptId": "choice_panic_01"
+    },
+    {
+      "id": "choice_panic_01",
+      "type": "choice",
+      "character": "내레이터",
+      "text": "설아가 무언가 결심한 듯 내 손을 놓으려 한다. 그녀의 눈빛은 복도로 향하고 있다. 어떻게 할까?",
+      "choices": [
+        {
+          "text": "위험하니까 같이 대피소로 가자고 설득한다.",
+          "nextSceneFile": "Chapter1/chapter1_evacuation_together.json"
+        },
+        {
+          "text": "무슨 일인지 모르겠지만, 조심하라고 말해준다.",
+          "nextSceneFile": "Chapter1/chapter1_seolah_mission_start.json"
+        },
+        {
+          "text": "선배님께 설아를 맡기고 상황을 지켜본다.",
+          "nextSceneFile": "Chapter1/chapter1_seoyoon_intervention.json"
+        }
+      ]
+    }
+  ]
+}

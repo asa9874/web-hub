@@ -1,0 +1,389 @@
+.heroin-detail-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
+  font-family: '맑은 고딕', sans-serif;
+}
+
+.heroin-detail-header {
+  max-width: 1400px;
+  margin: 0 auto 30px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 20px 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.back-btn {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.back-btn:hover {
+  background: #764ba2;
+  transform: translateX(-5px);
+}
+
+.heroin-detail-title {
+  font-size: 40px;
+  color: #333;
+  margin: 0;
+  flex: 1;
+}
+
+.heroin-detail-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  gap: 30px;
+}
+
+/* 이미지 섹션 */
+.heroin-detail-image-section {
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+}
+
+.heroin-detail-image {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
+}
+
+.heroin-detail-image img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  display: block;
+}
+
+.image-toggle-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.toggle-btn {
+  flex: 1;
+  padding: 12px 15px;
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #666;
+}
+
+.toggle-btn:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.toggle-btn.active {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* 정보 섹션 */
+.heroin-detail-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.info-card {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  animation: slideInRight 0.5s ease-out;
+}
+
+.info-card-title {
+  font-size: 20px;
+  color: #333;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 3px solid #667eea;
+  font-weight: bold;
+}
+
+/* 기본 정보 그리드 */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-label {
+  font-size: 12px;
+  color: #999;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-bottom: 5px;
+  letter-spacing: 1px;
+}
+
+.info-value {
+  font-size: 16px;
+  color: #333;
+  font-weight: 600;
+}
+
+/* 능력 정보 */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.stat-item {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.stat-label {
+  display: block;
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 8px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  display: block;
+  font-size: 18px;
+  color: #667eea;
+  font-weight: bold;
+}
+
+/* 외형 정보 */
+.appearance-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+.appearance-item {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 15px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.appearance-item:last-child {
+  border-bottom: none;
+}
+
+.appearance-label {
+  font-weight: bold;
+  color: #764ba2;
+  font-size: 14px;
+}
+
+.appearance-value {
+  color: #666;
+  font-size: 14px;
+}
+
+/* 성격 태그 */
+.tags-container {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.personality-tag {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* 배경 스토리 */
+.backstory-text {
+  line-height: 1.8;
+  color: #555;
+  font-size: 15px;
+}
+
+/* 인간관계 */
+.relationships {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.relationship-item {
+  padding: 15px;
+  background: #f9f9f9;
+  border-left: 4px solid #667eea;
+  border-radius: 4px;
+}
+
+.relationship-target {
+  font-size: 15px;
+  color: #333;
+  margin: 0 0 8px 0;
+  font-weight: bold;
+}
+
+.relationship-desc {
+  font-size: 13px;
+  color: #666;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* 말투 가이드 */
+.speech-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.speech-tone {
+  margin: 0;
+  font-size: 15px;
+  color: #555;
+  line-height: 1.6;
+}
+
+.speech-habits,
+.speech-examples {
+  margin: 0;
+}
+
+.speech-habits strong,
+.speech-examples strong {
+  display: block;
+  margin-bottom: 10px;
+  color: #333;
+  font-size: 15px;
+}
+
+.speech-habits ul,
+.speech-examples ul {
+  margin: 0;
+  padding-left: 20px;
+  list-style-position: inside;
+}
+
+.speech-habits li,
+.speech-examples li {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+/* 에러 상태 */
+.heroin-detail-error {
+  max-width: 1400px;
+  margin: 100px auto;
+  background: white;
+  padding: 50px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.heroin-detail-error p {
+  font-size: 20px;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.heroin-detail-error button {
+  padding: 12px 30px;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.heroin-detail-error button:hover {
+  background: #764ba2;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (max-width: 1024px) {
+  .heroin-detail-content {
+    grid-template-columns: 1fr;
+  }
+
+  .heroin-detail-image-section {
+    position: static;
+  }
+
+  .heroin-detail-title {
+    font-size: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroin-detail-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .heroin-detail-title {
+    font-size: 28px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .heroin-detail-image {
+    margin-bottom: 20px;
+  }
+}

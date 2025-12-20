@@ -1,0 +1,159 @@
+{
+  "sceneId": "chapter1_solo_run",
+  "title": "비정한(?) 도망자",
+  "chapter": 1,
+  "startId": "run_01",
+  "lines": [
+    {
+      "id": "run_01",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "학교_복도.png",
+      "effectSound": "run_steps.mp3",
+      "text": "나는 뒤도 돌아보지 않고 강당을 향해 전력으로 질주하기 시작했다. ",
+      "nextScriptId": "run_02"
+    },
+    {
+      "id": "run_02",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_panic",
+      "characterPosition": "left",
+      "text": "아와와?! 자, 잠깐만! 같이 가! 나 혼자 두고 가지 마~! ",
+      "nextScriptId": "run_03"
+    },
+    {
+      "id": "run_03",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_tired",
+      "characterPosition": "right",
+      "text": "(깊은 한숨을 내쉬며) 정말이지... 요즘 신입생들은 하나같이 종잡을 수가 없군. ",
+      "nextScriptId": "run_04"
+    },
+    {
+      "id": "run_04",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "컷씬_혼자_도망가는_주인공.png",
+      "text": "멀어지는 설아의 비명소리를 뒤로 한 채, 나는 오직 살아야겠다는 일념 하나로 복도를 가로질렀다. ",
+      "characterExit": "한설아,신서윤",
+      "nextScriptId": "run_05"
+    },
+    {
+      "id": "run_05",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "학교_강당_입구.png",
+      "music": "auditorium_ambience.mp3",
+      "text": "강당 입구에 도착하자, 수많은 신입생의 웅성거림과 입학식 준비 소리가 들려왔다. ",
+      "nextScriptId": "run_06"
+    },
+    {
+      "id": "run_06",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "가쁜 숨을 몰아쉬며 뒤를 돌아보았지만, 다행히 그 무서운(?) 선배나 덜렁거리는 소녀의 모습은 보이지 않았다. ",
+      "nextScriptId": "run_07"
+    },
+    {
+      "id": "run_07",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "후우, 일단은 살았나... 하지만 첫날부터 너무 튀는 행동을 한 건 아닐까 조금 걱정이 되기 시작한다. ",
+      "nextScriptId": "run_08"
+    },
+    {
+      "id": "run_08",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_sad",
+      "characterPosition": "center",
+      "effectSound": "footsteps.mp3",
+      "text": "하아... 하아... 너, 너무해... 어떻게 나만 두고 그렇게 쌩 하니 가버릴 수가 있어? ",
+      "nextScriptId": "run_09"
+    },
+    {
+      "id": "run_09",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_tired",
+      "text": "나 정말로 길 잃어버리는 줄 알았단 말이야. 나 길치란 말이야아... ",
+      "nextScriptId": "run_10"
+    },
+    {
+      "id": "run_10",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "설아는 땀을 뻘뻘 흘리며 내 옆으로 다가와 옷소매를 붙잡았다. 정말로 서운했는지 눈가가 살짝 촉촉해진 것 같다. ",
+      "nextScriptId": "run_11"
+    },
+    {
+      "id": "run_11",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_sad",
+      "text": "나... 아까 그 선배님한테 엄청 혼났단 말이야. 복도에서 뛰면 안 된다고... 훌쩍. ",
+      "nextScriptId": "run_12"
+    },
+    {
+      "id": "run_12",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "text": "그래도... 덕분에 늦지 않게 도착했으니까 이번 한 번만 봐줄게! 에헤헤. ",
+      "nextScriptId": "run_13"
+    },
+    {
+      "id": "run_13",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "금방 다시 웃음을 되찾는 그녀의 모습에 나도 모르게 긴장이 풀린다. 정말이지 미워할 수 없는 타입이다. ",
+      "nextScriptId": "run_14"
+    },
+    {
+      "id": "run_14",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "컷씬_강당_내부_신입생들.png",
+      "text": "우리 둘은 나란히 지정된 반의 좌석을 찾아 앉았다. 곧이어 장내의 조명이 어두워지며 입학식이 시작되었다. ",
+      "nextScriptId": "run_15"
+    },
+    {
+      "id": "run_15",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "단상 위로 아까 복도에서 마주쳤던 그 안경 쓴 선배, 신서윤이 학생 대표로 올라왔다. ",
+      "nextScriptId": "run_16"
+    },
+    {
+      "id": "run_16",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_surprised",
+      "characterPosition": "center",
+      "text": "우와... 저 선배님, 학생회장이었나 봐! 정말 멋지다... 그치? ",
+      "nextScriptId": "choice_run_01"
+    },
+    {
+      "id": "choice_run_01",
+      "type": "choice",
+      "character": "내레이터",
+      "text": "단상 위의 신서윤을 보며 설아가 눈을 반짝인다. 뭐라고 대답할까? ",
+      "choices": [
+        {
+          "text": "그러게, 아까랑은 분위기가 전혀 다르네.",
+          "nextSceneFile": "Chapter1/chapter1_ceremony_proceed.json"
+        },
+        {
+          "text": "난 무서운 선배는 질색이야.",
+          "nextSceneFile": "Chapter1/chapter1_scary_senior.json"
+        },
+        {
+          "text": "설아 너도 저렇게 멋진 사람이 될 수 있을 거야.",
+          "nextSceneFile": "Chapter1/chapter1_seolah_encouragement.json"
+        }
+      ]
+    }
+  ]
+}

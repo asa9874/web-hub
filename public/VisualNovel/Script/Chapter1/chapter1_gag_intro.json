@@ -1,6 +1,6 @@
 {
   "sceneId": "chapter1_gag_intro",
-  "title": "지구 수호자(?)의 비밀",
+  "title": "바닥과 절친한 사이?",
   "chapter": 1,
   "startId": "gag_01",
   "lines": [
@@ -10,130 +10,114 @@
       "character": "한설아",
       "characterImage": "한설아_panic",
       "characterPosition": "center",
-      "text": "히, 히익?! 어, 어떻게 아셨어요?! 제가 지구를 지키는 루나 실버라는 거...!",
+      "text": "아와와! 바, 바닥이랑 절친이라니! 그, 그런 거 아니야!",
       "nextScriptId": "gag_02"
     },
     {
       "id": "gag_02",
       "type": "dialogue",
-      "character": "내레이터",
-      "text": "그녀는 무척 당황한 기색으로 양손으로 입을 꽉 틀어막았다.  하지만 이미 늦었다. 방금 내 입으로 '루나 실버'라고 말해버린 것 같은데.",
+      "character": "한설아",
+      "characterImage": "한설아_embarrassed",
+      "text": "그냥... 바닥이 나를 너무 좋아하는 것 같달까? 자꾸만 나를 끌어당기는 기분이라... 에헤헤.",
       "nextScriptId": "gag_03"
     },
     {
       "id": "gag_03",
       "type": "dialogue",
-      "character": "주인공",
-      "text": "루나... 뭐? 아니, 나는 그냥 농담으로 한 말이었는데. 진짜로 땅이랑 싸우는 중이었어?",
+      "character": "내레이터",
+      "text": "설아는 뺨을 긁적이며 멋쩍게 웃었다. 농담을 진지하게 받아치는 모습이 꽤나 귀엽다. ",
       "nextScriptId": "gag_04"
     },
     {
       "id": "gag_04",
       "type": "dialogue",
       "character": "한설아",
-      "characterImage": "한설아_surprised",
-      "text": "아...! 아하하하! 그, 그렇죠? 농담이죠? 당연히 농담이죠! 에헤헤... 저도 농담으로 받아친 거예요!",
+      "characterImage": "한설아_smile",
+      "text": "음, 근데 너 되게 재미있는 아이구나? 처음 만났는데 그렇게 농담도 잘 하구!",
       "nextScriptId": "gag_05"
     },
     {
       "id": "gag_05",
       "type": "dialogue",
-      "character": "내레이터",
-      "text": "설아는 식은땀을 흘리며 어설프게 웃어 보였다.  그녀의 백은색 단발머리가 세차게 흔들렸다. ",
+      "background": "컷씬_설아_볼_빵빵.png",
+      "character": "한설아",
+      "text": "그치만 다음엔 '멋지게 일어나는 한설아'를 보여줄 테니까 기대하라구!",
       "nextScriptId": "gag_06"
     },
     {
       "id": "gag_06",
       "type": "dialogue",
-      "character": "주인공",
-      "text": "그렇구나. 반응이 너무 리얼해서 진짜인 줄 알았네. '루나 실버'라는 건 뭐야? 새로 나온 게임 캐릭터 이름?",
+      "character": "내레이터",
+      "background": "학교_복도.png",
+      "text": "주먹을 불끈 쥐며 다짐하는 그녀의 머리 위로, 은색 별 모양 머리핀이 아침 햇살을 받아 반짝였다. ",
       "nextScriptId": "gag_07"
     },
     {
       "id": "gag_07",
       "type": "dialogue",
-      "character": "한설아",
-      "characterImage": "한설아_embarrassed",
-      "text": "음... 그게, 그러니까! 요즘 유행하는... 그, 애니메이션 주인공 이름이에요! 제가 워낙 마법소녀를 좋아해서요! ",
+      "character": "???",
+      "characterImage": "신서윤_serious",
+      "characterPosition": "right",
+      "text": "거기, 복도에서 소란 피우지 마세요. 입학식 시작까지 얼마 안 남았습니다.",
       "nextScriptId": "gag_08"
     },
     {
       "id": "gag_08",
       "type": "dialogue",
       "character": "한설아",
-      "text": "와아, 정말 들키는 줄 알고 심장이 튀어나오는 줄 알았... 아니, 아무것도 아니에요! 에헤헤!",
+      "characterImage": "한설아_surprised",
+      "characterPosition": "left",
+      "text": "아와와! 선, 선배님?! 죄송합니다!",
       "nextScriptId": "gag_09"
     },
     {
       "id": "gag_09",
       "type": "dialogue",
       "character": "내레이터",
-      "text": "설아는 안도의 한숨을 내쉬며 가슴을 쓸어내렸다.  그녀의 보랏빛 눈동자가 안심한 듯 별 모양 하이라이트를 반짝이며 빛났다. ",
+      "text": "날카로운 눈매에 지적인 은테 안경을 쓴 여학생이 우리 쪽을 엄하게 바라보고 있었다. 학생회 완장이 눈에 띈다. ",
       "nextScriptId": "gag_10"
     },
     {
       "id": "gag_10",
       "type": "dialogue",
-      "character": "주인공",
-      "text": "그래? 아무튼 엉뚱한 면이 있네. 설아라고 했지? 나랑 같은 반이 된 기념으로 오늘 하루 내 '지구 수호'를 좀 도와줄래?",
+      "character": "신서윤",
+      "characterImage": "신서윤_normal",
+      "text": "신입생인가 보군요. 한설아 학생, 또 사고를 친 건 아니겠죠? ",
       "nextScriptId": "gag_11"
     },
     {
       "id": "gag_11",
       "type": "dialogue",
       "character": "한설아",
-      "characterImage": "한설아_happy",
-      "text": "네! 기꺼이 도와드릴게요! 제가 비록 실수가 조금... 아니, 아주 많지만!  근성 하나만큼은 자신 있거든요! ",
+      "characterImage": "한설아_panic",
+      "text": "아, 아하하... 그게 그러니까... 그냥 바닥이랑 잠깐 인사를...",
       "nextScriptId": "gag_12"
     },
     {
       "id": "gag_12",
       "type": "dialogue",
-      "character": "내레이터",
-      "text": "그녀는 주먹을 불끈 쥐며 의지를 다졌다.  비록 152cm의 작은 체구지만, 뿜어져 나오는 에너지만큼은 거인 못지않았다. ",
-      "nextScriptId": "gag_13"
+      "character": "신서윤",
+      "characterImage": "신서윤_serious",
+      "text": "한숨 나오게 하지 마세요. 옆에 있는 학생도, 얼른 강당으로 이동하도록 하세요. ",
+      "nextScriptId": "choice_gag_01"
     },
     {
-      "id": "gag_13",
-      "type": "dialogue",
-      "character": "한설아",
-      "characterImage": "한설아_smile",
-      "text": "그럼 이제 진짜로 강당에 가요! 이러다가 정말로 지각해서 선생님께 '정화'당할지도 몰라요!",
-      "nextScriptId": "gag_14"
-    },
-    {
-      "id": "gag_14",
-      "type": "dialogue",
-      "character": "내레이터",
-      "background": "아침교실.png",
-      "effectSound": "footsteps.mp3",
-      "text": "우리는 함께 교실을 나섰다. 복도를 걷는 내내 설아는 자신이 좋아하는 디저트 이야기와 마법소녀 굿즈 이야기를 늘어놓았다. ",
-      "nextScriptId": "gag_15"
-    },
-    {
-      "id": "gag_15",
-      "type": "dialogue",
-      "character": "내레이터",
-      "text": "그렇게 떠들썩한 대화 속에 강당으로 향하던 중, 복도 창밖에서 낯선 기계음과 함께 붉은 조명이 반짝이는 것이 보였다.",
-      "nextScriptId": "gag_16"
-    },
-    {
-      "id": "gag_16",
+      "id": "choice_gag_01",
       "type": "choice",
       "character": "내레이터",
-      "text": "강당 입구에 거의 다다랐을 때, 저 멀리 복도 끝에서 누군가 우리 쪽을 바라보고 있는 것 같다.",
+      "text": "엄격해 보이는 선배의 등장. 어떻게 행동할까?",
       "choices": [
         {
-          "text": "설아와 계속 대화하며 강당으로 들어간다.",
-          "nextSceneFile": "Chapter1/chapter1_ceremony_start.json"
+          "text": "죄송합니다! 바로 이동할게요. (설아의 손을 잡고 뛴다)",
+          "nextSceneFile": "Chapter1/chapter1_flutter_heart.json"
         },
         {
-          "text": "복도 끝에 있는 차가운 분위기의 학생을 확인한다.",
-          "nextSceneFile": "Chapter1/chapter1_meet_seoyoon.json"
+          "text": "저... 선배님은 성함이 어떻게 되시나요?",
+          "nextSceneFile": "Chapter1/chapter1_seoyoon_intro.json"
         },
         {
-          "text": "창밖의 붉은 조명이 무엇인지 자세히 살펴본다.",
-          "nextSceneFile": "Chapter1/chapter1_red_light.json"
+          "text": "설아를 버리고 혼자 빛의 속도로 강당으로 튄다.",
+          "nextSceneFile": "Chapter1/chapter1_solo_run.json"
         }
       ]
     }

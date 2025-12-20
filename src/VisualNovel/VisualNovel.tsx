@@ -5,6 +5,7 @@ import DialogueBox from './Components/DialogueBox';
 import ChoiceButtons from './Components/ChoiceButtons';
 import DialogueLog, { type DialogueLogEntry } from './Components/DialogueLog';
 import CoverPage from './Components/CoverPage';
+import LoadingScreen from './Components/LoadingScreen';
 import StoryEditor from './StoryEditor';
 import type { CharacterPosition, ScriptLine, ScriptScene } from './types';
 import config from './Script/config.json';
@@ -14,7 +15,12 @@ const VisualNovel: React.FC = () => {
   const [currentScene, setCurrentScene] = useState<ScriptScene | null>(null);
   const [currentLineId, setCurrentLineId] = useState<string>('');
   const [currentLine, setCurrentLine] = useState<ScriptLine | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [showLoadingScreen, setShowLoadingScreen] = useState(false);
+  const [loadingText, setLoadingText] = useState('게임 로딩 중...');
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  
+  // 로딩 화면 타이머 (2초 이상 로딩시에만 표시)
+  const loadingTimerRef = useRef<number | null>(null);
   
   // 표지 페이지 상태
   const [showCoverPage, setShowCoverPage] = useState(true);
@@ -53,19 +59,65 @@ const VisualNovel: React.FC = () => {
   // 씬 파일 로드
   useEffect(() => {
     const loadScene = async () => {
-      setIsLoading(true);
+      setLoadingProgress(0);
+      setLoadingText('씬 파일 로드 중...');
+      
+      // 2초 후 로딩 화면 표시
+      if (loadingTimerRef.current) {
+        clearTimeout(loadingTimerRef.current);
+      }
+      loadingTimerRef.current = window.setTimeout(() => {
+        setShowLoadingScreen(true);
+      }, 2000);
+      
       try {
+        // 진행률 애니메이션
+        const progressInterval = setInterval(() => {
+          setLoadingProgress(prev => Math.min(prev + Math.random() * 20, 85));
+        }, 200);
+
         const response = await fetch(`/web-hub/VisualNovel/Script/${currentSceneFile}`);
+        setLoadingProgress(70);
+        setLoadingText('데이터 파싱 중...');
+
         const scene = await response.json() as ScriptScene;
+        setLoadingProgress(85);
+        setLoadingText('UI 준비 중...');
+
         setCurrentScene(scene);
         setCurrentLineId(scene.startId);
+        setLoadingProgress(95);
+        
         // 새로운 씬으로 전환될 때 화면의 캐릭터 초기화
         setDisplayedCharacters(new Map());
         console.log(`[씬 전환] ${currentSceneFile}`);
+
+        clearInterval(progressInterval);
+        setLoadingProgress(100);
+        setLoadingText('완료!');
+
+        // 로딩 타이머 취소
+        if (loadingTimerRef.current) {
+          clearTimeout(loadingTimerRef.current);
+          loadingTimerRef.current = null;
+        }
+
+        // 로딩 화면이 표시되었다면, 짧은 시간 후 닫기
+        setShowLoadingScreen(false);
       } catch (error) {
         console.error('씬 로드 실패:', error);
-      } finally {
-        setIsLoading(false);
+        setLoadingText('로드 실패...');
+        setLoadingProgress(0);
+        
+        // 로딩 타이머 취소
+        if (loadingTimerRef.current) {
+          clearTimeout(loadingTimerRef.current);
+          loadingTimerRef.current = null;
+        }
+        
+        setTimeout(() => {
+          setShowLoadingScreen(false);
+        }, 1000);
       }
     };
     
@@ -80,6 +132,9 @@ const VisualNovel: React.FC = () => {
       }
       if (skipTimerRef.current) {
         clearInterval(skipTimerRef.current);
+      }
+      if (loadingTimerRef.current) {
+        clearTimeout(loadingTimerRef.current);
       }
     };
   }, []);
@@ -392,14 +447,12 @@ const VisualNovel: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [isLogOpen, handleToggleUI]);
 
-  if (isLoading || !currentScene || !currentLine) {
+  if (showLoadingScreen || !currentScene || !currentLine) {
     return (
-      <div className="w-full h-screen flex items-center justify-center bg-[#2D1115]">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-pink-300 border-t-pink-600 mb-4" />
-          <p className="text-2xl text-pink-600 font-bold">로딩 중...</p>
-        </div>
-      </div>
+      <LoadingScreen 
+        loadingText={loadingText}
+        progress={loadingProgress}
+      />
     );
   }
 
@@ -436,7 +489,7 @@ const VisualNovel: React.FC = () => {
         <BackgroundImage image={currentBackground} />
         
         {/* 캐릭터 스프라이트 (지속적 캐릭터 시스템) */}
-        {!isUIHidden && displayedCharacters.size > 0 && (
+        {!isUIHidden && displayedCharacters.size > 0 && !currentBackground.startsWith('컷씬') && (
           Array.from(displayedCharacters.values()).map((character) => (
             <CharacterSprite 
               key={character.name}
