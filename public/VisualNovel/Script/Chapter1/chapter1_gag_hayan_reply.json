@@ -1,0 +1,161 @@
+{
+  "sceneId": "chapter1_gag_hayan_reply",
+  "title": "옥상의 온도 조절",
+  "chapter": 1,
+  "startId": "gag_reply_01",
+  "lines": [
+    {
+      "id": "gag_reply_01",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "아침교실.png",
+      "music": "발랄한음악.mp3",
+      "text": "나는 쪽지 뒷면에 정성스럽게 글자를 적어 내려갔다. '옥상은 춥나요? 담요 챙겨갈까요? 아, 따뜻한 캔커피도 필요하시면 말씀하세요.'",
+      "nextScriptId": "gag_reply_02"
+    },
+    {
+      "id": "gag_reply_02",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "쪽지를 원래 있던 자리에 두고 교실을 빠져나왔다. 잠시 후 점심시간, 나는 호기심과 약간의 장난기를 품고 옥상으로 향했다.",
+      "nextScriptId": "gag_reply_03"
+    },
+    {
+      "id": "gag_reply_03",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "비오는밤옥상.png",
+      "music": "잔잔한음악.mp3",
+      "effectSound": "footsteps.mp3",
+      "text": "옥상 문을 열자마자 차가운 바람이 머리칼을 스쳤다. 철조망에 기대어 서 있는 백하얀의 뒷모습이 보였다.",
+      "nextScriptId": "gag_reply_04"
+    },
+    {
+      "id": "gag_reply_04",
+      "type": "dialogue",
+      "character": "백하얀",
+      "characterImage": "백하얀_normal",
+      "characterPosition": "center",
+      "text": "...너, 제정신이야? ",
+      "nextScriptId": "gag_reply_05"
+    },
+    {
+      "id": "gag_reply_05",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "그녀는 뒤돌아보지도 않은 채, 내가 남긴 쪽지를 손가락 사이에 끼워 흔들어 보였다. 층이 많이 진 흑발의 레이어드 컷이 바람에 거칠게 헝클어졌다.",
+      "nextScriptId": "gag_reply_06"
+    },
+    {
+      "id": "gag_reply_06",
+      "type": "dialogue",
+      "character": "주인공",
+      "text": "옥상이 생각보다 춥길래 걱정돼서 그랬죠. 담요는 안 필요하신가요?",
+      "nextScriptId": "gag_reply_07"
+    },
+    {
+      "id": "gag_reply_07",
+      "type": "dialogue",
+      "character": "백하얀",
+      "characterImage": "백하얀_tired",
+      "text": "담요? 하... 어이가 없군. 죽느냐 사느냐 하는 판국에 온도가 무슨 상관이야. 넌 긴장감이란 게 아예 없는 거냐? ",
+      "nextScriptId": "gag_reply_08"
+    },
+    {
+      "id": "gag_reply_08",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "그녀는 입에 물고 있던 체리 맛 막대사탕을 굴리며 낮게 헛웃음을 지었다. 다크서클이 짙은 차가운 삼백안이 나를 꿰뚫어 보듯 향했다.",
+      "nextScriptId": "gag_reply_09"
+    },
+    {
+      "id": "gag_reply_09",
+      "type": "dialogue",
+      "character": "백하얀",
+      "characterImage": "백하얀_serious",
+      "text": "협회 녀석들이 떠드는 '희망' 따위나 믿으며 히히덕거리는 꼴이 우스워서 불러낸 건데... 생각보다 더 이상한 녀석이었군. ",
+      "nextScriptId": "gag_reply_10"
+    },
+    {
+      "id": "gag_reply_10",
+      "type": "dialogue",
+      "character": "주인공",
+      "text": "이상하다니요, 호의입니다. 그래서 하려는 말씀이 뭐였나요?",
+      "nextScriptId": "gag_reply_11"
+    },
+    {
+      "id": "gag_reply_11",
+      "type": "dialogue",
+      "character": "백하얀",
+      "characterImage": "백하얀_normal",
+      "text": "협회가 마법소녀들의 절망을 이용해 뭘 만드는지, 넌 상상도 못 할 거다.  눈을 뜨고 제대로 보라고. 네 주변의 '영웅'들이 어떻게 소모되고 있는지. ",
+      "nextScriptId": "gag_reply_12"
+    },
+    {
+      "id": "gag_reply_12",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "그녀의 목 왼쪽 줄기에 새겨진 검은 장미 문신이 미세하게 떨렸다. 타락한 마법소녀라는 누명을 쓴 채 어둠 속에서 홀로 준비하는 자의 무게감이 느껴졌다.",
+      "nextScriptId": "gag_reply_13"
+    },
+    {
+      "id": "gag_reply_13",
+      "type": "dialogue",
+      "character": "백하얀",
+      "characterImage": "백하얀_smile",
+      "text": "뭐, 담요 같은 소리나 하고 있는 녀석한테 너무 어려운 이야기를 했나? ",
+      "nextScriptId": "gag_reply_14"
+    },
+    {
+      "id": "gag_reply_14",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "하얀은 사탕을 깨물어 먹으며 비릿한 미소를 지었다. 그때, 옥상 문이 다시 한번 거칠게 열렸다.",
+      "nextScriptId": "gag_reply_15"
+    },
+    {
+      "id": "gag_reply_15",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_panic",
+      "characterPosition": "left",
+      "text": "아, 안 돼요! 친구야, 위험해! 그분 곁에서 떨어져요! ",
+      "nextScriptId": "gag_reply_16"
+    },
+    {
+      "id": "gag_reply_16",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "설아가 숨을 헐떡이며 달려와 내 앞을 가로막았다. 그녀의 백은색 단발머리가 땀에 젖어 헝클어져 있었다.",
+      "nextScriptId": "gag_reply_17"
+    },
+    {
+      "id": "gag_reply_17",
+      "type": "dialogue",
+      "character": "백하얀",
+      "characterImage": "백하얀_tired",
+      "text": "여전하네, 멍청한 신입. 여긴 왜 온 거야? 시청률이라도 올리러 왔냐? ",
+      "nextScriptId": "gag_reply_18"
+    },
+    {
+      "id": "gag_reply_18",
+      "type": "choice",
+      "character": "내레이터",
+      "text": "냉소적인 백하얀과 당황한 한설아 사이에서 긴장감이 감돈다. 나는 어떻게 행동해야 할까?",
+      "choices": [
+        {
+          "text": "하얀의 말을 더 들어보고 싶다며 설아를 진정시킨다.",
+          "nextSceneFile": "Chapter1/chapter1_listen_to_hayan.json"
+        },
+        {
+          "text": "설아의 걱정대로 위험하니 하얀에게서 멀어진다.",
+          "nextSceneFile": "Chapter1/chapter1_back_off_from_hayan.json"
+        },
+        {
+          "text": "하얀에게 \"담요 대신 설아라도 안고 계실래요? 따뜻할 텐데\"라고 말한다.",
+          "nextSceneFile": "Chapter1/chapter1_gag_warm_seolah.json"
+        }
+      ]
+    }
+  ]
+}

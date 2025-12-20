@@ -1,0 +1,166 @@
+{
+  "sceneId": "chapter1_seoyoon_future",
+  "title": "마법 너머의 내일",
+  "chapter": 1,
+  "startId": "future_01",
+  "lines": [
+    {
+      "id": "future_01",
+      "type": "dialogue",
+      "character": "주인공",
+      "background": "디저트카페.png",
+      "music": "잔잔한음악.mp3",
+      "text": "선배님, 아까 은퇴 이야기를 하셨잖아요. 혹시 마법소녀 이후의 삶에 대해 구체적으로 생각해 두신 계획이 있으신가요?",
+      "nextScriptId": "future_02"
+    },
+    {
+      "id": "future_02",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_serious",
+      "characterPosition": "center",
+      "text": "....... ",
+      "nextScriptId": "future_03"
+    },
+    {
+      "id": "future_03",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "질문이 떨어지기 무섭게 카페 안의 공기가 미묘하게 가라앉았다. 서윤 선배는 마시려던 블랙커피 잔을 천천히 내려놓았다. ",
+      "nextScriptId": "future_04"
+    },
+    {
+      "id": "future_04",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_sad",
+      "text": "은퇴 이후의 계획이라... 솔직히 말하자면, 아직 데이터가 부족하다. ",
+      "nextScriptId": "future_05"
+    },
+    {
+      "id": "future_05",
+      "type": "dialogue",
+      "character": "신서윤",
+      "text": "13살에 계약한 이후 내 삶의 90% 이상은 '부정'과의 전투와 협회 업무로 채워져 있었으니까. ",
+      "nextScriptId": "future_06"
+    },
+    {
+      "id": "future_06",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_tired",
+      "text": "마법이 사라진 '평범한 인간'으로서의 내가 무엇을 할 수 있을지, 어떤 가치를 가질 수 있을지... 나조차도 잘 모르겠어. ",
+      "nextScriptId": "future_07"
+    },
+    {
+      "id": "future_07",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_sad",
+      "characterPosition": "left",
+      "text": "선배님... ",
+      "nextScriptId": "future_08"
+    },
+    {
+      "id": "future_08",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "평소 어떤 상황에서도 냉철함을 유지하던 '노아 아크'의 모습 뒤에 가려진, 열일곱 소녀의 진솔한 불안감이 느껴졌다. ",
+      "nextScriptId": "future_09"
+    },
+    {
+      "id": "future_09",
+      "type": "dialogue",
+      "character": "주인공",
+      "text": "꼭 대단한 일을 하지 않아도 괜찮지 않을까요? 선배님은 이미 충분히 많은 사람을 구하셨잖아요.",
+      "nextScriptId": "future_10"
+    },
+    {
+      "id": "future_10",
+      "type": "dialogue",
+      "character": "주인공",
+      "text": "평범하게 대학에 가고, 친구들과 여행을 다니고... 그런 사소한 일상들도 선배님에겐 새로운 '기적'이 될 수 있을 거예요.",
+      "nextScriptId": "future_11"
+    },
+    {
+      "id": "future_11",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_surprised",
+      "text": "일상 자체가 기적이 될 수 있다니... 비논리적인 수사법이지만, 나쁘지 않은 분석이군. ",
+      "nextScriptId": "future_12"
+    },
+    {
+      "id": "future_12",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_embarrassed",
+      "text": "나답지 않게 약한 소리를 했어. 방금 대화는 로그에서 삭제하도록 해. 불필요한 정보는 배제하는 게 효율적이니까. ",
+      "nextScriptId": "future_13"
+    },
+    {
+      "id": "future_13",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "text": "헤헤, 역시 우리 선배님! 은퇴하셔도 제가 매일매일 놀러 갈 거니까 심심할 틈 없으실 거예요! ",
+      "nextScriptId": "future_14"
+    },
+    {
+      "id": "future_14",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "서윤 선배는 안경을 고쳐 쓰며 옅은 미소를 지었다. 그녀의 청회색 눈동자에 비친 불안감이 조금은 옅어진 것 같았다. ",
+      "nextScriptId": "future_15"
+    },
+    {
+      "id": "future_15",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_normal",
+      "text": "자, 감상적인 시간은 여기까지다. 케이크의 당분 섭취가 끝났다면 다음 스케줄로 이동해야 해. 한설아, 너는 협회 연습실 예약 시간이 얼마 남지 않았다. ",
+      "nextScriptId": "future_16"
+    },
+    {
+      "id": "future_16",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_panic",
+      "text": "앗! 맞다! 연습실! 으아아, 서둘러야 해요! 포포, 빨리 챙겨! ",
+      "nextScriptId": "future_17"
+    },
+    {
+      "id": "future_17",
+      "type": "dialogue",
+      "character": "내레이터",
+      "characterExit": "한설아,신서윤",
+      "text": "서윤 선배와 설아는 서둘러 자리에서 일어났다. 짧았지만 많은 이야기가 오간 카페에서의 시간이 마무리되었다.",
+      "nextScriptId": "future_18"
+    },
+    {
+      "id": "future_18",
+      "type": "choice",
+      "character": "내레이터",
+      "background": "네온빛밤길거리.png",
+      "text": "카페를 나와 교문 근처에 다다르자, 저 멀리 화려한 조명과 함께 드론들이 날아다니는 것이 보였다. 누군가 라이브 방송이라도 하는 모양이다.",
+      "choices": [
+        {
+          "text": "화려한 조명이 있는 쪽으로 가본다. (누군가 공연 중인 것 같다)",
+          "nextSceneFile": "Chapter1/chapter1_meet_rina_live.json"
+        },
+        {
+          "text": "설아를 연습실까지 배웅해 주겠다고 제안한다.",
+          "nextSceneFile": "Chapter1/chapter1_escort_seolah.json"
+        },
+        {
+          "text": "서윤 선배에게 은퇴 후 평범한 데이트 코스를 추천해 주겠다고 한다.",
+          "nextSceneFile": "Chapter1/chapter1_recommend_date.json"
+        },
+        {
+          "text": "\"나중에 은퇴하시면 제 학생회장 자리를 물려드릴게요!\"라고 헛소리를 한다.",
+          "nextSceneFile": "Chapter1/chapter1_gag_successor.json"
+        }
+      ]
+    }
+  ]
+}

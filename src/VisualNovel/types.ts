@@ -22,6 +22,7 @@ export interface ScriptLine {
   character?: string; // 대화하는 캐릭터 이름
   characterImage?: string; // 캐릭터 이미지
   characterPosition?: CharacterPosition; // 캐릭터 위치
+  characterExit?: string; // 퇴장할 캐릭터 이름 (쉼표로 구분: "연소희,강리나" 또는 단일: "연소희")
   text: string; // 대사 또는 선택지 질문
   music?: string; // 배경음악 파일명 ("none"이면 음악 정지)
   effectSound?: string; // 효과음 파일명

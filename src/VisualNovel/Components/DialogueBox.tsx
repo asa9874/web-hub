@@ -44,6 +44,19 @@ const DialogueBox: React.FC<DialogueBoxProps> = ({
   return (
     <div className="absolute bottom-0 left-0 right-0 p-8 z-20 animate-slideUpFade">
       <div className="max-w-6xl mx-auto">
+        {/* 컨트롤 버튼 - 대화창 상단 우측 */}
+        <div className="absolute -top-5 right-4 z-30">
+          <ControlButtons
+            isAutoMode={isAutoMode}
+            onToggleAuto={onToggleAuto}
+            onSkip={onSkip}
+            onShowLog={onShowLog}
+            onToggleUI={onToggleUI}
+            isUIHidden={false}
+            isChoiceActive={false}
+          />
+        </div>
+
         {/* 메인 대화창 - 좌측 배치 레이아웃 */}
         <div className="relative group">
           {/* 외부 글로우 효과 */}
@@ -117,19 +130,6 @@ const DialogueBox: React.FC<DialogueBoxProps> = ({
                   </p>
                 </div>
               </div>
-            </div>
-            
-            {/* 컨트롤 버튼 - 우측 상단 */}
-            <div className="absolute top-4 right-4">
-              <ControlButtons
-                isAutoMode={isAutoMode}
-                onToggleAuto={onToggleAuto}
-                onSkip={onSkip}
-                onShowLog={onShowLog}
-                onToggleUI={onToggleUI}
-                isUIHidden={false}
-                isChoiceActive={false}
-              />
             </div>
           </div>
         </div>

@@ -11,6 +11,14 @@ interface SceneNode {
   connections: string[];
 }
 
+interface ValidationIssue {
+  sceneFile: string;
+  sceneTitle: string;
+  lineId: string;
+  text: string;
+  issueType: 'no_next' | 'orphan_choice';
+}
+
 // 챕터별 색상 팔레트
 const chapterColors = {
   1: { bg: 'bg-blue-100', border: 'border-blue-400', text: 'text-blue-800', gradient: 'from-blue-400 to-blue-500' },
@@ -25,6 +33,8 @@ const StoryEditor: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const [nodes, setNodes] = useState<SceneNode[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedScene, setSelectedScene] = useState<ScriptScene | null>(null);
+  const [validationIssues, setValidationIssues] = useState<ValidationIssue[]>([]);
+  const [showValidation, setShowValidation] = useState(false);
   
   // Pan & Zoom 상태
   const [offset, setOffset] = useState({ x: 0, y: 0 });
@@ -88,12 +98,63 @@ const StoryEditor: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       console.log(`🎉 총 ${Object.keys(loadedScenes).length}개의 씬을 로드했습니다.`);
       console.log('로드된 씬 목록:', Object.keys(loadedScenes));
       setScenes(loadedScenes);
+      validateScripts(loadedScenes);
       generateGraph(loadedScenes);
       setIsLoading(false);
     };
 
     loadScenes();
   }, []);
+
+  const validateScripts = (loadedScenes: Record<string, ScriptScene>) => {
+    const issues: ValidationIssue[] = [];
+
+    Object.entries(loadedScenes).forEach(([sceneFile, scene]) => {
+      scene.lines.forEach(line => {
+        // 엔딩 라인은 검사하지 않음
+        if (line.isEnding) return;
+
+        // 선택지 라인이 아닌 대화 라인 검사
+        if (line.type === 'dialogue') {
+          // nextScriptId와 nextSceneFile이 모두 없으면 문제
+          if (!line.nextScriptId && !line.nextSceneFile) {
+            issues.push({
+              sceneFile,
+              sceneTitle: scene.title,
+              lineId: line.id,
+              text: line.text,
+              issueType: 'no_next'
+            });
+          }
+        }
+
+        // 선택지 라인 검사
+        if (line.type === 'choice' && line.choices) {
+          line.choices.forEach(choice => {
+            if (!choice.nextScriptId && !choice.nextSceneFile) {
+              issues.push({
+                sceneFile,
+                sceneTitle: scene.title,
+                lineId: `${line.id} (선택: ${choice.text})`,
+                text: choice.text,
+                issueType: 'orphan_choice'
+              });
+            }
+          });
+        }
+      });
+    });
+
+    console.log(`\n🔍 검증 완료: ${issues.length}개의 문제 발견`);
+    if (issues.length > 0) {
+      console.warn('문제 있는 라인들:');
+      issues.forEach(issue => {
+        console.warn(`  - ${issue.sceneFile} / ${issue.lineId}`);
+      });
+    }
+    
+    setValidationIssues(issues);
+  };
 
   const generateGraph = (loadedScenes: Record<string, ScriptScene>) => {
     const graphNodes: SceneNode[] = [];
@@ -277,6 +338,57 @@ const StoryEditor: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-[#2D1115] z-50 overflow-auto">
+      {/* 검증 경고 배너 */}
+      {validationIssues.length > 0 && (
+        <div className="bg-gradient-to-r from-red-600 to-rose-600 text-white p-4 shadow-lg">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="flex-shrink-0">
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-bold text-lg">⚠️ 스크립트 검증 오류 발견!</h3>
+                <p className="text-sm text-white/90">{validationIssues.length}개의 문제 있는 라인이 있습니다</p>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowValidation(!showValidation)}
+              className="bg-white/20 hover:bg-white/30 rounded-lg px-4 py-2 transition-colors"
+            >
+              {showValidation ? '숨기기' : '상세보기'}
+            </button>
+          </div>
+
+          {/* 상세 내용 */}
+          {showValidation && (
+            <div className="mt-4 max-w-7xl mx-auto max-h-96 overflow-y-auto bg-black/20 rounded-lg p-4">
+              <div className="space-y-2">
+                {validationIssues.map((issue, index) => (
+                  <div key={index} className="bg-white/10 rounded-lg p-3 border border-white/20">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <p className="text-sm font-mono text-white/80">{issue.sceneFile}</p>
+                        <p className="text-xs text-white/60">라인: {issue.lineId}</p>
+                        <p className="text-sm mt-1 text-white/90">"{issue.text.substring(0, 60)}..."</p>
+                      </div>
+                      <span className={`whitespace-nowrap ml-4 px-3 py-1 rounded-full text-xs font-bold ${
+                        issue.issueType === 'no_next' 
+                          ? 'bg-red-500/30 text-red-200' 
+                          : 'bg-orange-500/30 text-orange-200'
+                      }`}>
+                        {issue.issueType === 'no_next' ? '다음 라인 없음' : '선택지 오류'}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* 헤더 */}
       <div className="sticky top-0 bg-gradient-to-r from-pink-500 to-rose-500 text-white p-4 shadow-lg z-10">
         <div className="flex items-center justify-between max-w-7xl mx-auto">

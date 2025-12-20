@@ -16,14 +16,70 @@ const getPositionClass = (position: CharacterPosition): string => {
   return positions[position];
 };
 
+const getCharacterNameFromImage = (imagePath: string): string | null => {
+  // 확장자 제거 (예: "강리나_happy.png" -> "강리나_happy")
+  const withoutExt = imagePath.replace(/\.\w+$/, '');
+  // 마지막 언더스코어 기준으로 캐릭터명 추출 (예: "강리나_happy" -> "강리나")
+  const lastUnderscoreIndex = withoutExt.lastIndexOf('_');
+  if (lastUnderscoreIndex === -1) {
+    return withoutExt;
+  }
+  return withoutExt.substring(0, lastUnderscoreIndex);
+};
+
+const getExpressionFromImage = (imagePath: string): string | null => {
+  // 확장자 제거 (예: "강리나_happy.png" -> "강리나_happy")
+  const withoutExt = imagePath.replace(/\.\w+$/, '');
+  // 마지막 언더스코어 이후 표정 추출 (예: "강리나_happy" -> "happy")
+  const lastUnderscoreIndex = withoutExt.lastIndexOf('_');
+  if (lastUnderscoreIndex === -1) {
+    return null;
+  }
+  return withoutExt.substring(lastUnderscoreIndex + 1);
+};
+
 const CharacterSprite: React.FC<CharacterSpriteProps> = ({ character }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [displayImage, setDisplayImage] = useState(character.image);
+  const [attemptedFallback, setAttemptedFallback] = useState(false);
 
   useEffect(() => {
     // 부드러운 페이드 인
     const timer = setTimeout(() => setIsVisible(true), 50);
     return () => clearTimeout(timer);
   }, [character.id]);
+
+  useEffect(() => {
+    // 이미지 변경 시 fallback 상태 리셋
+    setDisplayImage(character.image);
+    setAttemptedFallback(false);
+  }, [character.image]);
+
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    // 이미 fallback을 시도했으면 아무것도 하지 않음
+    if (attemptedFallback) {
+      e.currentTarget.style.display = 'none';
+      return;
+    }
+
+    const characterName = getCharacterNameFromImage(displayImage);
+    const expression = getExpressionFromImage(displayImage);
+
+    console.log(`[이미지 로드 실패] 경로: ${displayImage}`);
+    console.log(`[파싱 결과] 캐릭터: ${characterName}, 표정: ${expression}`);
+
+    // 표정이 있고 normal이 아닌 경우에만 fallback 시도
+    if (characterName && expression && expression !== 'normal') {
+      const fallbackImage = `${characterName}_normal.png`;
+      console.log(`[Fallback 시도] ${displayImage} -> ${fallbackImage}`);
+      setDisplayImage(fallbackImage);
+      setAttemptedFallback(true);
+    } else {
+      console.log(`[최종 실패] 대체 이미지 없음`);
+      // 그 외의 경우는 이미지 숨김
+      e.currentTarget.style.display = 'none';
+    }
+  };
 
   return (
     <div 
@@ -37,13 +93,12 @@ const CharacterSprite: React.FC<CharacterSpriteProps> = ({ character }) => {
     >
       <div className="relative h-full flex items-end">
         <img 
-          src={`/web-hub/VisualNovel/Character/${character.image}`}
+          key={displayImage}
+          src={`/web-hub/VisualNovel/Character/${displayImage}`}
           alt={character.name}
           className="h-full w-auto object-contain object-bottom transform 
             hover:scale-[1.02] transition-transform duration-300"
-          onError={(e) => {
-            e.currentTarget.style.display = 'none';
-          }}
+          onError={handleImageError}
         />
       </div>
     </div>

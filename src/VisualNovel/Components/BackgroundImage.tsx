@@ -11,8 +11,13 @@ const BackgroundImage: React.FC<BackgroundImageProps> = ({ image }) => {
 
   useEffect(() => {
     if (image !== currentImage) {
+      // image가 빈 문자열이면 배경을 비운 상태로 유지
+      if (image === '' && currentImage === '') {
+        return; // 이미 비어있으므로 아무것도 하지 않음
+      }
+      
       // 크로스페이드 시작
-      setNextImage(image);
+      setNextImage(image || null);
       setIsTransitioning(true);
 
       // 트랜지션 완료 후 이미지 교체
@@ -34,7 +39,7 @@ const BackgroundImage: React.FC<BackgroundImageProps> = ({ image }) => {
           transition-opacity duration-1000 ease-in-out
           ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}
         style={{ 
-          backgroundImage: `url('/web-hub/VisualNovel/Background/${currentImage}')`,
+          backgroundImage: currentImage ? `url('/web-hub/VisualNovel/Background/${currentImage}')` : 'none',
           backgroundColor: '#ffc0cb'
         }}
       />

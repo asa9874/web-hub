@@ -1,0 +1,223 @@
+{
+  "sceneId": "chapter1_rina_deodorant",
+  "title": "아이돌의 향기 관리법",
+  "chapter": 1,
+  "startId": "deodorant_01",
+  "lines": [
+    {
+      "id": "deodorant_01",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "연습실.png",
+      "music": "톡톡튕기는음악.mp3",
+      "text": "치킨 상자를 비우고 나자, 연습실 안에는 고소하지만 아주 강렬한 튀김 냄새가 진동했다. 이건 누가 봐도 '아이돌 마법소녀의 연습실'에서 날 법한 냄새가 아니었다.",
+      "nextScriptId": "deodorant_02"
+    },
+    {
+      "id": "deodorant_02",
+      "type": "dialogue",
+      "character": "강리나",
+      "characterImage": "강리나_panic",
+      "characterPosition": "center",
+      "text": "아... 망했어. 이 냄새 어떡하지? 조금 있으면 협회 매니저가 다음 스케줄 확인하러 올 텐데!",
+      "nextScriptId": "deodorant_03"
+    },
+    {
+      "id": "deodorant_03",
+      "type": "dialogue",
+      "character": "강리나",
+      "text": "만약 '샤이니 하트의 성역'에서 기름진 닭다리 냄새가 난다는 게 들통나면, 내 광고 계약이 몇 개나 날아갈지 알아?",
+      "nextScriptId": "deodorant_04"
+    },
+    {
+      "id": "deodorant_04",
+      "type": "dialogue",
+      "character": "주인공",
+      "text": "걱정 마세요. 이럴 줄 알고 가방에 페브리즈를 챙겨왔거든요. 리나 씨 몸이랑 연습실 구석구석에 좀 뿌려줄까요?",
+      "nextScriptId": "deodorant_05"
+    },
+    {
+      "id": "deodorant_05",
+      "type": "dialogue",
+      "character": "강리나",
+      "characterImage": "강리나_surprised",
+      "text": "페... 페브리즈?! 너, 비즈니스 준비성이 생각보다 철저하구나? 역시 내가 사람 보는 눈은 있다니까.",
+      "nextScriptId": "deodorant_06"
+    },
+    {
+      "id": "deodorant_06",
+      "type": "dialogue",
+      "character": "강리나",
+      "characterImage": "강리나_embarrassed",
+      "text": "그, 그럼 실례 좀 할게. 특히 이 머리카락 끝부분에 냄새가 잘 배니까 꼼꼼히 뿌려줘. 이건 '특수 탈취 업무'로 간주해서 나중에 정산해 줄게.",
+      "nextScriptId": "deodorant_07"
+    },
+    {
+      "id": "deodorant_07",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "나는 가방에서 탈취제를 꺼내 리나의 주변에 조심스럽게 분사하기 시작했다. 리나는 눈을 질끈 감은 채 양팔을 살짝 벌리고 내 처분을 기다렸다.",
+      "nextScriptId": "deodorant_08"
+    },
+    {
+      "id": "deodorant_08",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "화려한 금발 트윈테일이 내 손길에 따라 살랑거렸다. 가까이 다가가자 치킨 냄새 사이로 그녀가 평소에 쓰는 은은한 향수 냄새가 섞여 들었다.",
+      "nextScriptId": "deodorant_09"
+    },
+    {
+      "id": "deodorant_09",
+      "type": "dialogue",
+      "character": "강리나",
+      "characterImage": "강리나_embarrassed",
+      "text": "야... 너무 가깝잖아. 아무리 비즈니스 파트너라지만, 아이돌의 퍼스널 스페이스를 이렇게 쉽게 침범해도 되는 거야?",
+      "nextScriptId": "deodorant_10"
+    },
+    {
+      "id": "deodorant_10",
+      "type": "dialogue",
+      "character": "주인공",
+      "text": "구석구석 뿌려달라면서요. 자, 이제 이쪽 팔도 들어보세요.",
+      "nextScriptId": "deodorant_11"
+    },
+    {
+      "id": "deodorant_11",
+      "type": "dialogue",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "text": "흥, 서비스 정신 하나는 투철하네. 좋아, 이 정도면 매니저 코도 속일 수 있겠어.",
+      "nextScriptId": "deodorant_12"
+    },
+    {
+      "id": "deodorant_12",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "리나는 만족스러운 듯 거울을 보며 자신의 옷매무새를 가다듬었다. 다시 카메라 앞의 완벽한 아이돌, '샤이니 하트'로 돌아갈 준비를 마친 듯 보였다.",
+      "nextScriptId": "deodorant_13"
+    },
+    {
+      "id": "deodorant_13",
+      "type": "dialogue",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "text": "고마워. 오늘 치킨 건은 우리 둘만의 '기밀 사항'이야. 만약 발설하면 위약금이 네 인생 몸무게만큼 나올 줄 알아, 알겠지?",
+      "nextScriptId": "deodorant_14"
+    },
+    {
+      "id": "deodorant_14",
+      "type": "dialogue",
+      "character": "주인공",
+      "text": "걱정 마세요. 전 입이 무거운 비서니까요.",
+      "nextScriptId": "deodorant_15"
+    },
+    {
+      "id": "deodorant_15",
+      "type": "dialogue",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "text": "그래야지. 아, 그리고 내일은 협회 연구소에서 온다는 '그 꼬맹이' 때문에 좀 시끄러울 거야. 너도 미리 마음의 준비 해두는 게 좋을걸.",
+      "nextScriptId": "deodorant_16"
+    },
+    {
+      "id": "deodorant_16",
+      "type": "dialogue",
+      "character": "주인공",
+      "text": "연구소에서 온 꼬맹이요? 혹시 도아린을 말씀하시는 건가요? ",
+      "nextScriptId": "deodorant_17"
+    },
+    {
+      "id": "deodorant_17",
+      "type": "dialogue",
+      "character": "강리나",
+      "text": "응, 그 '인간 계산기' 말이야. 걔는 나랑은 정반대로 너무 딱딱해서 대화가 안 통하거든. 수익률 계산할 때만 쓸모 있지, 같이 있으면 숨 막혀 죽을지도 몰라.",
+      "nextScriptId": "deodorant_18"
+    },
+    {
+      "id": "deodorant_18",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "리나는 진저리가 난다는 듯 어깨를 으쓱했다. S급 화력을 가졌지만 감정이 없다는 어린 마법소녀, 도아린. 그녀와의 만남도 멀지 않은 모양이다.",
+      "nextScriptId": "deodorant_19"
+    },
+    {
+      "id": "deodorant_19",
+      "type": "dialogue",
+      "character": "강리나",
+      "characterImage": "강리나_happy",
+      "text": "자, 오늘 업무는 여기까지! 넌 이만 퇴근해. 난 남아서 '샤이니 하트'의 미소 연습을 좀 더 해야 하니까.",
+      "nextScriptId": "deodorant_20"
+    },
+    {
+      "id": "deodorant_20",
+      "type": "dialogue",
+      "character": "주인공",
+      "text": "네, 고생하세요. 내일 봬요.",
+      "nextScriptId": "deodorant_21"
+    },
+    {
+      "id": "deodorant_21",
+      "type": "dialogue",
+      "character": "내레이터",
+      "characterExit": "강리나",
+      "background": "네온빛밤길거리.png",
+      "music": "none",
+      "text": "연습실을 나오자 밤공기가 상쾌하게 느껴졌다. 화려한 아이돌 마법소녀의 이면을 공유하게 된 기묘한 하루가 저물어가고 있었다.",
+      "nextScriptId": "deodorant_22"
+    },
+    {
+      "id": "deodorant_22",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "집으로 걷는 길, 문득 오늘 만난 소녀들을 떠올렸다. 실수투성이지만 빛나는 한설아, 차갑지만 책임감 넘치는 신서윤, 그리고 철저히 비즈니스적인 강리나.",
+      "nextScriptId": "deodorant_23"
+    },
+    {
+      "id": "deodorant_23",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "그녀들의 삶은 겉으로 보이는 화려함만큼이나 각자의 무게를 지니고 있었다. 내일은 또 어떤 비일상적인 일상이 나를 기다리고 있을까?",
+      "nextScriptId": "deodorant_24"
+    },
+    {
+      "id": "deodorant_24",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "아침교실.png",
+      "music": "발랄한음악.mp3",
+      "text": "다음 날 아침. 교실 안은 여전히 활기찬 분위기였다. 하지만 내 책상 위에 놓인 쪽지 하나가 평화를 깨트렸다.",
+      "nextScriptId": "deodorant_25"
+    },
+    {
+      "id": "deodorant_25",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "'점심시간에 옥상으로 와. - 백하얀' ",
+      "nextScriptId": "deodorant_26"
+    },
+    {
+      "id": "deodorant_26",
+      "type": "choice",
+      "character": "내레이터",
+      "text": "지명수배 중인 타락한 마법소녀의 호출이다. 어떻게 대응해야 할까?",
+      "choices": [
+        {
+          "text": "경고를 무시할 수 없으니 옥상으로 향한다.",
+          "nextSceneFile": "Chapter1/chapter1_hayan_rooftop.json"
+        },
+        {
+          "text": "서윤 선배에게 이 사실을 알리고 조언을 구한다.",
+          "nextSceneFile": "Chapter1/chapter1_report_to_seoyoon.json"
+        },
+        {
+          "text": "설아와 함께 맛있는 점심을 먹으며 옥상 일은 잊어버린다.",
+          "nextSceneFile": "Chapter1/chapter1_lunch_with_seolah.json"
+        },
+        {
+          "text": "쪽지 뒤에 '옥상은 춥나요? 담요 챙겨갈까요?'라고 답장을 써둔다.",
+          "nextSceneFile": "Chapter1/chapter1_gag_hayan_reply.json"
+        }
+      ]
+    }
+  ]
+}

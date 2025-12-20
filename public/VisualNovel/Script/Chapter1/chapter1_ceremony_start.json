@@ -1,0 +1,188 @@
+{
+  "sceneId": "chapter1_ceremony_start",
+  "title": "강당의 열기와 새로운 만남",
+  "chapter": 1,
+  "startId": "start_01",
+  "lines": [
+    {
+      "id": "start_01",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "연습실.png",
+      "music": "발랄한음악.mp3",
+      "text": "웅성거리는 소리로 가득한 강당 안은 이미 입학생들과 학부모들로 인산인해를 이루고 있었다.",
+      "nextScriptId": "start_02"
+    },
+    {
+      "id": "start_02",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "강당 정면의 대형 스크립에는 '제25회 입학식'이라는 문구와 함께, 협회에서 관리하는 인기 마법소녀들의 축하 영상이 흐르고 있었다.",
+      "nextScriptId": "start_03"
+    },
+    {
+      "id": "start_03",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "와아! 저기 보세요! 제가 제일 좋아하는 S급 마법소녀 '루미너스' 님이 축전 영상을 보내주셨나 봐요! ",
+      "nextScriptId": "start_04"
+    },
+    {
+      "id": "start_04",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "설아는 아이처럼 들떠서 스크린을 가리켰다. 그녀의 보랏빛 눈동자 속에 은색 별 모양의 하이라이트가 반짝였다.",
+      "nextScriptId": "start_05"
+    },
+    {
+      "id": "start_05",
+      "type": "dialogue",
+      "character": "주인공",
+      "text": "정말이네. 마법소녀는 이제 단순한 구원자가 아니라 거의 슈퍼 아이돌이나 다름없으니까.",
+      "nextScriptId": "start_06"
+    },
+    {
+      "id": "start_06",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "text": "맞아요! 사람들에게 희망을 주는 저 모습... 정말 동경하게 된다니까요. 저도 언젠가는 루미너스 님처럼 멋진 사람이... ",
+      "nextScriptId": "start_07"
+    },
+    {
+      "id": "start_07",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_panic",
+      "text": "앗! 아니, 아니에요! 방금 말은 잊어주세요! 그냥 제 희망 사항일 뿐이니까요! 에헤헤... ",
+      "nextScriptId": "start_08"
+    },
+    {
+      "id": "start_08",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "설아는 또다시 실수를 했다는 듯 서둘러 입을 막았다. 그녀는 비밀을 지키는 데 영 소질이 없어 보였다.",
+      "nextScriptId": "start_09"
+    },
+    {
+      "id": "start_09",
+      "type": "dialogue",
+      "character": "주인공",
+      "text": "그래, 그래. 이해해. 자, 우리도 이제 자리를 찾아 앉아야지. 1반 자리가 어디였더라?",
+      "nextScriptId": "start_10"
+    },
+    {
+      "id": "start_10",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "text": "음, 지도를 보자면... 아, 저기인 것 같아요! 왼쪽 끝!",
+      "nextScriptId": "start_11"
+    },
+    {
+      "id": "start_11",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "설아는 당당하게 손가락으로 오른쪽 끝을 가리켰다. 아무래도 그녀는 엄청난 길치인 모양이다.",
+      "nextScriptId": "start_12"
+    },
+    {
+      "id": "start_12",
+      "type": "dialogue",
+      "character": "주인공",
+      "text": "설아야, 그쪽은 10반 자리야. 1반은 반대쪽이야.",
+      "nextScriptId": "start_13"
+    },
+    {
+      "id": "start_13",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_embarrassed",
+      "text": "에엣?! 그, 그랬나요? 지도가 거꾸로 되어 있었나 봐요! 0.5초 만에 사과드릴게요! 죄송합니다! ",
+      "nextScriptId": "start_14"
+    },
+    {
+      "id": "start_14",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "우리는 우여곡절 끝에 1반 구역의 빈자리에 나란히 앉았다. 의자가 다닥다닥 붙어 있어 그녀의 어깨가 내 팔에 살짝 닿았다.",
+      "nextScriptId": "start_15"
+    },
+    {
+      "id": "start_15",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "text": "후우, 무사히 앉았네요. 옆에 친구가 있으니까 하나도 안 떨리고 든든해요! ",
+      "nextScriptId": "start_16"
+    },
+    {
+      "id": "start_16",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "그녀가 내 쪽을 보며 활짝 웃을 때마다 머리카락에서 은은한 꽃 향기가 났다. 그 밝은 미소에 나도 모르게 가슴이 두근거렸다.",
+      "nextScriptId": "start_17"
+    },
+    {
+      "id": "start_17",
+      "type": "dialogue",
+      "character": "주인공",
+      "text": "나도 그래. 설아 너 덕분에 오늘 입학식이 재밌어질 것 같아.",
+      "nextScriptId": "start_18"
+    },
+    {
+      "id": "start_18",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "text": "정말요? 헤헤, 우리 앞으로 3년 동안 사이좋게 지내요! 약속!",
+      "nextScriptId": "start_19"
+    },
+    {
+      "id": "start_19",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "그녀가 내민 작은 새끼손가락을 보며 웃음 지으려던 찰나, 강당의 모든 조명이 일제히 꺼졌다.",
+      "nextScriptId": "start_20"
+    },
+    {
+      "id": "start_20",
+      "type": "dialogue",
+      "character": "내레이터",
+      "music": "none",
+      "effectSound": "siren.mp3",
+      "text": "그리고 고요해진 강당 안에, 우리에게 너무나 익숙하지만 결코 익숙해지고 싶지 않은 '부정 주의보' 사이렌 소리가 울려 퍼졌다.",
+      "nextScriptId": "start_21"
+    },
+    {
+      "id": "start_21",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_serious",
+      "text": "......! 이 수치는... 근처예요! ",
+      "nextScriptId": "start_22"
+    },
+    {
+      "id": "start_22",
+      "type": "choice",
+      "character": "내레이터",
+      "text": "갑작스러운 상황에 강당 안은 순식간에 혼란에 빠졌다. 선생님들이 학생들을 진정시키며 대피를 유도하기 시작했다.",
+      "choices": [
+        {
+          "text": "겁에 질린 설아의 손을 잡고 대피소로 향한다.",
+          "nextSceneFile": "Chapter1/chapter1_evacuation_with_seolah.json"
+        },
+        {
+          "text": "주변을 살피며 다른 학생들의 대피를 돕는다.",
+          "nextSceneFile": "Chapter1/chapter1_help_others.json"
+        },
+        {
+          "text": "진지해진 설아의 표정을 보며 그녀의 행동을 지켜본다.",
+          "nextSceneFile": "Chapter1/chapter1_observe_seolah.json"
+        }
+      ]
+    }
+  ]
+}

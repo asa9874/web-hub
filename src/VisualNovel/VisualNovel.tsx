@@ -5,7 +5,7 @@ import DialogueBox from './Components/DialogueBox';
 import ChoiceButtons from './Components/ChoiceButtons';
 import DialogueLog, { type DialogueLogEntry } from './Components/DialogueLog';
 import StoryEditor from './StoryEditor';
-import type { ScriptLine, ScriptScene } from './types';
+import type { CharacterPosition, ScriptLine, ScriptScene } from './types';
 import config from './Script/config.json';
 
 const VisualNovel: React.FC = () => {
@@ -20,6 +20,7 @@ const VisualNovel: React.FC = () => {
   
   // UI 상태
   const [isAutoMode, setIsAutoMode] = useState(false);
+  const [isSkipMode, setIsSkipMode] = useState(false);
   const [isUIHidden, setIsUIHidden] = useState(false);
   const [isLogOpen, setIsLogOpen] = useState(false);
   
@@ -29,8 +30,17 @@ const VisualNovel: React.FC = () => {
   // 선택지 잠금 상태
   const [choiceLocks, setChoiceLocks] = useState<boolean[]>([]);
   
+  // 화면에 표시할 캐릭터들 (ID -> Character 매핑)
+  const [displayedCharacters, setDisplayedCharacters] = useState<Map<string, { name: string; image: string; position: CharacterPosition }>>(new Map());
+  
+  // 현재 배경 상태 (이전 배경을 유지하도록)
+  const [currentBackground, setCurrentBackground] = useState<string>('');
+  
   // Auto 모드 타이머
   const autoTimerRef = useRef<number | null>(null);
+  
+  // Skip 모드 타이머
+  const skipTimerRef = useRef<number | null>(null);
   
   // 오디오 관리
   const bgmRef = useRef<HTMLAudioElement | null>(null);
@@ -45,6 +55,9 @@ const VisualNovel: React.FC = () => {
         const scene = await response.json() as ScriptScene;
         setCurrentScene(scene);
         setCurrentLineId(scene.startId);
+        // 새로운 씬으로 전환될 때 화면의 캐릭터 초기화
+        setDisplayedCharacters(new Map());
+        console.log(`[씬 전환] ${currentSceneFile}`);
       } catch (error) {
         console.error('씬 로드 실패:', error);
       } finally {
@@ -55,12 +68,71 @@ const VisualNovel: React.FC = () => {
     loadScene();
   }, [currentSceneFile]);
 
+  // 컴포넌트 언마운트시 타이머 정리
+  useEffect(() => {
+    return () => {
+      if (autoTimerRef.current) {
+        clearInterval(autoTimerRef.current);
+      }
+      if (skipTimerRef.current) {
+        clearInterval(skipTimerRef.current);
+      }
+    };
+  }, []);
+
   // 현재 라인 로드
   useEffect(() => {
     if (currentScene && currentLineId) {
       const line = currentScene.lines.find(l => l.id === currentLineId);
       if (line) {
         setCurrentLine(line);
+      
+        // 배경 처리 (background 필드가 있을 때만 변경)
+        if (line.background) {
+          if (line.background === 'none') {
+            // 명시적으로 "none"이 지정되면 배경 제거
+            setCurrentBackground('');
+            console.log(`[배경] 제거`);
+          } else {
+            // 새로운 배경으로 변경
+            setCurrentBackground(line.background);
+            console.log(`[배경] ${line.background}`);
+          }
+        } else {
+          // background 필드가 없으면 기존 배경 유지 (아무것도 하지 않음)
+          console.log(`[배경] 유지 (이미지 지정 안함)`);
+        }
+      
+        // 캐릭터 퇴장 처리
+        if (line.characterExit && line.characterExit.trim().length > 0) {
+          setDisplayedCharacters(prev => {
+            const newMap = new Map(prev);
+            const characterNames = line.characterExit!.split(',').map(name => name.trim());
+            characterNames.forEach(characterName => {
+              newMap.delete(characterName);
+              console.log(`[퇴장] ${characterName}`);
+            });
+            return newMap;
+          });
+        }
+      
+        // 캐릭터 상태 업데이트 (추가 또는 표정 변경)
+        if (line.characterImage && line.characterPosition) {
+          const characterId = line.character || 'main';
+          setDisplayedCharacters(prev => {
+            const newMap = new Map(prev);
+            newMap.set(characterId, {
+              name: line.character || '',
+              image: line.characterImage!,
+              position: line.characterPosition!
+            });
+            console.log(`[캐릭터] ${characterId}: ${line.characterImage} at ${line.characterPosition}`);
+            return newMap;
+          });
+        } else if (line.type === 'dialogue' && !line.characterImage) {
+          // characterImage가 없는 대화 라인: 기존 캐릭터 유지 (표정 변경 없음)
+          console.log(`[캐릭터] 유지됨 (이미지 지정 안함)`);
+        }
       
         // 대화 로그에 추가 (dialogue 타입인 경우)
         if (line.type === 'dialogue' && line.text) {
@@ -81,7 +153,7 @@ const VisualNovel: React.FC = () => {
                 const isValid = await checkChoiceValidity(choice);
                 const locked = !isValid;
                 console.log(`결과: ${locked ? '🔒 잠금' : '🔓 해제'}\n`);
-                return locked; // valid하면 잠금 해제(false), invalid하면 잠금(true)
+                return locked;
               })
             );
             console.log('🎯 최종 잠금 상태:', locks);
@@ -93,7 +165,6 @@ const VisualNovel: React.FC = () => {
         // 배경음악 처리
         if (line.music !== undefined) {
           if (line.music === 'none') {
-            // 음악 정지
             if (bgmRef.current) {
               bgmRef.current.pause();
               bgmRef.current.currentTime = 0;
@@ -101,7 +172,6 @@ const VisualNovel: React.FC = () => {
               currentMusicRef.current = null;
             }
           } else if (line.music !== currentMusicRef.current) {
-            // 새로운 음악 재생
             if (bgmRef.current) {
               bgmRef.current.pause();
               bgmRef.current = null;
@@ -125,7 +195,6 @@ const VisualNovel: React.FC = () => {
 
         // 엔딩 처리
         if (line.isEnding) {
-          // 엔딩 화면 표시 후 타이틀로 돌아가기 등의 처리 가능
           console.log('엔딩 도달');
         }
       }
@@ -248,14 +317,53 @@ const VisualNovel: React.FC = () => {
     setIsAutoMode(prev => !prev);
   }, []);
 
-  // Skip 기능
+  // Skip 기능 - 토글 방식으로 변경
   const handleSkip = useCallback(() => {
-    if (currentLine?.nextSceneFile) {
-      setCurrentSceneFile(currentLine.nextSceneFile);
-    } else if (currentLine?.nextScriptId) {
-      setCurrentLineId(currentLine.nextScriptId);
-    }
-  }, [currentLine]);
+    setIsSkipMode(prev => {
+      const newSkipMode = !prev;
+      console.log(`[스킵 모드] ${newSkipMode ? '활성화' : '비활성화'}`);
+      
+      if (newSkipMode) {
+        // 스킵 모드 시작
+        skipTimerRef.current = window.setInterval(() => {
+          console.log('[스킵 진행 중...]');
+          setCurrentLineId(prevLineId => {
+            const scene = currentScene;
+            if (!scene) return prevLineId;
+
+            const line = scene.lines.find(l => l.id === prevLineId);
+            if (!line) return prevLineId;
+
+            // 선택지 라인에 도달하면 스킵 모드 해제
+            if (line.type === 'choice') {
+              console.log('[스킵 모드] 선택지 도달 - 스킵 해제');
+              if (skipTimerRef.current) {
+                clearInterval(skipTimerRef.current);
+                skipTimerRef.current = null;
+              }
+              setIsSkipMode(false);
+              return prevLineId;
+            }
+
+            // 다음 라인으로 이동
+            if (line.nextScriptId) {
+              return line.nextScriptId;
+            }
+            
+            return prevLineId;
+          });
+        }, 300); // 300ms마다 다음 대화로 진행
+      } else {
+        // 스킵 모드 중지
+        if (skipTimerRef.current) {
+          clearInterval(skipTimerRef.current);
+          skipTimerRef.current = null;
+        }
+      }
+      
+      return newSkipMode;
+    });
+  }, [currentScene]);
 
   // 로그 열기/닫기
   const handleToggleLog = useCallback(() => {
@@ -316,18 +424,21 @@ const VisualNovel: React.FC = () => {
       {/* 레터박스 메인 컨테이너 (16:9 비율) */}
       <div className="relative w-full max-w-[177.78vh] h-full max-h-[56.25vw] bg-pink-50 shadow-2xl">
         {/* 배경 이미지 */}
-        <BackgroundImage image={currentLine.background || ''} />
+        <BackgroundImage image={currentBackground} />
         
-        {/* 캐릭터 스프라이트 (단일 캐릭터) */}
-        {!isUIHidden && currentLine.characterImage && currentLine.characterPosition && (
-          <CharacterSprite 
-            character={{
-              id: 'current',
-              name: currentLine.character || '',
-              image: currentLine.characterImage,
-              position: currentLine.characterPosition
-            }} 
-          />
+        {/* 캐릭터 스프라이트 (지속적 캐릭터 시스템) */}
+        {!isUIHidden && displayedCharacters.size > 0 && (
+          Array.from(displayedCharacters.values()).map((character) => (
+            <CharacterSprite 
+              key={character.name}
+              character={{
+                id: character.name,
+                name: character.name,
+                image: character.image,
+                position: character.position
+              }}
+            />
+          ))
         )}
         
         {/* 대화창 또는 선택지 */}
