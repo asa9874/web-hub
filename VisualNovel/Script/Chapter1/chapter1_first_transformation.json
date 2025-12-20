@@ -1,0 +1,124 @@
+{
+  "sceneId": "chapter1_first_transformation",
+  "title": "은빛 별의 각성",
+  "chapter": 1,
+  "startId": "trans_01",
+  "lines": [
+    {
+      "id": "trans_01",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "학교_옥상_전투.png",
+      "music": "transformation_theme.mp3",
+      "text": "숨을 죽이고 문틈 사이로 지켜보는 순간, 설아의 머리핀에서 뿜어져 나온 은색 빛이 옥상 전체를 가득 메웠다.",
+      "nextScriptId": "trans_02"
+    },
+    {
+      "id": "trans_02",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_serious",
+      "characterPosition": "center",
+      "text": "나보다 남을 먼저 생각하는 마음이... 기적이 되어라! 루미너스 스타, 릴리즈!",
+      "nextScriptId": "trans_03"
+    },
+    {
+      "id": "trans_03",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "컷씬_한설아_변신_장면.png",
+      "effectSound": "magic_shine.mp3",
+      "text": "강렬한 빛의 소용돌이가 설아를 감싸 안았다.  평범했던 교복이 잘게 부서지며, 그 자리를 화려한 프릴과 반짝이는 은하수 문양의 망토가 채워나갔다. ",
+      "nextScriptId": "trans_04"
+    },
+    {
+      "id": "trans_04",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "학교_옥상_전투.png",
+      "text": "빛이 잦아든 곳에는 내가 알던 '덜렁이 신입생' 한설아가 아닌, 밤하늘의 조각을 입은 듯한 소녀가 서 있었다.",
+      "nextScriptId": "trans_05"
+    },
+    {
+      "id": "trans_05",
+      "type": "dialogue",
+      "character": "루나 실버",
+      "characterImage": "한설아_변신_normal",
+      "characterPosition": "left",
+      "text": "모두의 미소를 지키는 은빛 희망, 루나 실버! 지금부터 정화를 시작할게!",
+      "nextScriptId": "trans_06"
+    },
+    {
+      "id": "trans_06",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_serious",
+      "characterPosition": "right",
+      "text": "(나직하게 한숨을 내쉬며) 대사는 여전하군요. 하지만 자세가 엉망입니다. 다리에 더 힘을 주도록 하세요. ",
+      "nextScriptId": "trans_07"
+    },
+    {
+      "id": "trans_07",
+      "type": "dialogue",
+      "character": "루나 실버",
+      "characterImage": "한설아_변신_panic",
+      "text": "아와와! 죄송해요, 선배님! 너무 긴장해서 그만...!",
+      "nextScriptId": "trans_08"
+    },
+    {
+      "id": "trans_08",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "컷씬_부정_출현.png",
+      "music": "boss_battle_intro.mp3",
+      "effectSound": "monster_roar.mp3",
+      "text": "그때, 상공의 균열이 기괴하게 뒤틀리더니 검은 연기로 이루어진 거대한 괴수가 옥상으로 내려앉았다. 인간의 원념이 뭉쳐진 존재, '부정'이었다. ",
+      "nextScriptId": "trans_09"
+    },
+    {
+      "id": "trans_09",
+      "type": "dialogue",
+      "character": "노아 아크",
+      "characterImage": "신서윤_변신_serious",
+      "characterPosition": "right",
+      "text": "나타났군요. C급 개체 '쉐도우 팽'. 한설아, 당신의 첫 실전 훈련 상대로 적절해 보입니다. ",
+      "nextScriptId": "trans_10"
+    },
+    {
+      "id": "trans_10",
+      "type": "dialogue",
+      "character": "루나 실버",
+      "characterImage": "한설아_변신_serious",
+      "characterPosition": "left",
+      "text": "네! 루나 실버, 갑니다!",
+      "nextScriptId": "trans_11"
+    },
+    {
+      "id": "trans_11",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "설아... 아니, 루나 실버는 실버 문 스태프를 꽉 쥐고 괴수를 향해 도약했다.  그 뒷모습은 평소보다 훨씬 커 보였다.",
+      "nextScriptId": "choice_trans_01"
+    },
+    {
+      "id": "choice_trans_01",
+      "type": "choice",
+      "character": "내레이터",
+      "text": "눈앞에서 펼쳐지는 마법소녀의 전투. 주인공인 나는 무엇을 할 수 있을까?",
+      "choices": [
+        {
+          "text": "마음속으로 설아를 응원하며 상황을 계속 지켜본다.",
+          "nextSceneFile": "Chapter1/chapter1_battle_watch.json"
+        },
+        {
+          "text": "주변에 도움이 될만한 물건이 있는지 찾아본다.",
+          "nextSceneFile": "Chapter1/chapter1_battle_support.json"
+        },
+        {
+          "text": "(깜짝 놀라 비명을 지른다) 우와아아! 진짜 마법소녀잖아?!",
+          "nextSceneFile": "Chapter1/chapter1_caught_by_scream.json"
+        }
+      ]
+    }
+  ]
+}
