@@ -1,0 +1,180 @@
+{
+  "sceneId": "chapter1_search_info",
+  "title": "네트워크 속의 구원자들",
+  "chapter": 1,
+  "startId": "search_01",
+  "lines": [
+    {
+      "id": "search_01",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "네온빛밤길거리.png",
+      "music": "잔잔한음악.mp3",
+      "text": "집으로 돌아가는 길, 거리의 대형 전광판에는 아까의 전투 결과가 속보로 흐르고 있었다.  스마트폰을 꺼내 '마법소녀협회(MGA)'의 공식 페이지에 접속했다. ",
+      "nextScriptId": "search_02"
+    },
+    {
+      "id": "search_02",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "화면 가장 윗줄에는 2000년 '대변동'에 관한 기록이 보였다.  인류가 현대 병기로는 타격을 입힐 수 없던 '부정'에 맞서기 시작한 것은, 마스코트들과 소녀들이 계약을 맺으면서부터였다. ",
+      "nextScriptId": "search_03"
+    },
+    {
+      "id": "search_03",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "현재 마법소녀들은 사회 시스템의 필수적인 일부가 되었고,  그들은 사람들의 '희망'과 의지를 에너지원으로 삼아 기적을 일으킨다고 설명되어 있었다. ",
+      "nextScriptId": "search_04"
+    },
+    {
+      "id": "search_04",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "검색창에 오늘 본 '노아 아크'를 검색하자 신서윤 선배의 프로필이 떴다.  17세, 고등학교 2학년.  협회의 에이스로 대우받으며 감정보다 효율을 중시하는 냉철한 현실주의자라는 평가가 자자했다. ",
+      "nextScriptId": "search_05"
+    },
+    {
+      "id": "search_05",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "하지만 은퇴가 1년도 채 남지 않았다는 문구에 시선이 멈췄다.  마법소녀는 18세가 되면 마법의 힘이 사라져 '은퇴'해야 한다는 엄격한 규칙이 있기 때문이다. ",
+      "nextScriptId": "search_06"
+    },
+    {
+      "id": "search_06",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "다음으로 '루나 실버'를 검색했다.  한설아.  랭킹 D+의 신입급 마법소녀.  무모할 정도의 선함을 가진 소녀라는 포포의 평가와 함께, 잦은 실수가 약점으로 기록되어 있었다. ",
+      "nextScriptId": "search_07"
+    },
+    {
+      "id": "search_07",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "공식 데이터 너머로 설아의 그 서툴지만 따뜻했던 웃음이 떠올라 나도 모르게 입가에 미소가 지어졌다.",
+      "nextScriptId": "search_08"
+    },
+    {
+      "id": "search_08",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "정보를 더 훑어보던 중, 화면 하단의 비공식 커뮤니티 게시판에 올라온 기묘한 게시글 하나가 눈에 들어왔다.",
+      "nextScriptId": "search_09"
+    },
+    {
+      "id": "search_09",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "'가시 돋친 장미 문신을 한 타락한 마법소녀를 조심하라'는 제목이었다.  협회가 숨기는 '부정'의 진실을 알고 있다는 위험한 소문들.... ",
+      "nextScriptId": "search_10"
+    },
+    {
+      "id": "search_10",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "그녀의 이름은 '느와르 로즈', 백하얀.  한때 최연소 S급 후보였으나 지금은 지명수배 대상이 된 인물이라고 했다. ",
+      "nextScriptId": "search_11"
+    },
+    {
+      "id": "search_11",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "순간, 등 뒤에서 서늘한 기운이 느껴졌다. 골목길 어둠 속에서 누군가 나를 지켜보고 있는 것 같은 불길한 예감이 들었다.",
+      "nextScriptId": "search_12"
+    },
+    {
+      "id": "search_12",
+      "type": "dialogue",
+      "character": "???",
+      "text": "...협회의 선전용 데이터나 뒤적이고 있다니, 한가한 녀석이군.",
+      "nextScriptId": "search_13"
+    },
+    {
+      "id": "search_13",
+      "type": "dialogue",
+      "character": "백하얀",
+      "characterImage": "백하얀_normal",
+      "characterPosition": "center",
+      "text": "거기서 네가 찾는 '진실' 같은 건 나오지 않아. ",
+      "nextScriptId": "search_14"
+    },
+    {
+      "id": "search_14",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "거칠게 헝클어진 흑발 사이로 날카로운 삼백안이 빛났다.  그녀의 입에는 체리 맛 막대사탕이 물려 있었고, 가죽 재킷 아래로 찢어진 교복이 보였다. ",
+      "nextScriptId": "search_15"
+    },
+    {
+      "id": "search_15",
+      "type": "dialogue",
+      "character": "주인공",
+      "text": "너는... 아까 게시판에서 본...!",
+      "nextScriptId": "search_16"
+    },
+    {
+      "id": "search_16",
+      "type": "dialogue",
+      "character": "백하얀",
+      "characterImage": "백하얀_serious",
+      "text": "이름 부르지 마. 역겨우니까.  협회가 말하는 희망이니 정의니 하는 것들이 얼마나 위선적인지, 곧 알게 될 거다. ",
+      "nextScriptId": "search_17"
+    },
+    {
+      "id": "search_17",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "그녀는 나른하면서도 정곡을 찌르는 말투로 헛웃음을 지었다.  그녀의 목 왼쪽 줄기에 새겨진 장미 문신이 가로등 불빛에 섬뜩하게 빛났다. ",
+      "nextScriptId": "search_18"
+    },
+    {
+      "id": "search_18",
+      "type": "dialogue",
+      "character": "백하얀",
+      "characterImage": "백하얀_smile",
+      "text": "너무 깊게 발 들이지 마. 그 순진한 신입이나 완벽주의자 회장님 곁에 있다간, 너도 금방 망가질 테니까. ",
+      "nextScriptId": "search_19"
+    },
+    {
+      "id": "search_19",
+      "type": "dialogue",
+      "character": "내레이터",
+      "characterExit": "백하얀",
+      "effectSound": "footsteps.mp3",
+      "text": "백하얀은 경고인지 조롱인지 모를 말을 남기고는 어둠 속으로 유유히 사라졌다.",
+      "nextScriptId": "search_20"
+    },
+    {
+      "id": "search_20",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "오늘 하루, 너무나 많은 일이 일어났다. 마법소녀들의 화려한 이면 뒤에 도사린 어둠을 엿본 기분이 들어 마음이 무거워졌다.",
+      "nextScriptId": "search_21"
+    },
+    {
+      "id": "search_21",
+      "type": "choice",
+      "character": "내레이터",
+      "text": "집 앞에 도착한 나는 문득 하늘을 올려다보았다. 내일은 또 어떤 일상이 나를 기다리고 있을까?",
+      "choices": [
+        {
+          "text": "백하얀의 경고를 무시하고 설아를 믿기로 한다.",
+          "nextSceneFile": "Chapter1/chapter1_trust_seolah.json"
+        },
+        {
+          "text": "신서윤 선배에게 오늘 만난 인물에 대해 물어보기로 한다.",
+          "nextSceneFile": "Chapter1/chapter1_ask_seoyoon_about_hayan.json"
+        },
+        {
+          "text": "복잡한 생각은 접어두고 일단 푹 자기로 한다.",
+          "nextSceneFile": "Chapter1/chapter1_next_morning.json"
+        },
+        {
+          "text": "방금 그 마법소녀... 사탕 먹는 모습이 좀 귀여웠던 것 같기도?",
+          "nextSceneFile": "Chapter1/chapter1_gag_hayan_candy.json"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "sceneId": "chapter1_gag_cleanup",
+  "title": "청소는 마법으로 안 되나요?",
+  "chapter": 1,
+  "startId": "gag_cleanup_01",
+  "lines": [
+    {
+      "id": "gag_cleanup_01",
+      "type": "dialogue",
+      "character": "주in공",
+      "background": "꽃잎전투장.png",
+      "music": "발랄한음악.mp3",
+      "text": "와, 이 난장판을 좀 보세요. 이거 다 치우려면 내년 입학식 때나 끝나는 거 아니에요? 우리 졸업할 때까지 강당 못 쓰는 거 아냐?",
+      "nextScriptId": "gag_cleanup_02"
+    },
+    {
+      "id": "gag_cleanup_02",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_panic",
+      "characterPosition": "center",
+      "text": "에엣?! 저, 정말요?! 그럼 저 3학년 될 때까지 매일 여기서 빗자루질만 해야 하는 건가요?! 안 돼요, 제 소중한 고교 생활이 청소로 끝날 순 없어요! ",
+      "nextScriptId": "gag_cleanup_03"
+    },
+    {
+      "id": "gag_cleanup_03",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_serious",
+      "characterPosition": "right",
+      "text": "한설아, 진정해라. 비논리적인 가설에 휘둘리지 마. ",
+      "nextScriptId": "gag_cleanup_04"
+    },
+    {
+      "id": "gag_cleanup_04",
+      "type": "dialogue",
+      "character": "신서윤",
+      "text": "협회 전속 복구팀과 정화 마법사들이 투입되면 48시간 이내에 98.7%의 복구율을 달성할 수 있다. 무질서한 상태로 방치하는 건 협회의 매뉴얼에 어긋나니까. ",
+      "nextScriptId": "gag_cleanup_05"
+    },
+    {
+      "id": "gag_cleanup_05",
+      "type": "dialogue",
+      "character": "주in공",
+      "text": "오... 역시 에이스는 다르네요. 복구율까지 소수점 단위로 계산하시는 건가요?",
+      "nextScriptId": "gag_cleanup_06"
+    },
+    {
+      "id": "gag_cleanup_06",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_tired",
+      "text": "정확한 데이터는 신뢰의 기본이다. ...그나저나, 너는 상황이 이런데도 농담이 나오는군. 긴장감이 부족한 건지, 배짱이 두둑한 건지. ",
+      "nextScriptId": "gag_cleanup_07"
+    },
+    {
+      "id": "gag_cleanup_07",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "text": "헤헤, 하지만 덕분에 무서웠던 게 다 날아갔는걸요! 역시 제 친구는 대단해요! ",
+      "nextScriptId": "gag_cleanup_08"
+    },
+    {
+      "id": "gag_cleanup_08",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "설아는 안심한 듯 배시시 웃으며 내 팔을 살짝 쳤다. 서윤 선배도 한숨을 내쉬긴 했지만, 아까보다 표정이 훨씬 부드러워 보였다. ",
+      "nextScriptId": "gag_cleanup_09"
+    },
+    {
+      "id": "gag_cleanup_09",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_normal",
+      "text": "시간이 지체됐다. 한설아, 서둘러라. 협회 차가 교문 앞에 대기 중이다. ",
+      "nextScriptId": "gag_cleanup_10"
+    },
+    {
+      "id": "gag_cleanup_10",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_sad",
+      "text": "앗, 네! 가야죠.... 저기, 미안해요. 첫날부터 같이 더 놀고 싶었는데.... ",
+      "nextScriptId": "gag_cleanup_11"
+    },
+    {
+      "id": "gag_cleanup_11",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "설아는 아쉬운 듯 내 옷소매를 만지작거리다 조심스럽게 손을 흔들었다.",
+      "nextScriptId": "gag_cleanup_12"
+    },
+    {
+      "id": "gag_cleanup_12",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "text": "내일 학교에서 꼭 봐요! 그때는 진짜로 맛있는 거 먹으러 가기로 약속이에요! ",
+      "nextScriptId": "gag_cleanup_13"
+    },
+    {
+      "id": "gag_cleanup_13",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_serious",
+      "text": "...너도 조심해서 귀가하도록 해. 오늘 본 것들은 가급적 발설하지 않는 게 신상에 좋을 거다. ",
+      "nextScriptId": "gag_cleanup_14"
+    },
+    {
+      "id": "gag_cleanup_14",
+      "type": "dialogue",
+      "character": "내레이터",
+      "characterExit": "한설아,신서윤",
+      "music": "none",
+      "text": "두 소녀는 저녁노을이 깔리기 시작한 교정을 가로질러 멀어져 갔다. 혼자 남겨진 강당에는 흩날리는 벚꽃 잎만이 남아 오늘 하루의 비현실적인 사건들을 속삭이는 듯했다.",
+      "nextScriptId": "gag_cleanup_15"
+    },
+    {
+      "id": "gag_cleanup_15",
+      "type": "choice",
+      "character": "내레이터",
+      "background": "네온빛밤길거리.png",
+      "text": "피곤하지만 왠지 가슴 한구석이 고동치는 입학식 날이었다. 집으로 돌아가는 길, 나는 오늘 겪은 일들을 되새겼다.",
+      "choices": [
+        {
+          "text": "설아에게 잘 들어갔는지 안부 문자를 보낸다.",
+          "nextSceneFile": "Chapter1/chapter1_night_message.json"
+        },
+        {
+          "text": "오늘 본 마법소녀들에 대해 인터넷에 검색해본다.",
+          "nextSceneFile": "Chapter1/chapter1_search_info.json"
+        },
+        {
+          "text": "편의점에 들러 아까 설아가 좋아한다던 딸기 디저트를 사 본다.",
+          "nextSceneFile": "Chapter1/chapter1_strawberry_buy.json"
+        }
+      ]
+    }
+  ]
+}

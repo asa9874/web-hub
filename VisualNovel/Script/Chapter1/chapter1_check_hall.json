@@ -1,0 +1,153 @@
+{
+  "sceneId": "chapter1_check_hall",
+  "title": "잔해 속의 재회",
+  "chapter": 1,
+  "startId": "check_01",
+  "lines": [
+    {
+      "id": "check_01",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "꽃잎전투장.png",
+      "music": "잔잔한음악.mp3",
+      "text": "대피소의 철문을 열고 나오자, 아까의 소란이 거짓말이었던 것처럼 복도는 고요했다. 하지만 깨진 유리창과 바닥에 흩어진 파편들이 방금 전의 사투를 증명하고 있었다.",
+      "nextScriptId": "check_02"
+    },
+    {
+      "id": "check_02",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_serious",
+      "characterPosition": "center",
+      "text": "서윤 선배님, 무사하시겠죠? 혼자서 그 많은 '부정'들을 상대하셨는데....",
+      "nextScriptId": "check_03"
+    },
+    {
+      "id": "check_03",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "설아의 보랏빛 눈동자에는 걱정이 가득 서려 있었다. 우리는 서둘러 강당으로 향했다.",
+      "nextScriptId": "check_04"
+    },
+    {
+      "id": "check_04",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "강당 문을 열자, 매캐한 연기와 함께 푸른 마력의 잔재가 허공을 떠다니고 있었다. 그리고 그 중심에 한 소녀가 서 있었다.",
+      "nextScriptId": "check_05"
+    },
+    {
+      "id": "check_05",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_tired",
+      "characterPosition": "right",
+      "text": "하아... 하아....",
+      "nextScriptId": "check_06"
+    },
+    {
+      "id": "check_06",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "신서윤 선배였다. 해군 제복을 모티브로 한 남색 코트는 군데군데 찢겨 있었고, 그녀의 차가운 청회색 눈동자에는 짙은 피로가 묻어 있었다.",
+      "nextScriptId": "check_07"
+    },
+    {
+      "id": "check_07",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_surprised",
+      "text": "선배님! 다치신 데는 없으세요?!",
+      "nextScriptId": "check_08"
+    },
+    {
+      "id": "check_08",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_serious",
+      "text": "...말했을 텐데. 걱정은 비효율적이라고. 그보다, 대피 명령을 어기고 왜 다시 이곳으로 돌아온 거지? ",
+      "nextScriptId": "check_09"
+    },
+    {
+      "id": "check_09",
+      "type": "dialogue",
+      "character": "주인공",
+      "text": "선배님이 걱정돼서요. 아까 도와주신 것도 감사하고요.",
+      "nextScriptId": "check_10"
+    },
+    {
+      "id": "check_10",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_normal",
+      "text": "감사 인사는 협회에 정식 보고서로 제출하도록 해. 마법소녀의 업무는 시민의 안전을 보장하는 것이니까.",
+      "nextScriptId": "check_11"
+    },
+    {
+      "id": "check_11",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "그녀는 무뚝뚝하게 말하며 변신을 해제했다. 마법의 옷이 사라지고 다시 단정한 교복 차림으로 돌아온 그녀는 평소처럼 은테 안경을 고쳐 썼다.",
+      "nextScriptId": "check_12"
+    },
+    {
+      "id": "check_12",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "text": "헤헤, 역시 선배님은 츤데레라니까요! 아, 맞다! 선배님, 이 친구가 아까 괴수들 위치를 알려줘서 정말 큰 도움이 됐어요!",
+      "nextScriptId": "check_13"
+    },
+    {
+      "id": "check_13",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_smile",
+      "text": "...알고 있다. 네 정보 덕분에 지휘 개체를 예상보다 빨리 특정할 수 있었어. 그 점은 칭찬해주지.",
+      "nextScriptId": "check_14"
+    },
+    {
+      "id": "check_14",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "서윤 선배가 아주 작게 미소를 지었다. 평소의 날카로움이 사라진 그 표정에 나도 모르게 심장이 덜컥 내려앉는 기분이었다.",
+      "nextScriptId": "check_15"
+    },
+    {
+      "id": "check_15",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_serious",
+      "text": "하지만 상황이 정리되었다고 해서 방심하지 마. '부정'은 언제든 다시 나타날 수 있으니까.",
+      "nextScriptId": "check_16"
+    },
+    {
+      "id": "check_16",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "text": "그럼 이제 어떡하죠? 입학식은 완전히 엉망이 되어버렸는데....",
+      "nextScriptId": "check_17"
+    },
+    {
+      "id": "check_17",
+      "type": "choice",
+      "character": "신서윤",
+      "text": "학교 측에서 오늘은 이만 귀가하라는 공지가 내려올 거다. 한설아, 너는 나와 함께 협회에 들러 사후 보고를 마저 하도록.",
+      "choices": [
+        {
+          "text": "서윤 선배에게 다친 곳은 정말 괜찮냐고 다시 묻는다.",
+          "nextSceneFile": "Chapter1/chapter1_seoyoon_care.json"
+        },
+        {
+          "text": "설아에게 오늘 하루 정말 고생 많았다고 작별 인사를 한다.",
+          "nextSceneFile": "Chapter1/chapter1_seolah_farewell.json"
+        },
+        {
+          "text": "엉망이 된 강당을 보고 \"이거 청소하려면 내년 입학식 때나 끝나겠는데요?\"라고 농담한다.",
+          "nextSceneFile": "Chapter1/chapter1_gag_cleanup.json"
+        }
+      ]
+    }
+  ]
+}

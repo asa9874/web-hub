@@ -1,0 +1,171 @@
+{
+  "sceneId": "chapter1_ask_seoyoon_about_hayan",
+  "title": "과거의 파편과 차가운 충고",
+  "chapter": 1,
+  "startId": "ask_01",
+  "lines": [
+    {
+      "id": "ask_01",
+      "type": "dialogue",
+      "character": "내레이터",
+      "background": "도서관.png",
+      "music": "잔잔한음악.mp3",
+      "text": "다음 날 아침, 나는 어젯밤의 불길한 만남을 떨쳐내지 못한 채 학생회장실을 찾았다. 도서관 한편에 마련된 그곳은 신서윤 선배가 가장 좋아하는 장소이기도 했다.",
+      "nextScriptId": "ask_02"
+    },
+    {
+      "id": "ask_02",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_serious",
+      "characterPosition": "center",
+      "text": "입학식 다음 날부터 학생회장실을 제집 드나들듯 하는군. 용건은 뭐지? 효율적인 대화를 위해 결론부터 말하도록 해.",
+      "nextScriptId": "ask_03"
+    },
+    {
+      "id": "ask_03",
+      "type": "dialogue",
+      "character": "주인공",
+      "text": "선배님, 혹시 '백하얀'이라는 사람에 대해 아시나요? 목에 장미 문신이 있는 마법소녀라고 하던데...",
+      "nextScriptId": "ask_04"
+    },
+    {
+      "id": "ask_04",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_surprised",
+      "text": "......!",
+      "nextScriptId": "ask_05"
+    },
+    {
+      "id": "ask_05",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "평소 냉정함을 유지하던 서윤 선배의 눈동자가 눈에 띄게 흔들렸다. 그녀는 서류를 쥐고 있던 손에 힘을 꽉 주었다.",
+      "nextScriptId": "ask_06"
+    },
+    {
+      "id": "ask_06",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_angry",
+      "text": "그 이름을 어디서 들었지? 아니, 설마 직접 만난 건가? 대답해, 98% 이상의 확률로 네가 위험에 노출되었다는 신호니까.",
+      "nextScriptId": "ask_07"
+    },
+    {
+      "id": "ask_07",
+      "type": "dialogue",
+      "character": "주인공",
+      "text": "어젯밤 집으로 돌아가는 길에 우연히 만났어요. 협회의 말은 믿지 말라면서 경고하더라고요.",
+      "nextScriptId": "ask_08"
+    },
+    {
+      "id": "ask_08",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_serious",
+      "text": "그 녀석... 여전히 불필요한 노이즈를 뿌리고 다니는군. 백하얀, 아니 '느와르 로즈'는 협회에서 제명된 타락한 마법소녀다.",
+      "nextScriptId": "ask_09"
+    },
+    {
+      "id": "ask_09",
+      "type": "dialogue",
+      "character": "신서윤",
+      "text": "과거엔 유능한 에이스였을지 몰라도, 지금은 시스템을 부정하는 고독한 늑대일 뿐이야. 그녀의 말에 귀를 기울이는 건 시간 낭비다.",
+      "nextScriptId": "ask_10"
+    },
+    {
+      "id": "ask_10",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "서윤 선배의 목소리는 단호했지만, 어딘가 슬픔이 섞여 있는 듯했다. 그녀와 백하얀 사이에는 내가 알지 못하는 깊은 과거가 있는 것이 분명했다.",
+      "nextScriptId": "ask_11"
+    },
+    {
+      "id": "ask_11",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_tired",
+      "text": "하아... 너까지 휘말리게 하고 싶지는 않았는데. 다시는 그 녀석과 엮이지 마. 이건 선배로서가 아니라, 이 구역 책임자로서 내리는 명령이다.",
+      "nextScriptId": "ask_12"
+    },
+    {
+      "id": "ask_12",
+      "type": "dialogue",
+      "character": "주인공",
+      "text": "알겠어요. 하지만 선배님도 그 사람을 증오만 하시는 건 아닌 것 같네요.",
+      "nextScriptId": "ask_13"
+    },
+    {
+      "id": "ask_13",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_embarrassed",
+      "text": "무, 무슨... 불필요한 추측은 그만둬! 감정적인 데이터는 연산에 방해만 될 뿐이야.",
+      "nextScriptId": "ask_14"
+    },
+    {
+      "id": "ask_14",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "서윤 선배는 서둘러 고개를 돌리며 안경을 고쳐 썼다. 붉어진 귀끝이 그녀의 당황스러움을 대변하고 있었다.",
+      "nextScriptId": "ask_15"
+    },
+    {
+      "id": "ask_15",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "left",
+      "text": "좋은 아침이에요, 서윤 선배님! 어라, 친구도 여기 있었네요? 에헤헤, 같이 아침 먹으러 가요! ",
+      "nextScriptId": "ask_16"
+    },
+    {
+      "id": "ask_16",
+      "type": "dialogue",
+      "character": "신서윤",
+      "characterImage": "신서윤_serious",
+      "text": "한설아, 노크도 없이 들어오지 말라고 했을 텐데. 예의 없는 행동은 효율성을 떨어뜨린다.",
+      "nextScriptId": "ask_17"
+    },
+    {
+      "id": "ask_17",
+      "type": "dialogue",
+      "character": "한설아",
+      "characterImage": "한설아_panic",
+      "text": "으앗, 죄송해요! 0.5초 만에 사과할게요! 하지만 오늘 카페테리아에 딸기 생크림 케이크가 나왔단 말이에요! ",
+      "nextScriptId": "ask_18"
+    },
+    {
+      "id": "ask_18",
+      "type": "dialogue",
+      "character": "내레이터",
+      "text": "설아의 등장으로 무거웠던 분위기가 순식간에 밝아졌다. 서윤 선배도 못 말린다는 듯 한숨을 내쉬며 서류를 정리했다.",
+      "nextScriptId": "ask_19"
+    },
+    {
+      "id": "ask_19",
+      "type": "choice",
+      "character": "한설아",
+      "text": "자, 다 같이 가요! 서윤 선배님도 당분 보충하셔야 하잖아요. 그렇죠? ",
+      "choices": [
+        {
+          "text": "설아를 따라 딸기 케이크를 먹으러 간다.",
+          "nextSceneFile": "Chapter1/chapter1_strawberry_cake_time.json"
+        },
+        {
+          "text": "서윤 선배에게 좀 더 자세한 이야기를 듣고 싶다며 남는다.",
+          "nextSceneFile": "Chapter1/chapter1_deep_talk_with_seoyoon.json"
+        },
+        {
+          "text": "백하얀이 어젯밤 줬던 막대사탕을 꺼내 서윤에게 건네본다.",
+          "nextSceneFile": "Chapter1/chapter1_hayan_candy_trigger.json"
+        },
+        {
+          "text": "케이크 대신 '마법소녀 맛' 젤리는 없냐고 물어본다.",
+          "nextSceneFile": "Chapter1/chapter1_gag_magical_jelly.json"
+        }
+      ]
+    }
+  ]
+}
