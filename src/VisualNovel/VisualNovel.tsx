@@ -4,6 +4,7 @@ import CharacterSprite from './Components/CharacterSprite';
 import DialogueBox from './Components/DialogueBox';
 import ChoiceButtons from './Components/ChoiceButtons';
 import DialogueLog, { type DialogueLogEntry } from './Components/DialogueLog';
+import CoverPage from './Components/CoverPage';
 import StoryEditor from './StoryEditor';
 import type { CharacterPosition, ScriptLine, ScriptScene } from './types';
 import config from './Script/config.json';
@@ -14,6 +15,9 @@ const VisualNovel: React.FC = () => {
   const [currentLineId, setCurrentLineId] = useState<string>('');
   const [currentLine, setCurrentLine] = useState<ScriptLine | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  
+  // 표지 페이지 상태
+  const [showCoverPage, setShowCoverPage] = useState(true);
   
   // 편집 모드
   const [isEditorMode, setIsEditorMode] = useState(false);
@@ -399,6 +403,11 @@ const VisualNovel: React.FC = () => {
     );
   }
 
+  // 표지 페이지 표시
+  if (showCoverPage) {
+    return <CoverPage onStartGame={() => setShowCoverPage(false)} />;
+  }
+
   // 편집 모드
   if (isEditorMode) {
     return <StoryEditor onClose={() => setIsEditorMode(false)} />;
@@ -483,6 +492,18 @@ const VisualNovel: React.FC = () => {
           </div>
         </div>
       )}
+      
+        {/* Skip 모드 표시 */}
+        {isSkipMode && (
+          <div className="absolute top-8 left-1/2 -translate-x-1/2 z-40 animate-fadeIn">
+            <div className="bg-pink-600/90 backdrop-blur-sm text-white px-6 py-3 rounded-full border-2 border-pink-300/50 shadow-lg flex items-center gap-2">
+              <svg className="w-5 h-5 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M4.555 5.168A1 1 0 003 6v8a1 1 0 001.555.832L10 11.202V14a1 1 0 001.555.832l6-4a1 1 0 000-1.664l-6-4A1 1 0 0010 6v2.798l-5.445-3.63z" />
+              </svg>
+              <span className="font-bold">스킵 모드</span>
+            </div>
+          </div>
+        )}
       
         {/* UI 데코레이션 - 상단 핑크 그라데이션 */}
         <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-pink-900/10 to-transparent pointer-events-none z-5" />

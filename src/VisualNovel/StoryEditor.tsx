@@ -97,6 +97,43 @@ const StoryEditor: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       
       console.log(`🎉 총 ${Object.keys(loadedScenes).length}개의 씬을 로드했습니다.`);
       console.log('로드된 씬 목록:', Object.keys(loadedScenes));
+      
+      // 로드되지 않은 씬 찾기
+      const referencedScenes = new Set<string>();
+      Object.values(loadedScenes).forEach(scene => {
+        scene.lines.forEach(line => {
+          if (line.nextSceneFile) referencedScenes.add(line.nextSceneFile);
+          if (line.choices) {
+            line.choices.forEach(choice => {
+              if (choice.nextSceneFile) referencedScenes.add(choice.nextSceneFile);
+            });
+          }
+        });
+      });
+      
+      const missingScenes = Array.from(referencedScenes).filter(
+        scene => !Object.keys(loadedScenes).includes(scene)
+      );
+      
+      if (missingScenes.length > 0) {
+        console.warn(`⚠️ ${missingScenes.length}개의 참조된 씬이 존재하지 않습니다:`);
+        missingScenes.forEach(scene => {
+          console.warn(`  - ${scene}`);
+          // 미구현 씬을 가상 객체로 생성
+          loadedScenes[scene] = {
+            sceneId: `missing_${scene}`,
+            title: '미구현',
+            chapter: 0,
+            startId: 'missing',
+            lines: [{
+              id: 'missing',
+              type: 'dialogue',
+              text: '이 씬은 아직 구현되지 않았습니다.'
+            }]
+          };
+        });
+      }
+      
       setScenes(loadedScenes);
       validateScripts(loadedScenes);
       generateGraph(loadedScenes);
@@ -195,21 +232,26 @@ const StoryEditor: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       });
     });
 
-    // BFS로 깊이 계산
+    // BFS로 깊이 계산 (깊이 제한 없음 - 모든 부모 경로 고려)
     const depths: Record<string, number> = {};
     const startNode = 'Chapter1/chapter1_entrance.json';
     const queue: Array<{ sceneFile: string; depth: number }> = [{ sceneFile: startNode, depth: 0 }];
-    const visited = new Set<string>();
+    const visitedPairs = new Set<string>(); // 순환 참조만 방지
 
     while (queue.length > 0) {
       const { sceneFile, depth } = queue.shift()!;
-      if (visited.has(sceneFile)) continue;
-      visited.add(sceneFile);
-      depths[sceneFile] = depth;
+      
+      // 각 노드의 최대 깊이만 저장 (여러 경로 중 가장 깊은 것)
+      if (!(sceneFile in depths) || depths[sceneFile] < depth) {
+        depths[sceneFile] = depth;
+      }
 
       const children = childrenMap[sceneFile] || new Set();
       children.forEach(child => {
-        if (!visited.has(child)) {
+        const pairKey = `${sceneFile}->${child}`;
+        // 같은 부모-자식 쌍은 한 번만 처리 (순환 참조 방지)
+        if (!visitedPairs.has(pairKey)) {
+          visitedPairs.add(pairKey);
           queue.push({ sceneFile: child, depth: depth + 1 });
         }
       });
@@ -220,6 +262,26 @@ const StoryEditor: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     Object.entries(depths).forEach(([sceneFile, depth]) => {
       if (!nodesByDepth[depth]) nodesByDepth[depth] = [];
       nodesByDepth[depth].push(sceneFile);
+    });
+
+    // 미구현 씬들의 깊이 계산 (부모의 깊이 + 1)
+    Object.entries(loadedScenes).forEach(([sceneFile, scene]) => {
+      if (scene.chapter === 0 && !(sceneFile in depths)) {
+        // 이 미구현 씬의 부모를 찾기
+        let maxParentDepth = 0;
+        Object.entries(loadedScenes).forEach(([parentFile, parentScene]) => {
+          parentScene.lines.forEach(line => {
+            if (line.nextSceneFile === sceneFile || 
+                (line.choices && line.choices.some(c => c.nextSceneFile === sceneFile))) {
+              maxParentDepth = Math.max(maxParentDepth, depths[parentFile] || 0);
+            }
+          });
+        });
+        depths[sceneFile] = maxParentDepth + 1;
+        const depth = depths[sceneFile];
+        if (!nodesByDepth[depth]) nodesByDepth[depth] = [];
+        nodesByDepth[depth].push(sceneFile);
+      }
     });
 
     const nodeWidth = 280;
@@ -294,6 +356,25 @@ const StoryEditor: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
     console.log('📊 그래프 생성 완료:', graphNodes.length, '개의 노드');
     setNodes(graphNodes);
+  };
+
+  // 그래프 캔버스 크기 계산
+  const getCanvasSize = () => {
+    if (nodes.length === 0) return { width: 4000, height: 3000 };
+    
+    let maxX = 0;
+    let maxY = 0;
+    
+    nodes.forEach(node => {
+      maxX = Math.max(maxX, node.x + 150); // 노드 폭 고려
+      maxY = Math.max(maxY, node.y + 150); // 노드 높이 고려
+    });
+    
+    // 여유 공간 추가
+    return {
+      width: Math.max(4000, maxX + 200),
+      height: Math.max(3000, maxY + 200)
+    };
   };
 
   // 마우스 드래그 핸들러
@@ -430,16 +511,17 @@ const StoryEditor: React.FC<{ onClose: () => void }> = ({ onClose }) => {
             transform: `translate(${offset.x}px, ${offset.y}px) scale(${scale})`,
             transformOrigin: '0 0',
             transition: isDragging ? 'none' : 'transform 0.1s ease-out',
-            width: '4000px',
-            height: '3000px',
+            width: `${getCanvasSize().width}px`,
+            height: `${getCanvasSize().height}px`,
             position: 'relative'
           }}
         >
           <svg className="absolute inset-0" style={{ width: '100%', height: '100%' }}>
           <defs>
             {/* 챕터별 화살표 마커 */}
-            {[1, 2, 3, 4, 5].map(chapter => {
+            {[0, 1, 2, 3, 4, 5].map(chapter => {
               const colors = {
+                0: '#8b5cf6',
                 1: '#3b82f6', 2: '#22c55e', 3: '#f97316', 4: '#a855f7', 5: '#ec4899'
               };
               return (
@@ -485,9 +567,11 @@ const StoryEditor: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                 : `M ${startX} ${startY} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${endX} ${endY}`;
 
               // 챕터별 색상
+              const sourceChapter = node.chapter;
               const strokeColor = {
+                0: '#8b5cf6',
                 1: '#3b82f6', 2: '#22c55e', 3: '#f97316', 4: '#a855f7', 5: '#ec4899'
-              }[node.chapter as 1 | 2 | 3 | 4 | 5];
+              }[sourceChapter as 0 | 1 | 2 | 3 | 4 | 5];
 
               return (
                 <path
@@ -496,7 +580,7 @@ const StoryEditor: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                   stroke={strokeColor}
                   strokeWidth="3"
                   fill="none"
-                  markerEnd={`url(#arrowhead-${node.chapter})`}
+                  markerEnd={`url(#arrowhead-${sourceChapter})`}
                   className="transition-all duration-300 hover:stroke-width-[4] opacity-70 hover:opacity-100"
                   strokeDasharray={isCrossChapter ? "5,5" : "none"}
                 />
@@ -507,12 +591,15 @@ const StoryEditor: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
         {/* 노드 그리기 */}
         {nodes.map(node => {
-          const colors = chapterColors[node.chapter as keyof typeof chapterColors];
+          const colors = chapterColors[node.chapter as keyof typeof chapterColors] || 
+            { bg: 'bg-gray-100', border: 'border-gray-400', text: 'text-gray-800', gradient: 'from-gray-400 to-gray-500' };
+          const isMissing = node.chapter === 0; // 미구현 씬
+          
           return (
             <div
               key={node.sceneFile}
-              onClick={() => setSelectedScene(scenes[node.sceneFile])}
-              className="absolute cursor-pointer group"
+              onClick={() => !isMissing && setSelectedScene(scenes[node.sceneFile])}
+              className={`absolute group ${isMissing ? 'pointer-events-none opacity-60' : 'cursor-pointer'}`}
               style={{
                 left: node.x,
                 top: node.y,
@@ -523,25 +610,36 @@ const StoryEditor: React.FC<{ onClose: () => void }> = ({ onClose }) => {
               {/* 동그라미 노드 */}
               <div className="relative w-full h-full">
                 {/* 외곽 글로우 */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${colors.gradient}
+                <div className={`absolute inset-0 ${isMissing ? 'bg-red-600' : `bg-gradient-to-br ${colors.gradient}`}
                   rounded-full opacity-0 group-hover:opacity-100 blur-md transition-opacity duration-300`} />
                 
                 {/* 메인 원 */}
-                <div className={`absolute inset-2 ${colors.bg} 
-                  border-4 ${colors.border} rounded-full shadow-xl 
+                <div className={`absolute inset-2 ${isMissing ? 'bg-black border-red-500' : `${colors.bg} ${colors.border}`} 
+                  border-4 rounded-full shadow-xl 
                   group-hover:scale-110 
                   transition-all duration-200 flex items-center justify-center p-3`}>
                   
+                  {/* 미구현 표시 (빨간색 X) */}
+                  {isMissing && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <svg className="w-12 h-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </div>
+                  )}
+                  
                   {/* 챕터 뱃지 */}
-                  <div className={`absolute -top-2 -right-2 w-8 h-8 rounded-full 
-                    bg-gradient-to-br ${colors.gradient} border-2 border-white 
-                    flex items-center justify-center shadow-lg`}>
-                    <span className="text-white font-bold text-xs">C{node.chapter}</span>
-                  </div>
+                  {!isMissing && (
+                    <div className={`absolute -top-2 -right-2 w-8 h-8 rounded-full 
+                      bg-gradient-to-br ${colors.gradient} border-2 border-white 
+                      flex items-center justify-center shadow-lg`}>
+                      <span className="text-white font-bold text-xs">C{node.chapter}</span>
+                    </div>
+                  )}
                   
                   {/* 제목 텍스트 */}
                   <div className="text-center">
-                    <div className={`text-xs font-bold ${colors.text} leading-tight px-1`}>
+                    <div className={`text-xs font-bold ${isMissing ? 'text-red-500' : colors.text} leading-tight px-1`}>
                       {node.title}
                     </div>
                   </div>
@@ -549,9 +647,9 @@ const StoryEditor: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                 
                 {/* 라벨 */}
                 <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                  <div className={`${colors.bg} backdrop-blur-sm px-2 py-1 rounded-full 
-                    border-2 ${colors.border} shadow-md`}>
-                    <div className={`text-xs ${colors.text} font-semibold`}>
+                  <div className={`${isMissing ? 'bg-red-900 border-red-500 text-red-300' : `${colors.bg} ${colors.border} ${colors.text}`} backdrop-blur-sm px-2 py-1 rounded-full 
+                    border-2 shadow-md`}>
+                    <div className={`text-xs font-semibold`}>
                       {node.sceneFile.split('/')[1].replace('.json', '')}
                     </div>
                   </div>
