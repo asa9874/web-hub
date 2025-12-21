@@ -102,6 +102,18 @@ const generateNodes = (): NodeData[] => {
       size: 'lg',
       link: '/visual-novel',
       image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=800', // Story/Art
+    },
+    {
+      id: 'japan',
+      title: 'JAPAN GUIDE',
+      subtitle: 'Travel Companion',
+      description: '일본 여행을 위한 종합 가이드입니다. 관광지, 음식, 문화 등 다양한 정보를 제공하여 완벽한 여행 계획을 세울 수 있도록 도와줍니다.',
+      icon: BookOpen,
+      x: 0,
+      y: -150,
+      size: 'md',
+      link: '/japan',
+      image: 'https://images.unsplash.com/photo-1505678261036-a3fcc5e884ee?auto=format&fit=crop&q=80&w=800', // Travel/Culture
     }
   ];
 
