@@ -12,6 +12,7 @@ import Scedule from './Scedule/Scedule.tsx'
 import VisualNovel from './VisualNovel/VisualNovel.tsx'
 import HeroinInfo from './VisualNovel/HeroinInfo.tsx'
 import Japan from './Japan/Japan.tsx'
+import English from './English/English.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -27,6 +28,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/visual-novel" element={<VisualNovel />} />
         <Route path="/heroin-info" element={<HeroinInfo />} />
         <Route path="/japan" element={<Japan />} />
+        <Route path="/english" element={<English />} />
       </Routes>
     </HashRouter>
   </StrictMode>,

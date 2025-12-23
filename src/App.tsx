@@ -114,6 +114,18 @@ const generateNodes = (): NodeData[] => {
       size: 'md',
       link: '/japan',
       image: 'https://images.unsplash.com/photo-1505678261036-a3fcc5e884ee?auto=format&fit=crop&q=80&w=800', // Travel/Culture
+    },
+    {
+      id: 'english',
+      title: 'ENGLISH VOCABULARY',
+      subtitle: 'Learning System',
+      description: '체계적인 영단어 학습 시스템입니다. Day별로 단어를 선택하여 효율적으로 학습할 수 있으며, 한글 뜻을 숨기고 단어를 맞춰보는 방식으로 학습할 수 있습니다.',
+      icon: BookOpen,
+      x: 250,
+      y: -200,
+      size: 'md',
+      link: '/english',
+      image: 'https://images.unsplash.com/photo-1546410531-bb4caa6b0e3b?auto=format&fit=crop&q=80&w=800', // Education/Language
     }
   ];
 
