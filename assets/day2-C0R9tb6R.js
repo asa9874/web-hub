@@ -1,0 +1,1 @@
+const a=[{word:"absolute",meaning:"절대적인, 완전한"},{word:"absorb",meaning:"흡수하다, 빨아들이다"},{word:"abstract",meaning:"추상적인, 개념적인"},{word:"abundance",meaning:"풍부, 많음"},{word:"abuse",meaning:"학대, 폭언, 악용"}];export{a as default};
