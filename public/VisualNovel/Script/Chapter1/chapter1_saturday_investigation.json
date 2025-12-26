@@ -1,0 +1,65 @@
+{
+  "id": "chapter1_saturday_investigation",
+  "type": "scene",
+  "sceneId": "saturday_investigation",
+  "title": "첫 조사 - 숨겨진 진실",
+  "chapter": 1,
+  "startId": "sat_inv_01",
+  "lines": [
+    {
+      "id": "sat_inv_01",
+      "type": "dialogue",
+      "background": "school_entrance.png",
+      "text": "토요일 오후. 강리나와 함께 학교 근처의 사건 장소로 향한다.",
+      "nextScriptId": "sat_inv_02"
+    },
+    {
+      "id": "sat_inv_02",
+      "type": "dialogue",
+      "background": "school_alley.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "여기야. 문제는 여기서 시작된 거야.",
+      "nextScriptId": "sat_inv_03"
+    },
+    {
+      "id": "sat_inv_03",
+      "type": "dialogue",
+      "background": "school_alley.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "넌... 뭔가 이상한 거 느껴?",
+      "nextScriptId": "sat_inv_04"
+    },
+    {
+      "id": "sat_inv_04",
+      "type": "dialogue",
+      "background": "school_alley.png",
+      "text": "주변을 살펴본다. 무언가 불길한 에너지가 감돈다.",
+      "nextScriptId": "sat_inv_05"
+    },
+    {
+      "id": "sat_inv_05",
+      "type": "dialogue",
+      "background": "school_alley.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "그 느낌이 맞아. 이 학교... 정상이 아니라는 증거가 바로 이거야.",
+      "nextScriptId": "sat_inv_06"
+    },
+    {
+      "id": "sat_inv_06",
+      "type": "dialogue",
+      "background": "school_alley.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "그리고 넌... 이미 이걸 느낄 수 있는 상태가 되어버렸어.",
+      "characterExit": "강리나",
+      "nextScriptId": "chapter1_climax_revelation"
+    }
+  ]
+}

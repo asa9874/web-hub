@@ -1,0 +1,58 @@
+{
+  "id": "chapter1_transition_evening1",
+  "type": "scene",
+  "sceneId": "transition_evening1",
+  "title": "첫 동아리 활동을 마치고",
+  "chapter": 1,
+  "startId": "eve1_01",
+  "lines": [
+    {
+      "id": "eve1_01",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "text": "첫 동아리 활동이 끝났다. 생각보다 즐거웠다.",
+      "nextScriptId": "eve1_02"
+    },
+    {
+      "id": "eve1_02",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "left",
+      "text": "어, 활동 어땠어? 좋았어?",
+      "nextScriptId": "eve1_03"
+    },
+    {
+      "id": "eve1_03",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "left",
+      "text": "좋다니 다행이야! 우리 내일도 함께하자!",
+      "nextScriptId": "eve1_04"
+    },
+    {
+      "id": "eve1_04",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "left",
+      "text": "그런데... 혹시 오늘 낮에 뭔가 이상한 거 봤어?",
+      "nextScriptId": "eve1_05"
+    },
+    {
+      "id": "eve1_05",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "left",
+      "text": "아니면 그냥 내가 생각이 많은 거겠지. 그럼 내일 봐!",
+      "characterExit": "한설아",
+      "nextScriptId": "chapter1_day3_morning"
+    }
+  ]
+}

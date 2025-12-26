@@ -1,0 +1,39 @@
+{
+  "id": "chapter1_blame_awkward",
+  "type": "scene",
+  "sceneId": "blame_awkward",
+  "title": "어색함으로 끝나는 입학식",
+  "chapter": 1,
+  "startId": "blame_awk_1",
+  "lines": [
+    {
+      "id": "blame_awk_1",
+      "type": "dialogue",
+      "background": "school_entrance.png",
+      "character": "학생1",
+      "characterImage": "학생1_angry",
+      "characterPosition": "right",
+      "text": "뭐하는 건데!? 네가 막으면서 날 잡은 거잖아!",
+      "characterExit": "학생1",
+      "nextScriptId": "blame_awk_2"
+    },
+    {
+      "id": "blame_awk_2",
+      "type": "dialogue",
+      "background": "school_entrance.png",
+      "text": "결국 입학식은 어색함 속에서 끝났다. 뭔가 이상한 시작이다.",
+      "nextScriptId": "blame_awk_3"
+    },
+    {
+      "id": "blame_awk_3",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "네가 어떤 학생인지 궁금하네. 조심해. 이 학교는 평범하지 않아.",
+      "characterExit": "강리나",
+      "nextScriptId": "transition_day2"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "id": "chapter1_week_montage_rina",
+  "type": "scene",
+  "sceneId": "week_montage_rina",
+  "title": "강리나 루트 - 비밀에 물들어가다",
+  "chapter": 1,
+  "startId": "week_rina_01",
+  "lines": [
+    {
+      "id": "week_rina_01",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "text": "4일째 - 설아는 더 이상 나를 묻지 않는다.",
+      "nextScriptId": "week_rina_02"
+    },
+    {
+      "id": "week_rina_02",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "잘했어. 이제 넌 준비가 된 거야.",
+      "nextScriptId": "week_rina_03"
+    },
+    {
+      "id": "week_rina_03",
+      "type": "dialogue",
+      "background": "school_alley.png",
+      "text": "5일째 - 강리나와 함께 학교의 비밀을 캐나간다.",
+      "nextScriptId": "week_rina_04"
+    },
+    {
+      "id": "week_rina_04",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "이 학교에서는 뭔가가 일어나려고 한다. 그리고 넌 그걸 막아야 해.",
+      "nextScriptId": "week_rina_05"
+    },
+    {
+      "id": "week_rina_05",
+      "type": "dialogue",
+      "background": "school_entrance.png",
+      "text": "금요일 - 첫 주가 끝나간다. 하지만 일은 시작되었다.",
+      "nextScriptId": "week_rina_06"
+    },
+    {
+      "id": "week_rina_06",
+      "type": "dialogue",
+      "background": "school_rooftop.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "월요일부터... 더 위험한 일들이 일어날 거야. 준비돼?",
+      "characterExit": "강리나",
+      "nextScriptId": "chapter1_ending_rina"
+    }
+  ]
+}

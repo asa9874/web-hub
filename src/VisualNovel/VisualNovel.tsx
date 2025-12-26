@@ -76,9 +76,17 @@ const VisualNovel: React.FC = () => {
           setLoadingProgress(prev => Math.min(prev + Math.random() * 20, 85));
         }, 200);
 
-        const response = await fetch(`/web-hub/VisualNovel/Script/${currentSceneFile}`);
+        const filePath = `/web-hub/VisualNovel/Script/${currentSceneFile}`;
+        console.log(`[씬 로드 시작] ${filePath}`);
+        
+        const response = await fetch(filePath);
         setLoadingProgress(70);
         setLoadingText('데이터 파싱 중...');
+
+        if (!response.ok) {
+          console.error(`[씬 로드 실패] 파일: ${filePath}, 상태: ${response.status} ${response.statusText}`);
+          throw new Error(`HTTP ${response.status}: ${filePath}`);
+        }
 
         const scene = await response.json() as ScriptScene;
         setLoadingProgress(85);
@@ -90,7 +98,7 @@ const VisualNovel: React.FC = () => {
         
         // 새로운 씬으로 전환될 때 화면의 캐릭터 초기화
         setDisplayedCharacters(new Map());
-        console.log(`[씬 전환] ${currentSceneFile}`);
+        console.log(`[씬 전환 성공] ${currentSceneFile}`);
 
         clearInterval(progressInterval);
         setLoadingProgress(100);
@@ -105,7 +113,9 @@ const VisualNovel: React.FC = () => {
         // 로딩 화면이 표시되었다면, 짧은 시간 후 닫기
         setShowLoadingScreen(false);
       } catch (error) {
-        console.error('씬 로드 실패:', error);
+        const filePath = `/web-hub/VisualNovel/Script/${currentSceneFile}`;
+        console.error(`[씬 로드 실패] 파일: ${filePath}`);
+        console.error(`[상세 에러] ${error instanceof Error ? error.message : String(error)}`);
         setLoadingText('로드 실패...');
         setLoadingProgress(0);
         

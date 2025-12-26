@@ -1,0 +1,225 @@
+{
+  "sceneId": "chapter1_shy_moment",
+  "title": "강리나 앞에서의 부끄러움",
+  "chapter": 1,
+  "startId": "shy_01",
+  "lines": [
+    {
+      "id": "shy_01",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "아, 미안해. 뭔가 민망하게 만들었나? 원래 내 성격이 그래.",
+      "nextScriptId": "shy_02"
+    },
+    {
+      "id": "shy_02",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "하지만 진심이야. 넌 뭔가 다르거든.",
+      "nextScriptId": "shy_03"
+    },
+    {
+      "id": "shy_03",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "좋아, 그럼 내일부터 일을 시작해. 처음이니까 간단한 것부터 할 거야.",
+      "nextScriptId": "shy_04"
+    },
+    {
+      "id": "shy_04",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "이건 신입생들의 서류들이야. 이걸 분류해 주면 돼.",
+      "nextScriptId": "shy_05"
+    },
+    {
+      "id": "shy_05",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "그리고... 혹시 이 학교가 뭔가 이상해 보여?",
+      "nextScriptId": "shy_06"
+    },
+    {
+      "id": "shy_06",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "아, 상관없어. 나중에 천천히 알려줄게.",
+      "nextScriptId": "shy_07"
+    },
+    {
+      "id": "shy_07",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "넌 용감해 보이니까 잘할 수 있을 거야.",
+      "nextScriptId": "shy_08"
+    },
+    {
+      "id": "shy_08",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "그리고 이걸 기억해. 이 일은 생각보다 중요해.",
+      "nextScriptId": "shy_09"
+    },
+    {
+      "id": "shy_09",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "학생들의 안전을 지키는 일이거든.",
+      "nextScriptId": "shy_10"
+    },
+    {
+      "id": "shy_10",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "아, 너한테 너무 많이 얘기하는 것 같은데, 미안해.",
+      "nextScriptId": "shy_11"
+    },
+    {
+      "id": "shy_11",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "그냥... 좀 더 알고 싶었어. 넌 누구야?",
+      "nextScriptId": "shy_12"
+    },
+    {
+      "id": "shy_12",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "이름 말고... 넌 뭘 좋아해? 뭘 꿈꾸고 있어?",
+      "nextScriptId": "shy_13"
+    },
+    {
+      "id": "shy_13",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "아, 미안해. 또 물어봤다. 내가 너무 호기심이 많은 것 같아.",
+      "nextScriptId": "shy_14"
+    },
+    {
+      "id": "shy_14",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "어쨌든... 내일 봐. 그리고 잘 쉬어.",
+      "nextScriptId": "shy_15"
+    },
+    {
+      "id": "shy_15",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "혹시... 뭔가 불안하면 언제든 말해. 알겠지?",
+      "characterExit": "강리나",
+      "nextScriptId": "shy_16"
+    },
+    {
+      "id": "shy_16",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "text": "강리나가 나간 후, 학생회실에는 따뜻한 향기만 남았다.",
+      "nextScriptId": "shy_17"
+    },
+    {
+      "id": "shy_17",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "text": "\"뭐하는 거야, 난...\" 나는 얼굴을 손으로 덮었다.",
+      "nextScriptId": "shy_18"
+    },
+    {
+      "id": "shy_18",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "text": "학생회실을 나와 복도를 걷는다. 심장이 아직도 철렁거린다.",
+      "nextScriptId": "shy_19"
+    },
+    {
+      "id": "shy_19",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "text": "\"강리나... 정말 예뻤어.\" 나는 중얼거렸다.",
+      "nextScriptId": "shy_20"
+    },
+    {
+      "id": "shy_20",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "text": "그 순간, 한설아가 나타났다.",
+      "nextScriptId": "shy_21"
+    },
+    {
+      "id": "shy_21",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "어? 너 학생회실에 있었어? 무슨 일 있었어?",
+      "nextScriptId": "shy_22"
+    },
+    {
+      "id": "shy_22",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "넌 뭐하고 있었어? 학생회실에 오래 있었잖아.",
+      "nextScriptId": "shy_23"
+    },
+    {
+      "id": "shy_23",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "어쨌든... 우리 내일도 함께하자. 뭐가 되든.",
+      "characterExit": "한설아",
+      "nextScriptId": "transition_day2_rina"
+    }
+  ]
+}

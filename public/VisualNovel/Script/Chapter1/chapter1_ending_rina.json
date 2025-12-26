@@ -1,0 +1,38 @@
+{
+  "id": "chapter1_ending_rina",
+  "type": "scene",
+  "sceneId": "chapter1_ending_rina",
+  "title": "Chapter 1 끝 - 강리나와의 비밀로운 계약",
+  "chapter": 1,
+  "startId": "ch1_end_rina_01",
+  "lines": [
+    {
+      "id": "ch1_end_rina_01",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "text": "첫 주가 끝났다. 나는 이제... 뭔가 다른 세계에 발을 들였다.",
+      "nextScriptId": "ch1_end_rina_02"
+    },
+    {
+      "id": "ch1_end_rina_02",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "text": "강리나의 진짜 정체, 학교의 진짜 비밀, 그리고 내가 있어야 할 곳...",
+      "nextScriptId": "ch1_end_rina_03"
+    },
+    {
+      "id": "ch1_end_rina_03",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "text": "모든 것이 혼돈스럽지만... 강리나를 믿기로 했다.",
+      "nextScriptId": "ch1_end_rina_04"
+    },
+    {
+      "id": "ch1_end_rina_04",
+      "type": "dialogue",
+      "background": "sky_night.png",
+      "text": "월요일부터... 진짜 이야기가 시작될 거다.",
+      "nextScriptId": "chapter2_entrance_rina"
+    }
+  ]
+}

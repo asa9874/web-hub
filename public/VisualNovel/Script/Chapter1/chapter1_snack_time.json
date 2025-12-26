@@ -1,0 +1,213 @@
+{
+  "sceneId": "chapter1_snack_time",
+  "title": "매점에서의 그 순간",
+  "chapter": 1,
+  "startId": "snack_01",
+  "lines": [
+    {
+      "id": "snack_01",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "좋아! 그럼 매점으로 가 볼까! 너 뭐 먹고 싶어?",
+      "nextScriptId": "snack_02"
+    },
+    {
+      "id": "snack_02",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "여기가 매점이야! 음식도 많고, 빵도 있고, 음료도 있어!",
+      "nextScriptId": "snack_03"
+    },
+    {
+      "id": "snack_03",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "text": "설아가 신나서 매점을 돌아다니며 물건들을 가리킨다.",
+      "nextScriptId": "snack_04"
+    },
+    {
+      "id": "snack_04",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "이 붕어빵이 진짜 맛있어! 매점 아주머니가 직접 만드신대!",
+      "nextScriptId": "snack_05"
+    },
+    {
+      "id": "snack_05",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "그리고 이건... 어? 뭐지? 아, 이건 새로 들어온 제품이네!",
+      "nextScriptId": "snack_06"
+    },
+    {
+      "id": "snack_06",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "아무튼! 너 뭐 할래? 나는 붕어빵 사먹을 거야!",
+      "nextScriptId": "snack_07"
+    },
+    {
+      "id": "snack_07",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "text": "설아는 이미 붕어빵 하나를 사서 먹고 있었다. 정말 간식을 좋아하는 것 같다.",
+      "nextScriptId": "snack_08"
+    },
+    {
+      "id": "snack_08",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "음~ 맛있다! 너도 사먹으면 좋아할 거야!",
+      "nextScriptId": "snack_09"
+    },
+    {
+      "id": "snack_09",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그리고 여긴 쉬는 시간마다 사람들이 엄청 모여. 점심시간에는 줄이 이 정도일 정도야!",
+      "nextScriptId": "snack_10"
+    },
+    {
+      "id": "snack_10",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "text": "설아의 말이 맞다. 이미 몇몇 상급생들이 줄을 서고 있었다.",
+      "nextScriptId": "snack_11"
+    },
+    {
+      "id": "snack_11",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "근데 넌 지금 뭐 먹을 거야? 빨리 정해야 해! 나중에 줄이 길어질 거야!",
+      "nextScriptId": "snack_12"
+    },
+    {
+      "id": "snack_12",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "그리고... 이 매점은 우리의 작은 천국이야. 배고플 땐 여기 와.",
+      "nextScriptId": "snack_13"
+    },
+    {
+      "id": "snack_13",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그리고 아주머니도 되게 친절하셔. 우리 같은 신입생들에게 자주 싸게 팔아 주신대!",
+      "nextScriptId": "snack_14"
+    },
+    {
+      "id": "snack_14",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "text": "어느 한 상급생이 매점 아주머니에게 인사를 했다. \"아주머니! 오늘도 맛있어!\"",
+      "nextScriptId": "snack_15"
+    },
+    {
+      "id": "snack_15",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "봐? 모두가 매점 아주머니를 존경해! 우리도 좋은 관계를 유지해야 해!",
+      "nextScriptId": "snack_16"
+    },
+    {
+      "id": "snack_16",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "그리고 이 시간이 되면... 아, 맞다! 너 동아리 뭐 할 거야?",
+      "nextScriptId": "snack_17"
+    },
+    {
+      "id": "snack_17",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "나는 아직 정하지 못했어. 너는? 어떤 동아리 들을 거야?",
+      "nextScriptId": "snack_18"
+    },
+    {
+      "id": "snack_18",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "혹시 같은 동아리 할 수 있으면 좋겠는데... 뭐 그건 나중에 생각해도 괜찮겠지?",
+      "nextScriptId": "snack_19"
+    },
+    {
+      "id": "snack_19",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "아무튼! 우리 매점에서 좋은 추억을 만들자! 그리고 이 아주머니 음식은 정말 맛있어!",
+      "nextScriptId": "snack_20"
+    },
+    {
+      "id": "snack_20",
+      "type": "choice",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "설아가 묻는다. 너는 어느 동아리에 관심이 있어?",
+      "choices": [
+        {
+          "text": "너같은 학생은 뭐 하는데? 나도 그 동아리 들어갈까.",
+          "nextSceneFile": "Chapter1/chapter1_same_club.json"
+        },
+        {
+          "text": "아직 모르겠어. 학교를 더 둘러보고 정하자.",
+          "nextSceneFile": "Chapter1/chapter1_exploration.json"
+        },
+        {
+          "text": "설아, 혹시 넌 매점 아주머니 말고 다른 누구 있어? *장난스럽게*",
+          "nextSceneFile": "Chapter1/chapter1_teasing_club.json"
+        }
+      ]
+    }
+  ]
+}

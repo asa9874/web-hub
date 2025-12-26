@@ -1,0 +1,80 @@
+{
+  "id": "chapter2_entrance",
+  "type": "scene",
+  "sceneId": "chapter2_entrance",
+  "title": "Chapter 2 - 비밀의 심화",
+  "chapter": 2,
+  "startId": "ch2_01",
+  "lines": [
+    {
+      "id": "ch2_01",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "text": "월요일 아침. 2주차가 시작된다.",
+      "nextScriptId": "ch2_02"
+    },
+    {
+      "id": "ch2_02",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "토요일에 강리나 만났어? 뭐... 뭔가 있었나?",
+      "nextScriptId": "ch2_03"
+    },
+    {
+      "id": "ch2_03",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "너는 정말 특별한 거 같아. 강리나가 이렇게까지 신경 쓰는 사람은 없었거든.",
+      "nextScriptId": "ch2_04"
+    },
+    {
+      "id": "ch2_04",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "오늘은 넌 좀 더 깊이 알아야 할 일들이 있어.",
+      "nextScriptId": "ch2_05"
+    },
+    {
+      "id": "ch2_05",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "Chapter 2에서는... 더 위험한 사건들이 일어날 거야.",
+      "nextScriptId": "ch2_choice_route"
+    },
+    {
+      "id": "ch2_choice_route",
+      "type": "choice",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "그런데... 넌 누구의 곁에 있고 싶어?",
+      "choices": [
+        {
+          "text": "한설아와 함께 평범함을 지키자",
+          "nextSceneFile": "Chapter2/chapter2_seolah_route.json"
+        },
+        {
+          "text": "강리나와 함께 비밀을 풀자",
+          "nextSceneFile": "Chapter2/chapter2_rina_route.json"
+        },
+        {
+          "text": "둘 다를 이해하면서 균형을 맞추자",
+          "nextSceneFile": "Chapter2/chapter2_balance_route.json"
+        }
+      ]
+    }
+  ]
+}

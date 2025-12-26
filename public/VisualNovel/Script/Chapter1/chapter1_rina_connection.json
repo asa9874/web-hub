@@ -1,0 +1,41 @@
+{
+  "id": "chapter1_rina_connection",
+  "type": "scene",
+  "sceneId": "rina_connection",
+  "title": "강리나와의 연결고리",
+  "chapter": 1,
+  "startId": "rina_01",
+  "lines": [
+    {
+      "id": "rina_01",
+      "type": "dialogue",
+      "background": "school_rooftop.png",
+      "character": "한설아",
+      "characterImage": "한설아_serious",
+      "characterPosition": "center",
+      "text": "아... 그거 맞아. 강리나가 너를 이미 선택한 거야.",
+      "nextScriptId": "rina_02"
+    },
+    {
+      "id": "rina_02",
+      "type": "dialogue",
+      "background": "school_rooftop.png",
+      "character": "한설아",
+      "characterImage": "한설아_sad",
+      "characterPosition": "center",
+      "text": "그게 무슨 의미인지는 아직 모르겠어. 하지만... 위험할 수도 있어.",
+      "nextScriptId": "rina_03"
+    },
+    {
+      "id": "rina_03",
+      "type": "dialogue",
+      "background": "school_rooftop.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "어쨌든 주의해. 그리고... 나를 믿어. 네가 힘들 때 도와줄 거야.",
+      "characterExit": "한설아",
+      "nextScriptId": "chapter1_week_montage_balance"
+    }
+  ]
+}

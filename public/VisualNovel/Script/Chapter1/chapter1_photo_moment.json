@@ -1,0 +1,93 @@
+{
+  "sceneId": "chapter1_photo_moment",
+  "title": "사진 속의 추억 - 영원히 간직하기",
+  "chapter": 1,
+  "startId": "photo_01",
+  "lines": [
+    {
+      "id": "photo_01",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "좋은 생각이야! 우리 사진을 찍자!",
+      "nextScriptId": "photo_02"
+    },
+    {
+      "id": "photo_02",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "이 벚꽃 아래에서! 그럼 이 순간이 영원히 남을 거야!",
+      "nextScriptId": "photo_03"
+    },
+    {
+      "id": "photo_03",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "근데 핸드폰으로 찍을까? 아니면 누가 찍어줄까?",
+      "nextScriptId": "photo_04"
+    },
+    {
+      "id": "photo_04",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "아, 저 학생한테 부탁해 볼까? 아주머니는... 저 선생님은 괜찮을 것 같은데?",
+      "nextScriptId": "photo_05"
+    },
+    {
+      "id": "photo_05",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "그리고 여기에 우리 서명도 써야지! 그럼 정말 특별한 추억이 될 거야!",
+      "nextScriptId": "photo_06"
+    },
+    {
+      "id": "photo_06",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "아, 미안해. 나 너무 신나는데? 근데 이건 정말 좋은 생각이야!",
+      "nextScriptId": "photo_07"
+    },
+    {
+      "id": "photo_07",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "그럼... 우리 매년 이날 이 사진을 보면서 추억에 빠져보자!",
+      "nextScriptId": "photo_08"
+    },
+    {
+      "id": "photo_08",
+      "type": "dialogue",
+      "background": "school_gate.png",
+      "text": "둘이 함께 학교를 나온다. 손에는 소중한 사진이 들려있다.",
+      "characterExit": "한설아",
+      "nextScriptId": "photo_09"
+    },
+    {
+      "id": "photo_09",
+      "type": "dialogue",
+      "background": "none",
+      "text": "이 사진이 정말 특별할 것 같다. 첫 친구와 함께한 벚꽃 아래에서의 약속.",
+      "nextScriptId": "transition_day2"
+    }
+  ]
+}

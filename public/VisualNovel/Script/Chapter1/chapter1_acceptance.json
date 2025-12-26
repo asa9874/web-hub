@@ -1,0 +1,137 @@
+{
+  "sceneId": "chapter1_acceptance",
+  "title": "받아들임 - 좋은 시작",
+  "chapter": 1,
+  "startId": "accept_01",
+  "lines": [
+    {
+      "id": "accept_01",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "좋아! 그럼 우리 진짜 친구야!",
+      "nextScriptId": "accept_02"
+    },
+    {
+      "id": "accept_02",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "이 입학식은 절대 잊지 못할 거야. 너 때문에!",
+      "nextScriptId": "accept_03"
+    },
+    {
+      "id": "accept_03",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그리고... 내가 좀 당황했어. 너 때문에. 하지만 좋은 의미에서!",
+      "nextScriptId": "accept_04"
+    },
+    {
+      "id": "accept_04",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "보통 첫 만남은 어색한데... 너는 뭔가 다르더라.",
+      "nextScriptId": "accept_05"
+    },
+    {
+      "id": "accept_05",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "좋은 의미에서 말이야. 넌 따뜻한 사람 같아.",
+      "nextScriptId": "accept_06"
+    },
+    {
+      "id": "accept_06",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그래서 난 너를 믿을 수 있을 것 같아. 첫 친구로.",
+      "nextScriptId": "accept_07"
+    },
+    {
+      "id": "accept_07",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "아무튼... 고등학교 3년, 함께하자. 약속해?",
+      "nextScriptId": "accept_08"
+    },
+    {
+      "id": "accept_08",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그리고 만약에 뭐 필요하면 언제든 얘기해.",
+      "nextScriptId": "accept_09"
+    },
+    {
+      "id": "accept_09",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "내가 있으니까. 너는 혼자가 아니야.",
+      "nextScriptId": "accept_10"
+    },
+    {
+      "id": "accept_10",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "그럼 이제 가 볼까? 벚꽃도 봤겠다, 입학식도 끝났겠다.",
+      "nextScriptId": "accept_11"
+    },
+    {
+      "id": "accept_11",
+      "type": "dialogue",
+      "background": "school_gate.png",
+      "text": "입학식을 마치고 나온다. 벚꽃이 햇빛 아래 반짝인다.",
+      "characterExit": "한설아",
+      "nextScriptId": "accept_12"
+    },
+    {
+      "id": "accept_12",
+      "type": "dialogue",
+      "background": "school_gate.png",
+      "text": "이 첫 만남이 정말 좋다. 설아라는 친구가 있어서 다행이다.",
+      "nextScriptId": "accept_13"
+    },
+    {
+      "id": "accept_13",
+      "type": "dialogue",
+      "background": "school_gate.png",
+      "text": "고등학교가 이렇게 시작된다. 따뜻한 첫 친구와 함께.",
+      "nextScriptId": "accept_14"
+    },
+    {
+      "id": "accept_14",
+      "type": "dialogue",
+      "background": "school_gate.png",
+      "text": "첫 날이 설아와의 만남으로 밝게 끝났다.",
+      "nextScriptId": "transition_day2"
+    }
+  ]
+}

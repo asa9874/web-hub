@@ -1,0 +1,71 @@
+{
+  "id": "chapter1_climax_revelation",
+  "type": "scene",
+  "sceneId": "climax_revelation",
+  "title": "학교의 진짜 정체",
+  "chapter": 1,
+  "startId": "climax_01",
+  "lines": [
+    {
+      "id": "climax_01",
+      "type": "dialogue",
+      "background": "school_rooftop.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "너한테 말해야 할 게 있어. 이 학교의 진짜 비밀.",
+      "nextScriptId": "climax_02"
+    },
+    {
+      "id": "climax_02",
+      "type": "dialogue",
+      "background": "school_rooftop.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "이 학교는... 단순한 학교가 아니야.",
+      "nextScriptId": "climax_03"
+    },
+    {
+      "id": "climax_03",
+      "type": "dialogue",
+      "background": "school_rooftop.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "여기서 일어나는 사건들은... 자연 현상이 아니야. 뭔가... 의도된 것들이야.",
+      "nextScriptId": "climax_04"
+    },
+    {
+      "id": "climax_04",
+      "type": "dialogue",
+      "background": "school_rooftop.png",
+      "character": "강리나",
+      "characterImage": "강리나_sad",
+      "characterPosition": "center",
+      "text": "그리고 넌... 그 중심에 있을 가능성이 높아.",
+      "nextScriptId": "climax_05"
+    },
+    {
+      "id": "climax_05",
+      "type": "dialogue",
+      "background": "school_rooftop.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "하지만 걱정하지 마. 내가 절대 뭔가 일어나게 하지 않을 거야.",
+      "nextScriptId": "climax_06"
+    },
+    {
+      "id": "climax_06",
+      "type": "dialogue",
+      "background": "school_rooftop.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "Chapter 2로... 너와 함께 나아갈 준비가 돼있어?",
+      "characterExit": "강리나",
+      "nextScriptId": "chapter1_ending"
+    }
+  ]
+}

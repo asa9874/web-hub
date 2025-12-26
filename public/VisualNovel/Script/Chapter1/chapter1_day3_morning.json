@@ -1,0 +1,102 @@
+{
+  "id": "chapter1_day3_morning",
+  "type": "scene",
+  "sceneId": "day3_morning",
+  "title": "세 번째 날 - 학교 비밀의 시작",
+  "chapter": 1,
+  "startId": "day3_01",
+  "lines": [
+    {
+      "id": "day3_01",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "3일째 아침. 학교가 이제 낯설지 않다.",
+      "nextScriptId": "day3_02"
+    },
+    {
+      "id": "day3_02",
+      "type": "dialogue",
+      "background": "school_entrance.png",
+      "text": "정문을 지나니 무언가 이상한 기운이 느껴진다.",
+      "nextScriptId": "day3_03"
+    },
+    {
+      "id": "day3_03",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "한설아",
+      "characterImage": "한설아_serious",
+      "characterPosition": "left",
+      "text": "어? 넌 뭐... 아, 뭐 아니야. 기분 탓이겠지.",
+      "nextScriptId": "day3_04"
+    },
+    {
+      "id": "day3_04",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "left",
+      "text": "어쨌든 오늘 방과 후에 조용한 곳에서 뭔가 얘기할 게 있어.",
+      "nextScriptId": "day3_05"
+    },
+    {
+      "id": "day3_05",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그 전까진... 그냥 평소처럼 해! 절대 자꾸 생각하지 말고!",
+      "characterExit": "한설아",
+      "nextScriptId": "day3_06"
+    },
+    {
+      "id": "day3_06",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "text": "뭔가... 한설아가 다르게 보인다. 어제와는 다른 표정이었다.",
+      "nextScriptId": "day3_07"
+    },
+    {
+      "id": "day3_07",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "text": "방과 후, 정해진 장소로 향한다.",
+      "nextScriptId": "day3_08"
+    },
+    {
+      "id": "day3_08",
+      "type": "dialogue",
+      "background": "school_rooftop.png",
+      "character": "한설아",
+      "characterImage": "한설아_serious",
+      "characterPosition": "center",
+      "text": "이 학교... 넌 뭔가 이상한 거 느낀 거 맞지?",
+      "nextScriptId": "day3_choice_01"
+    },
+    {
+      "id": "day3_choice_01",
+      "type": "choice",
+      "background": "school_rooftop.png",
+      "character": "한설아",
+      "characterImage": "한설아_serious",
+      "characterPosition": "center",
+      "text": "너한테 얘기해도 될까... 이 학교의 진짜 모습을?",
+      "choices": [
+        {
+          "text": "당연하지. 다 얘기해 줘.",
+          "nextSceneFile": "Chapter1/chapter1_truth_begins.json"
+        },
+        {
+          "text": "너무 무서워... 그냥 평범하게 살고 싶어.",
+          "nextSceneFile": "Chapter1/chapter1_ignorance_bliss.json"
+        },
+        {
+          "text": "강리나와는 이미 뭔가 알고 있는 거 같은데?",
+          "nextSceneFile": "Chapter1/chapter1_rina_connection.json"
+        }
+      ]
+    }
+  ]
+}

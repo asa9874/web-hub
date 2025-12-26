@@ -1,0 +1,221 @@
+{
+  "sceneId": "chapter1_mysterious_chat",
+  "title": "강리나에 대한 호기심",
+  "chapter": 1,
+  "startId": "mysterious_01",
+  "lines": [
+    {
+      "id": "mysterious_01",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "어? 내가 강리나를 신경 써? 아니... 뭐 아니지만, 뭔가 이상한데?",
+      "nextScriptId": "mysterious_02"
+    },
+    {
+      "id": "mysterious_02",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "입학식 때 보니까... 걔 뭔가 다르지 않아? 일반인 같지 않다고 할까?",
+      "nextScriptId": "mysterious_03"
+    },
+    {
+      "id": "mysterious_03",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_surprised",
+      "characterPosition": "center",
+      "text": "아니 뭐, 학생회장이니까 그럴 수 있지. 하지만... 뭔가 더 있는 것 같은데?",
+      "nextScriptId": "mysterious_04"
+    },
+    {
+      "id": "mysterious_04",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_embarrassed",
+      "characterPosition": "center",
+      "text": "근데 넌 왜 묻는 거야? 혹시 강리나에 관심 있는 거야?",
+      "nextScriptId": "mysterious_05"
+    },
+    {
+      "id": "mysterious_05",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "뭐 어쨌든 걔는 1학년이 아니라 2학년이래. 학생회장이라서 그런가?",
+      "nextScriptId": "mysterious_06"
+    },
+    {
+      "id": "mysterious_06",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "그리고... 들은 건데, 걔가 연예인이라고 해. 연예인인데 학생회장까지 해?",
+      "nextScriptId": "mysterious_07"
+    },
+    {
+      "id": "mysterious_07",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_surprised",
+      "characterPosition": "center",
+      "text": "그렇다면 그 광채는... 혹시 연예인이라서 그런 건가?",
+      "nextScriptId": "mysterious_08"
+    },
+    {
+      "id": "mysterious_08",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "아무튼, 우리는 1학년이니까 걔와는 상관없을 거야. 그냥 우리끼리만 해도 충분해!",
+      "nextScriptId": "mysterious_09"
+    },
+    {
+      "id": "mysterious_09",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그리고 난 너로 충분해! 좋은 친구 하나면 되잖아!",
+      "nextScriptId": "mysterious_10"
+    },
+    {
+      "id": "mysterious_10",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "근데 정말로... 강리나는 뭔가 비밀이 있는 것 같아. 느낌이 그래.",
+      "nextScriptId": "mysterious_11"
+    },
+    {
+      "id": "mysterious_11",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_serious",
+      "characterPosition": "center",
+      "text": "그런데... 혹시 넌 강리나에 대해 뭔가 더 알고 있어? 너 얼굴이 뭔가 이상한데?",
+      "nextScriptId": "mysterious_12"
+    },
+    {
+      "id": "mysterious_12",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "혹시 학생회에 들어가고 싶은 거야? 강리나 때문에?",
+      "nextScriptId": "mysterious_13"
+    },
+    {
+      "id": "mysterious_13",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "뭐 어쨌든, 만약 학생회에 들어가면 나도 함께할 거야! 너를 혼자 두진 않을 테니까!",
+      "nextScriptId": "mysterious_14"
+    },
+    {
+      "id": "mysterious_14",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "그리고... 혹시 너도 강리나처럼 뭔가 비밀이 있어? 뭔가... 달라 보이는데?",
+      "nextScriptId": "mysterious_15"
+    },
+    {
+      "id": "mysterious_15",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "아, 미안해! 나 또 말 많이 하고 있다. 근데 넌 정말... 뭔가 특별해.",
+      "nextScriptId": "mysterious_16"
+    },
+    {
+      "id": "mysterious_16",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "일반인이 아닌 것처럼... 아니면 내 생각이 많은 거야?",
+      "nextScriptId": "mysterious_17"
+    },
+    {
+      "id": "mysterious_17",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "어쨌든... 너는 내 첫 친구야. 그리고 넌 정말 좋은 사람이야.",
+      "nextScriptId": "mysterious_18"
+    },
+    {
+      "id": "mysterious_18",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "강리나든 누구든 관계없어. 난 너만으로 충분해.",
+      "nextScriptId": "mysterious_19"
+    },
+    {
+      "id": "mysterious_19",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그리고 만약 넌 뭔가 알고 있으면... 언제든 말해도 돼. 난 너를 판단하지 않을 거야.",
+      "nextScriptId": "mysterious_20"
+    },
+    {
+      "id": "mysterious_20",
+      "type": "choice",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "설아의 진심 어린 말 앞에서 넌 어떻게 반응할까?",
+      "choices": [
+        {
+          "text": "설아, 고마워. 넌 정말 좋은 친구야.",
+          "nextSceneFile": "Chapter1/chapter1_heartfelt_thanks.json"
+        },
+        {
+          "text": "뭔가 있긴 한데... 아직은 말할 수 없어.",
+          "nextSceneFile": "Chapter1/chapter1_secret_hinted.json"
+        },
+        {
+          "text": "설아, 혹시 넌 초능력이 있는 건 아닐까? *웃음*",
+          "nextSceneFile": "Chapter1/chapter1_jesting_supernatural.json"
+        }
+      ]
+    }
+  ]
+}

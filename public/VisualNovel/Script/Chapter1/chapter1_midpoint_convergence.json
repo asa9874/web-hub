@@ -1,0 +1,58 @@
+{
+  "id": "chapter1_midpoint_convergence",
+  "type": "scene",
+  "sceneId": "midpoint_convergence",
+  "title": "변화하는 관계들",
+  "chapter": 1,
+  "startId": "mid_01",
+  "lines": [
+    {
+      "id": "mid_01",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "text": "방과 후가 지나고 하교 시간이 온다.",
+      "nextScriptId": "mid_02"
+    },
+    {
+      "id": "mid_02",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "좀 시간 있어? 학생회실로 와. 뭔가 얘기하고 싶어.",
+      "nextScriptId": "mid_03"
+    },
+    {
+      "id": "mid_03",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "너... 한설아가 뭐라고 했어?",
+      "nextScriptId": "mid_04"
+    },
+    {
+      "id": "mid_04",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "상관없어. 어쨌든 넌 이미 안에 있어. 더 이상 되돌릴 수 없지.",
+      "nextScriptId": "mid_05"
+    },
+    {
+      "id": "mid_05",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "하지만 걱정하지 마. 내가 지켜줄 테니까.",
+      "characterExit": "강리나",
+      "nextScriptId": "chapter1_week_montage"
+    }
+  ]
+}

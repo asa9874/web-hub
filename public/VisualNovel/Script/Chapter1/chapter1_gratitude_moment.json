@@ -1,0 +1,216 @@
+{
+  "sceneId": "chapter1_gratitude_moment",
+  "title": "감사의 마음 - 설아를 향한 고백",
+  "chapter": 1,
+  "startId": "gratitude_01",
+  "lines": [
+    {
+      "id": "gratitude_01",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "뭐, 당연하지! 우리 친구니까!",
+      "nextScriptId": "gratitude_02"
+    },
+    {
+      "id": "gratitude_02",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "너도 만약에 내가 필요하면 언제든지 도와줄 거지? 약속해.",
+      "nextScriptId": "gratitude_03"
+    },
+    {
+      "id": "gratitude_03",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그럼 우리 진짜 친구야! 일생일대 친구!",
+      "nextScriptId": "gratitude_04"
+    },
+    {
+      "id": "gratitude_04",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "그런데... 뭔가 넌 독특하잖아. 다른 신입생들이랑은 뭔가 달라.",
+      "nextScriptId": "gratitude_05"
+    },
+    {
+      "id": "gratitude_05",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "그래도 좋아. 너 같은 친구를 만나서 정말 다행이야.",
+      "nextScriptId": "gratitude_06"
+    },
+    {
+      "id": "gratitude_06",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "내일부터 우리 점심도 함께 먹고, 방과 후에도 시간이 있으면 만나자!",
+      "nextScriptId": "gratitude_07"
+    },
+    {
+      "id": "gratitude_07",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "그리고 혹시 모르니까... 내 전화번호도 알려줄게.",
+      "nextScriptId": "gratitude_08"
+    },
+    {
+      "id": "gratitude_08",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "뭔가 힘들 때는 언제든 전화해. 내가 달려갈 거야.",
+      "nextScriptId": "gratitude_09"
+    },
+    {
+      "id": "gratitude_09",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그리고... 미안해. 내가 너무 많이 말하는 거 아니야?",
+      "nextScriptId": "gratitude_10"
+    },
+    {
+      "id": "gratitude_10",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "그냥 좋아서... 자꾸 말이 나와.",
+      "nextScriptId": "gratitude_11"
+    },
+    {
+      "id": "gratitude_11",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "너는 내 첫 친구야. 그래서 더 신경 써.",
+      "nextScriptId": "gratitude_12"
+    },
+    {
+      "id": "gratitude_12",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "아무튼... 우리 고등학교 3년, 정말 재미있게 보내자!",
+      "nextScriptId": "gratitude_13"
+    },
+    {
+      "id": "gratitude_13",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "그럼 이제 가 볼까? 벚꽃도 봤겠다, 학교도 돌아봤겠다.",
+      "nextScriptId": "gratitude_14"
+    },
+    {
+      "id": "gratitude_14",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "집에 가기 전에 한 번 더... 매점 들러도 되나? 나 배고파!",
+      "nextScriptId": "gratitude_15"
+    },
+    {
+      "id": "gratitude_15",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그리고 내 감기약은 내일 꼭 챙겨 올 거니까, 잊지 마!",
+      "nextScriptId": "gratitude_16"
+    },
+    {
+      "id": "gratitude_16",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "여기야! 매점! 아, 배고파! 뭐 먹을까?",
+      "nextScriptId": "gratitude_17"
+    },
+    {
+      "id": "gratitude_17",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "이 붕어빵이 진짜 맛있어! 너도 사먹으면 좋아할 거야!",
+      "nextScriptId": "gratitude_18"
+    },
+    {
+      "id": "gratitude_18",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그리고 우리 내일도 여기서 만나자! 점심시간에!",
+      "nextScriptId": "gratitude_19"
+    },
+    {
+      "id": "gratitude_19",
+      "type": "dialogue",
+      "background": "school_gate.png",
+      "text": "함께 학교를 나온다. 벚꽃이 아직도 흩날린다.",
+      "characterExit": "한설아",
+      "nextScriptId": "gratitude_20"
+    },
+    {
+      "id": "gratitude_20",
+      "type": "choice",
+      "background": "school_gate.png",
+      "text": "첫 날이 행복하게 끝났다. 내일은 어떻게 보낼까?",
+      "choices": [
+        {
+          "text": "내일은 설아와 점심을 먹어야지",
+          "nextSceneFile": "Chapter1/chapter1_lunch_day2.json"
+        },
+        {
+          "text": "내일은 뭔가 다른 일이 일어날 것 같은데...",
+          "nextSceneFile": "Chapter1/chapter1_premonition.json"
+        },
+        {
+          "text": "집에 가서 설아가 준 약을 먹고 쉬자",
+          "nextSceneFile": "Chapter1/chapter1_home_rest.json"
+        }
+      ]
+    }
+  ]
+}

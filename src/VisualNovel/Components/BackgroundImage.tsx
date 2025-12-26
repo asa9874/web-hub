@@ -6,8 +6,6 @@ interface BackgroundImageProps {
 
 const BackgroundImage: React.FC<BackgroundImageProps> = ({ image }) => {
   const [currentImage, setCurrentImage] = useState(image);
-  const [nextImage, setNextImage] = useState<string | null>(null);
-  const [isTransitioning, setIsTransitioning] = useState(false);
 
   useEffect(() => {
     if (image !== currentImage) {
@@ -18,8 +16,6 @@ const BackgroundImage: React.FC<BackgroundImageProps> = ({ image }) => {
       
       // 즉시 배경 전환 (효과 없음)
       setCurrentImage(image);
-      setNextImage(null);
-      setIsTransitioning(false);
     }
   }, [image, currentImage]);
 

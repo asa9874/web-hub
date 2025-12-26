@@ -1,0 +1,62 @@
+{
+  "id": "chapter1_incident_foreshadow",
+  "type": "scene",
+  "sceneId": "incident_foreshadow",
+  "title": "첫 번째 사건의 조짐",
+  "chapter": 1,
+  "startId": "incident_01",
+  "lines": [
+    {
+      "id": "incident_01",
+      "type": "dialogue",
+      "background": "school_entrance.png",
+      "text": "금요일 방과 후. 평소와는 다른 기운이 감돈다.",
+      "nextScriptId": "incident_02"
+    },
+    {
+      "id": "incident_02",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "text": "학생들이 뭔가를 속닥거리고 있다.",
+      "nextScriptId": "incident_03"
+    },
+    {
+      "id": "incident_03",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "text": "\"어제 밤 학교 근처에서 뭔가 일이 있었대.\"",
+      "nextScriptId": "incident_04"
+    },
+    {
+      "id": "incident_04",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "넌... 뭐 들었어?",
+      "nextScriptId": "incident_05"
+    },
+    {
+      "id": "incident_05",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "알았다. 그럼 이제부터 조심해. 실제로 일이 터질 수 있으니까.",
+      "nextScriptId": "incident_06"
+    },
+    {
+      "id": "incident_06",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "내일 토요일... 함께 확인해 보자. 그 사건이 정말 뭔지.",
+      "characterExit": "강리나",
+      "nextScriptId": "chapter1_saturday_investigation"
+    }
+  ]
+}

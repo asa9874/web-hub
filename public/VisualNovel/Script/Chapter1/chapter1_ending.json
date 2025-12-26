@@ -1,0 +1,52 @@
+{
+  "id": "chapter1_ending",
+  "type": "scene",
+  "sceneId": "chapter1_ending",
+  "title": "Chapter 1 끝 - 새로운 시작",
+  "chapter": 1,
+  "startId": "ch1_end_01",
+  "lines": [
+    {
+      "id": "ch1_end_01",
+      "type": "dialogue",
+      "background": "school_rooftop.png",
+      "text": "첫 주가 끝났다.",
+      "nextScriptId": "ch1_end_02"
+    },
+    {
+      "id": "ch1_end_02",
+      "type": "dialogue",
+      "background": "school_rooftop.png",
+      "text": "한 명의 평범한 고등학생에서... 뭔가 다른 존재로 변해버렸다.",
+      "nextScriptId": "ch1_end_03"
+    },
+    {
+      "id": "ch1_end_03",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "토요일 밤. 침대에 누워 생각해본다.",
+      "nextScriptId": "ch1_end_04"
+    },
+    {
+      "id": "ch1_end_04",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "설아의 따뜻함, 강리나의 신비로움, 그리고 이 학교의 비밀...",
+      "nextScriptId": "ch1_end_05"
+    },
+    {
+      "id": "ch1_end_05",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "전부가 얽혀있다.",
+      "nextScriptId": "ch1_end_06"
+    },
+    {
+      "id": "ch1_end_06",
+      "type": "dialogue",
+      "background": "sky_night.png",
+      "text": "월요일부터... 진짜 이야기가 시작될 것 같다.",
+      "nextScriptId": "chapter2_entrance"
+    }
+  ]
+}
