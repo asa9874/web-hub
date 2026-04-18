@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ExternalLink, X, Sparkles, BookOpen, Wand2, Skull, Zap, Clock } from 'lucide-react';
+import { ExternalLink, X, Sparkles, BookOpen, Wand2, Skull, Zap, Clock, Shield } from 'lucide-react';
 
 // --- Types ---
 interface NodeData {
@@ -126,6 +126,18 @@ const generateNodes = (): NodeData[] => {
       size: 'md',
       link: '/english',
       image: 'https://images.unsplash.com/photo-1546410531-bb4caa6b0e3b?auto=format&fit=crop&q=80&w=800', // Education/Language
+    },
+    {
+      id: 'mga',
+      title: 'MGA PORTAL',
+      subtitle: 'Glass Command Site',
+      description: '가상의 마법소녀협회(MGA) 공식 포털입니다. 대변동 연대기, 부정 도감, 마법소녀 랭킹, 실시간 경보센터, 시민 대피 가이드, 팬클럽 굿즈를 한곳에서 확인하세요.',
+      icon: Shield,
+      x: 360,
+      y: -40,
+      size: 'md',
+      link: '/mga',
+      image: '/web-hub/VisualNovel/Background/bg_mga_server_room.png',
     }
   ];
 

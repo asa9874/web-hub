@@ -13,6 +13,7 @@ import VisualNovel from './VisualNovel/VisualNovel.tsx'
 import HeroinInfo from './VisualNovel/HeroinInfo.tsx'
 import Japan from './Japan/Japan.tsx'
 import English from './English/English.tsx'
+import SuperHotDesign from './SuperHotDesign/SuperHotDesign.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -29,6 +30,7 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/heroin-info" element={<HeroinInfo />} />
         <Route path="/japan" element={<Japan />} />
         <Route path="/english" element={<English />} />
+        <Route path="/mga/*" element={<SuperHotDesign />} />
       </Routes>
     </HashRouter>
   </StrictMode>,
