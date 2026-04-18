@@ -1,0 +1,93 @@
+{
+  "sceneId": "chapter1_bittersweet_chat",
+  "title": "설아의 마음 - 슬픔 속의 아름다움",
+  "chapter": 1,
+  "startId": "bitter_01",
+  "lines": [
+    {
+      "id": "bitter_01",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_sad",
+      "characterPosition": "center",
+      "text": "음... 맞아. 벚꽃이 떨어지니까. 그게... 뭔가 슬프더라.",
+      "nextScriptId": "bitter_02"
+    },
+    {
+      "id": "bitter_02",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "나는... 그런 게 있어. 예쁜 것일수록 사라질 때 더 슬파.",
+      "nextScriptId": "bitter_03"
+    },
+    {
+      "id": "bitter_03",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_sad",
+      "characterPosition": "center",
+      "text": "벚꽃도 그렇고... 사람도 그렇고... 우리가 좋아하는 것들도 다 사라지잖아.",
+      "nextScriptId": "bitter_04"
+    },
+    {
+      "id": "bitter_04",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "그래서... 더 소중히 해야 하는 거겠지.",
+      "nextScriptId": "bitter_05"
+    },
+    {
+      "id": "bitter_05",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "그리고... 우리도. 이 순간이 언제까지 이어질지 모르니까.",
+      "nextScriptId": "bitter_06"
+    },
+    {
+      "id": "bitter_06",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "우리 절대 헤어지지 말자. 약속해?",
+      "nextScriptId": "bitter_07"
+    },
+    {
+      "id": "bitter_07",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "비록 벚꽃은 떨어지겠지만, 우리는 계속 곁에 있자.",
+      "nextScriptId": "bitter_08"
+    },
+    {
+      "id": "bitter_08",
+      "type": "dialogue",
+      "background": "school_gate.png",
+      "text": "둘이 함께 학교를 나온다. 설아의 손이 따뜻하다.",
+      "characterExit": "한설아",
+      "nextScriptId": "bitter_09"
+    },
+    {
+      "id": "bitter_09",
+      "type": "dialogue",
+      "background": "none",
+      "text": "설아의 슬픔이 나에게도 전해진다. 하지만 그건 슬픔이 아니라 진심인 것 같다.",
+      "nextScriptId": "transition_day2"
+    }
+  ]
+}

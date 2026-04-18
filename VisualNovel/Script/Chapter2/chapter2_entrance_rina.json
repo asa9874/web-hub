@@ -1,0 +1,240 @@
+{
+  "id": "chapter2_entrance_rina",
+  "type": "scene",
+  "sceneId": "chapter2_entrance_rina",
+  "title": "Chapter 2 - 강리나와의 비밀로운 사건",
+  "chapter": 2,
+  "startId": "ch2_rina_01",
+  "lines": [
+    {
+      "id": "ch2_rina_01",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "토요일 자정... 휴대폰에 메시지가 온다.",
+      "nextScriptId": "ch2_rina_02"
+    },
+    {
+      "id": "ch2_rina_02",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "발신인은 강리나. '내일 아침 학교 뒤 골목. 중요한 일이 있다.'",
+      "nextScriptId": "ch2_rina_03"
+    },
+    {
+      "id": "ch2_rina_03",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "지난 일주일... 너는 강리나와 학교의 비밀을 공유했다.",
+      "nextScriptId": "ch2_rina_04"
+    },
+    {
+      "id": "ch2_rina_04",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "그리고 그 비밀이 너를 완전히 다른 세계로 끌어당기고 있다는 걸 느낀다.",
+      "nextScriptId": "ch2_rina_05"
+    },
+    {
+      "id": "ch2_rina_05",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "월요일 아침... 일찍 일어난다.",
+      "nextScriptId": "ch2_rina_06"
+    },
+    {
+      "id": "ch2_rina_06",
+      "type": "dialogue",
+      "background": "school_alley.png",
+      "text": "학교 뒤 골목. 이른 아침 햇빛이 희미하게 들어온다.",
+      "nextScriptId": "ch2_rina_07"
+    },
+    {
+      "id": "ch2_rina_07",
+      "type": "dialogue",
+      "background": "school_alley.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "왔어. 좋아... 너는 항상 시간을 지킨다.",
+      "nextScriptId": "ch2_rina_08"
+    },
+    {
+      "id": "ch2_rina_08",
+      "type": "dialogue",
+      "background": "school_alley.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "지난 주말... 학교에서 이상한 일들이 있었어.",
+      "nextScriptId": "ch2_rina_09"
+    },
+    {
+      "id": "ch2_rina_09",
+      "type": "dialogue",
+      "background": "school_alley.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "토요일 밤... 체육관에서 뭔가가 일어났다. 일반인은 모를 일이지만, 우리는 알아야 한다.",
+      "nextScriptId": "ch2_rina_10"
+    },
+    {
+      "id": "ch2_rina_10",
+      "type": "dialogue",
+      "background": "school_alley.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "물론... 넌 아직 이런 것에 준비가 안 되어있을 수도 있다.",
+      "nextScriptId": "ch2_rina_11"
+    },
+    {
+      "id": "ch2_rina_11",
+      "type": "dialogue",
+      "background": "school_alley.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "하지만 넌 이미... 이 세계에 깊숙이 발을 들였어. 돌아갈 수 없어.",
+      "nextScriptId": "ch2_rina_12"
+    },
+    {
+      "id": "ch2_rina_12",
+      "type": "dialogue",
+      "background": "school_alley.png",
+      "text": "강리나는 너를 체육관으로 데려간다.",
+      "nextScriptId": "ch2_rina_13"
+    },
+    {
+      "id": "ch2_rina_13",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "text": "체육관의 한 구석이 이상하게 손상되어 있다.",
+      "nextScriptId": "ch2_rina_14"
+    },
+    {
+      "id": "ch2_rina_14",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "보이지? 이건... 일반적인 사고가 아니야.",
+      "nextScriptId": "ch2_rina_15"
+    },
+    {
+      "id": "ch2_rina_15",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "이런 일들은... 이 학교에서 자주 일어난다.",
+      "nextScriptId": "ch2_rina_16"
+    },
+    {
+      "id": "ch2_rina_16",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "그리고 학교 위원회의 우리 역할은... 이런 일들을 조용히 해결하는 것이야.",
+      "nextScriptId": "ch2_rina_17"
+    },
+    {
+      "id": "ch2_rina_17",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "너는... 나의 든든한 파트너가 되어줄 거지?",
+      "nextScriptId": "ch2_rina_18"
+    },
+    {
+      "id": "ch2_rina_18",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "text": "강리나의 눈이 너를 바라본다. 깊고, 신비로우며, 동시에 간절해 보인다.",
+      "nextScriptId": "ch2_rina_19"
+    },
+    {
+      "id": "ch2_rina_19",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "너를 믿어. 지난 일주일... 너는 이걸 증명했으니까.",
+      "nextScriptId": "ch2_rina_20"
+    },
+    {
+      "id": "ch2_rina_20",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "이제 넘어야 할 첫 번째 장애물이다. 이 손상의 원인이 뭔지 찾아야 해.",
+      "nextScriptId": "ch2_rina_21"
+    },
+    {
+      "id": "ch2_rina_21",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "그리고 혹시... 이게 단순한 사건이 아니라면? 누군가가 의도적으로 한 거라면?",
+      "nextScriptId": "ch2_rina_22"
+    },
+    {
+      "id": "ch2_rina_22",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "우리는... 더 깊이 파고들어야 할지도 몰라.",
+      "nextScriptId": "ch2_rina_23"
+    },
+    {
+      "id": "ch2_rina_23",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "text": "너는 강리나의 결연한 표정을 본다.",
+      "nextScriptId": "ch2_rina_24"
+    },
+    {
+      "id": "ch2_rina_24",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "text": "이 순간, 너는 완전히 다른 세계의 일부가 되었다는 걸 깨닫는다.",
+      "nextScriptId": "ch2_rina_choice_01"
+    },
+    {
+      "id": "ch2_rina_choice_01",
+      "type": "choice",
+      "background": "gymnasium.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "강리나가 물어본다. '우리는 어디서부터 시작할까?'",
+      "choices": [
+        {
+          "text": "현장을 자세히 조사하기",
+          "nextSceneFile": "Chapter2/chapter2_rina_investigation.json"
+        },
+        {
+          "text": "증인들을 심문하기",
+          "nextSceneFile": "Chapter2/chapter2_rina_interview.json"
+        },
+        {
+          "text": "학교의 비밀 기록을 찾기",
+          "nextSceneFile": "Chapter2/chapter2_rina_secrets.json"
+        }
+      ]
+    }
+  ]
+}

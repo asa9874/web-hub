@@ -1,0 +1,38 @@
+{
+  "id": "chapter1_ending_seolah",
+  "type": "scene",
+  "sceneId": "chapter1_ending_seolah",
+  "title": "Chapter 1 끝 - 설아와의 평온한 약속",
+  "chapter": 1,
+  "startId": "ch1_end_seolah_01",
+  "lines": [
+    {
+      "id": "ch1_end_seolah_01",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "첫 주가 끝났다. 많은 일들이 있었지만... 설아는 내 곁에 있었다.",
+      "nextScriptId": "ch1_end_seolah_02"
+    },
+    {
+      "id": "ch1_end_seolah_02",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "강리나의 신비로움, 학교의 비밀... 모두 잊기로 했다.",
+      "nextScriptId": "ch1_end_seolah_03"
+    },
+    {
+      "id": "ch1_end_seolah_03",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "대신 설아와의 따뜻한 순간들만 기억하기로.",
+      "nextScriptId": "ch1_end_seolah_04"
+    },
+    {
+      "id": "ch1_end_seolah_04",
+      "type": "dialogue",
+      "background": "sky_dawn.png",
+      "text": "월요일... 설아와 함께 또 다른 일주일을 시작할 거다.",
+      "nextScriptId": "chapter2_entrance_seolah"
+    }
+  ]
+}

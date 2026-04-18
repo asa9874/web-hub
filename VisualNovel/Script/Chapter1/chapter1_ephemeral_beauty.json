@@ -1,0 +1,93 @@
+{
+  "sceneId": "chapter1_ephemeral_beauty",
+  "title": "순간의 아름다움 - 지금을 살자",
+  "chapter": 1,
+  "startId": "ephemeral_01",
+  "lines": [
+    {
+      "id": "ephemeral_01",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "음... 그것도 맞는 말이야. 벚꽃은 순간이니까.",
+      "nextScriptId": "ephemeral_02"
+    },
+    {
+      "id": "ephemeral_02",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그럼 우리 지금 이 순간을 정말 충분히 즐겨보자!",
+      "nextScriptId": "ephemeral_03"
+    },
+    {
+      "id": "ephemeral_03",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "벚꽃을 보고, 냄새를 맡고, 이 모든 걸 느껴보자.",
+      "nextScriptId": "ephemeral_04"
+    },
+    {
+      "id": "ephemeral_04",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "그리고 우리가 만난 이 순간도. 이 순간이 영원하지 않다는 게 더 소중한 거 같아.",
+      "nextScriptId": "ephemeral_05"
+    },
+    {
+      "id": "ephemeral_05",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그래! 우리 지금을 즐기자! 이 순간이 우리 전부야!",
+      "nextScriptId": "ephemeral_06"
+    },
+    {
+      "id": "ephemeral_06",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "그리고 벚꽃이 떨어진 후에는... 우리는 계속 나아가야겠지.",
+      "nextScriptId": "ephemeral_07"
+    },
+    {
+      "id": "ephemeral_07",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "그리고 다음 벚꽃을 기다리면서. 우리도 함께 자라면서.",
+      "nextScriptId": "ephemeral_08"
+    },
+    {
+      "id": "ephemeral_08",
+      "type": "dialogue",
+      "background": "school_gate.png",
+      "text": "둘이 함께 학교를 나온다. 벚꽃이 한 번 더 떨어진다.",
+      "characterExit": "한설아",
+      "nextScriptId": "ephemeral_09"
+    },
+    {
+      "id": "ephemeral_09",
+      "type": "dialogue",
+      "background": "none",
+      "text": "설아의 말이 정말 좋다. 순간을 느끼고, 지금을 산다는 것.",
+      "nextScriptId": "transition_day2"
+    }
+  ]
+}

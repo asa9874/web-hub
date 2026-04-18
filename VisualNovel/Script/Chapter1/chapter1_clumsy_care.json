@@ -1,0 +1,216 @@
+{
+  "sceneId": "chapter1_clumsy_care",
+  "title": "처음 만난 관심 - 누군가의 손길",
+  "chapter": 1,
+  "startId": "clumsy_01",
+  "lines": [
+    {
+      "id": "clumsy_01",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "text": "입학식이 끝나고 교실로 돌아갔다. 하지만 뭔가 머리가 어지럽고 목이 따끔거렸다.",
+      "nextScriptId": "clumsy_02"
+    },
+    {
+      "id": "clumsy_02",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "text": "긴장과 떨림, 그리고 처음 본 새로운 환경이 섞여 있었나보다.",
+      "nextScriptId": "clumsy_03"
+    },
+    {
+      "id": "clumsy_03",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "text": "교실에 앉아있는데, 학급담당선생님이 자리 배치와 동아리 설명을 시작했다.",
+      "nextScriptId": "clumsy_04"
+    },
+    {
+      "id": "clumsy_04",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "어? 넌 괜찮아? 뭔가 얼굴이 안 좋은데...",
+      "nextScriptId": "clumsy_05"
+    },
+    {
+      "id": "clumsy_05",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "나는 한설아야. 혹시 감기 걸렸어? 신입생 때문에 스트레스 받은 거야?",
+      "nextScriptId": "clumsy_06"
+    },
+    {
+      "id": "clumsy_06",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "음... 아! 내가 물을 가져다 줄까? 교무실에 정수기가 있거든!",
+      "nextScriptId": "clumsy_07"
+    },
+    {
+      "id": "clumsy_07",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "아 잠깐, 그 전에... 혹시 넌 무언가 필요한 게 있어? 약이든, 휴지든...?",
+      "nextScriptId": "clumsy_08"
+    },
+    {
+      "id": "clumsy_08",
+      "type": "dialogue",
+      "background": "none",
+      "text": "한설아는 자기 가방에서 휴지 팩을 꺼내 내게 건넸다. 자신의 가방을 찾지 못했던 그 설아가.",
+      "characterExit": "한설아",
+      "nextScriptId": "clumsy_09"
+    },
+    {
+      "id": "clumsy_09",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "text": "\"고마워...\" 나는 중얼거렸다. 처음 만난 사람인데, 이미 따뜻함이 느껴진다.",
+      "nextScriptId": "clumsy_10"
+    },
+    {
+      "id": "clumsy_10",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "text": "잠시 후, 한설아가 종이컵에 물을 가득 담아 돌아왔다.",
+      "nextScriptId": "clumsy_11"
+    },
+    {
+      "id": "clumsy_11",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "여기! 따뜻한 물이야. 목이 아플 땐 따뜻한 물이 제일 좋거든!",
+      "nextScriptId": "clumsy_12"
+    },
+    {
+      "id": "clumsy_12",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그리고 만약을 대비해서 감기약도 내일 집에서 가져올게! 내 엄마가 항상 감기약을 많이 사두거든.",
+      "nextScriptId": "clumsy_13"
+    },
+    {
+      "id": "clumsy_13",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "text": "나는 그냥... 내가 도움이 될 수 있으면 좋거든.",
+      "nextScriptId": "clumsy_14"
+    },
+    {
+      "id": "clumsy_14",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "우리 반이 처음이라니까, 나도 뭔가 어색한데... 너와 얘기하면 마음이 편해.",
+      "nextScriptId": "clumsy_15"
+    },
+    {
+      "id": "clumsy_15",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "아! 근데 맨날 이렇게 까불지는 말 거고, 만약 필요한 게 있으면 언제든지 말해. 알겠지?",
+      "nextScriptId": "clumsy_16"
+    },
+    {
+      "id": "clumsy_16",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그리고... 우리 친구가 되 줄 거지? 첫 친구니까 꼭 해야 돼!",
+      "nextScriptId": "clumsy_17"
+    },
+    {
+      "id": "clumsy_17",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "text": "물을 마시니 목이 조금 나아졌다. 하지만 마음은 더 따뜻해졌다.",
+      "nextScriptId": "clumsy_18"
+    },
+    {
+      "id": "clumsy_18",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "text": "\"고마워, 설아. 우리 친구하자.\"",
+      "nextScriptId": "clumsy_19"
+    },
+    {
+      "id": "clumsy_19",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "좋아! 그럼 이제 나도 네 이름 좀 알고 싶은데! 뭐라고 불러야 돼?",
+      "nextScriptId": "clumsy_20"
+    },
+    {
+      "id": "clumsy_20",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "앞으로 자주 만날 거니까, 이름은 알아야 하잖아. 그리고... 뭔가 더 친해지고 싶어.",
+      "nextScriptId": "clumsy_21"
+    },
+    {
+      "id": "clumsy_21",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "내일부터 계속 옆에 있을 거야. 너를 챙길 테니까!",
+      "nextScriptId": "clumsy_22"
+    },
+    {
+      "id": "clumsy_22",
+      "type": "choice",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "설아의 따뜻한 관심 앞에서 넌 어떻게 대답할까?",
+      "choices": [
+        {
+          "text": "고마워... 난 정말 고맙다. 정말로.",
+          "nextSceneFile": "Chapter1/chapter1_gratitude_moment.json"
+        },
+        {
+          "text": "설아는 정말 좋은 사람이네. 천운일까?",
+          "nextSceneFile": "Chapter1/chapter1_serendipity.json"
+        },
+        {
+          "text": "내일부터? 혹시 설아, 나한테 반한 건 아니겠지? *웃음*",
+          "nextSceneFile": "Chapter1/chapter1_teasing_banter.json"
+        }
+      ]
+    }
+  ]
+}

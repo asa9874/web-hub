@@ -1,0 +1,244 @@
+{
+  "id": "chapter2_entrance_seolah",
+  "type": "scene",
+  "sceneId": "chapter2_entrance_seolah",
+  "title": "Chapter 2 - 설아와의 평온한 일상",
+  "chapter": 2,
+  "startId": "ch2_seolah_01",
+  "lines": [
+    {
+      "id": "ch2_seolah_01",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "토요일 밤... 침대에 누워있다.",
+      "nextScriptId": "ch2_seolah_02"
+    },
+    {
+      "id": "ch2_seolah_02",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "첫 주가 끝났다. 설아와의 따뜻한 시간들만 생각하니 마음이 편하다.",
+      "nextScriptId": "ch2_seolah_03"
+    },
+    {
+      "id": "ch2_seolah_03",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "강리나의 신비로움, 학교의 비밀... 그런 것들은 모두 잊기로 했다.",
+      "nextScriptId": "ch2_seolah_04"
+    },
+    {
+      "id": "ch2_seolah_04",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "대신 설아와의 따뜻한 순간들만 더 많이 만들어가고 싶다.",
+      "nextScriptId": "ch2_seolah_05"
+    },
+    {
+      "id": "ch2_seolah_05",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "월요일 아침... 또 다른 주가 시작된다.",
+      "nextScriptId": "ch2_seolah_06"
+    },
+    {
+      "id": "ch2_seolah_06",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "text": "학교 교실. 설아가 나를 보고 밝은 표정으로 웃는다.",
+      "nextScriptId": "ch2_seolah_07"
+    },
+    {
+      "id": "ch2_seolah_07",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "어! 너 왔어! 토요일에는 뭐했어? 재미있었어?",
+      "nextScriptId": "ch2_seolah_08"
+    },
+    {
+      "id": "ch2_seolah_08",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "나는 미술동아리가 있었어. 정말 재미있었어. 그리고... 너를 자꾸만 생각했어.",
+      "nextScriptId": "ch2_seolah_09"
+    },
+    {
+      "id": "ch2_seolah_09",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_embarrassed",
+      "characterPosition": "center",
+      "text": "아, 이게 뭔가... 좀 부끄러운데. 하지만 솔직하게 말하고 싶었어.",
+      "nextScriptId": "ch2_seolah_10"
+    },
+    {
+      "id": "ch2_seolah_10",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "우리... 계속 함께할 거지? 지금처럼?",
+      "nextScriptId": "ch2_seolah_11"
+    },
+    {
+      "id": "ch2_seolah_11",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "text": "하루가 흘러간다. 설아와 함께 지내는 모든 순간이 소중해 보인다.",
+      "nextScriptId": "ch2_seolah_12"
+    },
+    {
+      "id": "ch2_seolah_12",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "left",
+      "text": "방과 후에 카페 가자! 내가 추천하는 카페가 있어.",
+      "nextScriptId": "ch2_seolah_13"
+    },
+    {
+      "id": "ch2_seolah_13",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "text": "카페에 도착한다. 따뜻한 조명이 기분 좋게 한다.",
+      "nextScriptId": "ch2_seolah_14"
+    },
+    {
+      "id": "ch2_seolah_14",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "여기 정말 좋지? 나는 여기서 혼자 생각할 때가 많아.",
+      "nextScriptId": "ch2_seolah_15"
+    },
+    {
+      "id": "ch2_seolah_15",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "하지만 이제는... 너와 함께 오고 싶었어. 너를 여기로 데려오고 싶었어.",
+      "nextScriptId": "ch2_seolah_16"
+    },
+    {
+      "id": "ch2_seolah_16",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "우리 계속 이런 식으로 지낼 수 있으면 좋겠어.",
+      "nextScriptId": "ch2_seolah_17"
+    },
+    {
+      "id": "ch2_seolah_17",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "text": "설아의 두 손이 탁자 위에 조심스럽게 놓인다.",
+      "nextScriptId": "ch2_seolah_18"
+    },
+    {
+      "id": "ch2_seolah_18",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "character": "한설아",
+      "characterImage": "한설아_embarrassed",
+      "characterPosition": "center",
+      "text": "말이 자꾸 어색한데... 나는 너를 정말... 특별하게 생각해.",
+      "nextScriptId": "ch2_seolah_19"
+    },
+    {
+      "id": "ch2_seolah_19",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "이 학교에서... 처음 네가 나타났을 때부터. 뭔가 달라 보였어.",
+      "nextScriptId": "ch2_seolah_20"
+    },
+    {
+      "id": "ch2_seolah_20",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "이제 너는... 내 곁에 있어야 할 사람 같아. 항상.",
+      "nextScriptId": "ch2_seolah_21"
+    },
+    {
+      "id": "ch2_seolah_21",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "text": "설아는 긴장한 표정으로 너를 바라본다. 이렇게 솔직하게 마음을 드러내는 건 처음인 것 같다.",
+      "nextScriptId": "ch2_seolah_22"
+    },
+    {
+      "id": "ch2_seolah_22",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "character": "한설아",
+      "characterImage": "한설아_sad",
+      "characterPosition": "center",
+      "text": "근데... 넌 나를 어떻게 생각해? 솔직하게 말해줄래?",
+      "nextScriptId": "ch2_seolah_23"
+    },
+    {
+      "id": "ch2_seolah_23",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "text": "숨을 참고 있는 설아를 보면서, 너는 지난 일주일을 떠올린다.",
+      "nextScriptId": "ch2_seolah_24"
+    },
+    {
+      "id": "ch2_seolah_24",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "text": "강리나의 신비로움은 점점 멀어지고, 설아의 따뜻함만 점점 가까워지고 있다.",
+      "nextScriptId": "ch2_seolah_25"
+    },
+    {
+      "id": "ch2_seolah_25",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "text": "이것이... 평범한 일상의 행복인 것 같다.",
+      "nextScriptId": "ch2_seolah_choice_01"
+    },
+    {
+      "id": "ch2_seolah_choice_01",
+      "type": "choice",
+      "background": "cafe.png",
+      "character": "한설아",
+      "characterImage": "한설아_embarrassed",
+      "characterPosition": "center",
+      "text": "설아가 떨리는 목소리로 다시 물어본다. '정말... 뭐라고 해줄 거야?'",
+      "choices": [
+        {
+          "text": "설아를 향한 솔직한 감정을 말해주기",
+          "nextSceneFile": "Chapter2/chapter2_seolah_closeness.json"
+        },
+        {
+          "text": "천천히 관계를 키워나가자고 말하기",
+          "nextSceneFile": "Chapter2/chapter2_seolah_friendship.json"
+        },
+        {
+          "text": "설아의 진짜 마음이 뭔지 알아보기",
+          "nextSceneFile": "Chapter2/chapter2_seolah_truth.json"
+        }
+      ]
+    }
+  ]
+}

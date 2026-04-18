@@ -1,0 +1,139 @@
+{
+  "sceneId": "transition_day2",
+  "title": "두 번째 날의 아침 - 새로운 시작",
+  "chapter": 1,
+  "startId": "day2_01",
+  "lines": [
+    {
+      "id": "day2_01",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "어제는 정말 길었다. 침대에 누우니 벌써 다음 날처럼 느껴진다.",
+      "nextScriptId": "day2_02"
+    },
+    {
+      "id": "day2_02",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "아침이 밝아온다. 두 번째 학교 날이다.",
+      "nextScriptId": "day2_03"
+    },
+    {
+      "id": "day2_03",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "text": "학교에 가는 길이 어제보다 덜 낯설다.",
+      "nextScriptId": "day2_04"
+    },
+    {
+      "id": "day2_04",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "어! 너 왔어? 오늘은 동아리 소개 시간이야! 어제 감기약도 챙겨왔고!",
+      "nextScriptId": "day2_05"
+    },
+    {
+      "id": "day2_05",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "내 감기약 먹고 빨리 낫자! 오늘은 정말 흥미로운 날이 될 거야!",
+      "nextScriptId": "day2_06"
+    },
+    {
+      "id": "day2_06",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "그리고... 혹시 어제 뭔가 이상한 일 있었어? 학교에서?",
+      "nextScriptId": "day2_07"
+    },
+    {
+      "id": "day2_07",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "아니면 그냥 내가 생각이 많은 거겠지. 어쨌든, 오늘도 재미있게 보내자!",
+      "nextScriptId": "day2_08"
+    },
+    {
+      "id": "day2_08",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "text": "동아리 소개 시간. 여러 동아리가 무대에서 자신들을 표현한다.",
+      "characterExit": "한설아",
+      "nextScriptId": "day2_09"
+    },
+    {
+      "id": "day2_09",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "text": "봉사동아리, 문화예술동아리, 스포츠동아리, 그리고... 뭔가 이상한 동아리까지.",
+      "nextScriptId": "day2_10"
+    },
+    {
+      "id": "day2_10",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "text": "'학교 안전 위원회'라고 불리는 동아리. 강리나가 주도하는 그 동아리다.",
+      "nextScriptId": "day2_11"
+    },
+    {
+      "id": "day2_11",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "우리는 학교의 안전을 지키는 동아리입니다. 뭔가 이상한 일이 있으면 우리에게 알려주세요.",
+      "nextScriptId": "day2_12"
+    },
+    {
+      "id": "day2_12",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "강리나",
+      "text": "강리나가 무대에서 내려온다. 어제처럼 뭔가 밝고 신비로운 느낌이다.",
+      "nextScriptId": "day2_13"
+    },
+    {
+      "id": "day2_13",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "text": "동아리 소개가 끝난다. 이제 가입 신청 시간이다.",
+      "nextScriptId": "day2_14"
+    },
+    {
+      "id": "day2_14",
+      "type": "choice",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "설아가 물었다. '넌 어느 동아리 할 거야?'",
+      "choices": [
+        {
+          "text": "학교 안전 위원회에 가입하기 - 강리나를 더 알아보자",
+          "nextSceneFile": "Chapter1/chapter1_joining_safety.json"
+        },
+        {
+          "text": "문화예술동아리에 가입하기 - 평온한 학교생활",
+          "nextSceneFile": "Chapter1/chapter1_joining_arts.json"
+        },
+        {
+          "text": "봉사동아리에 가입하기 - 사람들을 돕자",
+          "nextSceneFile": "Chapter1/chapter1_joining_volunteer.json"
+        }
+      ]
+    }
+  ]
+}

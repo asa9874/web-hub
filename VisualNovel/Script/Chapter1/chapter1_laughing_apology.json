@@ -1,0 +1,137 @@
+{
+  "sceneId": "chapter1_laughing_apology",
+  "title": "웃음 속의 사과",
+  "chapter": 1,
+  "startId": "laugh_01",
+  "lines": [
+    {
+      "id": "laugh_01",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "좋아! 그러니까 우리 둘 다 좀 이상한 사람들이구나!",
+      "nextScriptId": "laugh_02"
+    },
+    {
+      "id": "laugh_02",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "그래도 우리 이 입학식을 절대 잊지 못할 거야!",
+      "nextScriptId": "laugh_03"
+    },
+    {
+      "id": "laugh_03",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "교장선생님도 우리를 본 거 같고... 아, 이제 뭐 하지?",
+      "nextScriptId": "laugh_04"
+    },
+    {
+      "id": "laugh_04",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "그래도 웃고 넘어가자! 이게 일생일대 추억이 될 거야!",
+      "nextScriptId": "laugh_05"
+    },
+    {
+      "id": "laugh_05",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그리고 내 이름은 한설아야! 그럼 우리 친구지?",
+      "nextScriptId": "laugh_06"
+    },
+    {
+      "id": "laugh_06",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "아무튼, 이 입학식은... 정말 잊지 못할 거야.",
+      "nextScriptId": "laugh_07"
+    },
+    {
+      "id": "laugh_07",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "그리고 차후엔 정신 좀 차려! 정말로!",
+      "nextScriptId": "laugh_08"
+    },
+    {
+      "id": "laugh_08",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "근데 넌 되게 재미있는 친구야! 이렇게 첫 만남부터 깨지는 데?",
+      "nextScriptId": "laugh_09"
+    },
+    {
+      "id": "laugh_09",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "좋아! 우리 이런 식으로 고등학교를 헤쳐나가자!",
+      "nextScriptId": "laugh_10"
+    },
+    {
+      "id": "laugh_10",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "내일도 봐! 같은 반이니까!",
+      "characterExit": "한설아",
+      "nextScriptId": "laugh_11"
+    },
+    {
+      "id": "laugh_11",
+      "type": "dialogue",
+      "background": "school_gate.png",
+      "text": "입학식을 마치고 나온다. 벚꽃이 여전히 흩날린다.",
+      "nextScriptId": "laugh_12"
+    },
+    {
+      "id": "laugh_12",
+      "type": "dialogue",
+      "background": "school_gate.png",
+      "text": "이 미친 입학식... 하지만 뭔가 좋다.",
+      "nextScriptId": "laugh_13"
+    },
+    {
+      "id": "laugh_13",
+      "type": "dialogue",
+      "background": "school_gate.png",
+      "text": "설아라는 친구를 사귀었다. 첫 친구.",
+      "nextScriptId": "laugh_14"
+    },
+    {
+      "id": "laugh_14",
+      "type": "dialogue",
+      "background": "school_gate.png",
+      "text": "이 날이 끝났다. 설아와의 우연은 단순한 시작일 뿐이었다.",
+      "nextScriptId": "transition_day2"
+    }
+  ]
+}

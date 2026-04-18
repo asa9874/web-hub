@@ -1,0 +1,221 @@
+{
+  "id": "chapter2_balance_rina",
+  "type": "scene",
+  "sceneId": "chapter2_balance_rina",
+  "title": "Chapter 2 - 강리나의 세계",
+  "chapter": 2,
+  "startId": "ch2_br_01",
+  "lines": [
+    {
+      "id": "ch2_br_01",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "text": "너는 설아의 손에서 손을 놓는다.",
+      "nextScriptId": "ch2_br_02"
+    },
+    {
+      "id": "ch2_br_02",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "text": "그녀의 얼굴이 어둡게 변한다.",
+      "nextScriptId": "ch2_br_03"
+    },
+    {
+      "id": "ch2_br_03",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "character": "한설아",
+      "characterImage": "한설아_sad",
+      "characterPosition": "center",
+      "text": "뭐... 뭐야? 뭐가 이러는 거야?",
+      "nextScriptId": "ch2_br_04"
+    },
+    {
+      "id": "ch2_br_04",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "text": "'미안해. 정말 미안해. 나 먼저 가야 할 것 같아. 정말 중요한 일이 생겼어.'",
+      "nextScriptId": "ch2_br_05"
+    },
+    {
+      "id": "ch2_br_05",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "character": "한설아",
+      "characterImage": "한설아_sad",
+      "characterPosition": "center",
+      "text": "뭐? 지금?",
+      "nextScriptId": "ch2_br_06"
+    },
+    {
+      "id": "ch2_br_06",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "text": "너는 카페를 나간다. 설아의 슬픈 얼굴을 뒤로하고.",
+      "nextScriptId": "ch2_br_07"
+    },
+    {
+      "id": "ch2_br_07",
+      "type": "dialogue",
+      "background": "school_corridor.png",
+      "text": "학교로 향한다.",
+      "nextScriptId": "ch2_br_08"
+    },
+    {
+      "id": "ch2_br_08",
+      "type": "dialogue",
+      "background": "school_corridor.png",
+      "text": "이미 어두워진 복도를 빠르게 움직인다.",
+      "nextScriptId": "ch2_br_09"
+    },
+    {
+      "id": "ch2_br_09",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "text": "학생회실 문을 두드린다.",
+      "nextScriptId": "ch2_br_10"
+    },
+    {
+      "id": "ch2_br_10",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "늦었네. 나는 너를 잠깐만 기다렸어.",
+      "nextScriptId": "ch2_br_11"
+    },
+    {
+      "id": "ch2_br_11",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "text": "리나는 창문을 통해 밤하늘을 본다.",
+      "nextScriptId": "ch2_br_12"
+    },
+    {
+      "id": "ch2_br_12",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "지난 주말에 벌어진 일 있잖아. 체육관 물품창고에서.",
+      "nextScriptId": "ch2_br_13"
+    },
+    {
+      "id": "ch2_br_13",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "그건 단순한 사고가 아니야. 뭔가... 계획된 것 같아. 목표가 있는 것처럼 느껴진다.",
+      "nextScriptId": "ch2_br_14"
+    },
+    {
+      "id": "ch2_br_14",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "text": "너는 긴장한다.",
+      "nextScriptId": "ch2_br_15"
+    },
+    {
+      "id": "ch2_br_15",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "너도 이상하다고 느껴지지? 그런데 학교에선 아무도 말하지 않아. 마치 모두가 무언가를 숨기고 있는 것처럼.",
+      "nextScriptId": "ch2_br_16"
+    },
+    {
+      "id": "ch2_br_16",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "text": "리나의 눈빛이 예리해진다.",
+      "nextScriptId": "ch2_br_17"
+    },
+    {
+      "id": "ch2_br_17",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "나는 너를 믿어. 그래서 너한테 이 일을 알려주는 거야. 함께 이 비밀을 풀어야 해.",
+      "nextScriptId": "ch2_br_18"
+    },
+    {
+      "id": "ch2_br_18",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "text": "너는 리나의 진지한 표정을 본다. 이건 장난이 아니다.",
+      "nextScriptId": "ch2_br_19"
+    },
+    {
+      "id": "ch2_br_19",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "내일 방과 후 함께 조사를 시작하자. 체육관 주변부터.",
+      "nextScriptId": "ch2_br_20"
+    },
+    {
+      "id": "ch2_br_20",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "text": "리나는 너에게 작은 손전등을 건넨다.",
+      "nextScriptId": "ch2_br_21"
+    },
+    {
+      "id": "ch2_br_21",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "이제부터 너는 나의 파트너야. 잘 기억해. 누구한테도 말하지 마.",
+      "nextScriptId": "ch2_br_22"
+    },
+    {
+      "id": "ch2_br_22",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "text": "너는 손전등을 받는다.",
+      "nextScriptId": "ch2_br_23"
+    },
+    {
+      "id": "ch2_br_23",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "text": "이것이 너의 선택이다. 평온함을 포기하고 신비로운 세계로 발을 들이는 것이다.",
+      "nextScriptId": "ch2_br_choice_01"
+    },
+    {
+      "id": "ch2_br_choice_01",
+      "type": "choice",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "내일의 조사가 시작되려 한다.",
+      "choices": [
+        {
+          "text": "체육관의 비밀을 파헤치기",
+          "nextSceneFile": "Chapter2/chapter2_rina_gymnasium.json"
+        },
+        {
+          "text": "학교의 다른 이상 징후 조사하기",
+          "nextSceneFile": "Chapter2/chapter2_rina_other.json"
+        },
+        {
+          "text": "강리나의 과거 조사하기",
+          "nextSceneFile": "Chapter2/chapter2_rina_past.json"
+        }
+      ]
+    }
+  ]
+}

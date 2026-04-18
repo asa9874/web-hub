@@ -1,0 +1,127 @@
+{
+  "sceneId": "chapter1_blame_game",
+  "title": "누가 잘못한 거야?",
+  "chapter": 1,
+  "startId": "blame_01",
+  "lines": [
+    {
+      "id": "blame_01",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_angry",
+      "characterPosition": "center",
+      "text": "뭐?! 내 탓이라고?!",
+      "nextScriptId": "blame_02"
+    },
+    {
+      "id": "blame_02",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_panic",
+      "characterPosition": "center",
+      "text": "그건... 음... 그건 네가 먼저 하품해서 그런 거야!",
+      "nextScriptId": "blame_03"
+    },
+    {
+      "id": "blame_03",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "그리고 내가 너를 때린 것도... 그건... 친근감을 표현한 거야!",
+      "nextScriptId": "blame_04"
+    },
+    {
+      "id": "blame_04",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_embarrassed",
+      "characterPosition": "center",
+      "text": "그래도... 미안해. 넌 첫 친구인데...",
+      "nextScriptId": "blame_05"
+    },
+    {
+      "id": "blame_05",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그래도 우리 친구하자! 이 정도는 괜찮은 거 아니야?",
+      "nextScriptId": "blame_06"
+    },
+    {
+      "id": "blame_06",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "아, 근데 정말로 다음부터는 정신 좀 차려! 진짜로!",
+      "nextScriptId": "blame_07"
+    },
+    {
+      "id": "blame_07",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "그리고 난 너한테 의존하고 싶지 않아. 넌 그냥 좋은 친구였으면 좋겠어.",
+      "nextScriptId": "blame_08"
+    },
+    {
+      "id": "blame_08",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그래도... 우리 좋은 추억 많이 만들자! 이 입학식처럼!",
+      "nextScriptId": "blame_09"
+    },
+    {
+      "id": "blame_09",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "좋아, 그럼 이제 가 볼까? 집에 가야겠다.",
+      "characterExit": "한설아",
+      "nextScriptId": "blame_10"
+    },
+    {
+      "id": "blame_10",
+      "type": "dialogue",
+      "background": "school_gate.png",
+      "text": "입학식을 마치고 나온다. 뭔가 어색한 분위기 속에서.",
+      "nextScriptId": "blame_11"
+    },
+    {
+      "id": "blame_11",
+      "type": "dialogue",
+      "background": "school_gate.png",
+      "text": "설아는 좋은 친구인 것 같지만... 좀 깔끔한 성격인 것 같다.",
+      "nextScriptId": "blame_12"
+    },
+    {
+      "id": "blame_12",
+      "type": "dialogue",
+      "background": "school_gate.png",
+      "text": "어쨌든... 내일은 더 조심해야겠다.",
+      "nextScriptId": "blame_13"
+    },
+    {
+      "id": "blame_13",
+      "type": "dialogue",
+      "background": "school_gate.png",
+      "text": "어색함 속에 첫 날이 저물었다. 이것이 시작일까, 아니면 끝일까?",
+      "nextScriptId": "transition_day2"
+    }
+  ]
+}

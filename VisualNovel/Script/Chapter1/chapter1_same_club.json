@@ -1,0 +1,114 @@
+{
+  "sceneId": "chapter1_same_club",
+  "title": "같은 길을 걷다 - 동아리 선택",
+  "chapter": 1,
+  "startId": "club_01",
+  "lines": [
+    {
+      "id": "club_01",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "아, 나는 아직 정하지 못했어. 근데 너랑 같은 동아리 할 수 있으면 좋겠어.",
+      "nextScriptId": "club_02"
+    },
+    {
+      "id": "club_02",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "우리 내일 함께 동아리 소개 시간에 가 볼까? 그럼 뭐가 좋은지 알 수 있을 거야.",
+      "nextScriptId": "club_03"
+    },
+    {
+      "id": "club_03",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "봉사동아리, 문화동아리, 스포츠동아리... 여러 가지가 있을 거야.",
+      "nextScriptId": "club_04"
+    },
+    {
+      "id": "club_04",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "근데 너는 어떤 동아리가 관심이 가? 뭔가 특기가 있어?",
+      "nextScriptId": "club_05"
+    },
+    {
+      "id": "club_05",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "나는... 음악이나 미술 같은 예술 활동을 좋아해. 그리고 사람들을 돕는 것도.",
+      "nextScriptId": "club_06"
+    },
+    {
+      "id": "club_06",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그래서 뭐 여러 개를 고민 중이야. 근데 너와 같은 걸 하고 싶어!",
+      "nextScriptId": "club_07"
+    },
+    {
+      "id": "club_07",
+      "type": "dialogue",
+      "background": "canteen.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "아무튼 내일 함께 둘러보자. 그리고 뭐가 맞는지 정하자.",
+      "nextScriptId": "club_08"
+    },
+    {
+      "id": "club_08",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "text": "매점을 나와 복도를 걷는다. 학생들이 하나둘 짐을 챙기고 있다.",
+      "characterExit": "한설아",
+      "nextScriptId": "club_09"
+    },
+    {
+      "id": "club_09",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "text": "첫 날이 정말 길었다. 하지만 뭔가 행복한 길이었다.",
+      "nextScriptId": "club_10"
+    },
+    {
+      "id": "club_10",
+      "type": "dialogue",
+      "background": "school_gate.png",
+      "text": "학교를 나간다. 벚꽃이 마지막 햇빛에 반짝인다.",
+      "nextScriptId": "club_11"
+    },
+    {
+      "id": "club_11",
+      "type": "dialogue",
+      "background": "none",
+      "text": "오늘 하루가 정말 행복했다. 설아라는 친구를 사귀었고, 학교도 구경했고, 벚꽃도 봤다.",
+      "nextScriptId": "club_12"
+    },
+    {
+      "id": "club_12",
+      "type": "dialogue",
+      "background": "none",
+      "text": "내일은 더 많은 일들이 일어날 것 같다. 그리고 모든 게 좋을 것 같다.",
+      "nextScriptId": "transition_day2"
+    }
+  ]
+}

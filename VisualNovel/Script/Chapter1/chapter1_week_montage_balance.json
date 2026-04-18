@@ -1,0 +1,58 @@
+{
+  "id": "chapter1_week_montage_balance",
+  "type": "scene",
+  "sceneId": "week_montage_balance",
+  "title": "밸런스 루트 - 두 세계의 경계에서",
+  "chapter": 1,
+  "startId": "week_balance_01",
+  "lines": [
+    {
+      "id": "week_balance_01",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "text": "4일째 - 난 두 개의 얼굴을 가지고 있다.",
+      "nextScriptId": "week_balance_02"
+    },
+    {
+      "id": "week_balance_02",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "left",
+      "text": "너, 뭔가 다르게 보여. 좋은 의미에서.",
+      "nextScriptId": "week_balance_03"
+    },
+    {
+      "id": "week_balance_03",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "그리고 설아에게는 절대 말하지 마. 그게 둘 다를 지키는 방법이야.",
+      "nextScriptId": "week_balance_04"
+    },
+    {
+      "id": "week_balance_04",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "text": "5일째 - 설아와 강리나 사이를 오간다.",
+      "nextScriptId": "week_balance_05"
+    },
+    {
+      "id": "week_balance_05",
+      "type": "dialogue",
+      "background": "school_entrance.png",
+      "text": "금요일 - 첫 주가 끝나간다. 난 이제... 더 이상 평범한 학생이 아니다.",
+      "nextScriptId": "week_balance_06"
+    },
+    {
+      "id": "week_balance_06",
+      "type": "dialogue",
+      "background": "sky_dusk.png",
+      "text": "하지만 설아와의 따뜻함, 강리나와의 신비로움... 둘 다 잃고 싶지 않다.",
+      "nextScriptId": "chapter1_ending_balance"
+    }
+  ]
+}

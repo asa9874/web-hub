@@ -1,0 +1,83 @@
+{
+  "sceneId": "chapter1_jesting_supernatural",
+  "title": "초능력? - 농담 섞인 진실",
+  "chapter": 1,
+  "startId": "jest_01",
+  "lines": [
+    {
+      "id": "jest_01",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "초능력?! 뭐 하는 소리야! *웃음*",
+      "nextScriptId": "jest_02"
+    },
+    {
+      "id": "jest_02",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "근데... 만약에 초능력이 있다면? 뭐 하고 싶어?",
+      "nextScriptId": "jest_03"
+    },
+    {
+      "id": "jest_03",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "나는... 모두를 행복하게 만들고 싶어! 그렇다면 시험 문제를 미리 알 수 있겠네! *웃음*",
+      "nextScriptId": "jest_04"
+    },
+    {
+      "id": "jest_04",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "농담이지만... 뭔가 진짜 초능력 있는 사람들이 있다면 좋을 텐데.",
+      "nextScriptId": "jest_05"
+    },
+    {
+      "id": "jest_05",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "그럼 사악한 것들로부터 우리를 지켜줄 수 있을 테니까.",
+      "nextScriptId": "jest_06"
+    },
+    {
+      "id": "jest_06",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "근데 그런 건 동화책에나 있는 거지. 현실은 그냥... 평범해.",
+      "nextScriptId": "jest_07"
+    },
+    {
+      "id": "jest_07",
+      "type": "dialogue",
+      "background": "school_gate.png",
+      "text": "둘이 함께 학교를 나온다. 설아의 웃음이 여전히 들린다.",
+      "characterExit": "한설아",
+      "nextScriptId": "jest_08"
+    },
+    {
+      "id": "jest_08",
+      "type": "dialogue",
+      "background": "none",
+      "text": "하지만 설아의 농담 속에 뭔가 진심이 숨어있는 것 같다.",
+      "nextScriptId": "transition_day2"
+    }
+  ]
+}

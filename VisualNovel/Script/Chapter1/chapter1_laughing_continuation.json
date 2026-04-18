@@ -1,0 +1,38 @@
+{
+  "id": "chapter1_laughing_continuation",
+  "type": "scene",
+  "sceneId": "laughing_continuation",
+  "title": "웃음으로 헤어지는 입학식",
+  "chapter": 1,
+  "startId": "laugh_cont_1",
+  "lines": [
+    {
+      "id": "laugh_cont_1",
+      "type": "dialogue",
+      "background": "school_entrance.png",
+      "text": "모두가 웃음으로 입학식의 황망한 시작을 잊을 수 있었다.",
+      "nextScriptId": "laugh_cont_2"
+    },
+    {
+      "id": "laugh_cont_2",
+      "type": "dialogue",
+      "background": "school_entrance.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "이렇게 시작되는 첫날도 나쁘지 않겠네.",
+      "characterExit": "강리나",
+      "nextScriptId": "laugh_cont_3"
+    },
+    {
+      "id": "laugh_cont_3",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "left",
+      "text": "자, 이제 반으로 가자! 담임선생님이 기다리고 있을 거야.",
+      "nextScriptId": "transition_day2"
+    }
+  ]
+}

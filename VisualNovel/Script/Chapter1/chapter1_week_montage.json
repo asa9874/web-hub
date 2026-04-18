@@ -1,0 +1,58 @@
+{
+  "id": "chapter1_week_montage",
+  "type": "scene",
+  "sceneId": "week_montage",
+  "title": "첫 주를 지나며",
+  "chapter": 1,
+  "startId": "week_01",
+  "lines": [
+    {
+      "id": "week_01",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "text": "4일째 - 한설아와는 여전히 함께지만, 뭔가가 달라졌다.",
+      "nextScriptId": "week_02"
+    },
+    {
+      "id": "week_02",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "left",
+      "text": "요즘 좀 힘들어? 너를 보니까 자꾸 마음이 쓰여.",
+      "nextScriptId": "week_03"
+    },
+    {
+      "id": "week_03",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "text": "5일째 - 강리나와의 시간도 자연스럽게 늘어난다.",
+      "nextScriptId": "week_04"
+    },
+    {
+      "id": "week_04",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "너, 적응 잘하고 있네. 생각보다 강한 애네.",
+      "nextScriptId": "week_05"
+    },
+    {
+      "id": "week_05",
+      "type": "dialogue",
+      "background": "school_entrance.png",
+      "text": "금요일 - 첫 주가 끝나간다. 많은 것이 바뀌었다.",
+      "nextScriptId": "week_06"
+    },
+    {
+      "id": "week_06",
+      "type": "dialogue",
+      "background": "school_entrance.png",
+      "text": "그리고... 뭔가 일이 터질 조짐이 보인다.",
+      "nextScriptId": "chapter1_incident_foreshadow"
+    }
+  ]
+}

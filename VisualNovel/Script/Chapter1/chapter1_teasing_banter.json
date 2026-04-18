@@ -1,0 +1,140 @@
+{
+  "sceneId": "chapter1_teasing_banter",
+  "title": "설아와의 장난 - 웃음 어린 밤",
+  "chapter": 1,
+  "startId": "teasing_01",
+  "lines": [
+    {
+      "id": "teasing_01",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_embarrassed",
+      "characterPosition": "center",
+      "text": "뭐?! 나한테 반한 건 아니고... 그건 아니지?!",
+      "nextScriptId": "teasing_02"
+    },
+    {
+      "id": "teasing_02",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "아, 장난이구나! 좋아, 우리 이렇게 장난 칠 수 있는 사이구나!",
+      "nextScriptId": "teasing_03"
+    },
+    {
+      "id": "teasing_03",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "그럼 내가 너한테도 장난을 쳐야 하나? 뭔가... 이상한데? *웃음*",
+      "nextScriptId": "teasing_04"
+    },
+    {
+      "id": "teasing_04",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "아무튼, 우리 친구잖아! 이 정도 장난은 괜찮아!",
+      "nextScriptId": "teasing_05"
+    },
+    {
+      "id": "teasing_05",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "그리고 내일부터 계속 옆에 있을 거니까, 이런 장난도 즐거울 거야!",
+      "nextScriptId": "teasing_06"
+    },
+    {
+      "id": "teasing_06",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "그럼 이제 우리... 정말 친구인 거야. 좋은 친구!",
+      "nextScriptId": "teasing_07"
+    },
+    {
+      "id": "teasing_07",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그리고 만약에 넌 또 이상한 말 해 봐. 나한테 얘기하고 싶은 뭐든!",
+      "nextScriptId": "teasing_08"
+    },
+    {
+      "id": "teasing_08",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "놀래키고 싶으면 내가 먼저 너를 놀래킬 건데?",
+      "nextScriptId": "teasing_09"
+    },
+    {
+      "id": "teasing_09",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그럼... 내일도 봐! 같은 반이니까!",
+      "nextScriptId": "teasing_10"
+    },
+    {
+      "id": "teasing_10",
+      "type": "dialogue",
+      "background": "school_gate.png",
+      "text": "둘이 함께 학교를 나온다. 벚꽃이 마지막 햇빛에 반짝인다.",
+      "characterExit": "한설아",
+      "nextScriptId": "teasing_11"
+    },
+    {
+      "id": "teasing_11",
+      "type": "dialogue",
+      "background": "school_gate.png",
+      "text": "설아와의 첫 만남은 정말 기억에 남을 것 같다.",
+      "nextScriptId": "teasing_12"
+    },
+    {
+      "id": "teasing_12",
+      "type": "dialogue",
+      "background": "school_gate.png",
+      "text": "이런 장난스러운 친구와 함께 고등학교를 보낸다면... 정말 재미있을 것 같다.",
+      "nextScriptId": "teasing_13"
+    },
+    {
+      "id": "teasing_13",
+      "type": "choice",
+      "background": "school_gate.png",
+      "text": "설아와의 첫 날이 끝났다. 내일은 어떻게 보낼까?",
+      "choices": [
+        {
+          "text": "내일은 설아를 더 잘 알아보기",
+          "nextSceneFile": "Chapter1/chapter1_knowing_seolah.json"
+        },
+        {
+          "text": "내일은 학교의 다른 친구들도 사귀기",
+          "nextSceneFile": "Chapter1/chapter1_other_friends.json"
+        },
+        {
+          "text": "내일은 학교에서 일어날 뭔가를 기대하기",
+          "nextSceneFile": "Chapter1/chapter1_school_mystery.json"
+        }
+      ]
+    }
+  ]
+}

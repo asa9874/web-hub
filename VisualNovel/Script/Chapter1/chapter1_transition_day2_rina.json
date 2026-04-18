@@ -1,0 +1,101 @@
+{
+  "sceneId": "transition_day2_rina",
+  "title": "두 번째 날 - 학생회 루트",
+  "chapter": 1,
+  "startId": "day2_rina_01",
+  "lines": [
+    {
+      "id": "day2_rina_01",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "두 번째 날 아침. 학생회에서의 첫 일이 어떻게 될지 기대된다.",
+      "nextScriptId": "day2_rina_02"
+    },
+    {
+      "id": "day2_rina_02",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "어! 어제는 뭐했어? 학생회실에 오래 있었어?",
+      "nextScriptId": "day2_rina_03"
+    },
+    {
+      "id": "day2_rina_03",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "혹시 강리나한테 뭔가 듣긴 했어? 뭔가 이상한 기운이 돌더라.",
+      "nextScriptId": "day2_rina_04"
+    },
+    {
+      "id": "day2_rina_04",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "어쨌든 오늘도 함께하자! 동아리 소개 시간이니까!",
+      "nextScriptId": "day2_rina_05"
+    },
+    {
+      "id": "day2_rina_05",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "여기서 봤어? 강리나! 저건 분명 뭔가 다른데...",
+      "nextScriptId": "day2_rina_06"
+    },
+    {
+      "id": "day2_rina_06",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "우리는 학교의 안전을 지키는 동아리입니다. 뭔가 이상한 일이 있으면 우리에게 알려주세요.",
+      "nextScriptId": "day2_rina_07"
+    },
+    {
+      "id": "day2_rina_07",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "character": "강리나",
+      "text": "강리나가 내 눈을 마주친다. 뭔가 의미 있는 눈빛이다.",
+      "nextScriptId": "day2_rina_08"
+    },
+    {
+      "id": "day2_rina_08",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "text": "동아리 소개가 끝난다. 이제 가입 신청을 해야 한다.",
+      "characterExit": "한설아",
+      "nextScriptId": "day2_rina_09"
+    },
+    {
+      "id": "day2_rina_09",
+      "type": "choice",
+      "background": "gymnasium.png",
+      "text": "동아리 신청 시간이다. 너는 어느 동아리를 고를까?",
+      "choices": [
+        {
+          "text": "학교 안전 위원회에 가입 - 강리나와 함께",
+          "nextSceneFile": "Chapter1/chapter1_joining_safety.json"
+        },
+        {
+          "text": "문화예술동아리에 가입 - 평온함을 원해",
+          "nextSceneFile": "Chapter1/chapter1_joining_arts.json"
+        },
+        {
+          "text": "봉사동아리에 가입 - 사람들을 돕자",
+          "nextSceneFile": "Chapter1/chapter1_joining_volunteer.json"
+        }
+      ]
+    }
+  ]
+}

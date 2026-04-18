@@ -1,0 +1,41 @@
+{
+  "id": "chapter1_joining_volunteer",
+  "type": "scene",
+  "sceneId": "joining_volunteer",
+  "title": "봉사동아리에 들어가다",
+  "chapter": 1,
+  "startId": "vol_1",
+  "lines": [
+    {
+      "id": "vol_1",
+      "type": "dialogue",
+      "background": "school_corridor.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "오, 봉사동아리? 너 정말 착한데? 나도 그 동아리 소개장을 받았어.",
+      "nextScriptId": "vol_2"
+    },
+    {
+      "id": "vol_2",
+      "type": "dialogue",
+      "background": "school_corridor.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "혹시... 우리 함께 동아리를 선택한 거야? 정말 신기해!",
+      "nextScriptId": "vol_3"
+    },
+    {
+      "id": "vol_3",
+      "type": "dialogue",
+      "background": "school_corridor.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "좋아, 내일부터 함께 봉사활동을 해보자!",
+      "characterExit": "한설아",
+      "nextScriptId": "transition_evening1"
+    }
+  ]
+}

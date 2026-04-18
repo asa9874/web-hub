@@ -1,0 +1,222 @@
+{
+  "sceneId": "chapter1_flutter_heart",
+  "title": "학생회장의 신비 - 마음이 철렁",
+  "chapter": 1,
+  "startId": "flutter_01",
+  "lines": [
+    {
+      "id": "flutter_01",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "text": "입학식이 끝나고 학생들이 삼삼오오 교실로 돌아간다. 하지만 나의 눈은 자꾸만 무대를 향한다.",
+      "nextScriptId": "flutter_02"
+    },
+    {
+      "id": "flutter_02",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "text": "아까 강리나가... 정말 이상했다. 뭔가 다른 느낌. 빛이 나는 것처럼 보였다.",
+      "nextScriptId": "flutter_03"
+    },
+    {
+      "id": "flutter_03",
+      "type": "dialogue",
+      "background": "gymnasium.png",
+      "text": "\"내가 왜...?\" 나는 중얼거렸다. 학생회장이라고 해서 그런 건가? 아니... 뭔가 더 있는 것 같은데...",
+      "nextScriptId": "flutter_04"
+    },
+    {
+      "id": "flutter_04",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "text": "체육관을 나와 복도를 걷는다. 학생들이 자신의 반으로 돌아가고 있다.",
+      "nextScriptId": "flutter_05"
+    },
+    {
+      "id": "flutter_05",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "text": "\"강리나... 학생회장실은 어디 있을까?\" 나는 문득 궁금해졌다.",
+      "nextScriptId": "flutter_06"
+    },
+    {
+      "id": "flutter_06",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "어? 너 어디 가는 거야?",
+      "nextScriptId": "flutter_07"
+    },
+    {
+      "id": "flutter_07",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "우리 반 교실은 저기인데... 혹시 길 잃었어?",
+      "nextScriptId": "flutter_08"
+    },
+    {
+      "id": "flutter_08",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "아, 나는 한설아야. 우리 같은 반이잖아! 어디를 찾고 있어?",
+      "nextScriptId": "flutter_09"
+    },
+    {
+      "id": "flutter_09",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "아! 학생회실? 그럼 3층이야! 나도 한 번 구경해 보고 싶었는데, 어! 우리 같이 가 볼까?",
+      "nextScriptId": "flutter_10"
+    },
+    {
+      "id": "flutter_10",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "한설아",
+      "text": "설아와 함께 3층으로 올라간다. 계단을 밟을 때마다 심장이 철렁거린다.",
+      "nextScriptId": "flutter_11"
+    },
+    {
+      "id": "flutter_11",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "어? 뭐야, 너 얼굴이 빨간데? 혹시 감기 걸렸어?",
+      "nextScriptId": "flutter_12"
+    },
+    {
+      "id": "flutter_12",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "여기가 학생회실이구나! 오... 생각보다 멋진데?",
+      "nextScriptId": "flutter_13"
+    },
+    {
+      "id": "flutter_13",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "한설아",
+      "text": "노크를 해야 하나? 아니면... 그냥 들어가도 되나?",
+      "nextScriptId": "flutter_14"
+    },
+    {
+      "id": "flutter_14",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "어? 누세요?",
+      "nextScriptId": "flutter_15"
+    },
+    {
+      "id": "flutter_15",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "text": "문이 열리고 강리나가 나타났다. 아까 무대 위의 빛은 사라졌지만... 여전히 뭔가 다르다.",
+      "nextScriptId": "flutter_16"
+    },
+    {
+      "id": "flutter_16",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "어? 너... 아까 무대에 섰던 학생이지? 뭐 하는 거야? 혹시 학생회에 들어오려고?",
+      "nextScriptId": "flutter_17"
+    },
+    {
+      "id": "flutter_17",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "그렇다면 환영해. 우리 학생회는 항상 새로운 멤버를 찾고 있거든.",
+      "nextScriptId": "flutter_18"
+    },
+    {
+      "id": "flutter_18",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "text": "그녀의 눈빛이 좀 더 자세히 보니 정말 맑다. 뭔가 말할 수 없는 힘이 있는 것 같다.",
+      "nextScriptId": "flutter_19"
+    },
+    {
+      "id": "flutter_19",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "left",
+      "text": "오! 나도 학생회에 들어가고 싶어요! 강리나 선배!",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "좋은데? 더 많은 친구들이 있으면 더 즐거우니까. 너희 이름이 뭐야?",
+      "nextScriptId": "flutter_20"
+    },
+    {
+      "id": "flutter_20",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "좋아. 그럼 내일부터 방과 후에 여기 와. 처음 일은 간단할 거야.",
+      "nextScriptId": "flutter_21"
+    },
+    {
+      "id": "flutter_21",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "그리고... 넌 특별하네. 뭔가 다른 느낌이야.",
+      "nextScriptId": "flutter_22"
+    },
+    {
+      "id": "flutter_22",
+      "type": "choice",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "강리나의 말에 어떻게 반응할까?",
+      "choices": [
+        {
+          "text": "감사합니다... 내일 올게요",
+          "nextSceneFile": "Chapter1/chapter1_first_duty.json"
+        },
+        {
+          "text": "특별하다니요? 뭐가 특별한데요?",
+          "nextSceneFile": "Chapter1/chapter1_curiosity_moment.json"
+        },
+        {
+          "text": "*얼굴이 벌게진다* 아, 아니... 저는 그냥...",
+          "nextSceneFile": "Chapter1/chapter1_shy_moment.json"
+        }
+      ]
+    }
+  ]
+}

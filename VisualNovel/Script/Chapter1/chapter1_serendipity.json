@@ -1,0 +1,170 @@
+{
+  "sceneId": "chapter1_serendipity",
+  "title": "천운의 만남",
+  "chapter": 1,
+  "startId": "serendipity_01",
+  "lines": [
+    {
+      "id": "serendipity_01",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "천운? 뭔가... 로맨틱한데? 좋아! 맞아, 우리 천운의 만남인 거야!",
+      "nextScriptId": "serendipity_02"
+    },
+    {
+      "id": "serendipity_02",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "신입생 첫날, 입학식에서 만나고... 이렇게 친구가 되다니!",
+      "nextScriptId": "serendipity_03"
+    },
+    {
+      "id": "serendipity_03",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "이건 분명히 운명이야. 아니면 뭐라고 설명할 수 있어?",
+      "nextScriptId": "serendipity_04"
+    },
+    {
+      "id": "serendipity_04",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그래서 우리 꼭 좋은 친구가 되자! 이 운명을 소중히 하자!",
+      "nextScriptId": "serendipity_05"
+    },
+    {
+      "id": "serendipity_05",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "그리고... 혹시 넌 뭔가 특별한 사람인 거 아닐까?",
+      "nextScriptId": "serendipity_06"
+    },
+    {
+      "id": "serendipity_06",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "그래서 우리가 만난 거 말이야. 깊은 뜻이 있는 거 같아.",
+      "nextScriptId": "serendipity_07"
+    },
+    {
+      "id": "serendipity_07",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "아무튼! 우리 함께 이 고등학교를 멋지게 헤쳐나가자!",
+      "nextScriptId": "serendipity_08"
+    },
+    {
+      "id": "serendipity_08",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "그리고 이 천운의 만남을 절대 잊지 말자. 약속해?",
+      "nextScriptId": "serendipity_09"
+    },
+    {
+      "id": "serendipity_09",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "그럼 이제 경상 빠진다는 게 뭔지 모르겠어. 넌 정말 최고야!",
+      "nextScriptId": "serendipity_10"
+    },
+    {
+      "id": "serendipity_10",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그리고 혹시 넌 뭔가 하고 싶은 게 있어? 동아리든, 취미든?",
+      "nextScriptId": "serendipity_11"
+    },
+    {
+      "id": "serendipity_11",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "만약 뭐 있으면 내가 따라갈게! 어디든!",
+      "nextScriptId": "serendipity_12"
+    },
+    {
+      "id": "serendipity_12",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "우리 이 천운의 운명을 함께 나누는 친구가 되자!",
+      "nextScriptId": "serendipity_13"
+    },
+    {
+      "id": "serendipity_13",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "text": "두 사람은 학교를 나왔다. 벚꽃이 여전히 흩날린다.",
+      "characterExit": "한설아",
+      "nextScriptId": "serendipity_14"
+    },
+    {
+      "id": "serendipity_14",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "text": "천운의 만남... 설아의 말이 자꾸만 떠오른다.",
+      "nextScriptId": "serendipity_15"
+    },
+    {
+      "id": "serendipity_15",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "text": "혹시 진짜 내가 특별한 걸까? 무엇이 특별한 건지는 모르겠지만...",
+      "nextScriptId": "serendipity_16"
+    },
+    {
+      "id": "serendipity_16",
+      "type": "choice",
+      "background": "school_courtyard.png",
+      "text": "이 천운이 어떤 의미일까? 넌 뭔가 예감이 들어?",
+      "choices": [
+        {
+          "text": "좋은 일들이 일어날 거 같은데?",
+          "nextSceneFile": "Chapter1/chapter1_hopeful_future.json"
+        },
+        {
+          "text": "뭔가... 위험한 일들이 일어날 것 같은데?",
+          "nextSceneFile": "Chapter1/chapter1_danger_foreboding.json"
+        },
+        {
+          "text": "설아와의 인연이 계속될 것 같은 느낌이야",
+          "nextSceneFile": "Chapter1/chapter1_deepening_bond.json"
+        }
+      ]
+    }
+  ]
+}

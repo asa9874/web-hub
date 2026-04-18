@@ -1,0 +1,208 @@
+{
+  "sceneId": "chapter1_first_duty",
+  "title": "학생회에서의 첫 순간",
+  "chapter": 1,
+  "startId": "duty_01",
+  "lines": [
+    {
+      "id": "duty_01",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "그럼 내일부터 시작하자. 처음이니까 간단한 일부터 시작할 거야.",
+      "nextScriptId": "duty_02"
+    },
+    {
+      "id": "duty_02",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "이건 최근 신입생들의 서류들이야. 이걸 정렬해 주면 돼.",
+      "nextScriptId": "duty_03"
+    },
+    {
+      "id": "duty_03",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "그리고... 혹시 넌 뭐라고 불러? 이름 말이야.",
+      "nextScriptId": "duty_04"
+    },
+    {
+      "id": "duty_04",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "좋은 이름이네. 기억할게.",
+      "nextScriptId": "duty_05"
+    },
+    {
+      "id": "duty_05",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "그리고 한 가지 더... 지금까지 뭔가 이상하지 않았어?",
+      "nextScriptId": "duty_06"
+    },
+    {
+      "id": "duty_06",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "아, 상관없어. 그냥 넘어가자. 너는... 좋은 사람인 것 같아.",
+      "nextScriptId": "duty_07"
+    },
+    {
+      "id": "duty_07",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "학생회에는 여러 일이 있어. 행사 준비, 학생 지원, 건의사항 처리... 다양해.",
+      "nextScriptId": "duty_08"
+    },
+    {
+      "id": "duty_08",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "하지만 가장 중요한 건... 학생들을 보호하는 것이야.",
+      "nextScriptId": "duty_09"
+    },
+    {
+      "id": "duty_09",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "특히... 뭔가 이상한 일이 일어날 때는 말이야.",
+      "nextScriptId": "duty_10"
+    },
+    {
+      "id": "duty_10",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "아, 미안해. 뭔가 깊이 있게 말하는 것 같아. 그냥... 넘어가자.",
+      "nextScriptId": "duty_11"
+    },
+    {
+      "id": "duty_11",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "내일 방과 후에 다시 만나자. 그리고... 혹시 누군가에게 이 일을 말했어?",
+      "nextScriptId": "duty_12"
+    },
+    {
+      "id": "duty_12",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "한설아? 그 학생 괜찮은 학생이야. 긍정적이고 따뜻한 마음을 가진.",
+      "nextScriptId": "duty_13"
+    },
+    {
+      "id": "duty_13",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "하지만... 모두가 같은 걸 알 필요는 없어. 그래?",
+      "nextScriptId": "duty_14"
+    },
+    {
+      "id": "duty_14",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "아무튼... 내일 봐. 그리고 잘 쉬어.",
+      "nextScriptId": "duty_15"
+    },
+    {
+      "id": "duty_15",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "혹시 무서우면... 아, 상관없어. 넌 강하니까.",
+      "characterExit": "강리나",
+      "nextScriptId": "duty_16"
+    },
+    {
+      "id": "duty_16",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "text": "강리나가 나간 후... 학생회실에는 묘한 침묵이 흘렀다.",
+      "nextScriptId": "duty_17"
+    },
+    {
+      "id": "duty_17",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "text": "뭔가... 강리나의 말 속에는 깊은 의미가 있는 것 같았다. 하지만 무엇인지는 알 수 없었다.",
+      "nextScriptId": "duty_18"
+    },
+    {
+      "id": "duty_18",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "text": "학생회실을 나와 복도를 걷는다. 다른 학생들은 이미 집에 가고 있었다.",
+      "nextScriptId": "duty_19"
+    },
+    {
+      "id": "duty_19",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "text": "\"뭐가 이상한 일이라는 거지?\" 나는 중얼거렸다.",
+      "nextScriptId": "duty_20"
+    },
+    {
+      "id": "duty_20",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "text": "벚꽃이 아직도 흩날리고 있었다. 하지만 이제 뭔가 다르게 보였다.",
+      "nextScriptId": "duty_21"
+    },
+    {
+      "id": "duty_21",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "text": "학생회에 들어갔다. 강리나의 말과 비밀이 계속 맴돈다.",
+      "nextScriptId": "duty_22"
+    },
+    {
+      "id": "duty_22",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "text": "하지만 그 비밀은 나중에 풀리겠지. 지금은 그냥 강리나를 믿기로 했다.",
+      "nextScriptId": "transition_day2_rina"
+    }
+  ]
+}

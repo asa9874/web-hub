@@ -1,0 +1,41 @@
+{
+  "id": "chapter1_joining_safety",
+  "type": "scene",
+  "sceneId": "joining_safety",
+  "title": "학교 안전 위원회에 들어가다",
+  "chapter": 1,
+  "startId": "safe_1",
+  "lines": [
+    {
+      "id": "safe_1",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "좋은 선택이야. 안전 위원회는 학교에서 가장 중요한 역할을 하고 있어.",
+      "nextScriptId": "safe_2"
+    },
+    {
+      "id": "safe_2",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "내가 너를 감시... 아니, 돌볼 거야.",
+      "nextScriptId": "safe_3"
+    },
+    {
+      "id": "safe_3",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "첫 활동은 내일 방과 후에 있어. 준비해둬.",
+      "characterExit": "강리나",
+      "nextScriptId": "transition_evening1"
+    }
+  ]
+}

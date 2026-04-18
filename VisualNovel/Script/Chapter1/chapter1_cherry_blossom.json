@@ -1,0 +1,227 @@
+{
+  "sceneId": "chapter1_cherry_blossom",
+  "title": "벚꽃 아래의 고백",
+  "chapter": 1,
+  "startId": "cherry_01",
+  "lines": [
+    {
+      "id": "cherry_01",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그래! 우리 여기서 벚꽃 구경하자! 정말 예쁜데?",
+      "nextScriptId": "cherry_02"
+    },
+    {
+      "id": "cherry_02",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "text": "두 사람은 벚꽃이 피어있는 큰 벚나무 아래에 앉았다.",
+      "nextScriptId": "cherry_03"
+    },
+    {
+      "id": "cherry_03",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "봐... 벚꽃이 흩날린다. 진짜 아름답지 않아?",
+      "nextScriptId": "cherry_04"
+    },
+    {
+      "id": "cherry_04",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "text": "설아는 떨어지는 벚꽃 잎을 바라본다.",
+      "nextScriptId": "cherry_05"
+    },
+    {
+      "id": "cherry_05",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "아, 벚꽃이 하나 떨어졌어! 좋은 일이 일어날 거 같은데?",
+      "nextScriptId": "cherry_06"
+    },
+    {
+      "id": "cherry_06",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "아무튼... 이 벚꽃이 우리의 시작을 축복하는 것 같아.",
+      "nextScriptId": "cherry_07"
+    },
+    {
+      "id": "cherry_07",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "우리... 이렇게 벚꽃 아래서 처음 만났어. 이건 의미가 있는 거 아닐까?",
+      "nextScriptId": "cherry_08"
+    },
+    {
+      "id": "cherry_08",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그리고 우리 약속하자! 매년 이 시간에 여기서 만나자! 벚꽃 아래에서!",
+      "nextScriptId": "cherry_09"
+    },
+    {
+      "id": "cherry_09",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "그럼 우리는 영원한 친구가 될 거야. 벚꽃만큼이나 예쁜 추억들과 함께.",
+      "nextScriptId": "cherry_10"
+    },
+    {
+      "id": "cherry_10",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "근데... 혹시 너도 이 벚꽃을 좋아해?",
+      "nextScriptId": "cherry_11"
+    },
+    {
+      "id": "cherry_11",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_embarrassed",
+      "characterPosition": "center",
+      "text": "내가 너무 뭐라고 하는 건 아닐까? 미안해, 나 말이 많거든...",
+      "nextScriptId": "cherry_12"
+    },
+    {
+      "id": "cherry_12",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그래도 너는 좋아하지? 이 벚꽃, 이 학교, 그리고... 나?",
+      "nextScriptId": "cherry_13"
+    },
+    {
+      "id": "cherry_13",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "난 벌써 너와의 이 친구 관계가 좋아. 진심이야.",
+      "nextScriptId": "cherry_14"
+    },
+    {
+      "id": "cherry_14",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "그럼... 우리 영원한 친구가 되자. 약속해?",
+      "nextScriptId": "cherry_15"
+    },
+    {
+      "id": "cherry_15",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "벚꽃이 한 번 더 떨어진다. 마치 우리의 약속을 축복하듯.",
+      "nextScriptId": "cherry_16"
+    },
+    {
+      "id": "cherry_16",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "이 순간을 절대 잊지 마. 우리의 첫 인연, 벚꽃 아래에서.",
+      "nextScriptId": "cherry_17"
+    },
+    {
+      "id": "cherry_17",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그리고 만약 힘든 일이 있으면... 언제든지 나를 찾아와. 알겠지?",
+      "nextScriptId": "cherry_18"
+    },
+    {
+      "id": "cherry_18",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "아무리 힘든 순간이라도, 우리는 함께 이겨낼 거야.",
+      "nextScriptId": "cherry_19"
+    },
+    {
+      "id": "cherry_19",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "그럼... 이제 아까 못 본 학교 다른 곳도 구경할까?",
+      "nextScriptId": "cherry_20"
+    },
+    {
+      "id": "cherry_20",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "근데 이 벚꽃... 정말 예쁜데, 뭔가 영원하지 않은 느낌이 들어. 뭐하지?",
+      "nextScriptId": "cherry_21"
+    },
+    {
+      "id": "cherry_21",
+      "type": "choice",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "이 벚꽃의 순간을 어떻게 간직하고 싶어?",
+      "choices": [
+        {
+          "text": "사진을 찍자. 이 순간을 영원히 간직하기 위해.",
+          "nextSceneFile": "Chapter1/chapter1_photo_moment.json"
+        },
+        {
+          "text": "이대로가 좋아. 벚꽃처럼 순간을 즐기는 게 낫지 않을까?",
+          "nextSceneFile": "Chapter1/chapter1_ephemeral_beauty.json"
+        },
+        {
+          "text": "설아, 뭔가 슬픈데? 벚꽃이 떨어지니까?",
+          "nextSceneFile": "Chapter1/chapter1_bittersweet_chat.json"
+        }
+      ]
+    }
+  ]
+}

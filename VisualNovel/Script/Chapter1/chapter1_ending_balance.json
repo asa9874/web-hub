@@ -1,0 +1,38 @@
+{
+  "id": "chapter1_ending_balance",
+  "type": "scene",
+  "sceneId": "chapter1_ending_balance",
+  "title": "Chapter 1 끝 - 두 세계 사이의 균형",
+  "chapter": 1,
+  "startId": "ch1_end_balance_01",
+  "lines": [
+    {
+      "id": "ch1_end_balance_01",
+      "type": "dialogue",
+      "background": "school_rooftop.png",
+      "text": "첫 주가 끝났다. 난 이제... 두 개의 세계를 살고 있다.",
+      "nextScriptId": "ch1_end_balance_02"
+    },
+    {
+      "id": "ch1_end_balance_02",
+      "type": "dialogue",
+      "background": "school_rooftop.png",
+      "text": "설아의 따뜻함과 강리나의 신비로움... 둘 다 필요했다.",
+      "nextScriptId": "ch1_end_balance_03"
+    },
+    {
+      "id": "ch1_end_balance_03",
+      "type": "dialogue",
+      "background": "school_rooftop.png",
+      "text": "학교의 비밀을 알지만, 평범한 일상도 소중하다.",
+      "nextScriptId": "ch1_end_balance_04"
+    },
+    {
+      "id": "ch1_end_balance_04",
+      "type": "dialogue",
+      "background": "sky_twilight.png",
+      "text": "월요일부터... 두 가지를 모두 지켜나가기로 했다.",
+      "nextScriptId": "chapter2_entrance_balance"
+    }
+  ]
+}

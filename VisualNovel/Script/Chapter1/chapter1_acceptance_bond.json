@@ -1,0 +1,41 @@
+{
+  "id": "chapter1_acceptance_bond",
+  "type": "scene",
+  "sceneId": "acceptance_bond",
+  "title": "우연 같은 인연",
+  "chapter": 1,
+  "startId": "acc_bond_1",
+  "lines": [
+    {
+      "id": "acc_bond_1",
+      "type": "dialogue",
+      "background": "school_entrance.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "left",
+      "text": "아, 괜찮아. 나도 입학식이 얼마나 어색한지 알아.",
+      "nextScriptId": "acc_bond_2"
+    },
+    {
+      "id": "acc_bond_2",
+      "type": "dialogue",
+      "background": "school_entrance.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "left",
+      "text": "오히려 이렇게 시작된 우리가 더 잘 지낼 수도 있지 않을까?",
+      "nextScriptId": "acc_bond_3"
+    },
+    {
+      "id": "acc_bond_3",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "left",
+      "text": "나한테서 학교의 모든 것을 배워. 나랑 함께라면 문제없을 거야.",
+      "characterExit": "한설아",
+      "nextScriptId": "transition_day2"
+    }
+  ]
+}

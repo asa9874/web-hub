@@ -1,0 +1,220 @@
+{
+  "sceneId": "chapter1_curiosity_moment",
+  "title": "강리나와의 대화 - 진실을 향한 호기심",
+  "chapter": 1,
+  "startId": "curiosity_01",
+  "lines": [
+    {
+      "id": "curiosity_01",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "흠... 넌 정말 직설적이네. 좋아.",
+      "nextScriptId": "curiosity_02"
+    },
+    {
+      "id": "curiosity_02",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "특별하다니... 뭐라고 설명해야 할까?",
+      "nextScriptId": "curiosity_03"
+    },
+    {
+      "id": "curiosity_03",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "넌 뭔가... 다른 사람들과는 다른 파장을 가지고 있어. 눈빛이 깊어.",
+      "nextScriptId": "curiosity_04"
+    },
+    {
+      "id": "curiosity_04",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "아, 미안해. 뭔가 깊이 있게 말하는 것 같아.",
+      "nextScriptId": "curiosity_05"
+    },
+    {
+      "id": "curiosity_05",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "그런데... 넌 뭐라고 생각해? 내가 뭐하는 사람이라고?",
+      "nextScriptId": "curiosity_06"
+    },
+    {
+      "id": "curiosity_06",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "학생회장이라고만 생각해? 아니면... 뭔가 더?",
+      "nextScriptId": "curiosity_07"
+    },
+    {
+      "id": "curiosity_07",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "아, 역시. 넌 감이 예민하네.",
+      "nextScriptId": "curiosity_08"
+    },
+    {
+      "id": "curiosity_08",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "내가 뭔가 비밀이 있다고 느꼈다는 거지? 맞아... 난 비밀이 있어.",
+      "nextScriptId": "curiosity_09"
+    },
+    {
+      "id": "curiosity_09",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "하지만... 그 비밀은 아직 말할 수 없어. 미안해.",
+      "nextScriptId": "curiosity_10"
+    },
+    {
+      "id": "curiosity_10",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "대신... 내일 이걸 하면서 좀 더 알아가도 괜찮아?",
+      "nextScriptId": "curiosity_11"
+    },
+    {
+      "id": "curiosity_11",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "난... 제한된 시간 속에서 살고 있어. 그래서 소중한 사람들을 만날 때마다 더 신경 써.",
+      "nextScriptId": "curiosity_12"
+    },
+    {
+      "id": "curiosity_12",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "넌 그런 사람 중 한 명이야. 그래서 특별하다고 한 거야.",
+      "nextScriptId": "curiosity_13"
+    },
+    {
+      "id": "curiosity_13",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "하지만... 너한테 일을 주기 전에 한 가지 더 말해야 할 것 같아.",
+      "nextScriptId": "curiosity_14"
+    },
+    {
+      "id": "curiosity_14",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_serious",
+      "characterPosition": "center",
+      "text": "이 학교... 평범해 보이지만 평범하지 않아.",
+      "nextScriptId": "curiosity_15"
+    },
+    {
+      "id": "curiosity_15",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "뭔가... 이상한 일이 가끔 일어나. 그리고 우리 학생회는 그걸 관리해.",
+      "nextScriptId": "curiosity_16"
+    },
+    {
+      "id": "curiosity_16",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "그래서 이 일은... 생각보다 위험할 수 있어. 넌 괜찮아?",
+      "nextScriptId": "curiosity_17"
+    },
+    {
+      "id": "curiosity_17",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "하지만... 넌 강할 것 같아. 넌 할 수 있을 거야.",
+      "nextScriptId": "curiosity_18"
+    },
+    {
+      "id": "curiosity_18",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_smile",
+      "characterPosition": "center",
+      "text": "그래서... 내일부터 시작하자. 그리고 차근차근 알아가자.",
+      "nextScriptId": "curiosity_19"
+    },
+    {
+      "id": "curiosity_19",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "character": "강리나",
+      "characterImage": "강리나_normal",
+      "characterPosition": "center",
+      "text": "혹시 무서우면... 언제든 말해. 난 너를 보호할 거야.",
+      "characterExit": "강리나",
+      "nextScriptId": "curiosity_20"
+    },
+    {
+      "id": "curiosity_20",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "text": "강리나가 나간 후, 학생회실에는 침묵만 남았다.",
+      "nextScriptId": "curiosity_21"
+    },
+    {
+      "id": "curiosity_21",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "text": "강리나의 말은 내 호기심을 더욱 자극했다.",
+      "nextScriptId": "curiosity_22"
+    },
+    {
+      "id": "curiosity_22",
+      "type": "dialogue",
+      "background": "student_council_room.png",
+      "text": "학교가 평범하지 않다는 게... 정말 뭔가 있다는 뜻일까?",
+      "nextScriptId": "transition_day2_rina"
+    }
+  ]
+}

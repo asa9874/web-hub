@@ -1,0 +1,51 @@
+{
+  "id": "chapter1_truth_begins",
+  "type": "scene",
+  "sceneId": "truth_begins",
+  "title": "진실은 처음이다",
+  "chapter": 1,
+  "startId": "truth_01",
+  "lines": [
+    {
+      "id": "truth_01",
+      "type": "dialogue",
+      "background": "school_rooftop.png",
+      "character": "한설아",
+      "characterImage": "한설아_serious",
+      "characterPosition": "center",
+      "text": "좋아... 그럼 말할게.",
+      "nextScriptId": "truth_02"
+    },
+    {
+      "id": "truth_02",
+      "type": "dialogue",
+      "background": "school_rooftop.png",
+      "character": "한설아",
+      "characterImage": "한설아_sad",
+      "characterPosition": "center",
+      "text": "이 학교는... 평범한 학교가 아니야. 여기에선 사건들이 일어나.",
+      "nextScriptId": "truth_03"
+    },
+    {
+      "id": "truth_03",
+      "type": "dialogue",
+      "background": "school_rooftop.png",
+      "character": "한설아",
+      "characterImage": "한설아_serious",
+      "characterPosition": "center",
+      "text": "학생회... 특히 강리나는 그 사건들을 처리한다.",
+      "nextScriptId": "truth_04"
+    },
+    {
+      "id": "truth_04",
+      "type": "dialogue",
+      "background": "school_rooftop.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "그리고 넌... 이미 그쪽에 발을 들였어.",
+      "characterExit": "한설아",
+      "nextScriptId": "chapter1_week_montage_rina"
+    }
+  ]
+}

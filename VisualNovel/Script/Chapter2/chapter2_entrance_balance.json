@@ -1,0 +1,218 @@
+{
+  "id": "chapter2_entrance_balance",
+  "type": "scene",
+  "sceneId": "chapter2_entrance_balance",
+  "title": "Chapter 2 - 두 길의 교차점",
+  "chapter": 2,
+  "startId": "ch2_balance_01",
+  "lines": [
+    {
+      "id": "ch2_balance_01",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "토요일 밤. 너는 침대에서 천장을 바라본다.",
+      "nextScriptId": "ch2_balance_02"
+    },
+    {
+      "id": "ch2_balance_02",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "첫 주는 정말 특별했다. 설아의 따뜻함도 있었고, 강리나의 신비로움도 있었다.",
+      "nextScriptId": "ch2_balance_03"
+    },
+    {
+      "id": "ch2_balance_03",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "어느 한 쪽만 선택할 수 없다. 둘 다... 내 삶의 중요한 부분이 되어버렸다.",
+      "nextScriptId": "ch2_balance_04"
+    },
+    {
+      "id": "ch2_balance_04",
+      "type": "dialogue",
+      "background": "bedroom.png",
+      "text": "월요일 아침... 다시 학교로 간다.",
+      "nextScriptId": "ch2_balance_05"
+    },
+    {
+      "id": "ch2_balance_05",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "text": "교실에 도착하면 설아가 이미 기다리고 있다.",
+      "nextScriptId": "ch2_balance_06"
+    },
+    {
+      "id": "ch2_balance_06",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "어! 너 왔어! 토요일은 뭐했어?",
+      "nextScriptId": "ch2_balance_07"
+    },
+    {
+      "id": "ch2_balance_07",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "나는 미술동아리가 있었어. 그리고... 너를 생각했어.",
+      "nextScriptId": "ch2_balance_08"
+    },
+    {
+      "id": "ch2_balance_08",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "우리 어제처럼 카페 가자. 카페 있잖아. 내가 추천했던 그곳.",
+      "nextScriptId": "ch2_balance_09"
+    },
+    {
+      "id": "ch2_balance_09",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "text": "설아의 제안에 동의하고, 하루를 함께 보내기로 한다.",
+      "nextScriptId": "ch2_balance_10"
+    },
+    {
+      "id": "ch2_balance_10",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "text": "하루가 흘러간다. 설아와의 따뜻한 시간들.",
+      "nextScriptId": "ch2_balance_11"
+    },
+    {
+      "id": "ch2_balance_11",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "여기 좋지? 나는 여기서 혼자 있을 때... 너를 자주 생각해.",
+      "nextScriptId": "ch2_balance_12"
+    },
+    {
+      "id": "ch2_balance_12",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "지난 일주일... 넌 뭔가 달라 보였어. 좀... 어두워진 것 같았어.",
+      "nextScriptId": "ch2_balance_13"
+    },
+    {
+      "id": "ch2_balance_13",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "character": "한설아",
+      "characterImage": "한설아_sad",
+      "characterPosition": "center",
+      "text": "혹시... 뭔가 힘든 일 있어? 넌 나한테 얘기할 수 없는 거?",
+      "nextScriptId": "ch2_balance_14"
+    },
+    {
+      "id": "ch2_balance_14",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "text": "설아의 예리한 눈이 너를 관찰한다.",
+      "nextScriptId": "ch2_balance_15"
+    },
+    {
+      "id": "ch2_balance_15",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "미안해. 자꾸 물어봐서. 하지만... 난 너를 지키고 싶어.",
+      "nextScriptId": "ch2_balance_16"
+    },
+    {
+      "id": "ch2_balance_16",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "text": "휴대폰에 알림이 울린다. 강리나로부터의 메시지다.",
+      "nextScriptId": "ch2_balance_17"
+    },
+    {
+      "id": "ch2_balance_17",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "text": "'학생회실로 와. 긴급. 지금.'",
+      "nextScriptId": "ch2_balance_18"
+    },
+    {
+      "id": "ch2_balance_18",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "text": "너는 화면을 보고 손이 차가워진다.",
+      "nextScriptId": "ch2_balance_19"
+    },
+    {
+      "id": "ch2_balance_19",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "뭐야? 뭔가 일 있어?",
+      "nextScriptId": "ch2_balance_20"
+    },
+    {
+      "id": "ch2_balance_20",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "text": "너는 설아의 눈을 마주치지 못한다.",
+      "nextScriptId": "ch2_balance_21"
+    },
+    {
+      "id": "ch2_balance_21",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "text": "이 순간, 너는 정말로 두 세계 사이에 갇혀있다는 걸 느낀다.",
+      "nextScriptId": "ch2_balance_22"
+    },
+    {
+      "id": "ch2_balance_22",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "text": "설아의 따뜻한 손과 강리나의 긴급한 메시지...",
+      "nextScriptId": "ch2_balance_23"
+    },
+    {
+      "id": "ch2_balance_23",
+      "type": "dialogue",
+      "background": "cafe.png",
+      "text": "넌 어느 것도 포기하고 싶지 않다.",
+      "nextScriptId": "ch2_balance_choice_01"
+    },
+    {
+      "id": "ch2_balance_choice_01",
+      "type": "choice",
+      "background": "cafe.png",
+      "character": "한설아",
+      "characterImage": "한설아_sad",
+      "characterPosition": "center",
+      "text": "설아가 다시 물어본다. '정말... 뭔데?'",
+      "choices": [
+        {
+          "text": "설아와의 약속을 지키기",
+          "nextSceneFile": "Chapter2/chapter2_balance_seolah.json"
+        },
+        {
+          "text": "강리나의 긴급 상황에 응하기",
+          "nextSceneFile": "Chapter2/chapter2_balance_rina.json"
+        },
+        {
+          "text": "둘 다에게 솔직하게 말하기",
+          "nextSceneFile": "Chapter2/chapter2_balance_honest.json"
+        }
+      ]
+    }
+  ]
+}

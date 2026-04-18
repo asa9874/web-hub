@@ -1,0 +1,41 @@
+{
+  "id": "chapter1_ignorance_bliss",
+  "type": "scene",
+  "sceneId": "ignorance_bliss",
+  "title": "모르고 사는 게 낫다",
+  "chapter": 1,
+  "startId": "ign_01",
+  "lines": [
+    {
+      "id": "ign_01",
+      "type": "dialogue",
+      "background": "school_rooftop.png",
+      "character": "한설아",
+      "characterImage": "한설아_sad",
+      "characterPosition": "center",
+      "text": "아... 그렇구나. 넌 그럴 수도 있지.",
+      "nextScriptId": "ign_02"
+    },
+    {
+      "id": "ign_02",
+      "type": "dialogue",
+      "background": "school_rooftop.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "괜찮아. 그럼 이건 다 꿈이라고 생각해. 우리는 평범한 학생일 뿐이야.",
+      "nextScriptId": "ign_03"
+    },
+    {
+      "id": "ign_03",
+      "type": "dialogue",
+      "background": "school_rooftop.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "하지만... 혹시 뭔가 이상한 일이 일어나면, 내게만 말해. 약속해.",
+      "characterExit": "한설아",
+      "nextScriptId": "chapter1_week_montage_seolah"
+    }
+  ]
+}

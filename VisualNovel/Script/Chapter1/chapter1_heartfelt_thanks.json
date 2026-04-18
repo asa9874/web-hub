@@ -1,0 +1,73 @@
+{
+  "sceneId": "chapter1_heartfelt_thanks",
+  "title": "진심 어린 감사 - 최고의 친구",
+  "chapter": 1,
+  "startId": "thanks_01",
+  "lines": [
+    {
+      "id": "thanks_01",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "좋아! 우리 정말 좋은 친구가 될 거야!",
+      "nextScriptId": "thanks_02"
+    },
+    {
+      "id": "thanks_02",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "너는 뭔가... 특별한 사람이야. 그래서 더 신경 써.",
+      "nextScriptId": "thanks_03"
+    },
+    {
+      "id": "thanks_03",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "만약에 뭐 필요하면 언제든 말해. 내가 도와줄 테니까.",
+      "nextScriptId": "thanks_04"
+    },
+    {
+      "id": "thanks_04",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "그리고... 넌 내 최고의 친구야. 변하지 말아.",
+      "nextScriptId": "thanks_05"
+    },
+    {
+      "id": "thanks_05",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "우리 고등학교 3년, 정말 좋은 추억을 만들자!",
+      "nextScriptId": "thanks_06"
+    },
+    {
+      "id": "thanks_06",
+      "type": "dialogue",
+      "background": "school_gate.png",
+      "text": "둘이 함께 학교를 나온다. 벚꽃이 해질녘에 반짝인다.",
+      "characterExit": "한설아",
+      "nextScriptId": "thanks_07"
+    },
+    {
+      "id": "thanks_07",
+      "type": "dialogue",
+      "background": "none",
+      "text": "이 친구가 있어서 정말 다행이다. 고등학교는 더 이상 낯설지 않다.",
+      "nextScriptId": "transition_day2"
+    }
+  ]
+}

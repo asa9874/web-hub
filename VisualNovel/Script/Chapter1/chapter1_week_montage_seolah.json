@@ -1,0 +1,62 @@
+{
+  "id": "chapter1_week_montage_seolah",
+  "type": "scene",
+  "sceneId": "week_montage_seolah",
+  "title": "설아 루트 - 평온한 한 주",
+  "chapter": 1,
+  "startId": "week_seolah_01",
+  "lines": [
+    {
+      "id": "week_seolah_01",
+      "type": "dialogue",
+      "background": "classroom.png",
+      "text": "4일째 - 설아와 함께 하는 시간들.",
+      "nextScriptId": "week_seolah_02"
+    },
+    {
+      "id": "week_seolah_02",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "left",
+      "text": "어, 너 요즘 기분 좋아 보여. 뭐가 있었어?",
+      "nextScriptId": "week_seolah_03"
+    },
+    {
+      "id": "week_seolah_03",
+      "type": "dialogue",
+      "background": "school_courtyard.png",
+      "text": "5일째 - 강리나는 더 이상 만나지 않기로 했다.",
+      "nextScriptId": "week_seolah_04"
+    },
+    {
+      "id": "week_seolah_04",
+      "type": "dialogue",
+      "background": "school_hallway.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "left",
+      "text": "그래, 정답이야. 우리 둘이서만으로도 충분해.",
+      "nextScriptId": "week_seolah_05"
+    },
+    {
+      "id": "week_seolah_05",
+      "type": "dialogue",
+      "background": "school_entrance.png",
+      "text": "금요일 - 첫 주가 끝나간다. 평범하지만 따뜻한 일주일이었다.",
+      "nextScriptId": "week_seolah_06"
+    },
+    {
+      "id": "week_seolah_06",
+      "type": "dialogue",
+      "background": "school_entrance.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "left",
+      "text": "월요일부터도 계속 함께하자. 약속이야?",
+      "characterExit": "한설아",
+      "nextScriptId": "chapter1_ending_seolah"
+    }
+  ]
+}

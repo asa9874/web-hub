@@ -1,0 +1,41 @@
+{
+  "id": "chapter1_joining_arts",
+  "type": "scene",
+  "sceneId": "joining_arts",
+  "title": "미술동아리에 들어가다",
+  "chapter": 1,
+  "startId": "arts_1",
+  "lines": [
+    {
+      "id": "arts_1",
+      "type": "dialogue",
+      "background": "school_corridor.png",
+      "character": "한설아",
+      "characterImage": "한설아_happy",
+      "characterPosition": "center",
+      "text": "오! 미술동아리? 좋은 선택이야! 너 그림 그릴 줄 알아?",
+      "nextScriptId": "arts_2"
+    },
+    {
+      "id": "arts_2",
+      "type": "dialogue",
+      "background": "school_corridor.png",
+      "character": "한설아",
+      "characterImage": "한설아_smile",
+      "characterPosition": "center",
+      "text": "내일 동아리 활동 시간에 함께 가자! 나도 미술을 좋아해.",
+      "nextScriptId": "arts_3"
+    },
+    {
+      "id": "arts_3",
+      "type": "dialogue",
+      "background": "school_corridor.png",
+      "character": "한설아",
+      "characterImage": "한설아_normal",
+      "characterPosition": "center",
+      "text": "동아리는 정말 좋은 곳이야. 친구도 많이 사귈 수 있고.",
+      "characterExit": "한설아",
+      "nextScriptId": "transition_evening1"
+    }
+  ]
+}
