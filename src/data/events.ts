@@ -7,7 +7,8 @@ export type EventEffect =
   | { type: 'card_reward'; count: number }
   | { type: 'relic_reward'; count: number }
   | { type: 'card_upgrade' }
-  | { type: 'card_remove_free' };
+  | { type: 'card_remove_free' }
+  | { type: 'potion_reward'; count: number };
 
 export interface EventChoice {
   label: string;
@@ -106,6 +107,22 @@ export const EVENT_LIBRARY: EventData[] = [
         label: '거절한다',
         effects: [{ type: 'none' }],
         outcome: '악마는 씁쓸한 미소를 지으며 사라집니다. "다음 기회에..."',
+      },
+    ],
+  },
+  {
+    id: 'potion_stash',
+    title: '포션 창고',
+    description: '낡은 창고 문이 삐걱거리며 열립니다. 안에는 먼지 쌓인 포션들이 가득합니다. 아직 사용할 수 있을 것 같습니다.',
+    choices: [
+      {
+        label: '포션을 챙긴다',
+        effects: [{ type: 'potion_reward', count: 2 }],
+      },
+      {
+        label: '지나친다',
+        effects: [{ type: 'none' }],
+        outcome: '창고를 닫고 자리를 떠납니다. 포션은 다른 모험가가 쓸 것입니다.',
       },
     ],
   },

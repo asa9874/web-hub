@@ -1,9 +1,10 @@
 import Phaser from 'phaser';
 import { GameState } from '../GameState';
-import type { Card, Relic, ShopSceneData } from '../types';
+import type { Card, Potion, Relic, ShopSceneData } from '../types';
 
-interface ShopCardItem { card: Card; price: number; soldOut: boolean; }
+interface ShopCardItem  { card: Card;   price: number; soldOut: boolean; }
 interface ShopRelicItem { relic: Relic; price: number; soldOut: boolean; }
+interface ShopPotionItem { potion: Potion; price: number; soldOut: boolean; }
 
 const CARD_W = 190;
 const CARD_H = 270;
@@ -13,6 +14,7 @@ export class ShopScene extends Phaser.Scene {
   private returnScene = 'HubScene';
   private shopCards: ShopCardItem[] = [];
   private shopRelic: ShopRelicItem | null = null;
+  private shopPotion: ShopPotionItem | null = null;
   private content: Phaser.GameObjects.GameObject[] = [];
 
   constructor() { super({ key: 'ShopScene' }); }
@@ -43,6 +45,12 @@ export class ShopScene extends Phaser.Scene {
     this.shopRelic = relics.length > 0
       ? { relic: relics[0], price: GameState.getRelicShopPrice(relics[0]), soldOut: false }
       : null;
+
+    this.shopPotion = {
+      potion: GameState.getRandomPotion(),
+      price: GameState.getPotionShopPrice(),
+      soldOut: false,
+    };
   }
 
   // ── 콘텐츠 관리 ───────────────────────────────────────────────────────────
@@ -95,6 +103,7 @@ export class ShopScene extends Phaser.Scene {
     }).setOrigin(0.5));
 
     this.renderRemovalService();
+    if (this.shopPotion) this.renderPotionService(this.shopPotion);
     if (this.shopRelic) this.renderRelicService(this.shopRelic);
 
     // 나가기 버튼
@@ -207,7 +216,7 @@ export class ShopScene extends Phaser.Scene {
   // ── 서비스: 카드 제거 ─────────────────────────────────────────────────────
 
   private renderRemovalService(): void {
-    const cx = 320, cy = 552, W = 510, H = 155;
+    const cx = 213, cy = 552, W = 380, H = 155;
     const cost = GameState.cardRemovalCost;
     const canAfford = GameState.gold >= cost;
     const hasCards = GameState.getAllRunCards().length > 0;
@@ -252,10 +261,87 @@ export class ShopScene extends Phaser.Scene {
     }
   }
 
+  // ── 서비스: 포션 구매 ─────────────────────────────────────────────────────
+
+  private renderPotionService(item: ShopPotionItem): void {
+    const cx = 640, cy = 552, W = 380, H = 155;
+    const POTION_COLORS: Record<string, number> = {
+      heal_potion: 0x00b894,
+      strength_potion: 0xe17055,
+      explosive_potion: 0xff4757,
+      draw_potion: 0x0984e3,
+    };
+    const col = POTION_COLORS[item.potion.id] ?? 0x74b9ff;
+    const colStr = '#' + col.toString(16).padStart(6, '0');
+
+    const bg = this.track(this.add.rectangle(cx, cy, W, H, 0x161b22));
+    bg.setStrokeStyle(1, item.soldOut ? 0x30363d : col);
+
+    if (item.soldOut) {
+      this.track(this.add.text(cx, cy, '매진', {
+        fontSize: '20px', color: '#555', fontStyle: 'bold',
+      }).setOrigin(0.5));
+      return;
+    }
+
+    const slotsFull = GameState.potionSlots.every(s => s !== null);
+    const canBuy = !slotsFull && GameState.gold >= item.price;
+
+    this.track(this.add.text(cx, cy - 52, item.potion.name, {
+      fontSize: '17px', color: '#e6edf3', fontStyle: 'bold',
+    }).setOrigin(0.5));
+
+    this.track(this.add.text(cx, cy - 22, item.potion.description, {
+      fontSize: '12px', color: '#7d8590', align: 'center',
+      wordWrap: { width: W - 40 },
+    }).setOrigin(0.5));
+
+    if (slotsFull) {
+      this.track(this.add.text(cx, cy + 8, '포션 슬롯 가득참', {
+        fontSize: '12px', color: '#e17055',
+      }).setOrigin(0.5));
+    } else {
+      this.track(this.add.text(cx, cy + 8, `${item.price} G`, {
+        fontSize: '13px', color: canBuy ? '#fdcb6e' : '#e17055', fontStyle: 'bold',
+      }).setOrigin(0.5));
+    }
+
+    const btnW = W - 60, btnY = cy + 50;
+    const btnBg = this.track(this.add.rectangle(cx, btnY, btnW, 32,
+      canBuy ? 0x0d2810 : 0x1a1a1a));
+    btnBg.setStrokeStyle(1, canBuy ? col : 0x30363d);
+    const btnTxt = this.track(this.add.text(cx, btnY, '구매', {
+      fontSize: '14px', color: canBuy ? colStr : '#555',
+    }).setOrigin(0.5));
+
+    if (canBuy) {
+      (btnBg as Phaser.GameObjects.Rectangle).setInteractive({ useHandCursor: true });
+      btnBg.on('pointerover', () => {
+        (btnBg as Phaser.GameObjects.Rectangle).setFillStyle(0x1a4a28);
+        (btnTxt as Phaser.GameObjects.Text).setColor('#b0ffd8');
+      });
+      btnBg.on('pointerout', () => {
+        (btnBg as Phaser.GameObjects.Rectangle).setFillStyle(0x0d2810);
+        (btnTxt as Phaser.GameObjects.Text).setColor(colStr);
+      });
+      btnBg.on('pointerdown', () => {
+        this.showConfirmOverlay(
+          `"${item.potion.name}"을(를) ${item.price}G에 구매합니다.`,
+          () => {
+            GameState.gold -= item.price;
+            GameState.addPotion(item.potion);
+            item.soldOut = true;
+            this.showMain();
+          },
+        );
+      });
+    }
+  }
+
   // ── 서비스: 유물 구매 ─────────────────────────────────────────────────────
 
   private renderRelicService(item: ShopRelicItem): void {
-    const cx = 960, cy = 552, W = 510, H = 155;
+    const cx = 1067, cy = 552, W = 380, H = 155;
     const tierHex = item.relic.tier === 'common' ? 0x74b9ff
       : item.relic.tier === 'rare' ? 0xfdcb6e : 0xe17055;
     const tierStr = item.relic.tier === 'common' ? '#74b9ff'

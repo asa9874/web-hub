@@ -1,5 +1,6 @@
-import type { Card, Entity, Player, AttackPattern, BattleMode, Relic, RelicId, RelicTier, MapNode } from './types';
+import type { Card, Entity, Player, AttackPattern, BattleMode, Relic, RelicId, RelicTier, MapNode, Potion } from './types';
 import { generateMap } from './data/mapGenerator';
+import { POTION_LIBRARY } from './potions/potionLibrary';
 import { applyDamage, applyPoison, addStatus, tickDuration, emptyStatuses } from './utils/combat';
 import { RELIC_LIBRARY } from './relics/relicLibrary';
 import { Slime } from './monsters/Slime';
@@ -251,6 +252,7 @@ export class GameState {
   static removedCardIds: string[] = [];
   static pendingGold = 0;           // 보스/엘리트 전투 → RelicReward 경유 시 VictoryScene이 읽을 골드
   static pendingReturnScene = '';   // RelicReward → VictoryScene 경유 시 returnScene 전달용
+  static potionSlots: (Potion | null)[] = [null, null];  // 포션 슬롯 (최대 2개)
 
   // ── 맵 상태 ───────────────────────────────────────────────────────────────
   static mapSeed = 0;
@@ -455,6 +457,7 @@ export class GameState {
     GameState.removedCardIds = [];
     GameState.pendingGold = 0;
     GameState.pendingReturnScene = '';
+    GameState.potionSlots = [null, null];
     GameState.mapSeed = 0;
     GameState.mapNodes = [];
     GameState.visitedNodeKeys = [];
@@ -623,6 +626,27 @@ export class GameState {
     });
 
     return nextRowNodes.filter(n => availableCols.has(n.col));
+  }
+
+  // ── 포션 시스템 정적 메서드 ─────────────────────────────────────────────────
+
+  /** 비어있는 슬롯에 포션 추가. 슬롯 가득 차면 false 반환. */
+  static addPotion(potion: Potion): boolean {
+    const slot = GameState.potionSlots.findIndex(s => s === null);
+    if (slot === -1) return false;
+    GameState.potionSlots[slot] = potion;
+    return true;
+  }
+
+  /** 라이브러리에서 무작위 포션 1개 반환. */
+  static getRandomPotion(): Potion {
+    return POTION_LIBRARY[Math.floor(Math.random() * POTION_LIBRARY.length)];
+  }
+
+  /** 포션 상점 가격 (할인 적용). */
+  static getPotionShopPrice(): number {
+    const base = 50 + Math.floor(Math.random() * 31); // 50–80G
+    return Math.floor(base * (1 - GameState.getShopDiscount()));
   }
 
   /**

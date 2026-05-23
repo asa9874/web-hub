@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { GameState } from '../GameState';
 import type { BattleMode, Card, StatusEffects, TurnPhase } from '../types';
 import type { Monster } from '../monsters/Monster';
+import { applyDamage, addStatus } from '../utils/combat';
 
 // ── 레이아웃 상수 (1280×720) ────────────────────────────────────────────────
 const W = 1280;
@@ -53,6 +54,7 @@ export class BattleScene extends Phaser.Scene {
   private endTurnBtn!: Phaser.GameObjects.Rectangle;
 
   private cardViews: CardView[] = [];
+  private potionSlotObjs: Phaser.GameObjects.GameObject[] = [];
 
   constructor() {
     super({ key: 'BattleScene' });
@@ -80,6 +82,7 @@ export class BattleScene extends Phaser.Scene {
     this.renderPlayer();
     this.renderRelicPanel();
     this.renderPileUI();
+    this.renderPotionSlots();
     this.renderHand();
     this.renderEndTurnButton();
     this.renderBackButton();
@@ -277,6 +280,114 @@ export class BattleScene extends Phaser.Scene {
       `${player.mana}/${player.maxMana}`,
       { fontSize: '13px', color: '#8080c0' },
     ).setOrigin(0, 0.5);
+  }
+
+  /** 포션 슬롯 2개를 PILE_MANA_Y 행 좌측에 렌더링. 재호출 시 이전 오브젝트 제거. */
+  private renderPotionSlots(): void {
+    this.potionSlotObjs.forEach(o => o.destroy());
+    this.potionSlotObjs = [];
+
+    const label = this.add.text(150, PILE_MANA_Y - 20, '포션', {
+      fontSize: '10px', color: '#556688',
+    }).setOrigin(0.5);
+    this.potionSlotObjs.push(label);
+
+    const SLOT_W = 58, SLOT_H = 46;
+    const POTION_COLORS: Record<string, number> = {
+      heal_potion: 0x00b894,
+      strength_potion: 0xe17055,
+      explosive_potion: 0xff4757,
+      draw_potion: 0x0984e3,
+    };
+    const POTION_SHORT: Record<string, string> = {
+      heal_potion: '치유',
+      strength_potion: '힘',
+      explosive_potion: '폭발',
+      draw_potion: '드로우',
+    };
+
+    const slotXs = [120, 184];
+    for (let i = 0; i < 2; i++) {
+      const cx = slotXs[i];
+      const potion = GameState.potionSlots[i];
+
+      if (potion) {
+        const col = POTION_COLORS[potion.id] ?? 0x74b9ff;
+        const bg = this.add.rectangle(cx, PILE_MANA_Y, SLOT_W, SLOT_H, col, 0.22);
+        bg.setStrokeStyle(1.5, col);
+        bg.setInteractive({ useHandCursor: true });
+        this.potionSlotObjs.push(bg);
+
+        const txt = this.add.text(cx, PILE_MANA_Y - 6, POTION_SHORT[potion.id] ?? potion.name, {
+          fontSize: '10px', color: '#ffffff', fontStyle: 'bold',
+        }).setOrigin(0.5);
+        this.potionSlotObjs.push(txt);
+
+        const hint = this.add.text(cx, PILE_MANA_Y + 10, '클릭 사용', {
+          fontSize: '8px', color: '#aaaacc',
+        }).setOrigin(0.5);
+        this.potionSlotObjs.push(hint);
+
+        const slotIdx = i;
+        bg.on('pointerover', () => bg.setStrokeStyle(2, 0xffffff));
+        bg.on('pointerout',  () => bg.setStrokeStyle(1.5, col));
+        bg.on('pointerdown', () => {
+          if (this.turnPhase === 'player') this.usePotionAtSlot(slotIdx);
+        });
+      } else {
+        const bg = this.add.rectangle(cx, PILE_MANA_Y, SLOT_W, SLOT_H, 0x1a1a2e);
+        bg.setStrokeStyle(1, 0x2a2a4e);
+        this.potionSlotObjs.push(bg);
+
+        const empty = this.add.text(cx, PILE_MANA_Y, '비어있음', {
+          fontSize: '8px', color: '#333355',
+        }).setOrigin(0.5);
+        this.potionSlotObjs.push(empty);
+      }
+    }
+  }
+
+  /** 슬롯 idx의 포션을 사용. 플레이어 턴에만 호출됨. */
+  private usePotionAtSlot(slot: number): void {
+    const potion = GameState.potionSlots[slot];
+    if (!potion) return;
+    GameState.potionSlots[slot] = null;
+
+    switch (potion.id) {
+      case 'heal_potion': {
+        const heal = Math.min(20, this.gs.player.maxHp - this.gs.player.hp);
+        this.gs.player.hp += heal;
+        GameState.playerHp = this.gs.player.hp;
+        this.flashMessage(`HP +${heal} 회복!`, 0x00b894);
+        break;
+      }
+      case 'strength_potion':
+        addStatus(this.gs.player, 'strength', 3);
+        this.flashMessage('힘 +3!', 0xe17055);
+        break;
+      case 'explosive_potion': {
+        const alive = this.gs.enemies.filter(e => e.hp > 0);
+        alive.forEach(e => applyDamage(e, 10, this.gs.player));
+        this.flashMessage('폭발! 전체 10 피해', 0xff4757);
+        this.updateUI();
+        if (this.gs.enemies.every(e => e.hp <= 0)) {
+          GameState.savePlayerState(this.gs.player.hp);
+          this.cardViews.forEach(cv => cv.container.disableInteractive());
+          this.renderPotionSlots();
+          this.handleVictory();
+          return;
+        }
+        break;
+      }
+      case 'draw_potion':
+        this.gs.drawCards(3);
+        this.renderHand();
+        this.flashMessage('카드 3장 드로우!', 0x0984e3);
+        break;
+    }
+
+    this.renderPotionSlots();
+    this.updateUI();
   }
 
   /** 현재 손패를 화면 하단 중앙에 균등 배치 */

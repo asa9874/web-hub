@@ -140,6 +140,9 @@ export class EventScene extends Phaser.Scene {
     if (choice.effects.some(e => e.type === 'card_remove_free')) {
       if (GameState.getAllRunCards().length === 0) return false;
     }
+    if (choice.effects.some(e => e.type === 'potion_reward')) {
+      if (GameState.potionSlots.every(s => s !== null)) return false;
+    }
     return true;
   }
 
@@ -154,6 +157,7 @@ export class EventScene extends Phaser.Scene {
         case 'relic_reward':   parts.push('유물 획득'); break;
         case 'card_upgrade':   parts.push('카드 업그레이드'); break;
         case 'card_remove_free': parts.push('카드 제거'); break;
+        case 'potion_reward':   parts.push(`포션 ${e.count}개`); break;
       }
     }
     return parts.join(' / ');
@@ -168,6 +172,8 @@ export class EventScene extends Phaser.Scene {
       return '업그레이드 가능한 카드가 없습니다';
     if (choice.effects.some(e => e.type === 'card_remove_free'))
       return '제거할 카드가 없습니다';
+    if (choice.effects.some(e => e.type === 'potion_reward'))
+      return '포션 슬롯이 가득 찼습니다';
     return '';
   }
 
@@ -200,6 +206,17 @@ export class EventScene extends Phaser.Scene {
         case 'card_remove_free':
           inline = effect;
           break;
+        case 'potion_reward': {
+          let added = 0;
+          for (let i = 0; i < effect.count; i++) {
+            if (GameState.addPotion(GameState.getRandomPotion())) added++;
+          }
+          const outcomeText = added > 0
+            ? `포션 ${added}개를 획득했습니다!`
+            : '포션 슬롯이 가득 차 받을 수 없었습니다.';
+          this.showOutcome(choice.outcome ?? outcomeText);
+          return;
+        }
       }
     }
 

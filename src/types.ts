@@ -141,6 +141,17 @@ export interface EventSceneData {
   returnScene: string;
 }
 
+// ── 포션 시스템 타입 ───────────────────────────────────────────────────────
+
+export type PotionId = 'heal_potion' | 'strength_potion' | 'explosive_potion' | 'draw_potion';
+
+/** 전투 중 사용 가능한 일회용 소모품 */
+export interface Potion {
+  id: PotionId;
+  name: string;
+  description: string;
+}
+
 // ── 유물 시스템 타입 ───────────────────────────────────────────────────────
 
 export type RelicId =
