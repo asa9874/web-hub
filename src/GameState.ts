@@ -1,4 +1,5 @@
-import type { Card, Entity, Player, AttackPattern, BattleMode, Relic, RelicId, RelicTier } from './types';
+import type { Card, Entity, Player, AttackPattern, BattleMode, Relic, RelicId, RelicTier, MapNode } from './types';
+import { generateMap } from './data/mapGenerator';
 import { applyDamage, applyPoison, addStatus, tickDuration, emptyStatuses } from './utils/combat';
 import { RELIC_LIBRARY } from './relics/relicLibrary';
 import { Slime } from './monsters/Slime';
@@ -248,7 +249,15 @@ export class GameState {
   static equippedRelics: Relic[] = [];
   static cardRemovalCost = 75;
   static removedCardIds: string[] = [];
-  static pendingGold = 0;  // 보스/엘리트 전투 → RelicReward 경유 시 VictoryScene이 읽을 골드
+  static pendingGold = 0;           // 보스/엘리트 전투 → RelicReward 경유 시 VictoryScene이 읽을 골드
+  static pendingReturnScene = '';   // RelicReward → VictoryScene 경유 시 returnScene 전달용
+
+  // ── 맵 상태 ───────────────────────────────────────────────────────────────
+  static mapSeed = 0;
+  static mapNodes: MapNode[][] = [];
+  static visitedNodeKeys: string[] = [];
+  static currentMapNode: { row: number; col: number } | null = null;
+  static lastBattleWon = false;
 
   static readonly MAX_RELICS = 5;
 
@@ -445,6 +454,12 @@ export class GameState {
     GameState.cardRemovalCost = 75;
     GameState.removedCardIds = [];
     GameState.pendingGold = 0;
+    GameState.pendingReturnScene = '';
+    GameState.mapSeed = 0;
+    GameState.mapNodes = [];
+    GameState.visitedNodeKeys = [];
+    GameState.currentMapNode = null;
+    GameState.lastBattleWon = false;
   }
 
   // ── 유물 관련 정적 메서드 ────────────────────────────────────────────────
@@ -559,6 +574,55 @@ export class GameState {
       ...card,
       id: `${card.id}_bonus_${GameState.bonusCards.length}`,
     });
+  }
+
+  // ── 맵 시스템 정적 메서드 ─────────────────────────────────────────────────
+
+  /** 새 던전 맵을 생성. seed 생략 시 랜덤 시드 사용. */
+  static initMap(seed?: number): void {
+    GameState.mapSeed = seed ?? Math.floor(Math.random() * 999999) + 1;
+    GameState.mapNodes = generateMap(GameState.mapSeed);
+    GameState.visitedNodeKeys = [];
+    GameState.currentMapNode = null;
+    GameState.lastBattleWon = false;
+  }
+
+  /** 노드 방문 완료 표시 */
+  static markNodeVisited(row: number, col: number): void {
+    const key = `${row}_${col}`;
+    if (!GameState.visitedNodeKeys.includes(key)) {
+      GameState.visitedNodeKeys.push(key);
+    }
+  }
+
+  /** 현재 진행 상황에서 이동 가능한 노드 목록 반환 */
+  static getAvailableMapNodes(): MapNode[] {
+    const visited = new Set(GameState.visitedNodeKeys);
+    const map = GameState.mapNodes;
+    if (!map.length) return [];
+
+    // 첫 턴: row 0 전체
+    if (visited.size === 0) return map[0] ?? [];
+
+    // 방문한 최고 row 탐색
+    let maxRow = -1;
+    for (const key of visited) {
+      const r = parseInt(key.split('_')[0], 10);
+      if (r > maxRow) maxRow = r;
+    }
+
+    const nextRowNodes = map[maxRow + 1];
+    if (!nextRowNodes) return [];
+
+    // maxRow에서 방문된 노드의 connections를 모아 다음 row 가용 노드 결정
+    const availableCols = new Set<number>();
+    (map[maxRow] ?? []).forEach(node => {
+      if (visited.has(`${node.row}_${node.col}`)) {
+        node.connections.forEach(c => availableCols.add(c));
+      }
+    });
+
+    return nextRowNodes.filter(n => availableCols.has(n.col));
   }
 
   /**

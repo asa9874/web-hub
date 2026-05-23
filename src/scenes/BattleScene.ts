@@ -26,6 +26,7 @@ interface CardView {
 export class BattleScene extends Phaser.Scene {
   private gs!: GameState;
   private battleMode: BattleMode = 'default';
+  private returnScene = 'HubScene';
   private midBattleTriggered = false;
   private turnPhase: TurnPhase = 'player';
 
@@ -57,12 +58,13 @@ export class BattleScene extends Phaser.Scene {
     super({ key: 'BattleScene' });
   }
 
-  init(data: { mode?: string }): void {
+  init(data: { mode?: string; returnScene?: string }): void {
     const m = data?.mode;
     this.battleMode =
       m === 'five_monsters' || m === 'boss' || m === 'elite_giant' || m === 'elite_spider'
         ? (m as BattleMode)
         : 'default';
+    this.returnScene = data?.returnScene ?? 'HubScene';
   }
 
   create(): void {
@@ -405,7 +407,7 @@ export class BattleScene extends Phaser.Scene {
     btn.on('pointerdown', () => {
       this.cameras.main.fadeOut(280, 0, 0, 0);
       this.cameras.main.once('camerafadeoutcomplete', () => {
-        this.scene.start('HubScene');
+        this.scene.start(this.returnScene);
       });
     });
   }
@@ -677,19 +679,21 @@ export class BattleScene extends Phaser.Scene {
     this.cameras.main.once('camerafadeoutcomplete', () => {
       if (this.battleMode === 'boss') {
         GameState.pendingGold = Phaser.Math.Between(120, 160);
+        GameState.pendingReturnScene = this.returnScene;
         this.scene.start('RelicRewardScene', {
           relics: GameState.getRandomRelics('boss', 3),
           returnScene: 'VictoryScene',
         });
       } else if (this.battleMode === 'elite_giant' || this.battleMode === 'elite_spider') {
         GameState.pendingGold = Phaser.Math.Between(80, 110);
+        GameState.pendingReturnScene = this.returnScene;
         const tier = Math.random() < 0.5 ? 'common' as const : 'rare' as const;
         this.scene.start('RelicRewardScene', {
           relics: GameState.getRandomRelics(tier, 3),
           returnScene: 'VictoryScene',
         });
       } else {
-        this.scene.start('VictoryScene', { gold: Phaser.Math.Between(40, 70) });
+        this.scene.start('VictoryScene', { gold: Phaser.Math.Between(40, 70), returnScene: this.returnScene });
       }
     });
   }

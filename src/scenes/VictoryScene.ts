@@ -9,6 +9,7 @@ import type { VictorySceneData } from '../types';
  */
 export class VictoryScene extends Phaser.Scene {
   private goldEarned = 0;
+  private returnScene = 'HubScene';
 
   constructor() {
     super({ key: 'VictoryScene' });
@@ -17,6 +18,9 @@ export class VictoryScene extends Phaser.Scene {
   init(data: VictorySceneData): void {
     this.goldEarned = data?.gold ?? GameState.pendingGold;
     GameState.pendingGold = 0;
+    this.returnScene = data?.returnScene ?? (GameState.pendingReturnScene || 'HubScene');
+    GameState.pendingReturnScene = '';
+    GameState.lastBattleWon = true;
     GameState.gold += this.goldEarned;
   }
 
@@ -79,7 +83,7 @@ export class VictoryScene extends Phaser.Scene {
       this.cameras.main.once('camerafadeoutcomplete', () => {
         this.scene.start('CardRewardScene', {
           cards: GameState.getRandomRewardCards(3),
-          returnScene: 'HubScene',
+          returnScene: this.returnScene,
         });
       });
     });

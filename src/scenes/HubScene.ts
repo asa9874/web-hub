@@ -145,28 +145,34 @@ export class HubScene extends Phaser.Scene {
           this.launchScene('RelicRewardScene', { relics, returnScene: 'HubScene' });
         },
       }],
-      [190, ys[2], {
+      [128, ys[2], {
         title: '상점',
-        description: '카드 구매 / 카드 제거 / 유물 구매',
-        accentColor: 0xf0a500, cardW: 260, cardH: CH,
+        description: '카드 구매 / 제거\n유물 구매',
+        accentColor: 0xf0a500, cardW: 200, cardH: CH,
         onClick: () => this.launchScene('ShopScene', { returnScene: 'HubScene' }),
       }],
-      [490, ys[2], {
+      [384, ys[2], {
         title: '이벤트',
-        description: '선택지에 따라 보상 또는\n패널티가 주어지는 랜덤 이벤트',
-        accentColor: 0x6c5ce7, cardW: 260, cardH: CH,
+        description: '선택지에 따라\n보상 또는 패널티',
+        accentColor: 0x6c5ce7, cardW: 200, cardH: CH,
         onClick: () => this.launchScene('EventScene', { returnScene: 'HubScene' }),
       }],
-      [790, ys[2], {
+      [640, ys[2], {
+        title: '던전 탐험',
+        description: 'Act 1 맵 — 10개 노드\n전투·이벤트·상점·보스',
+        accentColor: 0x00b894, cardW: 200, cardH: CH,
+        onClick: () => this.launchScene('MapScene'),
+      }],
+      [896, ys[2], {
         title: '보스 전투',
-        description: '암흑 군주 — 페이즈 전환\n보스 유물 드롭',
-        accentColor: 0xe74c3c, cardW: 260, cardH: CH,
+        description: '암흑 군주\n페이즈 전환 보스',
+        accentColor: 0xe74c3c, cardW: 200, cardH: CH,
         onClick: () => this.launchScene('BattleScene', { mode: 'boss' }),
       }],
-      [1090, ys[2], {
+      [1152, ys[2], {
         title: '엘리트 전투',
-        description: '숲 거인 또는 독거미 여왕\n유물 드롭',
-        accentColor: 0x9b59b6, cardW: 260, cardH: CH,
+        description: '숲 거인 / 독거미 여왕\n유물 드롭',
+        accentColor: 0x9b59b6, cardW: 200, cardH: CH,
         onClick: () => this.launchScene('BattleScene', {
           mode: Math.random() < 0.5 ? 'elite_giant' : 'elite_spider',
         }),
