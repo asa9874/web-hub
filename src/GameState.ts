@@ -243,6 +243,8 @@ export class GameState {
   static playerMaxMana = 3;
   static upgradedCardIds: string[] = [];
   static equippedRelics: Relic[] = [];
+  static cardRemovalCost = 75;
+  static removedCardIds: string[] = [];
 
   static readonly MAX_RELICS = 5;
 
@@ -274,8 +276,12 @@ export class GameState {
     this.enemies.forEach(e => e.prepareNextAction());
 
     this.deck = this.shuffleArray([
-      ...CARD_LIBRARY.map(c => GameState.applyUpgrade({ ...c })),
-      ...GameState.bonusCards.map(c => GameState.applyUpgrade({ ...c })),
+      ...CARD_LIBRARY
+        .filter(c => !GameState.removedCardIds.includes(c.id))
+        .map(c => GameState.applyUpgrade({ ...c })),
+      ...GameState.bonusCards
+        .filter(c => !GameState.removedCardIds.includes(c.id))
+        .map(c => GameState.applyUpgrade({ ...c })),
     ]);
     this.discard = [];
     this.hand = [];
@@ -426,6 +432,8 @@ export class GameState {
     GameState.playerMaxMana = 3;
     GameState.upgradedCardIds = [];
     GameState.equippedRelics = [];
+    GameState.cardRemovalCost = 75;
+    GameState.removedCardIds = [];
   }
 
   // ── 유물 관련 정적 메서드 ────────────────────────────────────────────────
@@ -462,6 +470,29 @@ export class GameState {
     return GameState.hasRelic('old_coin') ? 0.1 : 0;
   }
 
+  /** 카드 상점 가격. 코스트 기준 범위 + 할인 적용. */
+  static getCardShopPrice(card: Card): number {
+    let base: number;
+    if (card.cost <= 1) base = 50 + Math.floor(Math.random() * 26);       // 50–75G
+    else if (card.cost === 2) base = 75 + Math.floor(Math.random() * 36); // 75–110G
+    else base = 120 + Math.floor(Math.random() * 61);                     // 120–180G
+    return Math.floor(base * (1 - GameState.getShopDiscount()));
+  }
+
+  /** 유물 상점 가격. 등급 기준 + 할인 적용. */
+  static getRelicShopPrice(relic: Relic): number {
+    const base = relic.tier === 'common' ? 120 : relic.tier === 'rare' ? 200 : 320;
+    return Math.floor(base * (1 - GameState.getShopDiscount()));
+  }
+
+  /** 카드를 영구 제거. 다음 전투부터 덱에서 빠짐. */
+  static removeCard(cardId: string): void {
+    if (!GameState.removedCardIds.includes(cardId)) {
+      GameState.removedCardIds.push(cardId);
+      GameState.cardRemovalCost += 25;
+    }
+  }
+
   /** 전투 종료 시 현재 HP를 정적 상태에 저장. */
   static savePlayerState(hp: number): void {
     GameState.playerHp = Math.max(0, hp);
@@ -485,8 +516,12 @@ export class GameState {
   /** 현재 런의 전체 카드 목록 (업그레이드 상태 반영). 캠프파이어 UI에서 사용. */
   static getAllRunCards(): Card[] {
     return [
-      ...CARD_LIBRARY.map(c => GameState.applyUpgrade({ ...c })),
-      ...GameState.bonusCards.map(c => GameState.applyUpgrade({ ...c })),
+      ...CARD_LIBRARY
+        .filter(c => !GameState.removedCardIds.includes(c.id))
+        .map(c => GameState.applyUpgrade({ ...c })),
+      ...GameState.bonusCards
+        .filter(c => !GameState.removedCardIds.includes(c.id))
+        .map(c => GameState.applyUpgrade({ ...c })),
     ];
   }
 

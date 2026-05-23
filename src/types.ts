@@ -117,6 +117,11 @@ export interface RestSceneData {
   returnScene: string;
 }
 
+/** ShopScene 초기화 시 전달할 데이터 구조 */
+export interface ShopSceneData {
+  returnScene: string;
+}
+
 // ── 유물 시스템 타입 ───────────────────────────────────────────────────────
 
 export type RelicId =

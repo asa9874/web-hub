@@ -91,10 +91,9 @@ export class HubScene extends Phaser.Scene {
   }
 
   private renderSceneCards(): void {
-    const CW = 330, CH = 180;
-    // 3열 × 2행 배치
+    const CW = 330, CH = 155;
     const xs = [213, 640, 1067];
-    const ys = [300, 510];
+    const ys = [285, 460, 635];
 
     const cards: [number, number, SceneCard][] = [
       [xs[0], ys[0], {
@@ -146,6 +145,12 @@ export class HubScene extends Phaser.Scene {
           this.launchScene('RelicRewardScene', { relics, returnScene: 'HubScene' });
         },
       }],
+      [640, ys[2], {
+        title: '상점',
+        description: '카드 구매 / 카드 제거 / 유물 구매',
+        accentColor: 0xf0a500, cardW: 600, cardH: CH,
+        onClick: () => this.launchScene('ShopScene', { returnScene: 'HubScene' }),
+      }],
     ];
 
     cards.forEach(([x, y, cfg]) => this.createSceneCard(x, y, cfg));
@@ -171,7 +176,7 @@ export class HubScene extends Phaser.Scene {
       wordWrap: { width: W - 48 },
     }).setOrigin(0.5);
 
-    this.add.text(x, y + 74, '클릭하여 입장', {
+    this.add.text(x, y + H / 2 - 16, '클릭하여 입장', {
       fontSize: '13px',
       color: '#' + cfg.accentColor.toString(16).padStart(6, '0'),
     }).setOrigin(0.5);
