@@ -1,5 +1,5 @@
 import type { Entity } from '../types';
-import { applyDamage } from '../utils/combat';
+import { applyDamage, addStatus } from '../utils/combat';
 import { Monster } from './Monster';
 
 export class Goblin extends Monster {
@@ -12,16 +12,16 @@ export class Goblin extends Monster {
       name: '빠른 베기',
       description: '5의 피해를 입힌다.',
       weight: 5,
-      execute: (target: Entity, _self: Entity) => applyDamage(target, 5),
+      execute: (target: Entity, self: Entity) => applyDamage(target, 5, self),
     },
     {
       id: 'goblin_double',
       name: '두 번 베기',
       description: '3의 피해를 2회 입힌다.',
       weight: 3,
-      execute: (target: Entity, _self: Entity) => {
-        applyDamage(target, 3);
-        applyDamage(target, 3);
+      execute: (target: Entity, self: Entity) => {
+        applyDamage(target, 3, self);
+        applyDamage(target, 3, self);
       },
     },
     {
@@ -30,6 +30,16 @@ export class Goblin extends Monster {
       description: '방어도 4를 획득한다.',
       weight: 2,
       execute: (_target: Entity, self: Entity) => { self.block += 4; },
+    },
+    {
+      id: 'goblin_poison',
+      name: '독 단검',
+      description: '4의 피해 + 독 2를 부여한다.',
+      weight: 2,
+      execute: (target: Entity, self: Entity) => {
+        applyDamage(target, 4, self);
+        addStatus(target, 'poison', 2);
+      },
     },
   ];
 

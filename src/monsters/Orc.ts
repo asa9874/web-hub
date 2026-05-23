@@ -1,5 +1,5 @@
 import type { Entity } from '../types';
-import { applyDamage } from '../utils/combat';
+import { applyDamage, addStatus } from '../utils/combat';
 import { Monster } from './Monster';
 
 export class Orc extends Monster {
@@ -12,7 +12,7 @@ export class Orc extends Monster {
       name: '대검 강타',
       description: '14의 피해를 입힌다.',
       weight: 4,
-      execute: (target: Entity, _self: Entity) => applyDamage(target, 14),
+      execute: (target: Entity, self: Entity) => applyDamage(target, 14, self),
     },
     {
       id: 'orc_guard',
@@ -26,7 +26,14 @@ export class Orc extends Monster {
       name: '분노의 일격',
       description: '10의 피해를 입힌다.',
       weight: 3,
-      execute: (target: Entity, _self: Entity) => applyDamage(target, 10),
+      execute: (target: Entity, self: Entity) => applyDamage(target, 10, self),
+    },
+    {
+      id: 'orc_roar',
+      name: '공포의 포효',
+      description: '약화 2를 부여한다.',
+      weight: 2,
+      execute: (target: Entity, _self: Entity) => addStatus(target, 'weak', 2),
     },
   ];
 

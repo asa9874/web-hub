@@ -1,5 +1,5 @@
 import type { Entity } from '../types';
-import { applyDamage } from '../utils/combat';
+import { applyDamage, addStatus } from '../utils/combat';
 import { Monster } from './Monster';
 
 export class Slime extends Monster {
@@ -12,16 +12,16 @@ export class Slime extends Monster {
       name: '점액 강타',
       description: '8의 피해를 입힌다.',
       weight: 5,
-      execute: (target: Entity, _self: Entity) => applyDamage(target, 8),
+      execute: (target: Entity, self: Entity) => applyDamage(target, 8, self),
     },
     {
       id: 'slime_double',
       name: '연속 공격',
       description: '5의 피해를 2회 입힌다.',
       weight: 3,
-      execute: (target: Entity, _self: Entity) => {
-        applyDamage(target, 5);
-        applyDamage(target, 5);
+      execute: (target: Entity, self: Entity) => {
+        applyDamage(target, 5, self);
+        applyDamage(target, 5, self);
       },
     },
     {
@@ -30,6 +30,13 @@ export class Slime extends Monster {
       description: '방어도 6을 획득한다.',
       weight: 2,
       execute: (_target: Entity, self: Entity) => { self.block += 6; },
+    },
+    {
+      id: 'slime_spit',
+      name: '독성 점액',
+      description: '독 2를 부여한다.',
+      weight: 2,
+      execute: (target: Entity, _self: Entity) => addStatus(target, 'poison', 2),
     },
   ];
 

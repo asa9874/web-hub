@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { GameState } from '../GameState';
-import type { BattleMode, Card, TurnPhase } from '../types';
+import type { BattleMode, Card, StatusEffects, TurnPhase } from '../types';
 import type { Monster } from '../monsters/Monster';
 
 // ── 레이아웃 상수 (1280×720) ────────────────────────────────────────────────
@@ -32,11 +32,13 @@ export class BattleScene extends Phaser.Scene {
   // ── 플레이어 UI ────────────────────────────────────────────────────────
   private txtPlayerHp!: Phaser.GameObjects.Text;
   private txtPlayerBlock!: Phaser.GameObjects.Text;
+  private txtPlayerStatus!: Phaser.GameObjects.Text;
 
   // ── 몬스터 UI 배열 (인덱스 = enemies 배열 순서) ──────────────────────
   private enemyBodies: Phaser.GameObjects.Rectangle[] = [];
   private txtEnemyHp: Phaser.GameObjects.Text[] = [];
   private txtEnemyBlock: Phaser.GameObjects.Text[] = [];
+  private txtEnemyStatus: Phaser.GameObjects.Text[] = [];
   private txtIntentLabels: Phaser.GameObjects.Text[] = [];
   private enemyDropZones: (Phaser.Geom.Rectangle | null)[] = [];
 
@@ -91,6 +93,7 @@ export class BattleScene extends Phaser.Scene {
     this.enemyBodies = [];
     this.txtEnemyHp = [];
     this.txtEnemyBlock = [];
+    this.txtEnemyStatus = [];
     this.txtIntentLabels = [];
     this.enemyDropZones = [];
 
@@ -130,12 +133,19 @@ export class BattleScene extends Phaser.Scene {
       }).setOrigin(0.5);
       this.txtEnemyBlock.push(blk);
 
+      // 상태이상
+      const statusTxt = this.add.text(cx, cy + 76, '', {
+        fontSize: '10px', color: '#a29bfe',
+        wordWrap: { width: 140 }, align: 'center',
+      }).setOrigin(0.5);
+      this.txtEnemyStatus.push(statusTxt);
+
       // 의도 표시 (다음 행동)
-      this.add.text(cx, cy + 79, '다음 행동', {
+      this.add.text(cx, cy + 91, '다음 행동', {
         fontSize: '10px', color: '#556688',
       }).setOrigin(0.5);
 
-      const intentTxt = this.add.text(cx, cy + 93, '', {
+      const intentTxt = this.add.text(cx, cy + 105, '', {
         fontSize: '12px', color: '#fdcb6e', fontStyle: 'bold',
         wordWrap: { width: 130 }, align: 'center',
       }).setOrigin(0.5);
@@ -163,6 +173,11 @@ export class BattleScene extends Phaser.Scene {
 
     this.txtPlayerBlock = this.add.text(cx, cy + 78, `방어도: ${player.block}`, {
       fontSize: '12px', color: '#74b9ff',
+    }).setOrigin(0.5);
+
+    this.txtPlayerStatus = this.add.text(cx, cy + 92, '', {
+      fontSize: '10px', color: '#a29bfe',
+      wordWrap: { width: 140 }, align: 'center',
     }).setOrigin(0.5);
   }
 
@@ -446,19 +461,31 @@ export class BattleScene extends Phaser.Scene {
 
     if (pattern) {
       this.flashMessage(`${monster.name}: ${pattern.name}`, 0xff7675);
-      this.updateUI();
+    } else if (monster.hp <= 0) {
+      this.flashMessage(`${monster.name}: 독으로 쓰러짐`, 0x55efc4);
+    }
+    this.updateUI();
 
-      if (this.gs.player.hp <= 0) {
-        this.handleGameOver();
-        return;
-      }
+    if (this.gs.player.hp <= 0) {
+      this.handleGameOver();
+      return;
+    }
+
+    // 독으로 모든 적이 사망한 경우 승리 처리
+    if (this.gs.enemies.every(e => e.hp <= 0)) {
+      const gold = Phaser.Math.Between(40, 70);
+      this.cameras.main.fadeOut(450, 0, 0, 0);
+      this.cameras.main.once('camerafadeoutcomplete', () => {
+        this.scene.start('VictoryScene', { gold });
+      });
+      return;
     }
 
     this.time.delayedCall(700, () => this.executeNextMonsterTurn(idx + 1));
   }
 
   private beginPlayerTurn(): void {
-    this.gs.startPlayerTurn();
+    const poisonDmg = this.gs.startPlayerTurn();
     this.turnPhase = 'player';
     this.renderHand();
     this.updateUI();
@@ -466,6 +493,14 @@ export class BattleScene extends Phaser.Scene {
 
     this.endTurnBtn.setFillStyle(0x27ae60);
     this.endTurnBtn.setInteractive({ useHandCursor: true });
+
+    if (poisonDmg > 0) {
+      this.flashMessage(`독 피해 -${poisonDmg}`, 0x55efc4);
+      if (this.gs.player.hp <= 0) {
+        this.handleGameOver();
+        return;
+      }
+    }
     this.flashMessage('플레이어의 턴!', 0x00b894);
   }
 
@@ -489,10 +524,12 @@ export class BattleScene extends Phaser.Scene {
 
     this.txtPlayerHp.setText(`HP ${player.hp}/${player.maxHp}`);
     this.txtPlayerBlock.setText(`방어도: ${player.block}`);
+    this.txtPlayerStatus.setText(this.formatStatuses(player.statuses));
 
     this.gs.enemies.forEach((monster, i) => {
       this.txtEnemyHp[i].setText(`HP ${monster.hp}/${monster.maxHp}`);
       this.txtEnemyBlock[i].setText(`방어도: ${monster.block}`);
+      this.txtEnemyStatus[i].setText(this.formatStatuses(monster.statuses));
       if (monster.hp <= 0 && this.enemyBodies[i].alpha > 0.5) {
         this.enemyBodies[i].setFillStyle(0x3a3a3a);
         this.enemyBodies[i].setAlpha(0.35);
@@ -580,5 +617,14 @@ export class BattleScene extends Phaser.Scene {
   private openPileViewer(cards: Card[], title: string): void {
     if (this.scene.isActive('PileViewerScene')) return;
     this.scene.launch('PileViewerScene', { cards, title });
+  }
+
+  private formatStatuses(s: StatusEffects): string {
+    const parts: string[] = [];
+    if (s.poison > 0)     parts.push(`독${s.poison}`);
+    if (s.strength > 0)   parts.push(`힘${s.strength}`);
+    if (s.vulnerable > 0) parts.push(`취약${s.vulnerable}`);
+    if (s.weak > 0)       parts.push(`약화${s.weak}`);
+    return parts.join(' ');
   }
 }

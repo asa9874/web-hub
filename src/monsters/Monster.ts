@@ -1,4 +1,5 @@
-import type { Entity, AttackPattern } from '../types';
+import type { Entity, AttackPattern, StatusEffects } from '../types';
+import { emptyStatuses } from '../utils/combat';
 
 /**
  * 몬스터 추상 기반 클래스.
@@ -12,6 +13,7 @@ export abstract class Monster implements Entity {
   hp: number;
   maxHp: number;
   block: number = 0;
+  statuses: StatusEffects;
 
   /** 이번 턴에 실행할 패턴 (플레이어 턴 중 UI에 미리 표시) */
   nextPattern: AttackPattern | null = null;
@@ -19,6 +21,7 @@ export abstract class Monster implements Entity {
   constructor(maxHp: number) {
     this.maxHp = maxHp;
     this.hp = maxHp;
+    this.statuses = emptyStatuses();
   }
 
   /** 가중치(weight) 기반 무작위 패턴 선택 */

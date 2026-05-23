@@ -1,9 +1,24 @@
+// ── 상태이상 ──────────────────────────────────────────────────────────────────
+
+/** 상태이상 종류 식별자 */
+export type StatusId = 'poison' | 'strength' | 'vulnerable' | 'weak';
+
+/**
+ * 엔티티가 가진 모든 상태이상 수치.
+ * - poison: 턴 시작 시 해당 수치의 HP 손실(방어도 무시), 이후 1 감소
+ * - strength: 모든 공격에 고정 추가 피해 (지속)
+ * - vulnerable: 해당 수치(턴)만큼 받는 피해 50% 증가, 매 턴 말 1 감소
+ * - weak: 해당 수치(턴)만큼 주는 피해 25% 감소, 매 턴 말 1 감소
+ */
+export type StatusEffects = Record<StatusId, number>;
+
 /** 전투에 참여하는 모든 개체의 공통 속성 */
 export interface Entity {
   name: string;
   hp: number;
   maxHp: number;
   block: number; // 방어도: 피해를 먼저 흡수한 뒤 남은 수치를 HP에 적용
+  statuses: StatusEffects;
 }
 
 /** 플레이어 전용 속성 — 마나 시스템 포함 */

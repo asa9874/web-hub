@@ -1,5 +1,5 @@
 import type { Entity } from '../types';
-import { applyDamage } from '../utils/combat';
+import { applyDamage, addStatus } from '../utils/combat';
 import { Monster } from './Monster';
 
 export class Skeleton extends Monster {
@@ -12,7 +12,7 @@ export class Skeleton extends Monster {
       name: '뼈 던지기',
       description: '6의 피해를 입힌다.',
       weight: 4,
-      execute: (target: Entity, _self: Entity) => applyDamage(target, 6),
+      execute: (target: Entity, self: Entity) => applyDamage(target, 6, self),
     },
     {
       id: 'skeleton_shield',
@@ -26,11 +26,18 @@ export class Skeleton extends Monster {
       name: '뼈 폭격',
       description: '3의 피해를 3회 입힌다.',
       weight: 3,
-      execute: (target: Entity, _self: Entity) => {
-        applyDamage(target, 3);
-        applyDamage(target, 3);
-        applyDamage(target, 3);
+      execute: (target: Entity, self: Entity) => {
+        applyDamage(target, 3, self);
+        applyDamage(target, 3, self);
+        applyDamage(target, 3, self);
       },
+    },
+    {
+      id: 'skeleton_curse',
+      name: '저주의 뼈',
+      description: '취약 2를 부여한다.',
+      weight: 2,
+      execute: (target: Entity, _self: Entity) => addStatus(target, 'vulnerable', 2),
     },
   ];
 
