@@ -205,6 +205,13 @@ export class GameState {
     GameState._instance = new GameState(mode);
   }
 
+  /** 전투 간 유지되는 모든 진행 상태를 초기화 (런 종료 시 호출). */
+  static hardReset(): void {
+    GameState.gold = 0;
+    GameState.bonusCards = [];
+    // _instance는 다음 reset(mode) 호출 시 재생성됨
+  }
+
   /**
    * 카드를 덱 보너스 풀에 영구 추가.
    * 다음 전투 시작 시 기본 덱 위에 함께 셔플됨.

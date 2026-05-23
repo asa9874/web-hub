@@ -83,10 +83,11 @@ export class VictoryScene extends Phaser.Scene {
       });
     });
 
-    // 메인 메뉴 버튼 (보조 — 어두운 회색)
+    // 메인 메뉴 버튼 — 런 종료: hardReset 후 허브로
     this.createButton(850, 500, '메인 메뉴', 0x21262d, 0x2d3436, () => {
       this.cameras.main.fadeOut(300, 0, 0, 0);
       this.cameras.main.once('camerafadeoutcomplete', () => {
+        GameState.hardReset();
         this.scene.start('HubScene');
       });
     });

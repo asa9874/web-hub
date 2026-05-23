@@ -174,22 +174,38 @@ export class BattleScene extends Phaser.Scene {
     const { player } = this.gs;
     const PY = PILE_Y;
 
-    // ── 덱 (좌측) ──────────────────────────────────────────────────────
+    // ── 덱 (좌측) — 클릭 시 내용 보기 ────────────────────────────────
     this.add.text(65, PY - 40, '덱', {
       fontSize: '11px', color: '#5888a8',
     }).setOrigin(0.5);
     this.add.rectangle(68, PY - 3, 40, 54, 0x1e2535).setStrokeStyle(1, 0x2d4060);
-    this.add.rectangle(65, PY, 40, 54, 0x2a3548).setStrokeStyle(1.5, 0x4080b0);
+    const deckRect = this.add.rectangle(65, PY, 40, 54, 0x2a3548);
+    deckRect.setStrokeStyle(1.5, 0x4080b0);
+    deckRect.setInteractive({ useHandCursor: true });
+    deckRect.on('pointerover', () => deckRect.setStrokeStyle(2, 0x74b9ff));
+    deckRect.on('pointerout',  () => deckRect.setStrokeStyle(1.5, 0x4080b0));
+    deckRect.on('pointerdown', () => this.openPileViewer(
+      [...this.gs.deck],
+      `덱 (${this.gs.deck.length}장)`,
+    ));
     this.txtDeckCount = this.add.text(65, PY + 36, `${this.gs.deck.length}장`, {
       fontSize: '12px', color: '#90a0b0',
     }).setOrigin(0.5);
 
-    // ── 버림 더미 (우측) ────────────────────────────────────────────────
+    // ── 버림 더미 (우측) — 클릭 시 내용 보기 ──────────────────────────
     this.add.text(1215, PY - 40, '버림', {
       fontSize: '11px', color: '#a86050',
     }).setOrigin(0.5);
     this.add.rectangle(1218, PY - 3, 40, 54, 0x1e2535).setStrokeStyle(1, 0x2d4060);
-    this.add.rectangle(1215, PY, 40, 54, 0x3d2a2a).setStrokeStyle(1.5, 0xb06040);
+    const discardRect = this.add.rectangle(1215, PY, 40, 54, 0x3d2a2a);
+    discardRect.setStrokeStyle(1.5, 0xb06040);
+    discardRect.setInteractive({ useHandCursor: true });
+    discardRect.on('pointerover', () => discardRect.setStrokeStyle(2, 0xff9f7f));
+    discardRect.on('pointerout',  () => discardRect.setStrokeStyle(1.5, 0xb06040));
+    discardRect.on('pointerdown', () => this.openPileViewer(
+      [...this.gs.discard],
+      `버림 더미 (${this.gs.discard.length}장)`,
+    ));
     this.txtDiscardCount = this.add.text(1215, PY + 36, `${this.gs.discard.length}장`, {
       fontSize: '12px', color: '#90a0b0',
     }).setOrigin(0.5);
@@ -459,6 +475,7 @@ export class BattleScene extends Phaser.Scene {
       this.time.delayedCall(1800, () => {
         this.cameras.main.fadeOut(400, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => {
+          GameState.hardReset();
           this.scene.start('HubScene');
         });
       });
@@ -557,5 +574,11 @@ export class BattleScene extends Phaser.Scene {
     const left = 200, right = 1080;
     const span = right - left;
     return Array.from({ length: n }, (_, i) => left + (span / (n - 1)) * i);
+  }
+
+  /** 덱 또는 버림 더미의 카드 목록을 그리드 오버레이로 표시. */
+  private openPileViewer(cards: Card[], title: string): void {
+    if (this.scene.isActive('PileViewerScene')) return;
+    this.scene.launch('PileViewerScene', { cards, title });
   }
 }

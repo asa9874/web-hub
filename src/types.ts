@@ -83,3 +83,9 @@ export interface CardRewardSceneData {
   cards: Card[];
   returnScene: string;
 }
+
+/** PileViewerScene 초기화 시 전달할 데이터 구조 */
+export interface PileViewerSceneData {
+  cards: Card[];
+  title: string;
+}

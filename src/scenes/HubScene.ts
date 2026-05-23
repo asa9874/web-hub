@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { GameState } from '../GameState';
 
 /** 씬 카드 버튼 설정 구조체 */
 interface SceneCard {
@@ -18,6 +19,7 @@ export class HubScene extends Phaser.Scene {
     this.cameras.main.fadeIn(350, 0, 0, 0);
     this.renderBackground();
     this.renderTitle();
+    this.renderRunStatus();
     this.renderSceneCards();
   }
 
@@ -39,6 +41,46 @@ export class HubScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     this.add.rectangle(640, 148, 860, 1, 0x21262d);
+  }
+
+  /**
+   * 현재 런 진행 상태를 표시.
+   * gold > 0 또는 보너스 카드가 있을 때만 표시하고 초기화 버튼을 제공.
+   */
+  private renderRunStatus(): void {
+    const hasProgress = GameState.gold > 0 || GameState.bonusCards.length > 0;
+
+    if (!hasProgress) {
+      this.add.text(640, 190, '새 게임을 시작하세요', {
+        fontSize: '13px', color: '#2d3436',
+      }).setOrigin(0.5);
+      return;
+    }
+
+    // 상태 배경 바
+    this.add.rectangle(640, 190, 780, 34, 0x161b22)
+      .setStrokeStyle(1, 0x21262d);
+
+    const statusText = [
+      `골드  ${GameState.gold} G`,
+      `보너스 카드  ${GameState.bonusCards.length}장`,
+    ].join('   |   ');
+
+    this.add.text(530, 190, statusText, {
+      fontSize: '13px', color: '#7d8590',
+    }).setOrigin(0, 0.5);
+
+    // 초기화 버튼
+    const resetBtn = this.add.text(940, 190, '[ 런 초기화 ]', {
+      fontSize: '12px', color: '#e17055',
+    }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+
+    resetBtn.on('pointerover', () => resetBtn.setColor('#ff9f7f'));
+    resetBtn.on('pointerout',  () => resetBtn.setColor('#e17055'));
+    resetBtn.on('pointerdown', () => {
+      GameState.hardReset();
+      this.scene.restart();
+    });
   }
 
   private renderSceneCards(): void {
