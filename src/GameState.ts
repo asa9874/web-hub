@@ -52,9 +52,14 @@ const CARD_LIBRARY: Card[] = [
 export class GameState {
   private static _instance: GameState;
 
+  /** 턴 시작 시 드로우할 카드 수 */
+  static readonly DRAW_PER_TURN = 3;
+
   player: Player;
   enemy: Monster;
-  hand: Card[];
+  hand: Card[];    // 현재 손패
+  deck: Card[];    // 뽑기 더미 (앞면 아래, 무작위 순서)
+  discard: Card[]; // 버림 더미 (사용한 카드 누적)
 
   private constructor() {
     this.player = {
@@ -67,9 +72,12 @@ export class GameState {
     };
 
     this.enemy = new Slime();
-    this.enemy.prepareNextAction(); // 첫 번째 의도 미리 결정
+    this.enemy.prepareNextAction();
 
-    this.hand = CARD_LIBRARY.map(c => ({ ...c }));
+    this.deck = this.shuffleArray(CARD_LIBRARY.map(c => ({ ...c })));
+    this.discard = [];
+    this.hand = [];
+    this.drawCards(GameState.DRAW_PER_TURN); // 전투 시작 첫 손패
   }
 
   static get instance(): GameState {
@@ -79,9 +87,34 @@ export class GameState {
     return GameState._instance;
   }
 
+  /** Fisher-Yates 알고리즘으로 배열을 제자리 셔플 */
+  private shuffleArray<T>(arr: T[]): T[] {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  /**
+   * 뽑기 더미에서 n장을 손패로 가져옴.
+   * 더미가 비면 버림 더미를 셔플해 자동으로 보충.
+   */
+  drawCards(n: number): void {
+    for (let i = 0; i < n; i++) {
+      if (this.deck.length === 0) {
+        if (this.discard.length === 0) break; // 남은 카드 없음
+        this.deck = this.shuffleArray(this.discard);
+        this.discard = [];
+      }
+      this.hand.push(this.deck.pop()!);
+    }
+  }
+
   /**
    * 카드 사용.
-   * 순서: 마나 검사 → 마나 차감 → onPlay 실행 → 패에서 제거.
+   * 순서: 마나 검사 → 마나 차감 → onPlay 실행 → 손패에서 버림 더미로 이동.
    * @returns 성공 true / 마나 부족·카드 없음 false
    */
   playCard(cardId: string, target: Entity): boolean {
@@ -94,6 +127,7 @@ export class GameState {
     this.player.mana -= card.cost;
     card.onPlay(this.player, target);
     this.hand.splice(idx, 1);
+    this.discard.push(card); // 사용된 카드는 버림 더미로
     return true;
   }
 
@@ -102,14 +136,15 @@ export class GameState {
     return this.enemy.nextPattern;
   }
 
-  /** 플레이어 턴 종료 처리 */
+  /** 플레이어 턴 종료: 남은 손패를 버림 더미로 이동 */
   endPlayerTurn(): void {
-    // Phase 2: 패 버리기, 덱에서 드로우 예정
+    this.discard.push(...this.hand);
+    this.hand = [];
   }
 
   /**
    * 몬스터 턴 실행.
-   * 턴 시작 시 방어도를 초기화한 뒤 예약된 패턴을 수행하고 다음 패턴을 예약.
+   * 방어도 초기화 후 예약 패턴을 수행하고 다음 패턴을 예약.
    * @returns 실행된 AttackPattern
    */
   executeMonsterTurn(): AttackPattern {
@@ -117,10 +152,11 @@ export class GameState {
     return this.enemy.executeTurn(this.player);
   }
 
-  /** 플레이어 턴 시작 — 방어도 초기화 및 마나 회복 */
+  /** 플레이어 턴 시작: 방어도 초기화 → 마나 회복 → 카드 드로우 */
   startPlayerTurn(): void {
     this.player.block = 0;
     this.player.mana = this.player.maxMana;
+    this.drawCards(GameState.DRAW_PER_TURN);
   }
 
   /** 상태를 초기값으로 완전히 재설정 (BattleScene 재진입 시 호출) */
