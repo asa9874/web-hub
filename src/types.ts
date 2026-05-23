@@ -67,6 +67,8 @@ export interface MapNode {
   row: number;
   col: number;
   connections: number[]; // 다음 row에서 연결된 col 인덱스 목록
+  jitterX: number;       // 렌더링 시 X 좌표 오프셋 (픽셀)
+  jitterY: number;       // 렌더링 시 Y 좌표 오프셋 (픽셀)
 }
 
 /**

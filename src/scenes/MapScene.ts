@@ -3,10 +3,16 @@ import { GameState } from '../GameState';
 import type { MapNode } from '../types';
 
 // ── 레이아웃 상수 ─────────────────────────────────────────────────────────────
-const COL_X  = [290, 640, 990];
-const ROW_Y_BASE = 648;
-const ROW_SPACING = 63;
-const NODE_R = 22;
+const COL_X       = [290, 640, 990];
+const ROW_SPACING = 90;            // row 간격 (63 → 90으로 확대)
+const ROW_TOP_PAD = 50;            // 컨테이너 상단 여백 (보스 위)
+const ROW_BOT_PAD = 50;            // 컨테이너 하단 여백
+const NODE_R      = 22;
+
+// 스크롤 영역
+const CONTENT_TOP = 70;            // 헤더 아래 맵 뷰포트 시작 y
+const CONTENT_H   = 650;           // 맵 뷰포트 높이 (720 - 70)
+const MAP_TOTAL_H = ROW_TOP_PAD + 9 * ROW_SPACING + ROW_BOT_PAD; // 50+810+50 = 910
 
 const NODE_INFO: Record<string, { fill: number; stroke: number; label: string }> = {
   battle:   { fill: 0x1a2840, stroke: 0x4a7fc1, label: '전투'   },
@@ -18,8 +24,19 @@ const NODE_INFO: Record<string, { fill: number; stroke: number; label: string }>
   treasure: { fill: 0x2a2000, stroke: 0xfdcb6e, label: '보물'   },
 };
 
+/** row → 컨테이너-로컬 y (보스=상단, 시작=하단) */
 function rowY(row: number): number {
-  return ROW_Y_BASE - row * ROW_SPACING;
+  return ROW_TOP_PAD + (9 - row) * ROW_SPACING;
+}
+
+/** 노드 컨테이너-로컬 x (지터 적용) */
+function nodeX(node: MapNode): number {
+  return COL_X[node.col] + node.jitterX;
+}
+
+/** 노드 컨테이너-로컬 y (지터 적용) */
+function nodeY(node: MapNode): number {
+  return rowY(node.row) + node.jitterY;
 }
 
 function hexStr(n: number): string {
@@ -27,10 +44,14 @@ function hexStr(n: number): string {
 }
 
 export class MapScene extends Phaser.Scene {
+  private mapContainer!: Phaser.GameObjects.Container;
+  private scrollMin = 0;
+  private scrollMax = 0;
+
   constructor() { super({ key: 'MapScene' }); }
 
   create(): void {
-    // 1. 전투 결과 처리 (먼저 처리해야 act complete 감지가 정확함)
+    // 1. 전투 결과 처리 (act complete 감지 정확도를 위해 먼저 처리)
     if (GameState.currentMapNode) {
       if (GameState.lastBattleWon) {
         const { row, col } = GameState.currentMapNode;
@@ -44,12 +65,37 @@ export class MapScene extends Phaser.Scene {
     if (GameState.mapNodes.length === 0) GameState.initMap();
 
     this.cameras.main.fadeIn(300, 0, 0, 0);
+
     this.renderBackground();
-    this.renderHeader();
+    this.setupScrollableMap(); // 맵 컨테이너 먼저 생성 (낮은 렌더 순서)
+    this.renderHeaderCover();  // 헤더 영역 불투명 오버레이 (맵 노드가 헤더 뒤로 숨음)
+    this.renderHeader();       // 헤더 텍스트
     this.renderAbandonButton();
-    this.renderMap();
+    this.addScrollHint();
 
     if (this.isActComplete()) this.showActComplete();
+  }
+
+  // ── 스크롤 컨테이너 설정 ──────────────────────────────────────────────────
+
+  private setupScrollableMap(): void {
+    // 스크롤 범위
+    this.scrollMax = CONTENT_TOP;                                     // 70
+    this.scrollMin = CONTENT_TOP - Math.max(0, MAP_TOTAL_H - CONTENT_H); // -190
+
+    // 컨테이너 초기 위치: 하단(출발 row) 표시
+    this.mapContainer = this.add.container(0, this.scrollMin);
+
+    this.renderMapContent();
+
+    // 마우스 휠: 위로 굴리면 보스 방향 표시
+    this.input.on('wheel', (_ptr: unknown, _gos: unknown, _dx: number, dy: number) => {
+      this.mapContainer.y = Phaser.Math.Clamp(
+        this.mapContainer.y - dy * 0.5,
+        this.scrollMin,
+        this.scrollMax,
+      );
+    });
   }
 
   // ── 배경·헤더 ─────────────────────────────────────────────────────────────
@@ -58,6 +104,16 @@ export class MapScene extends Phaser.Scene {
     this.add.rectangle(640, 360, 1280, 720, 0x090d14);
     this.add.rectangle(640, 2, 1280, 4, 0x6c5ce7).setOrigin(0.5, 0);
     this.add.rectangle(640, 718, 1280, 2, 0x21262d).setOrigin(0.5, 1);
+  }
+
+  /**
+   * 헤더 영역(y 0~68)을 배경색으로 덮는 불투명 오버레이.
+   * 맵 컨테이너보다 나중에 렌더되므로 스크롤 시 노드가 헤더 뒤로 자연스럽게 숨는다.
+   */
+  private renderHeaderCover(): void {
+    this.add.rectangle(640, 34, 1280, 68, 0x090d14);
+    // 상단 퍼플 라인도 재그림 (z-order 유지)
+    this.add.rectangle(640, 2, 1280, 4, 0x6c5ce7).setOrigin(0.5, 0);
   }
 
   private renderHeader(): void {
@@ -86,36 +142,46 @@ export class MapScene extends Phaser.Scene {
     });
   }
 
-  // ── 맵 렌더링 ─────────────────────────────────────────────────────────────
+  private addScrollHint(): void {
+    const hint = this.add.text(640, 714, '↑ 스크롤로 상단 탐색', {
+      fontSize: '11px', color: '#2d2d3f',
+    }).setOrigin(0.5, 1);
 
-  private renderMap(): void {
+    this.time.delayedCall(2200, () => {
+      this.tweens.add({ targets: hint, alpha: 0, duration: 900 });
+    });
+  }
+
+  // ── 맵 렌더링 (컨테이너 내부) ─────────────────────────────────────────────
+
+  private renderMapContent(): void {
     const map     = GameState.mapNodes;
     const visited = new Set(GameState.visitedNodeKeys);
     const avail   = new Set(
       GameState.getAvailableMapNodes().map(n => `${n.row}_${n.col}`),
     );
 
-    // 연결선 (단일 Graphics로 효율화)
+    // 연결선 (단일 Graphics)
     const g = this.add.graphics();
     map.forEach(rowNodes => {
       rowNodes.forEach(node => {
-        const x1 = COL_X[node.col];
-        const y1 = rowY(node.row);
+        const x1      = nodeX(node);
+        const y1      = nodeY(node);
         const curDone = visited.has(`${node.row}_${node.col}`);
 
         node.connections.forEach(nc => {
           const nxt = (map[node.row + 1] ?? []).find(n => n.col === nc);
           if (!nxt) return;
-
           const pathDone = curDone && visited.has(`${nxt.row}_${nc}`);
           g.lineStyle(2, pathDone ? 0x4a4a6a : 0x1a1a28, pathDone ? 0.85 : 0.3);
           g.beginPath();
           g.moveTo(x1, y1);
-          g.lineTo(COL_X[nc], rowY(nxt.row));
+          g.lineTo(nodeX(nxt), nodeY(nxt));
           g.strokePath();
         });
       });
     });
+    this.mapContainer.add(g);
 
     // 노드
     map.forEach(rowNodes => {
@@ -133,12 +199,14 @@ export class MapScene extends Phaser.Scene {
     const isAvail   = avail.has(key);
     const info      = NODE_INFO[node.type] ?? NODE_INFO['battle'];
 
-    const cx = COL_X[node.col];
-    const cy = rowY(node.row);
+    const cx = nodeX(node);
+    const cy = nodeY(node);
+
+    const objs: Phaser.GameObjects.GameObject[] = [];
 
     // 글로우 (가용 노드)
     if (isAvail) {
-      this.add.circle(cx, cy, NODE_R + 8, info.stroke, 0.12);
+      objs.push(this.add.circle(cx, cy, NODE_R + 8, info.stroke, 0.12));
     }
 
     // 노드 원
@@ -147,18 +215,21 @@ export class MapScene extends Phaser.Scene {
     const sw     = isAvail ? 3 : 1;
     const circle = this.add.circle(cx, cy, NODE_R, fill);
     circle.setStrokeStyle(sw, stroke);
+    objs.push(circle);
 
     // 아이콘 (첫 글자)
     const iconColor = isVisited ? '#252535' : (isAvail ? hexStr(info.stroke) : '#1c1c28');
-    this.add.text(cx, cy, info.label.charAt(0), {
+    objs.push(this.add.text(cx, cy, info.label.charAt(0), {
       fontSize: '13px', color: iconColor, fontStyle: 'bold',
-    }).setOrigin(0.5);
+    }).setOrigin(0.5));
 
     // 노드명 라벨
     const labelColor = isAvail ? hexStr(info.stroke) : (isVisited ? '#252535' : '#1c1c28');
-    this.add.text(cx, cy + NODE_R + 9, info.label, {
+    objs.push(this.add.text(cx, cy + NODE_R + 9, info.label, {
       fontSize: '10px', color: labelColor,
-    }).setOrigin(0.5);
+    }).setOrigin(0.5));
+
+    this.mapContainer.add(objs);
 
     // 인터랙션 (가용 & 미방문)
     if (isAvail && !isVisited) {

@@ -49,15 +49,69 @@ const ROW_TYPE_POOLS: NodeType[][] = [
   ['boss'],                         // row 9
 ];
 
+/** 노드 시각 오프셋 범위 */
+const JITTER_X = 45;
+const JITTER_Y = 18;
+
 function activeCols(mask: number): number[] {
   return [0, 1, 2].filter(c => (mask >> c) & 1);
 }
 
-/** 각 col에서 다음 row의 연결 col 목록 (거리 ≤1인 활성 col만) */
-function connectionsForRow(row: number): number[][] {
+type Edge = [number, number]; // [srcCol, dstCol]
+
+/** 두 엣지가 시각적으로 교차하는지 확인 */
+function crossesEdge(e1: Edge, e2: Edge): boolean {
+  // (c1-c2)와 (n1-n2)의 부호가 반대이면 교차
+  return (e1[0] - e2[0]) * (e1[1] - e2[1]) < 0;
+}
+
+/**
+ * StS 스타일 연결 생성:
+ * - 노드당 최대 2개 연결
+ * - 교차 엣지 없음
+ * - 모든 노드에 최소 1개 연결 보장
+ */
+function buildConnections(row: number, rand: () => number): number[][] {
   const curCols  = activeCols(ROW_COL_MASK[row]);
   const nextCols = activeCols(ROW_COL_MASK[row + 1] ?? 0);
-  return curCols.map(c => nextCols.filter(nc => Math.abs(nc - c) <= 1));
+  if (nextCols.length === 0) return curCols.map(() => []);
+
+  // 거리 ≤1 조건을 만족하는 후보 엣지 전부 수집
+  const candidates: Edge[] = [];
+  curCols.forEach(c => {
+    nextCols.filter(nc => Math.abs(nc - c) <= 1).forEach(nc => {
+      candidates.push([c, nc]);
+    });
+  });
+
+  // 시드 셔플로 다양성 확보
+  const shuffled = shuffle(candidates, rand);
+
+  // 탐욕적 할당: 교차 없음 & 출발 노드당 최대 2개
+  const accepted: Edge[] = [];
+  const srcCount: Record<number, number> = {};
+
+  for (const edge of shuffled) {
+    const [c] = edge;
+    if ((srcCount[c] ?? 0) >= 2) continue;
+    if (accepted.some(ae => crossesEdge(ae, edge))) continue;
+    accepted.push(edge);
+    srcCount[c] = (srcCount[c] ?? 0) + 1;
+  }
+
+  // 연결이 0개인 출발 노드에 가장 가까운 다음 col 강제 연결
+  for (const c of curCols) {
+    if ((srcCount[c] ?? 0) === 0) {
+      const closest = nextCols.reduce((best, nc) =>
+        Math.abs(nc - c) < Math.abs(best - c) ? nc : best,
+      );
+      accepted.push([c, closest]);
+    }
+  }
+
+  return curCols.map(c =>
+    accepted.filter(([ac]) => ac === c).map(([, nc]) => nc).sort((a, b) => a - b),
+  );
 }
 
 export function generateMap(seed: number): MapNode[][] {
@@ -66,13 +120,16 @@ export function generateMap(seed: number): MapNode[][] {
   return ROW_TYPE_POOLS.map((pool, row) => {
     const cols     = activeCols(ROW_COL_MASK[row]);
     const types    = row === 9 ? [...pool] : shuffle([...pool], rand);
-    const connSets = row < 9 ? connectionsForRow(row) : cols.map(() => []);
+    const connSets = row < 9 ? buildConnections(row, rand) : cols.map(() => []);
+    const isBoss   = row === 9;
 
     return cols.map((col, i) => ({
       type: types[i] as NodeType,
       row,
       col,
       connections: connSets[i],
+      jitterX: isBoss ? 0 : (rand() * 2 - 1) * JITTER_X,
+      jitterY: isBoss ? 0 : (rand() * 2 - 1) * JITTER_Y,
     }));
   });
 }
