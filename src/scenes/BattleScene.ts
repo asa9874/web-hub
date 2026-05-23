@@ -473,6 +473,7 @@ export class BattleScene extends Phaser.Scene {
 
     // 독으로 모든 적이 사망한 경우 승리 처리
     if (this.gs.enemies.every(e => e.hp <= 0)) {
+      GameState.savePlayerState(this.gs.player.hp);
       const gold = Phaser.Math.Between(40, 70);
       this.cameras.main.fadeOut(450, 0, 0, 0);
       this.cameras.main.once('camerafadeoutcomplete', () => {
@@ -577,6 +578,7 @@ export class BattleScene extends Phaser.Scene {
   private handlePostCardPlay(): void {
     if (this.gs.enemies.every(e => e.hp <= 0)) {
       this.cardViews.forEach(cv => cv.container.disableInteractive());
+      GameState.savePlayerState(this.gs.player.hp);
       const gold = Phaser.Math.Between(40, 70);
       this.cameras.main.fadeOut(450, 0, 0, 0);
       this.cameras.main.once('camerafadeoutcomplete', () => {

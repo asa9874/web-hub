@@ -7,6 +7,8 @@ interface SceneCard {
   description: string;
   accentColor: number;
   onClick: () => void;
+  cardW?: number;
+  cardH?: number;
 }
 
 /** 개발자 테스트 허브 — 각 게임 시스템으로 진입하는 메뉴 씬 */
@@ -48,7 +50,10 @@ export class HubScene extends Phaser.Scene {
    * gold > 0 또는 보너스 카드가 있을 때만 표시하고 초기화 버튼을 제공.
    */
   private renderRunStatus(): void {
-    const hasProgress = GameState.gold > 0 || GameState.bonusCards.length > 0;
+    const hasProgress = GameState.gold > 0
+      || GameState.bonusCards.length > 0
+      || GameState.playerHp < GameState.playerMaxHp
+      || GameState.upgradedCardIds.length > 0;
 
     if (!hasProgress) {
       this.add.text(640, 190, '새 게임을 시작하세요', {
@@ -58,20 +63,22 @@ export class HubScene extends Phaser.Scene {
     }
 
     // 상태 배경 바
-    this.add.rectangle(640, 190, 780, 34, 0x161b22)
+    this.add.rectangle(640, 190, 900, 34, 0x161b22)
       .setStrokeStyle(1, 0x21262d);
 
     const statusText = [
+      `HP  ${GameState.playerHp} / ${GameState.playerMaxHp}`,
       `골드  ${GameState.gold} G`,
       `보너스 카드  ${GameState.bonusCards.length}장`,
+      `업그레이드  ${GameState.upgradedCardIds.length}건`,
     ].join('   |   ');
 
-    this.add.text(530, 190, statusText, {
+    this.add.text(640, 190, statusText, {
       fontSize: '13px', color: '#7d8590',
-    }).setOrigin(0, 0.5);
+    }).setOrigin(0.5, 0.5);
 
     // 초기화 버튼
-    const resetBtn = this.add.text(940, 190, '[ 런 초기화 ]', {
+    const resetBtn = this.add.text(1060, 190, '[ 런 초기화 ]', {
       fontSize: '12px', color: '#e17055',
     }).setOrigin(0.5).setInteractive({ useHandCursor: true });
 
@@ -84,40 +91,54 @@ export class HubScene extends Phaser.Scene {
   }
 
   private renderSceneCards(): void {
-    // 전투 씬 카드 (좌측)
-    this.createSceneCard(240, 380, {
+    const CW = 360, CH = 190;
+
+    // 1행 좌: 전투 시스템
+    this.createSceneCard(320, 310, {
       title: '전투 시스템',
       description: '카드를 드래그하여 적을 공격하는\n덱 빌딩 전투 화면',
       accentColor: 0x0984e3,
+      cardW: CW, cardH: CH,
       onClick: () => this.launchScene('DialogueScene', {
         scriptId: 'battle_intro',
         returnScene: 'BattleScene',
       }),
     });
 
-    // 대화 씬 카드 (중앙)
-    this.createSceneCard(640, 380, {
+    // 1행 우: 대화 시스템
+    this.createSceneCard(960, 310, {
       title: '대화 시스템',
       description: '비주얼 노벨 형식의\n캐릭터 대화 화면',
       accentColor: 0x6c5ce7,
+      cardW: CW, cardH: CH,
       onClick: () => this.launchScene('DialogueScene', {
         scriptId: 'test_intro',
         returnScene: 'HubScene',
       }),
     });
 
-    // 5인 전투 테스트 카드 (우측)
-    this.createSceneCard(1040, 380, {
+    // 2행 좌: 5인 전투 테스트
+    this.createSceneCard(320, 530, {
       title: '5인 전투 테스트',
       description: '슬라임·고블린·오크·스켈레톤·박쥐\n5마리와의 전투 테스트',
       accentColor: 0xe17055,
+      cardW: CW, cardH: CH,
       onClick: () => this.launchScene('BattleScene', { mode: 'five_monsters' }),
+    });
+
+    // 2행 우: 캠프파이어
+    this.createSceneCard(960, 530, {
+      title: '캠프파이어',
+      description: '휴식으로 HP를 회복하거나\n카드를 업그레이드합니다',
+      accentColor: 0xff6600,
+      cardW: CW, cardH: CH,
+      onClick: () => this.launchScene('RestScene', { returnScene: 'HubScene' }),
     });
   }
 
   /** 씬 카드 버튼 하나를 생성 */
   private createSceneCard(x: number, y: number, cfg: SceneCard): void {
-    const W = 320, H = 220;
+    const W = cfg.cardW ?? 320, H = cfg.cardH ?? 220;
 
     const bg = this.add.rectangle(x, y, W, H, 0x161b22);
     bg.setStrokeStyle(2, 0x30363d);

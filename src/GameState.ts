@@ -23,6 +23,11 @@ const CARD_LIBRARY: Card[] = [
     targetType: 'single',
     description: '적에게 6의\n피해를 입힙니다.',
     onPlay: (u, targets) => applyDamage(targets[0], 6, u),
+    upgrade: (c) => {
+      c.upgraded = true;
+      c.description = '적에게 9의\n피해를 입힙니다.';
+      c.onPlay = (u, targets) => applyDamage(targets[0], 9, u);
+    },
   },
   {
     id: 'strike_b',
@@ -31,6 +36,11 @@ const CARD_LIBRARY: Card[] = [
     targetType: 'single',
     description: '적에게 6의\n피해를 입힙니다.',
     onPlay: (u, targets) => applyDamage(targets[0], 6, u),
+    upgrade: (c) => {
+      c.upgraded = true;
+      c.description = '적에게 9의\n피해를 입힙니다.';
+      c.onPlay = (u, targets) => applyDamage(targets[0], 9, u);
+    },
   },
   {
     id: 'defend_a',
@@ -39,6 +49,11 @@ const CARD_LIBRARY: Card[] = [
     targetType: 'single',
     description: '방어도 5를\n획득합니다.',
     onPlay: (u, _targets) => { u.block += 5; },
+    upgrade: (c) => {
+      c.upgraded = true;
+      c.description = '방어도 8을\n획득합니다.';
+      c.onPlay = (u, _t) => { u.block += 8; };
+    },
   },
   {
     id: 'heavy_blow',
@@ -47,6 +62,11 @@ const CARD_LIBRARY: Card[] = [
     targetType: 'single',
     description: '적에게 14의\n피해를 입힙니다.',
     onPlay: (u, targets) => applyDamage(targets[0], 14, u),
+    upgrade: (c) => {
+      c.upgraded = true;
+      c.description = '적에게 18의\n피해를 입힙니다.';
+      c.onPlay = (u, targets) => applyDamage(targets[0], 18, u);
+    },
   },
   {
     id: 'twin_strike',
@@ -58,6 +78,14 @@ const CARD_LIBRARY: Card[] = [
       applyDamage(targets[0], 5, u);
       applyDamage(targets[0], 5, u);
     },
+    upgrade: (c) => {
+      c.upgraded = true;
+      c.description = '7의 피해를\n2번 입힙니다.';
+      c.onPlay = (u, targets) => {
+        applyDamage(targets[0], 7, u);
+        applyDamage(targets[0], 7, u);
+      };
+    },
   },
   {
     id: 'explosion',
@@ -66,6 +94,11 @@ const CARD_LIBRARY: Card[] = [
     targetType: 'all',
     description: '모든 적에게\n4의 피해를 입힙니다.',
     onPlay: (u, targets) => targets.forEach(t => applyDamage(t, 4, u)),
+    upgrade: (c) => {
+      c.upgraded = true;
+      c.cost = 1;
+      c.description = '모든 적에게\n4의 피해를 입힙니다.';
+    },
   },
   {
     id: 'chain_attack',
@@ -78,6 +111,15 @@ const CARD_LIBRARY: Card[] = [
       applyDamage(targets[0], 3, u);
       applyDamage(targets[0], 3, u);
     },
+    upgrade: (c) => {
+      c.upgraded = true;
+      c.description = '4의 피해를\n3번 입힙니다.';
+      c.onPlay = (u, targets) => {
+        applyDamage(targets[0], 4, u);
+        applyDamage(targets[0], 4, u);
+        applyDamage(targets[0], 4, u);
+      };
+    },
   },
   {
     id: 'storm_blast',
@@ -86,6 +128,11 @@ const CARD_LIBRARY: Card[] = [
     targetType: 'all',
     description: '모든 적에게\n8의 피해를 입힙니다.',
     onPlay: (u, targets) => targets.forEach(t => applyDamage(t, 8, u)),
+    upgrade: (c) => {
+      c.upgraded = true;
+      c.cost = 2;
+      c.description = '모든 적에게\n8의 피해를 입힙니다.';
+    },
   },
   // ── 상태이상 카드 ──────────────────────────────────────────────────────────
   {
@@ -98,6 +145,14 @@ const CARD_LIBRARY: Card[] = [
       applyDamage(targets[0], 5, u);
       addStatus(targets[0], 'poison', 3);
     },
+    upgrade: (c) => {
+      c.upgraded = true;
+      c.description = '8의 피해 +\n독 4를 부여합니다.';
+      c.onPlay = (u, targets) => {
+        applyDamage(targets[0], 8, u);
+        addStatus(targets[0], 'poison', 4);
+      };
+    },
   },
   {
     id: 'toxic_cloud',
@@ -106,6 +161,11 @@ const CARD_LIBRARY: Card[] = [
     targetType: 'single',
     description: '대상에게\n독 5를 부여합니다.',
     onPlay: (_u, targets) => addStatus(targets[0], 'poison', 5),
+    upgrade: (c) => {
+      c.upgraded = true;
+      c.description = '대상에게\n독 8을 부여합니다.';
+      c.onPlay = (_u, targets) => addStatus(targets[0], 'poison', 8);
+    },
   },
   {
     id: 'weaken',
@@ -117,6 +177,14 @@ const CARD_LIBRARY: Card[] = [
       applyDamage(targets[0], 8, u);
       addStatus(targets[0], 'vulnerable', 2);
     },
+    upgrade: (c) => {
+      c.upgraded = true;
+      c.description = '11의 피해 +\n취약 2를 부여합니다.';
+      c.onPlay = (u, targets) => {
+        applyDamage(targets[0], 11, u);
+        addStatus(targets[0], 'vulnerable', 2);
+      };
+    },
   },
   {
     id: 'empower',
@@ -125,6 +193,11 @@ const CARD_LIBRARY: Card[] = [
     targetType: 'single',
     description: '힘 2를 획득합니다.\n(자신에게 적용)',
     onPlay: (u, _targets) => addStatus(u, 'strength', 2),
+    upgrade: (c) => {
+      c.upgraded = true;
+      c.description = '힘 3을 획득합니다.\n(자신에게 적용)';
+      c.onPlay = (u, _t) => addStatus(u, 'strength', 3);
+    },
   },
   {
     id: 'mass_poison',
@@ -133,6 +206,11 @@ const CARD_LIBRARY: Card[] = [
     targetType: 'all',
     description: '모든 적에게\n독 3을 부여합니다.',
     onPlay: (_u, targets) => targets.forEach(t => addStatus(t, 'poison', 3)),
+    upgrade: (c) => {
+      c.upgraded = true;
+      c.cost = 1;
+      c.description = '모든 적에게\n독 3을 부여합니다.';
+    },
   },
 ];
 
@@ -146,6 +224,9 @@ export class GameState {
   // ── 전투 간 유지되는 정적 상태 ──────────────────────────────────────────
   static gold = 0;
   static bonusCards: Card[] = [];
+  static playerHp = 80;
+  static playerMaxHp = 80;
+  static upgradedCardIds: string[] = [];
 
   player: Player;
   enemies: Monster[];  // 최대 5마리
@@ -156,8 +237,8 @@ export class GameState {
   private constructor(mode: BattleMode = 'default') {
     this.player = {
       name: '영웅',
-      hp: 80,
-      maxHp: 80,
+      hp: GameState.playerHp,
+      maxHp: GameState.playerMaxHp,
       block: 0,
       mana: 3,
       maxMana: 3,
@@ -172,8 +253,8 @@ export class GameState {
     this.enemies.forEach(e => e.prepareNextAction());
 
     this.deck = this.shuffleArray([
-      ...CARD_LIBRARY.map(c => ({ ...c })),
-      ...GameState.bonusCards.map(c => ({ ...c })),
+      ...CARD_LIBRARY.map(c => GameState.applyUpgrade({ ...c })),
+      ...GameState.bonusCards.map(c => GameState.applyUpgrade({ ...c })),
     ]);
     this.discard = [];
     this.hand = [];
@@ -279,6 +360,44 @@ export class GameState {
   static hardReset(): void {
     GameState.gold = 0;
     GameState.bonusCards = [];
+    GameState.playerHp = 80;
+    GameState.playerMaxHp = 80;
+    GameState.upgradedCardIds = [];
+  }
+
+  /** 전투 종료 시 현재 HP를 정적 상태에 저장. */
+  static savePlayerState(hp: number): void {
+    GameState.playerHp = Math.max(0, hp);
+  }
+
+  /** 캠프파이어 휴식 — 최대 HP의 30%를 회복. 실제 회복량 반환. */
+  static restHeal(): number {
+    const heal = Math.floor(GameState.playerMaxHp * 0.3);
+    const actual = Math.min(heal, GameState.playerMaxHp - GameState.playerHp);
+    GameState.playerHp += actual;
+    return actual;
+  }
+
+  /** 카드 업그레이드 ID 등록. 다음 전투부터 적용. */
+  static upgradeCard(cardId: string): void {
+    if (!GameState.upgradedCardIds.includes(cardId)) {
+      GameState.upgradedCardIds.push(cardId);
+    }
+  }
+
+  /** 현재 런의 전체 카드 목록 (업그레이드 상태 반영). 캠프파이어 UI에서 사용. */
+  static getAllRunCards(): Card[] {
+    return [
+      ...CARD_LIBRARY.map(c => GameState.applyUpgrade({ ...c })),
+      ...GameState.bonusCards.map(c => GameState.applyUpgrade({ ...c })),
+    ];
+  }
+
+  private static applyUpgrade(copy: Card): Card {
+    if (GameState.upgradedCardIds.includes(copy.id) && copy.upgrade) {
+      copy.upgrade(copy);
+    }
+    return copy;
   }
 
   /**

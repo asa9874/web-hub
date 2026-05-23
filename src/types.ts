@@ -40,6 +40,8 @@ export interface Card {
   description: string;
   targetType: 'single' | 'all';
   onPlay: (user: Player, targets: Entity[]) => void;
+  upgraded?: boolean;
+  upgrade?: (self: Card) => void;
 }
 
 // ── 턴 시스템 타입 ─────────────────────────────────────────────────────────
@@ -103,4 +105,9 @@ export interface CardRewardSceneData {
 export interface PileViewerSceneData {
   cards: Card[];
   title: string;
+}
+
+/** RestScene 초기화 시 전달할 데이터 구조 */
+export interface RestSceneData {
+  returnScene: string;
 }
