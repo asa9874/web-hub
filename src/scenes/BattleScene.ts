@@ -3,6 +3,8 @@ import { GameState } from '../GameState';
 import type { BattleMode, Card, StatusEffects, TurnPhase } from '../types';
 import type { Monster } from '../monsters/Monster';
 import { applyDamage, addStatus } from '../utils/combat';
+import { shakeObject, flashHit, spawnDamageNumber, spawnHealNumber, playDeathTween } from '../utils/fx';
+import { sfx } from '../audio/SoundManager';
 
 // ── 레이아웃 상수 (1280×720) ────────────────────────────────────────────────
 const W = 1280;
@@ -38,6 +40,8 @@ export class BattleScene extends Phaser.Scene {
 
   // ── 몬스터 UI 배열 (인덱스 = enemies 배열 순서) ──────────────────────
   private enemyBodies: Phaser.GameObjects.Rectangle[] = [];
+  private enemyBodyColors: number[] = [];       // 원래 채우기 색 (flashHit 복원용)
+  private enemyDeathTriggered: boolean[] = [];  // 사망 애니메이션 중복 방지
   private txtEnemyHp: Phaser.GameObjects.Text[] = [];
   private txtEnemyBlock: Phaser.GameObjects.Text[] = [];
   private txtEnemyStatus: Phaser.GameObjects.Text[] = [];
@@ -101,6 +105,8 @@ export class BattleScene extends Phaser.Scene {
   /** 전투 모드에 맞게 몬스터 슬롯을 동적으로 생성 */
   private renderEnemies(): void {
     this.enemyBodies = [];
+    this.enemyBodyColors = [];
+    this.enemyDeathTriggered = [];
     this.txtEnemyHp = [];
     this.txtEnemyBlock = [];
     this.txtEnemyStatus = [];
@@ -137,6 +143,8 @@ export class BattleScene extends Phaser.Scene {
       const body = this.add.rectangle(cx, cy, bodyW, bodyH, bodyColor);
       body.setStrokeStyle(2, strokeColor);
       this.enemyBodies.push(body);
+      this.enemyBodyColors.push(bodyColor);
+      this.enemyDeathTriggered.push(false);
 
       // 보스/엘리트 배지
       if (isBossMonster) {
@@ -353,11 +361,13 @@ export class BattleScene extends Phaser.Scene {
     if (!potion) return;
     GameState.potionSlots[slot] = null;
 
+    sfx.playPotion();
     switch (potion.id) {
       case 'heal_potion': {
         const heal = Math.min(20, this.gs.player.maxHp - this.gs.player.hp);
         this.gs.player.hp += heal;
         GameState.playerHp = this.gs.player.hp;
+        spawnHealNumber(this, PLAYER_CX, PLAYER_CY - 30, heal);
         this.flashMessage(`HP +${heal} 회복!`, 0x00b894);
         break;
       }
@@ -367,7 +377,14 @@ export class BattleScene extends Phaser.Scene {
         break;
       case 'explosive_potion': {
         const alive = this.gs.enemies.filter(e => e.hp > 0);
+        const hpBefore = this.gs.enemies.map(e => e.hp);
         alive.forEach(e => applyDamage(e, 10, this.gs.player));
+        const positions = this.getEnemyPositions(this.gs.enemies.length);
+        this.gs.enemies.forEach((enemy, i) => {
+          const dmg = hpBefore[i] - enemy.hp;
+          if (dmg > 0) spawnDamageNumber(this, positions[i], ENEMY_CY + 35, dmg);
+        });
+        this.cameras.main.shake(180, 0.006);
         this.flashMessage('폭발! 전체 10 피해', 0xff4757);
         this.updateUI();
         if (this.gs.enemies.every(e => e.hp <= 0)) {
@@ -382,6 +399,7 @@ export class BattleScene extends Phaser.Scene {
       case 'draw_potion':
         this.gs.drawCards(3);
         this.renderHand();
+        sfx.playCardDraw();
         this.flashMessage('카드 3장 드로우!', 0x0984e3);
         break;
     }
@@ -521,6 +539,28 @@ export class BattleScene extends Phaser.Scene {
         this.scene.start(this.returnScene);
       });
     });
+
+    this.renderMuteButton();
+  }
+
+  private renderMuteButton(): void {
+    const bx = 140, by = 24;
+    const getLabel = () => sfx.muted ? '🔇' : '🔊';
+
+    const btn = this.add.rectangle(bx, by, 38, 28, 0x2d3436);
+    btn.setStrokeStyle(1, 0x636e72);
+    btn.setInteractive({ useHandCursor: true });
+
+    const txt = this.add.text(bx, by, getLabel(), {
+      fontSize: '14px',
+    }).setOrigin(0.5);
+
+    btn.on('pointerover', () => btn.setFillStyle(0x3d4451));
+    btn.on('pointerout', () => btn.setFillStyle(0x2d3436));
+    btn.on('pointerdown', () => {
+      sfx.toggleMute();
+      txt.setText(getLabel());
+    });
   }
 
   // ── 드래그 앤 드롭 ─────────────────────────────────────────────────────────
@@ -528,6 +568,7 @@ export class BattleScene extends Phaser.Scene {
   private setupDragDrop(): void {
     this.input.on('dragstart', (_p: unknown, obj: unknown) => {
       (obj as Phaser.GameObjects.Container).setDepth(10);
+      sfx.playCardPickup();
     });
 
     this.input.on('drag', (_p: unknown, obj: unknown, dragX: number, dragY: number) => {
@@ -556,10 +597,30 @@ export class BattleScene extends Phaser.Scene {
       }
 
       if (targetMonster) {
+        const card = this.gs.hand.find(c => c.id === view.cardId);
+        const isAttack = card?.cardType === 'attack';
+        const hpBefore = this.gs.enemies.map(e => e.hp);
+
         const success = this.gs.playCard(view.cardId, targetMonster);
         if (success) {
+          isAttack ? sfx.playAttack() : sfx.playDefend();
           container.destroy();
           this.cardViews = this.cardViews.filter(cv => cv !== view);
+
+          // 피격 이펙트 — HP 변화가 있는 적에게 적용
+          const positions = this.getEnemyPositions(this.gs.enemies.length);
+          let maxDmg = 0;
+          this.gs.enemies.forEach((enemy, i) => {
+            const dmg = hpBefore[i] - enemy.hp;
+            if (dmg > 0) {
+              spawnDamageNumber(this, positions[i], ENEMY_CY + 35, dmg);
+              shakeObject(this, this.enemyBodies[i]);
+              flashHit(this, this.enemyBodies[i], this.enemyBodyColors[i]);
+              maxDmg = Math.max(maxDmg, dmg);
+            }
+          });
+          if (maxDmg >= 10) this.cameras.main.shake(130, 0.004);
+
           this.updateUI();
           this.handlePostCardPlay();
         } else {
@@ -631,6 +692,7 @@ export class BattleScene extends Phaser.Scene {
     }
 
     const monster = this.gs.enemies[idx];
+    const playerHpBefore = this.gs.player.hp;
     const pattern = this.gs.executeMonsterTurn(idx);
 
     if (pattern) {
@@ -638,6 +700,13 @@ export class BattleScene extends Phaser.Scene {
     } else if (monster.hp <= 0) {
       this.flashMessage(`${monster.name}: 독으로 쓰러짐`, 0x55efc4);
     }
+
+    const playerDmg = playerHpBefore - this.gs.player.hp;
+    if (playerDmg > 0) {
+      spawnDamageNumber(this, PLAYER_CX, PLAYER_CY - 30, playerDmg);
+      this.cameras.main.shake(90, 0.0035);
+    }
+
     this.updateUI();
 
     if (this.gs.player.hp <= 0) {
@@ -666,12 +735,15 @@ export class BattleScene extends Phaser.Scene {
     this.endTurnBtn.setInteractive({ useHandCursor: true });
 
     if (poisonDmg > 0) {
+      sfx.playPoison();
+      spawnDamageNumber(this, PLAYER_CX, PLAYER_CY - 30, poisonDmg, '#55efc4');
       this.flashMessage(`독 피해 -${poisonDmg}`, 0x55efc4);
       if (this.gs.player.hp <= 0) {
         this.handleGameOver();
         return;
       }
     }
+    sfx.playCardDraw();
     this.flashMessage('플레이어의 턴!', 0x00b894);
   }
 
@@ -701,11 +773,11 @@ export class BattleScene extends Phaser.Scene {
       this.txtEnemyHp[i].setText(`HP ${monster.hp}/${monster.maxHp}`);
       this.txtEnemyBlock[i].setText(`방어도: ${monster.block}`);
       this.txtEnemyStatus[i].setText(this.formatStatuses(monster.statuses));
-      if (monster.hp <= 0 && this.enemyBodies[i].alpha > 0.5) {
-        this.enemyBodies[i].setFillStyle(0x3a3a3a);
-        this.enemyBodies[i].setAlpha(0.35);
-        // 드롭 존 무효화 (죽은 적에게 카드 사용 불가)
+      if (monster.hp <= 0 && !this.enemyDeathTriggered[i]) {
+        this.enemyDeathTriggered[i] = true;
         this.enemyDropZones[i] = null;
+        sfx.playMonsterDeath();
+        playDeathTween(this, this.enemyBodies[i]);
       }
     });
 
@@ -759,6 +831,8 @@ export class BattleScene extends Phaser.Scene {
       if (monster.hp > 0 && 'checkPhaseTransition' in monster) {
         const boss = monster as unknown as { checkPhaseTransition(): boolean; phaseChangeMessage: string };
         if (boss.checkPhaseTransition()) {
+          sfx.playBossPhase();
+          this.cameras.main.shake(300, 0.008);
           this.flashMessage(boss.phaseChangeMessage, 0xff4757);
           this.updateAllIntents();
         }
@@ -786,6 +860,7 @@ export class BattleScene extends Phaser.Scene {
    * - 일반: VictoryScene에 gold 직접 전달
    */
   private handleVictory(): void {
+    sfx.playVictory();
     this.cameras.main.fadeOut(450, 0, 0, 0);
     this.cameras.main.once('camerafadeoutcomplete', () => {
       if (this.battleMode === 'boss') {
