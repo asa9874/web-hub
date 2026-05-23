@@ -25,6 +25,24 @@ export interface Card {
   onPlay: (user: Player, target: Entity) => void;
 }
 
+// ── 턴 시스템 타입 ─────────────────────────────────────────────────────────
+
+/** 현재 턴 소유자 */
+export type TurnPhase = 'player' | 'monster';
+
+/**
+ * 몬스터 행동 패턴.
+ * 새 패턴 추가 = 이 인터페이스를 따르는 객체 한 개 추가.
+ * weight가 클수록 선택 확률이 높음.
+ */
+export interface AttackPattern {
+  id: string;
+  name: string;
+  description: string;
+  weight: number;
+  execute: (target: Entity, self: Entity) => void;
+}
+
 // ── 대화 시스템 타입 ──────────────────────────────────────────────────────
 
 /** 대화에서 말하는 주체의 역할 */

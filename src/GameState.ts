@@ -1,11 +1,7 @@
-import type { Card, Entity, Player } from './types';
-
-/** 방어도를 먼저 소모하고 남은 수치를 HP에 적용하는 순수 헬퍼 */
-function applyDamage(target: Entity, amount: number): void {
-  const absorbed = Math.min(target.block, amount);
-  target.block -= absorbed;
-  target.hp = Math.max(0, target.hp - (amount - absorbed));
-}
+import type { Card, Entity, Player, AttackPattern } from './types';
+import { applyDamage } from './utils/combat';
+import { Slime } from './monsters/Slime';
+import type { Monster } from './monsters/Monster';
 
 /**
  * 카드 라이브러리.
@@ -57,11 +53,10 @@ export class GameState {
   private static _instance: GameState;
 
   player: Player;
-  enemy: Entity;
+  enemy: Monster;
   hand: Card[];
 
   private constructor() {
-    // 플레이어 초기 상태
     this.player = {
       name: '영웅',
       hp: 80,
@@ -71,15 +66,9 @@ export class GameState {
       maxMana: 3,
     };
 
-    // 적 초기 상태
-    this.enemy = {
-      name: '슬라임',
-      hp: 50,
-      maxHp: 50,
-      block: 0,
-    };
+    this.enemy = new Slime();
+    this.enemy.prepareNextAction(); // 첫 번째 의도 미리 결정
 
-    // 초기 패: 라이브러리를 얕게 복사해 독립된 인스턴스로 사용
     this.hand = CARD_LIBRARY.map(c => ({ ...c }));
   }
 
@@ -108,16 +97,34 @@ export class GameState {
     return true;
   }
 
-  /** 턴 종료: 마나 회복 및 플레이어 방어도 초기화 */
-  endTurn(): void {
-    this.player.mana = this.player.maxMana;
+  /** 몬스터의 다음 예약 행동 (UI 의도 표시용) */
+  get monsterIntent(): AttackPattern | null {
+    return this.enemy.nextPattern;
+  }
+
+  /** 플레이어 턴 종료 처리 */
+  endPlayerTurn(): void {
+    // Phase 2: 패 버리기, 덱에서 드로우 예정
+  }
+
+  /**
+   * 몬스터 턴 실행.
+   * 턴 시작 시 방어도를 초기화한 뒤 예약된 패턴을 수행하고 다음 패턴을 예약.
+   * @returns 실행된 AttackPattern
+   */
+  executeMonsterTurn(): AttackPattern {
+    this.enemy.block = 0;
+    return this.enemy.executeTurn(this.player);
+  }
+
+  /** 플레이어 턴 시작 — 방어도 초기화 및 마나 회복 */
+  startPlayerTurn(): void {
     this.player.block = 0;
-    // Phase 2: 적 행동 및 새 카드 드로우 추가 예정
+    this.player.mana = this.player.maxMana;
   }
 
   /** 상태를 초기값으로 완전히 재설정 (BattleScene 재진입 시 호출) */
   static reset(): void {
-    // private 생성자는 클래스 내부에서 호출 가능
     GameState._instance = new GameState();
   }
 }
