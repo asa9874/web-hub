@@ -24,3 +24,29 @@ export interface Card {
   description: string; // 화면에 표시될 카드 설명 (한국어)
   onPlay: (user: Player, target: Entity) => void;
 }
+
+// ── 대화 시스템 타입 ──────────────────────────────────────────────────────
+
+/** 대화에서 말하는 주체의 역할 */
+export type SpeakerRole = 'protagonist' | 'other' | 'narrator';
+
+/** 대화 스크립트의 한 줄 */
+export interface DialogueLine {
+  speaker: SpeakerRole;
+  characterName?: string; // 대화창에 표시될 이름 (narrator는 생략)
+  text: string;
+}
+
+/** 하나의 완전한 대화 시퀀스 */
+export interface DialogueScript {
+  id: string;
+  showOtherCharacter: boolean; // 우측 캐릭터 표시 여부
+  lines: DialogueLine[];
+}
+
+/** DialogueScene 초기화 시 전달할 데이터 구조 */
+export interface DialogueSceneData {
+  scriptId: string;     // 재생할 스크립트 ID
+  returnScene: string;  // 완료 후 돌아갈 씬 키
+  resumeScene?: string; // 설정 시 returnScene 대신 이 씬을 재개 (전투 중간 대화에 사용)
+}

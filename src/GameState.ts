@@ -114,4 +114,10 @@ export class GameState {
     this.player.block = 0;
     // Phase 2: 적 행동 및 새 카드 드로우 추가 예정
   }
+
+  /** 상태를 초기값으로 완전히 재설정 (BattleScene 재진입 시 호출) */
+  static reset(): void {
+    // private 생성자는 클래스 내부에서 호출 가능
+    GameState._instance = new GameState();
+  }
 }
