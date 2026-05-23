@@ -122,6 +122,12 @@ export interface ShopSceneData {
   returnScene: string;
 }
 
+/** EventScene 초기화 시 전달할 데이터 구조 */
+export interface EventSceneData {
+  eventId?: string;  // 생략 시 랜덤 이벤트
+  returnScene: string;
+}
+
 // ── 유물 시스템 타입 ───────────────────────────────────────────────────────
 
 export type RelicId =

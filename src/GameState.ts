@@ -485,11 +485,18 @@ export class GameState {
     return Math.floor(base * (1 - GameState.getShopDiscount()));
   }
 
-  /** 카드를 영구 제거. 다음 전투부터 덱에서 빠짐. */
+  /** 카드를 영구 제거 (상점). 다음 전투부터 덱에서 빠지며 제거 비용 +25. */
   static removeCard(cardId: string): void {
     if (!GameState.removedCardIds.includes(cardId)) {
       GameState.removedCardIds.push(cardId);
       GameState.cardRemovalCost += 25;
+    }
+  }
+
+  /** 카드를 영구 제거 (이벤트 무료). 비용 증가 없음. */
+  static removeCardFree(cardId: string): void {
+    if (!GameState.removedCardIds.includes(cardId)) {
+      GameState.removedCardIds.push(cardId);
     }
   }
 

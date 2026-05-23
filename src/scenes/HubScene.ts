@@ -145,11 +145,17 @@ export class HubScene extends Phaser.Scene {
           this.launchScene('RelicRewardScene', { relics, returnScene: 'HubScene' });
         },
       }],
-      [640, ys[2], {
+      [350, ys[2], {
         title: '상점',
         description: '카드 구매 / 카드 제거 / 유물 구매',
-        accentColor: 0xf0a500, cardW: 600, cardH: CH,
+        accentColor: 0xf0a500, cardW: 500, cardH: CH,
         onClick: () => this.launchScene('ShopScene', { returnScene: 'HubScene' }),
+      }],
+      [930, ys[2], {
+        title: '이벤트',
+        description: '선택지에 따라 보상 또는\n패널티가 주어지는 랜덤 이벤트',
+        accentColor: 0x6c5ce7, cardW: 500, cardH: CH,
+        onClick: () => this.launchScene('EventScene', { returnScene: 'HubScene' }),
       }],
     ];
 
