@@ -23,8 +23,9 @@ export interface Entity {
 
 /** 플레이어 전용 속성 — 마나 시스템 포함 */
 export interface Player extends Entity {
-  mana: number;    // 현재 마나
-  maxMana: number; // 최대 마나 (턴 시작 시 이 값으로 회복)
+  mana: number;
+  maxMana: number;
+  bonusDmg: number; // 유물(Blood Sword 등)에서 오는 일시적 공격 보너스
 }
 
 /**
@@ -33,12 +34,16 @@ export interface Player extends Entity {
  * - targetType 'single': primaryTarget 1개만 targets에 담겨 전달
  * - targetType 'all':    살아있는 모든 적이 targets에 담겨 전달
  */
+/** 카드 종류 — Flame Amulet 등 일부 유물이 cardType을 참조 */
+export type CardType = 'attack' | 'skill';
+
 export interface Card {
   id: string;
   name: string;
   cost: number;
   description: string;
   targetType: 'single' | 'all';
+  cardType?: CardType;
   onPlay: (user: Player, targets: Entity[]) => void;
   upgraded?: boolean;
   upgrade?: (self: Card) => void;
@@ -109,5 +114,31 @@ export interface PileViewerSceneData {
 
 /** RestScene 초기화 시 전달할 데이터 구조 */
 export interface RestSceneData {
+  returnScene: string;
+}
+
+// ── 유물 시스템 타입 ───────────────────────────────────────────────────────
+
+export type RelicId =
+  | 'flame_amulet'
+  | 'bone_ring'
+  | 'toxic_crystal'
+  | 'blood_sword'
+  | 'old_coin'
+  | 'mana_crystal';
+
+export type RelicTier = 'common' | 'rare' | 'boss';
+
+/** 전투 간 지속되는 패시브 아이템 */
+export interface Relic {
+  id: RelicId;
+  name: string;
+  description: string;
+  tier: RelicTier;
+}
+
+/** RelicRewardScene 초기화 시 전달할 데이터 구조 */
+export interface RelicRewardSceneData {
+  relics: Relic[];
   returnScene: string;
 }

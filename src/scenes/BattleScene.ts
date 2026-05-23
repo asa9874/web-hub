@@ -72,6 +72,7 @@ export class BattleScene extends Phaser.Scene {
     this.renderBackground();
     this.renderEnemies();
     this.renderPlayer();
+    this.renderRelicPanel();
     this.renderPileUI();
     this.renderHand();
     this.renderEndTurnButton();
@@ -327,6 +328,36 @@ export class BattleScene extends Phaser.Scene {
     this.endTurnBtn.on('pointerdown', () => {
       if (this.turnPhase !== 'player') return;
       this.startMonsterTurn();
+    });
+  }
+
+  /** 장착된 유물 목록을 왼쪽 상단에 표시 (전투 중 변하지 않으므로 1회만 그림) */
+  private renderRelicPanel(): void {
+    const relics = GameState.equippedRelics;
+    const px = 10, py = 44;
+
+    this.add.text(px, py, '유물', {
+      fontSize: '10px', color: '#444455',
+    });
+
+    if (relics.length === 0) {
+      this.add.text(px, py + 14, '없음', {
+        fontSize: '10px', color: '#333344',
+      });
+      return;
+    }
+
+    const TIER_DOT: Record<string, string> = {
+      common: '#74b9ff', rare: '#fdcb6e', boss: '#e17055',
+    };
+
+    relics.forEach((r, i) => {
+      const dotColor = TIER_DOT[r.tier] ?? '#aaaaaa';
+      const dot = this.add.circle(px + 5, py + 16 + i * 17, 4, parseInt(dotColor.replace('#', ''), 16));
+      dot.setAlpha(0.9);
+      this.add.text(px + 14, py + 10 + i * 17, r.name, {
+        fontSize: '10px', color: '#8888aa',
+      });
     });
   }
 

@@ -14,9 +14,13 @@ export function emptyStatuses(): StatusEffects {
  */
 export function applyDamage(target: Entity, amount: number, attacker?: Entity): void {
   let dmg = amount;
-  if (attacker && attacker.statuses.strength > 0) dmg += attacker.statuses.strength;
-  if (attacker && attacker.statuses.weak > 0)     dmg = Math.floor(dmg * 0.75);
-  if (target.statuses.vulnerable > 0)              dmg = Math.floor(dmg * 1.5);
+  if (attacker) {
+    if (attacker.statuses.strength > 0) dmg += attacker.statuses.strength;
+    const bonus = (attacker as { bonusDmg?: number }).bonusDmg ?? 0;
+    if (bonus > 0) dmg += bonus;
+    if (attacker.statuses.weak > 0) dmg = Math.floor(dmg * 0.75);
+  }
+  if (target.statuses.vulnerable > 0) dmg = Math.floor(dmg * 1.5);
 
   const absorbed = Math.min(target.block, dmg);
   target.block -= absorbed;

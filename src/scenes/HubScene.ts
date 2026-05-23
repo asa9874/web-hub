@@ -91,49 +91,64 @@ export class HubScene extends Phaser.Scene {
   }
 
   private renderSceneCards(): void {
-    const CW = 360, CH = 190;
+    const CW = 330, CH = 180;
+    // 3열 × 2행 배치
+    const xs = [213, 640, 1067];
+    const ys = [300, 510];
 
-    // 1행 좌: 전투 시스템
-    this.createSceneCard(320, 310, {
-      title: '전투 시스템',
-      description: '카드를 드래그하여 적을 공격하는\n덱 빌딩 전투 화면',
-      accentColor: 0x0984e3,
-      cardW: CW, cardH: CH,
-      onClick: () => this.launchScene('DialogueScene', {
-        scriptId: 'battle_intro',
-        returnScene: 'BattleScene',
-      }),
-    });
+    const cards: [number, number, SceneCard][] = [
+      [xs[0], ys[0], {
+        title: '전투 시스템',
+        description: '카드를 드래그하여 적을 공격하는\n덱 빌딩 전투 화면',
+        accentColor: 0x0984e3, cardW: CW, cardH: CH,
+        onClick: () => this.launchScene('DialogueScene', {
+          scriptId: 'battle_intro', returnScene: 'BattleScene',
+        }),
+      }],
+      [xs[1], ys[0], {
+        title: '대화 시스템',
+        description: '비주얼 노벨 형식의\n캐릭터 대화 화면',
+        accentColor: 0x6c5ce7, cardW: CW, cardH: CH,
+        onClick: () => this.launchScene('DialogueScene', {
+          scriptId: 'test_intro', returnScene: 'HubScene',
+        }),
+      }],
+      [xs[2], ys[0], {
+        title: '5인 전투 테스트',
+        description: '5마리 몬스터와의\n동시 전투 테스트',
+        accentColor: 0xe17055, cardW: CW, cardH: CH,
+        onClick: () => this.launchScene('BattleScene', { mode: 'five_monsters' }),
+      }],
+      [xs[0], ys[1], {
+        title: '캠프파이어',
+        description: '휴식으로 HP를 회복하거나\n카드를 업그레이드합니다',
+        accentColor: 0xff6600, cardW: CW, cardH: CH,
+        onClick: () => this.launchScene('RestScene', { returnScene: 'HubScene' }),
+      }],
+      [xs[1], ys[1], {
+        title: '보스 유물 보상',
+        description: '보스 격파 시 보스 유물 3개 중\n1개를 선택하는 화면',
+        accentColor: 0xe17055, cardW: CW, cardH: CH,
+        onClick: () => this.launchScene('RelicRewardScene', {
+          relics: GameState.getRandomRelics('boss', 3),
+          returnScene: 'HubScene',
+        }),
+      }],
+      [xs[2], ys[1], {
+        title: '일반 유물 보상',
+        description: 'Common·Rare 유물을 무작위로\n2개씩 섞어 3개 제시',
+        accentColor: 0x74b9ff, cardW: CW, cardH: CH,
+        onClick: () => {
+          const relics = [
+            ...GameState.getRandomRelics('common', 2),
+            ...GameState.getRandomRelics('rare', 1),
+          ];
+          this.launchScene('RelicRewardScene', { relics, returnScene: 'HubScene' });
+        },
+      }],
+    ];
 
-    // 1행 우: 대화 시스템
-    this.createSceneCard(960, 310, {
-      title: '대화 시스템',
-      description: '비주얼 노벨 형식의\n캐릭터 대화 화면',
-      accentColor: 0x6c5ce7,
-      cardW: CW, cardH: CH,
-      onClick: () => this.launchScene('DialogueScene', {
-        scriptId: 'test_intro',
-        returnScene: 'HubScene',
-      }),
-    });
-
-    // 2행 좌: 5인 전투 테스트
-    this.createSceneCard(320, 530, {
-      title: '5인 전투 테스트',
-      description: '슬라임·고블린·오크·스켈레톤·박쥐\n5마리와의 전투 테스트',
-      accentColor: 0xe17055,
-      cardW: CW, cardH: CH,
-      onClick: () => this.launchScene('BattleScene', { mode: 'five_monsters' }),
-    });
-
-    // 2행 우: 캠프파이어
-    this.createSceneCard(960, 530, {
-      title: '캠프파이어',
-      description: '휴식으로 HP를 회복하거나\n카드를 업그레이드합니다',
-      accentColor: 0xff6600,
-      cardW: CW, cardH: CH,
-      onClick: () => this.launchScene('RestScene', { returnScene: 'HubScene' }),
-    });
+    cards.forEach(([x, y, cfg]) => this.createSceneCard(x, y, cfg));
   }
 
   /** 씬 카드 버튼 하나를 생성 */

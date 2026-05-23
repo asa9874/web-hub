@@ -1,5 +1,6 @@
-import type { Card, Entity, Player, AttackPattern, BattleMode } from './types';
+import type { Card, Entity, Player, AttackPattern, BattleMode, Relic, RelicId, RelicTier } from './types';
 import { applyDamage, applyPoison, addStatus, tickDuration, emptyStatuses } from './utils/combat';
+import { RELIC_LIBRARY } from './relics/relicLibrary';
 import { Slime } from './monsters/Slime';
 import { Goblin } from './monsters/Goblin';
 import { Orc } from './monsters/Orc';
@@ -20,6 +21,7 @@ const CARD_LIBRARY: Card[] = [
     id: 'strike_a',
     name: '타격',
     cost: 1,
+    cardType: 'attack',
     targetType: 'single',
     description: '적에게 6의\n피해를 입힙니다.',
     onPlay: (u, targets) => applyDamage(targets[0], 6, u),
@@ -33,6 +35,7 @@ const CARD_LIBRARY: Card[] = [
     id: 'strike_b',
     name: '타격',
     cost: 1,
+    cardType: 'attack',
     targetType: 'single',
     description: '적에게 6의\n피해를 입힙니다.',
     onPlay: (u, targets) => applyDamage(targets[0], 6, u),
@@ -46,6 +49,7 @@ const CARD_LIBRARY: Card[] = [
     id: 'defend_a',
     name: '방어',
     cost: 1,
+    cardType: 'skill',
     targetType: 'single',
     description: '방어도 5를\n획득합니다.',
     onPlay: (u, _targets) => { u.block += 5; },
@@ -59,6 +63,7 @@ const CARD_LIBRARY: Card[] = [
     id: 'heavy_blow',
     name: '강타',
     cost: 2,
+    cardType: 'attack',
     targetType: 'single',
     description: '적에게 14의\n피해를 입힙니다.',
     onPlay: (u, targets) => applyDamage(targets[0], 14, u),
@@ -72,6 +77,7 @@ const CARD_LIBRARY: Card[] = [
     id: 'twin_strike',
     name: '쌍격',
     cost: 1,
+    cardType: 'attack',
     targetType: 'single',
     description: '5의 피해를\n2번 입힙니다.',
     onPlay: (u, targets) => {
@@ -91,6 +97,7 @@ const CARD_LIBRARY: Card[] = [
     id: 'explosion',
     name: '폭발',
     cost: 2,
+    cardType: 'attack',
     targetType: 'all',
     description: '모든 적에게\n4의 피해를 입힙니다.',
     onPlay: (u, targets) => targets.forEach(t => applyDamage(t, 4, u)),
@@ -104,6 +111,7 @@ const CARD_LIBRARY: Card[] = [
     id: 'chain_attack',
     name: '연쇄 공격',
     cost: 1,
+    cardType: 'attack',
     targetType: 'single',
     description: '3의 피해를\n3번 입힙니다.',
     onPlay: (u, targets) => {
@@ -125,6 +133,7 @@ const CARD_LIBRARY: Card[] = [
     id: 'storm_blast',
     name: '폭풍격',
     cost: 3,
+    cardType: 'attack',
     targetType: 'all',
     description: '모든 적에게\n8의 피해를 입힙니다.',
     onPlay: (u, targets) => targets.forEach(t => applyDamage(t, 8, u)),
@@ -139,6 +148,7 @@ const CARD_LIBRARY: Card[] = [
     id: 'poison_strike',
     name: '독침',
     cost: 1,
+    cardType: 'attack',
     targetType: 'single',
     description: '5의 피해 +\n독 3을 부여합니다.',
     onPlay: (u, targets) => {
@@ -158,6 +168,7 @@ const CARD_LIBRARY: Card[] = [
     id: 'toxic_cloud',
     name: '독기 방출',
     cost: 1,
+    cardType: 'skill',
     targetType: 'single',
     description: '대상에게\n독 5를 부여합니다.',
     onPlay: (_u, targets) => addStatus(targets[0], 'poison', 5),
@@ -171,6 +182,7 @@ const CARD_LIBRARY: Card[] = [
     id: 'weaken',
     name: '취약화',
     cost: 1,
+    cardType: 'attack',
     targetType: 'single',
     description: '8의 피해 +\n취약 2를 부여합니다.',
     onPlay: (u, targets) => {
@@ -190,6 +202,7 @@ const CARD_LIBRARY: Card[] = [
     id: 'empower',
     name: '역량 강화',
     cost: 1,
+    cardType: 'skill',
     targetType: 'single',
     description: '힘 2를 획득합니다.\n(자신에게 적용)',
     onPlay: (u, _targets) => addStatus(u, 'strength', 2),
@@ -203,6 +216,7 @@ const CARD_LIBRARY: Card[] = [
     id: 'mass_poison',
     name: '독 폭풍',
     cost: 2,
+    cardType: 'skill',
     targetType: 'all',
     description: '모든 적에게\n독 3을 부여합니다.',
     onPlay: (_u, targets) => targets.forEach(t => addStatus(t, 'poison', 3)),
@@ -226,7 +240,11 @@ export class GameState {
   static bonusCards: Card[] = [];
   static playerHp = 80;
   static playerMaxHp = 80;
+  static playerMaxMana = 3;
   static upgradedCardIds: string[] = [];
+  static equippedRelics: Relic[] = [];
+
+  static readonly MAX_RELICS = 5;
 
   player: Player;
   enemies: Monster[];  // 최대 5마리
@@ -234,15 +252,18 @@ export class GameState {
   deck: Card[];
   discard: Card[];
 
+  private firstAttackPlayedThisTurn = false; // Flame Amulet용
+
   private constructor(mode: BattleMode = 'default') {
     this.player = {
       name: '영웅',
       hp: GameState.playerHp,
       maxHp: GameState.playerMaxHp,
       block: 0,
-      mana: 3,
-      maxMana: 3,
+      mana: GameState.playerMaxMana,
+      maxMana: GameState.playerMaxMana,
       statuses: emptyStatuses(),
+      bonusDmg: 0,
     };
 
     if (mode === 'five_monsters') {
@@ -297,13 +318,46 @@ export class GameState {
     if (idx === -1) return false;
 
     const card = this.hand[idx];
-    if (this.player.mana < card.cost) return false;
 
-    this.player.mana -= card.cost;
+    // Flame Amulet: 매 턴 첫 공격 카드 비용 1 감소
+    let costReduction = 0;
+    if (
+      GameState.hasRelic('flame_amulet') &&
+      !this.firstAttackPlayedThisTurn &&
+      card.cardType === 'attack'
+    ) {
+      costReduction = 1;
+      this.firstAttackPlayedThisTurn = true;
+    }
+    const effectiveCost = Math.max(0, card.cost - costReduction);
+    if (this.player.mana < effectiveCost) return false;
+
+    this.player.mana -= effectiveCost;
+
+    // Blood Sword: HP 50% 이하일 때 공격 +3
+    this.player.bonusDmg =
+      GameState.hasRelic('blood_sword') &&
+      this.player.hp <= this.player.maxHp / 2 &&
+      card.cardType === 'attack'
+        ? 3
+        : 0;
+
+    // Toxic Crystal: 독 부여량 +1 — 카드 실행 전 적 독 스택 스냅샷
+    const poisonBefore = this.enemies.map(e => e.statuses.poison);
+
     const targets: Entity[] = card.targetType === 'all'
       ? this.enemies.filter(e => e.hp > 0)
       : [primaryTarget];
     card.onPlay(this.player, targets);
+
+    // Toxic Crystal 사후 처리
+    if (GameState.hasRelic('toxic_crystal')) {
+      this.enemies.forEach((e, i) => {
+        if (e.statuses.poison > poisonBefore[i]) addStatus(e, 'poison', 1);
+      });
+    }
+
+    this.player.bonusDmg = 0;
     this.hand.splice(idx, 1);
     this.discard.push(card);
     return true;
@@ -348,6 +402,13 @@ export class GameState {
     this.player.block = 0;
     const poisonDmg = applyPoison(this.player);
     this.player.mana = this.player.maxMana;
+
+    // Bone Ring: 턴 시작 시 방어도 4 획득
+    if (GameState.hasRelic('bone_ring')) this.player.block += 4;
+
+    // Flame Amulet: 매 턴 첫 번째 공격 카드 할인 초기화
+    this.firstAttackPlayedThisTurn = false;
+
     this.drawCards(GameState.DRAW_PER_TURN);
     return poisonDmg;
   }
@@ -362,7 +423,43 @@ export class GameState {
     GameState.bonusCards = [];
     GameState.playerHp = 80;
     GameState.playerMaxHp = 80;
+    GameState.playerMaxMana = 3;
     GameState.upgradedCardIds = [];
+    GameState.equippedRelics = [];
+  }
+
+  // ── 유물 관련 정적 메서드 ────────────────────────────────────────────────
+
+  /** 유물 장착. Mana Crystal은 즉시 maxMana +1 적용. */
+  static addRelic(relic: Relic): void {
+    if (GameState.equippedRelics.length >= GameState.MAX_RELICS) return;
+    if (GameState.equippedRelics.some(r => r.id === relic.id)) return;
+    GameState.equippedRelics.push(relic);
+    if (relic.id === 'mana_crystal') GameState.playerMaxMana += 1;
+  }
+
+  static hasRelic(id: RelicId): boolean {
+    return GameState.equippedRelics.some(r => r.id === id);
+  }
+
+  /**
+   * 지정 등급의 미획득 유물을 무작위로 n개 반환.
+   * 풀이 부족하면 있는 것만 반환.
+   */
+  static getRandomRelics(tier: RelicTier, n: number): Relic[] {
+    const pool = RELIC_LIBRARY.filter(
+      r => r.tier === tier && !GameState.equippedRelics.some(e => e.id === r.id),
+    );
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    return pool.slice(0, Math.min(n, pool.length));
+  }
+
+  /** 상점 가격 계산 시 사용 — Old Coin 장착 시 10% 할인. */
+  static getShopDiscount(): number {
+    return GameState.hasRelic('old_coin') ? 0.1 : 0;
   }
 
   /** 전투 종료 시 현재 HP를 정적 상태에 저장. */
