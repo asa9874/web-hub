@@ -1,6 +1,10 @@
 export { Monster } from './Monster';
+export { Boss } from './Boss';
 export { Slime } from './Slime';
 export { Goblin } from './Goblin';
 export { Orc } from './Orc';
 export { Skeleton } from './Skeleton';
 export { Bat } from './Bat';
+export { DarkLord } from './DarkLord';
+export { ForestGiant } from './ForestGiant';
+export { SpiderQueen } from './SpiderQueen';

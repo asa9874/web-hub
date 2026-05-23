@@ -58,7 +58,11 @@ export class BattleScene extends Phaser.Scene {
   }
 
   init(data: { mode?: string }): void {
-    this.battleMode = data?.mode === 'five_monsters' ? 'five_monsters' : 'default';
+    const m = data?.mode;
+    this.battleMode =
+      m === 'five_monsters' || m === 'boss' || m === 'elite_giant' || m === 'elite_spider'
+        ? (m as BattleMode)
+        : 'default';
   }
 
   create(): void {
@@ -110,15 +114,41 @@ export class BattleScene extends Phaser.Scene {
 
     this.gs.enemies.forEach((monster, i) => {
       const cx = positions[i];
-      const color = MONSTER_COLORS[i] ?? 0x6a0dad;
+
+      const isBossMonster = 'phasePatterns' in monster;
+      const isEliteMonster = !isBossMonster && 'isElite' in monster && (monster as Record<string, unknown>).isElite === true;
+
+      let bodyW = 70, bodyH = 80;
+      let bodyColor = MONSTER_COLORS[i] ?? 0x6a0dad;
+      let strokeColor = 0xe17055;
+
+      if (isBossMonster) {
+        bodyW = 90; bodyH = 110; bodyColor = 0xc0392b; strokeColor = 0xff6b6b;
+      } else if (isEliteMonster) {
+        bodyW = 80; bodyH = 95; bodyColor = 0x8e44ad; strokeColor = 0xb39ddb;
+      }
 
       // 스프라이트
-      const body = this.add.rectangle(cx, cy, 70, 80, color);
-      body.setStrokeStyle(2, 0xe17055);
+      const body = this.add.rectangle(cx, cy, bodyW, bodyH, bodyColor);
+      body.setStrokeStyle(2, strokeColor);
       this.enemyBodies.push(body);
 
+      // 보스/엘리트 배지
+      if (isBossMonster) {
+        this.add.rectangle(cx, cy - bodyH / 2 + 9, bodyW - 4, 17, 0x7f0000);
+        this.add.text(cx, cy - bodyH / 2 + 9, 'BOSS', {
+          fontSize: '10px', color: '#ffcccc', fontStyle: 'bold',
+        }).setOrigin(0.5);
+      } else if (isEliteMonster) {
+        this.add.rectangle(cx, cy - bodyH / 2 + 9, bodyW - 4, 17, 0x4a0d6d);
+        this.add.text(cx, cy - bodyH / 2 + 9, 'ELITE', {
+          fontSize: '10px', color: '#e0b8ff', fontStyle: 'bold',
+        }).setOrigin(0.5);
+      }
+
       // 이름
-      this.add.text(cx, cy - 57, monster.name, {
+      const nameY = cy - Math.floor(bodyH / 2) - 14;
+      this.add.text(cx, nameY, monster.name, {
         fontSize: '13px', color: '#ffffff', fontStyle: 'bold',
       }).setOrigin(0.5);
 
@@ -154,7 +184,7 @@ export class BattleScene extends Phaser.Scene {
 
       // 드롭 존
       this.enemyDropZones.push(
-        new Phaser.Geom.Rectangle(cx - 35, cy - 40, 70, 80),
+        new Phaser.Geom.Rectangle(cx - bodyW / 2, cy - bodyH / 2, bodyW, bodyH),
       );
     });
   }
@@ -505,11 +535,7 @@ export class BattleScene extends Phaser.Scene {
     // 독으로 모든 적이 사망한 경우 승리 처리
     if (this.gs.enemies.every(e => e.hp <= 0)) {
       GameState.savePlayerState(this.gs.player.hp);
-      const gold = Phaser.Math.Between(40, 70);
-      this.cameras.main.fadeOut(450, 0, 0, 0);
-      this.cameras.main.once('camerafadeoutcomplete', () => {
-        this.scene.start('VictoryScene', { gold });
-      });
+      this.handleVictory();
       return;
     }
 
@@ -603,23 +629,31 @@ export class BattleScene extends Phaser.Scene {
 
   /**
    * 카드 사용 후 전투 상태 분기.
-   * - 전체 승리: 모든 적 HP ≤ 0 → VictoryScene
-   * - 단일 전투 중간 이벤트: 적 HP 절반 이하 첫 도달 → mid 대화
+   * - 전체 승리 → handleVictory()
+   * - 보스 페이즈 전환 감지 → 플래시 메시지 + 인텐트 갱신
+   * - 단일 일반 적: HP 절반 이하 첫 도달 → mid 대화
    */
   private handlePostCardPlay(): void {
     if (this.gs.enemies.every(e => e.hp <= 0)) {
       this.cardViews.forEach(cv => cv.container.disableInteractive());
       GameState.savePlayerState(this.gs.player.hp);
-      const gold = Phaser.Math.Between(40, 70);
-      this.cameras.main.fadeOut(450, 0, 0, 0);
-      this.cameras.main.once('camerafadeoutcomplete', () => {
-        this.scene.start('VictoryScene', { gold });
-      });
+      this.handleVictory();
       return;
     }
 
-    // 단일 적 전투에서만 중간 대화 트리거
-    if (this.gs.enemies.length === 1) {
+    // 보스 페이즈 전환 확인
+    for (const monster of this.gs.enemies) {
+      if (monster.hp > 0 && 'checkPhaseTransition' in monster) {
+        const boss = monster as unknown as { checkPhaseTransition(): boolean; phaseChangeMessage: string };
+        if (boss.checkPhaseTransition()) {
+          this.flashMessage(boss.phaseChangeMessage, 0xff4757);
+          this.updateAllIntents();
+        }
+      }
+    }
+
+    // 단일 일반 적 전투에서만 중간 대화 트리거
+    if (this.gs.enemies.length === 1 && !('phasePatterns' in this.gs.enemies[0])) {
       const enemy = this.gs.enemies[0];
       if (!this.midBattleTriggered && enemy.hp <= enemy.maxHp / 2) {
         this.midBattleTriggered = true;
@@ -631,6 +665,33 @@ export class BattleScene extends Phaser.Scene {
         });
       }
     }
+  }
+
+  /**
+   * 전투 승리 처리.
+   * - 보스/엘리트: GameState.pendingGold 설정 후 RelicRewardScene → VictoryScene
+   * - 일반: VictoryScene에 gold 직접 전달
+   */
+  private handleVictory(): void {
+    this.cameras.main.fadeOut(450, 0, 0, 0);
+    this.cameras.main.once('camerafadeoutcomplete', () => {
+      if (this.battleMode === 'boss') {
+        GameState.pendingGold = Phaser.Math.Between(120, 160);
+        this.scene.start('RelicRewardScene', {
+          relics: GameState.getRandomRelics('boss', 3),
+          returnScene: 'VictoryScene',
+        });
+      } else if (this.battleMode === 'elite_giant' || this.battleMode === 'elite_spider') {
+        GameState.pendingGold = Phaser.Math.Between(80, 110);
+        const tier = Math.random() < 0.5 ? 'common' as const : 'rare' as const;
+        this.scene.start('RelicRewardScene', {
+          relics: GameState.getRandomRelics(tier, 3),
+          returnScene: 'VictoryScene',
+        });
+      } else {
+        this.scene.start('VictoryScene', { gold: Phaser.Math.Between(40, 70) });
+      }
+    });
   }
 
   // ── 유틸리티 ────────────────────────────────────────────────────────────────

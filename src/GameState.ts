@@ -6,6 +6,9 @@ import { Goblin } from './monsters/Goblin';
 import { Orc } from './monsters/Orc';
 import { Skeleton } from './monsters/Skeleton';
 import { Bat } from './monsters/Bat';
+import { DarkLord } from './monsters/DarkLord';
+import { ForestGiant } from './monsters/ForestGiant';
+import { SpiderQueen } from './monsters/SpiderQueen';
 import type { Monster } from './monsters/Monster';
 
 /**
@@ -245,6 +248,7 @@ export class GameState {
   static equippedRelics: Relic[] = [];
   static cardRemovalCost = 75;
   static removedCardIds: string[] = [];
+  static pendingGold = 0;  // 보스/엘리트 전투 → RelicReward 경유 시 VictoryScene이 읽을 골드
 
   static readonly MAX_RELICS = 5;
 
@@ -270,6 +274,12 @@ export class GameState {
 
     if (mode === 'five_monsters') {
       this.enemies = [new Slime(), new Goblin(), new Orc(), new Skeleton(), new Bat()];
+    } else if (mode === 'boss') {
+      this.enemies = [new DarkLord()];
+    } else if (mode === 'elite_giant') {
+      this.enemies = [new ForestGiant()];
+    } else if (mode === 'elite_spider') {
+      this.enemies = [new SpiderQueen()];
     } else {
       this.enemies = [new Slime()];
     }
@@ -434,6 +444,7 @@ export class GameState {
     GameState.equippedRelics = [];
     GameState.cardRemovalCost = 75;
     GameState.removedCardIds = [];
+    GameState.pendingGold = 0;
   }
 
   // ── 유물 관련 정적 메서드 ────────────────────────────────────────────────

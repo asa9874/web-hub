@@ -15,7 +15,8 @@ export class VictoryScene extends Phaser.Scene {
   }
 
   init(data: VictorySceneData): void {
-    this.goldEarned = data.gold ?? 0;
+    this.goldEarned = data?.gold ?? GameState.pendingGold;
+    GameState.pendingGold = 0;
     GameState.gold += this.goldEarned;
   }
 

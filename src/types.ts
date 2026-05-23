@@ -55,7 +55,7 @@ export interface Card {
 export type TurnPhase = 'player' | 'monster';
 
 /** 전투 모드 — GameState 생성 시 사용할 몬스터 구성 결정 */
-export type BattleMode = 'default' | 'five_monsters';
+export type BattleMode = 'default' | 'five_monsters' | 'boss' | 'elite_giant' | 'elite_spider';
 
 /**
  * 몬스터 행동 패턴.
@@ -97,7 +97,7 @@ export interface DialogueSceneData {
 
 /** VictoryScene 초기화 시 전달할 데이터 구조 */
 export interface VictorySceneData {
-  gold: number;
+  gold?: number;  // 생략 시 GameState.pendingGold 사용 (보스/엘리트 → RelicReward 경유 시)
 }
 
 /** CardRewardScene 초기화 시 전달할 데이터 구조 */
