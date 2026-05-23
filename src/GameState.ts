@@ -93,6 +93,10 @@ export class GameState {
   static readonly DRAW_PER_TURN = 3;
   static readonly MAX_ENEMIES = 5;
 
+  // ── 전투 간 유지되는 정적 상태 ──────────────────────────────────────────
+  static gold = 0;
+  static bonusCards: Card[] = [];
+
   player: Player;
   enemies: Monster[];  // 최대 5마리
   hand: Card[];
@@ -116,7 +120,10 @@ export class GameState {
     }
     this.enemies.forEach(e => e.prepareNextAction());
 
-    this.deck = this.shuffleArray(CARD_LIBRARY.map(c => ({ ...c })));
+    this.deck = this.shuffleArray([
+      ...CARD_LIBRARY.map(c => ({ ...c })),
+      ...GameState.bonusCards.map(c => ({ ...c })),
+    ]);
     this.discard = [];
     this.hand = [];
     this.drawCards(GameState.DRAW_PER_TURN);
@@ -196,5 +203,32 @@ export class GameState {
 
   static reset(mode: BattleMode = 'default'): void {
     GameState._instance = new GameState(mode);
+  }
+
+  /**
+   * 카드를 덱 보너스 풀에 영구 추가.
+   * 다음 전투 시작 시 기본 덱 위에 함께 셔플됨.
+   */
+  static addBonusCard(card: Card): void {
+    GameState.bonusCards.push({
+      ...card,
+      id: `${card.id}_bonus_${GameState.bonusCards.length}`,
+    });
+  }
+
+  /**
+   * 카드 라이브러리에서 n장을 무작위로 반환 (이름 중복 없음).
+   * 카드 보상 화면에서 사용.
+   */
+  static getRandomRewardCards(n: number): Card[] {
+    const unique = CARD_LIBRARY.filter(
+      (c, i) => CARD_LIBRARY.findIndex(x => x.name === c.name) === i,
+    );
+    const pool = unique.map(c => ({ ...c }));
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    return pool.slice(0, Math.min(n, pool.length));
   }
 }

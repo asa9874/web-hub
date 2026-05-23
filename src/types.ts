@@ -72,3 +72,14 @@ export interface DialogueSceneData {
   returnScene: string;
   resumeScene?: string;
 }
+
+/** VictoryScene 초기화 시 전달할 데이터 구조 */
+export interface VictorySceneData {
+  gold: number;
+}
+
+/** CardRewardScene 초기화 시 전달할 데이터 구조 */
+export interface CardRewardSceneData {
+  cards: Card[];
+  returnScene: string;
+}

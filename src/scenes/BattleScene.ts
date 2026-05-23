@@ -517,16 +517,16 @@ export class BattleScene extends Phaser.Scene {
 
   /**
    * 카드 사용 후 전투 상태 분기.
-   * - 전체 승리: 모든 적 HP ≤ 0 → victory 대화
+   * - 전체 승리: 모든 적 HP ≤ 0 → VictoryScene
    * - 단일 전투 중간 이벤트: 적 HP 절반 이하 첫 도달 → mid 대화
    */
   private handlePostCardPlay(): void {
     if (this.gs.enemies.every(e => e.hp <= 0)) {
       this.cardViews.forEach(cv => cv.container.disableInteractive());
-      this.scene.pause();
-      this.scene.launch('DialogueScene', {
-        scriptId: 'battle_victory',
-        returnScene: 'HubScene',
+      const gold = Phaser.Math.Between(40, 70);
+      this.cameras.main.fadeOut(450, 0, 0, 0);
+      this.cameras.main.once('camerafadeoutcomplete', () => {
+        this.scene.start('VictoryScene', { gold });
       });
       return;
     }
