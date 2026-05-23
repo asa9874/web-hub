@@ -2,6 +2,12 @@ import Phaser from 'phaser';
 import { GameState } from '../GameState';
 import type { Card, EventSceneData } from '../types';
 import { EVENT_LIBRARY, type EventData, type EventChoice, type EventEffect } from '../data/events';
+import {
+  BG_DEEP, BG_PANEL, BG_HOVER, BG_DIVIDER,
+  BORDER_DIM,
+  PINK, ROSE, LAVENDER,
+  TEXT_PRIMARY, TEXT_SECONDARY, TEXT_PINK, FONT,
+} from '../theme';
 
 const PANEL_W = 860;
 const PANEL_H = 520;
@@ -29,8 +35,6 @@ export class EventScene extends Phaser.Scene {
     this.showEvent();
   }
 
-  // ── 공통 헬퍼 ─────────────────────────────────────────────────────────────
-
   private track<T extends Phaser.GameObjects.GameObject>(obj: T): T {
     this.content.push(obj);
     return obj;
@@ -42,37 +46,30 @@ export class EventScene extends Phaser.Scene {
   }
 
   private renderBase(): void {
-    this.add.rectangle(640, 360, 1280, 720, 0x0d1117);
-    this.add.rectangle(640, 2, 1280, 4, 0x6c5ce7).setOrigin(0.5, 0);
-    this.add.rectangle(640, 718, 1280, 2, 0x21262d).setOrigin(0.5, 1);
+    this.add.rectangle(640, 360, 1280, 720, BG_DEEP);
+    this.add.rectangle(640, 2, 1280, 4, PINK).setOrigin(0.5, 0);
+    this.add.rectangle(640, 718, 1280, 2, BG_DIVIDER).setOrigin(0.5, 1);
   }
-
-  // ── 이벤트 선택 화면 ──────────────────────────────────────────────────────
 
   private showEvent(): void {
     this.clearContent();
 
-    // 패널 배경
-    const panel = this.track(this.add.rectangle(PANEL_CX, PANEL_CY, PANEL_W, PANEL_H, 0x161b22));
-    panel.setStrokeStyle(1, 0x30363d);
-    this.track(this.add.rectangle(PANEL_CX, PANEL_CY - PANEL_H / 2 + 3, PANEL_W, 6, 0x6c5ce7));
+    const panel = this.track(this.add.rectangle(PANEL_CX, PANEL_CY, PANEL_W, PANEL_H, BG_PANEL));
+    panel.setStrokeStyle(1, BORDER_DIM);
+    this.track(this.add.rectangle(PANEL_CX, PANEL_CY - PANEL_H / 2 + 3, PANEL_W, 6, PINK));
 
-    // 제목
     this.track(this.add.text(PANEL_CX, PANEL_CY - PANEL_H / 2 + 36, this.event.title, {
-      fontSize: '26px', color: '#c8a2ff', fontStyle: 'bold',
+      fontSize: '26px', color: TEXT_PINK, fontStyle: 'bold', fontFamily: FONT,
     }).setOrigin(0.5));
 
-    // 배경 설명
     this.track(this.add.text(PANEL_CX, PANEL_CY - PANEL_H / 2 + 86, this.event.description, {
-      fontSize: '15px', color: '#adb5bd',
+      fontSize: '15px', color: TEXT_PRIMARY, fontFamily: FONT,
       wordWrap: { width: PANEL_W - 80 },
       lineSpacing: 6, align: 'center',
     }).setOrigin(0.5, 0));
 
-    // 구분선
-    this.track(this.add.rectangle(PANEL_CX, PANEL_CY - 44, PANEL_W - 60, 1, 0x30363d));
+    this.track(this.add.rectangle(PANEL_CX, PANEL_CY - 44, PANEL_W - 60, 1, BG_DIVIDER));
 
-    // 선택지 버튼
     const BTN_H = 54, BTN_GAP = 10;
     const totalH = this.event.choices.length * BTN_H + (this.event.choices.length - 1) * BTN_GAP;
     const startY = PANEL_CY + PANEL_H / 2 - 16 - totalH;
@@ -90,28 +87,25 @@ export class EventScene extends Phaser.Scene {
     const available = this.isAvailable(choice);
 
     const bg = this.track(this.add.rectangle(cx, cy, W, H,
-      available ? 0x1a1a2e : 0x0d0d17));
-    bg.setStrokeStyle(1, available ? 0x6c5ce7 : 0x252535);
+      available ? 0x2D1550 : 0x1A0A2E));
+    bg.setStrokeStyle(1, available ? PINK : 0x3D1F5A);
 
-    // 선택지 레이블
     const labelY = available ? cy : cy - 10;
     const label = this.track(this.add.text(cx - W / 2 + 20, labelY, choice.label, {
-      fontSize: '15px', color: available ? '#e6edf3' : '#555',
+      fontSize: '15px', color: available ? TEXT_PRIMARY : '#555577', fontFamily: FONT,
     }).setOrigin(0, 0.5));
 
-    // 효과 미리보기 (오른쪽 끝)
     const preview = this.effectPreview(choice);
     if (preview) {
       this.track(this.add.text(cx + W / 2 - 16, labelY, preview, {
-        fontSize: '13px', color: available ? '#7d8590' : '#333',
+        fontSize: '13px', color: available ? TEXT_SECONDARY : '#3A2A3A', fontFamily: FONT,
       }).setOrigin(1, 0.5));
     }
 
-    // 비활성 이유
     if (!available) {
       this.track(this.add.text(cx - W / 2 + 20, cy + 10,
         this.unavailableReason(choice), {
-          fontSize: '11px', color: '#8b3a3a',
+          fontSize: '11px', color: '#8B3A5A', fontFamily: FONT,
         }).setOrigin(0, 0.5));
     }
 
@@ -119,14 +113,14 @@ export class EventScene extends Phaser.Scene {
 
     bg.setInteractive({ useHandCursor: true });
     bg.on('pointerover', () => {
-      bg.setFillStyle(0x2a2a4e);
-      bg.setStrokeStyle(2, 0x9b8eff);
+      bg.setFillStyle(BG_HOVER);
+      bg.setStrokeStyle(2, 0xFFB6C1);
       (label as Phaser.GameObjects.Text).setColor('#ffffff');
     });
     bg.on('pointerout', () => {
-      bg.setFillStyle(0x1a1a2e);
-      bg.setStrokeStyle(1, 0x6c5ce7);
-      (label as Phaser.GameObjects.Text).setColor('#e6edf3');
+      bg.setFillStyle(0x2D1550);
+      bg.setStrokeStyle(1, PINK);
+      (label as Phaser.GameObjects.Text).setColor(TEXT_PRIMARY);
     });
     bg.on('pointerdown', () => this.executeChoice(choice));
   }
@@ -176,8 +170,6 @@ export class EventScene extends Phaser.Scene {
       return '포션 슬롯이 가득 찼습니다';
     return '';
   }
-
-  // ── 선택지 실행 ───────────────────────────────────────────────────────────
 
   private executeChoice(choice: EventChoice): void {
     let transition: EventEffect | null = null;
@@ -249,50 +241,46 @@ export class EventScene extends Phaser.Scene {
     }
   }
 
-  // ── 결과 화면 ─────────────────────────────────────────────────────────────
-
   private showOutcome(text: string): void {
     this.clearContent();
 
     const W = 720, H = 290, CX = 640, CY = 340;
-    const box = this.track(this.add.rectangle(CX, CY, W, H, 0x161b22));
-    box.setStrokeStyle(1, 0x6c5ce7);
+    const box = this.track(this.add.rectangle(CX, CY, W, H, BG_PANEL));
+    box.setStrokeStyle(1, PINK);
 
     this.track(this.add.text(CX, CY - H / 2 + 28, this.event.title, {
-      fontSize: '16px', color: '#7d8590',
+      fontSize: '16px', color: TEXT_SECONDARY, fontFamily: FONT,
     }).setOrigin(0.5));
 
     this.track(this.add.text(CX, CY - 18, text, {
-      fontSize: '16px', color: '#e6edf3',
+      fontSize: '16px', color: TEXT_PRIMARY, fontFamily: FONT,
       wordWrap: { width: W - 80 },
       lineSpacing: 6, align: 'center',
     }).setOrigin(0.5));
 
     const btn = this.track(this.add.text(CX, CY + H / 2 - 30, '[ 계속하기 ]', {
-      fontSize: '18px', color: '#6c5ce7',
+      fontSize: '18px', color: '#FF69B4', fontFamily: FONT,
     }).setOrigin(0.5).setInteractive({ useHandCursor: true }));
-    btn.on('pointerover', () => btn.setColor('#a29bfe'));
-    btn.on('pointerout',  () => btn.setColor('#6c5ce7'));
+    btn.on('pointerover', () => btn.setColor('#FFB6C1'));
+    btn.on('pointerout',  () => btn.setColor('#FF69B4'));
     btn.on('pointerdown', () => {
       this.cameras.main.fadeOut(280, 0, 0, 0);
       this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start(this.returnScene));
     });
   }
 
-  // ── 카드 업그레이드 화면 ──────────────────────────────────────────────────
-
   private showCardUpgradeScreen(): void {
     this.clearContent();
 
     this.track(this.add.text(640, 46, '업그레이드할 카드를 선택하세요', {
-      fontSize: '22px', color: '#c8a2ff', fontStyle: 'bold',
+      fontSize: '22px', color: TEXT_PINK, fontStyle: 'bold', fontFamily: FONT,
     }).setOrigin(0.5));
     this.track(this.add.text(640, 82, '선택한 카드가 무료로 업그레이드됩니다.', {
-      fontSize: '14px', color: '#7d8590',
+      fontSize: '14px', color: TEXT_SECONDARY, fontFamily: FONT,
     }).setOrigin(0.5));
 
     const upgradable = GameState.getAllRunCards().filter(c => c.upgrade && !c.upgraded);
-    this.renderCardGrid(upgradable, 0xc8a2ff, 0x20102a, card => {
+    this.renderCardGrid(upgradable, LAVENDER, 0x200A3A, card => {
       GameState.upgradeCard(card.id);
       this.showOutcome(`"${card.name}" 카드가 업그레이드되었습니다.`);
     });
@@ -300,28 +288,24 @@ export class EventScene extends Phaser.Scene {
     this.renderBackBtn(() => this.showEvent());
   }
 
-  // ── 카드 제거 화면 (무료) ─────────────────────────────────────────────────
-
   private showCardRemoveScreen(): void {
     this.clearContent();
 
     this.track(this.add.text(640, 46, '제거할 카드를 선택하세요', {
-      fontSize: '22px', color: '#e17055', fontStyle: 'bold',
+      fontSize: '22px', color: '#FF1493', fontStyle: 'bold', fontFamily: FONT,
     }).setOrigin(0.5));
     this.track(this.add.text(640, 82, '선택한 카드가 덱에서 영구적으로 제거됩니다. (무료)', {
-      fontSize: '14px', color: '#7d8590',
+      fontSize: '14px', color: TEXT_SECONDARY, fontFamily: FONT,
     }).setOrigin(0.5));
 
     const allCards = GameState.getAllRunCards();
-    this.renderCardGrid(allCards, 0xe17055, 0x2a1010, card => {
+    this.renderCardGrid(allCards, ROSE, 0x2A0A1A, card => {
       GameState.removeCardFree(card.id);
       this.showOutcome(`"${card.name}" 카드가 덱에서 제거되었습니다.`);
     });
 
     this.renderBackBtn(() => this.showEvent());
   }
-
-  // ── 공용 카드 그리드 ──────────────────────────────────────────────────────
 
   private renderCardGrid(
     cards: Card[],
@@ -340,23 +324,23 @@ export class EventScene extends Phaser.Scene {
       const cx = startX + col * (CW + GAP);
       const cy = startY + row * (CH + GAP) + CH / 2;
 
-      const bg = this.track(this.add.rectangle(cx, cy, CW, CH, 0x161b22));
-      bg.setStrokeStyle(1, 0x30363d);
+      const bg = this.track(this.add.rectangle(cx, cy, CW, CH, BG_PANEL));
+      bg.setStrokeStyle(1, BORDER_DIM);
 
       this.track(this.add.text(cx, cy - 58,
         card.name + (card.upgraded ? '+' : ''), {
-          fontSize: '13px', color: '#e6edf3', fontStyle: 'bold',
+          fontSize: '13px', color: TEXT_PRIMARY, fontStyle: 'bold', fontFamily: FONT,
           wordWrap: { width: CW - 10 }, align: 'center',
         }).setOrigin(0.5));
 
       this.track(this.add.text(cx, cy - 14, card.description, {
-        fontSize: '10px', color: '#7d8590',
+        fontSize: '10px', color: TEXT_SECONDARY, fontFamily: FONT,
         lineSpacing: 3, align: 'center',
         wordWrap: { width: CW - 12 },
       }).setOrigin(0.5));
 
       this.track(this.add.text(cx, cy + 60, `${card.cost}코스트`, {
-        fontSize: '11px', color: '#74b9ff',
+        fontSize: '11px', color: '#C8A0FF', fontFamily: FONT,
       }).setOrigin(0.5));
 
       bg.setInteractive({ useHandCursor: true });
@@ -365,8 +349,8 @@ export class EventScene extends Phaser.Scene {
         bg.setFillStyle(fillHover);
       });
       bg.on('pointerout', () => {
-        bg.setStrokeStyle(1, 0x30363d);
-        bg.setFillStyle(0x161b22);
+        bg.setStrokeStyle(1, BORDER_DIM);
+        bg.setFillStyle(BG_PANEL);
       });
       bg.on('pointerdown', () => onSelect(card));
     });
@@ -374,10 +358,10 @@ export class EventScene extends Phaser.Scene {
 
   private renderBackBtn(onBack: () => void): void {
     const btn = this.track(this.add.text(640, 692, '[ 돌아가기 ]', {
-      fontSize: '16px', color: '#7d8590',
+      fontSize: '16px', color: TEXT_SECONDARY, fontFamily: FONT,
     }).setOrigin(0.5).setInteractive({ useHandCursor: true }));
-    btn.on('pointerover', () => btn.setColor('#e6edf3'));
-    btn.on('pointerout',  () => btn.setColor('#7d8590'));
+    btn.on('pointerover', () => btn.setColor(TEXT_PRIMARY));
+    btn.on('pointerout',  () => btn.setColor(TEXT_SECONDARY));
     btn.on('pointerdown', () => onBack());
   }
 }

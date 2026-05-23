@@ -5,6 +5,12 @@ import type { Monster } from '../monsters/Monster';
 import { applyDamage, addStatus } from '../utils/combat';
 import { shakeObject, flashHit, spawnDamageNumber, spawnHealNumber, playDeathTween } from '../utils/fx';
 import { sfx } from '../audio/SoundManager';
+import {
+  BG_DEEP, BG_PANEL, BG_HOVER, BG_DIVIDER,
+  BORDER_DIM,
+  PINK, ROSE, PINK_SOFT, LAVENDER, GREEN,
+  TEXT_SECONDARY, FONT,
+} from '../theme';
 
 // ── 레이아웃 상수 (1280×720) ────────────────────────────────────────────────
 const W = 1280;
@@ -98,8 +104,8 @@ export class BattleScene extends Phaser.Scene {
   // ── 렌더링 ────────────────────────────────────────────────────────────────
 
   private renderBackground(): void {
-    this.add.rectangle(W / 2, 360, W, 720, 0x1a1a2e);
-    this.add.rectangle(W / 2, DIVIDER_Y, W, 2, 0x2d3561);
+    this.add.rectangle(W / 2, 360, W, 720, BG_DEEP);
+    this.add.rectangle(W / 2, DIVIDER_Y, W, 2, BG_DIVIDER);
   }
 
   /** 전투 모드에 맞게 몬스터 슬롯을 동적으로 생성 */
@@ -206,9 +212,9 @@ export class BattleScene extends Phaser.Scene {
     const { player } = this.gs;
     const cx = PLAYER_CX, cy = PLAYER_CY;
 
-    this.add.rectangle(cx, cy, 80, 100, 0x0984e3).setStrokeStyle(2, 0x00cec9);
+    this.add.rectangle(cx, cy, 80, 100, ROSE).setStrokeStyle(2, PINK);
     this.add.text(cx, cy - 68, player.name, {
-      fontSize: '15px', color: '#ffffff', fontStyle: 'bold',
+      fontSize: '15px', color: '#ffffff', fontStyle: 'bold', fontFamily: FONT,
     }).setOrigin(0.5);
 
     this.txtPlayerHp = this.add.text(cx, cy + 62, `HP ${player.hp}/${player.maxHp}`, {
@@ -278,8 +284,8 @@ export class BattleScene extends Phaser.Scene {
     const pipStartX = 916;
     const pipSpacing = 24;
     for (let i = 0; i < player.maxMana; i++) {
-      const pip = this.add.circle(pipStartX + i * pipSpacing, PILE_MANA_Y, 10, 0x0984e3);
-      pip.setStrokeStyle(2, 0x74b9ff);
+      const pip = this.add.circle(pipStartX + i * pipSpacing, PILE_MANA_Y, 10, PINK);
+      pip.setStrokeStyle(2, PINK_SOFT);
       this.manaPips.push(pip);
     }
     this.txtMana = this.add.text(
@@ -343,8 +349,8 @@ export class BattleScene extends Phaser.Scene {
           if (this.turnPhase === 'player') this.usePotionAtSlot(slotIdx);
         });
       } else {
-        const bg = this.add.rectangle(cx, PILE_MANA_Y, SLOT_W, SLOT_H, 0x1a1a2e);
-        bg.setStrokeStyle(1, 0x2a2a4e);
+        const bg = this.add.rectangle(cx, PILE_MANA_Y, SLOT_W, SLOT_H, BG_DEEP);
+        bg.setStrokeStyle(1, BORDER_DIM);
         this.potionSlotObjs.push(bg);
 
         const empty = this.add.text(cx, PILE_MANA_Y, '비어있음', {
@@ -428,10 +434,10 @@ export class BattleScene extends Phaser.Scene {
   private createCardView(card: Card, x: number, y: number, w: number, h: number): CardView {
     const container = this.add.container(x, y);
 
-    const bg = this.add.rectangle(0, 0, w, h, 0x2d3436);
-    bg.setStrokeStyle(2, card.targetType === 'all' ? 0xe17055 : 0xb2bec3);
+    const bg = this.add.rectangle(0, 0, w, h, BG_PANEL);
+    bg.setStrokeStyle(2, card.targetType === 'all' ? ROSE : LAVENDER);
 
-    const badge = this.add.circle(-w / 2 + 14, -h / 2 + 14, 12, 0x6c5ce7);
+    const badge = this.add.circle(-w / 2 + 14, -h / 2 + 14, 12, PINK);
     const costText = this.add.text(-w / 2 + 14, -h / 2 + 14, String(card.cost), {
       fontSize: '13px', color: '#ffffff', fontStyle: 'bold',
     }).setOrigin(0.5);
@@ -441,7 +447,7 @@ export class BattleScene extends Phaser.Scene {
       wordWrap: { width: w - 20 }, align: 'center',
     }).setOrigin(0.5);
 
-    const divider = this.add.rectangle(0, -h / 2 + 44, w - 20, 1, 0x636e72);
+    const divider = this.add.rectangle(0, -h / 2 + 44, w - 20, 1, BG_DIVIDER);
 
     const descText = this.add.text(0, 14, card.description, {
       fontSize: '11px', color: '#b2bec3',
@@ -472,8 +478,8 @@ export class BattleScene extends Phaser.Scene {
   private renderEndTurnButton(): void {
     const bx = 1155, by = PILE_MANA_Y;
 
-    this.endTurnBtn = this.add.rectangle(bx, by, 140, 46, 0x27ae60);
-    this.endTurnBtn.setStrokeStyle(2, 0x2ecc71);
+    this.endTurnBtn = this.add.rectangle(bx, by, 140, 46, GREEN);
+    this.endTurnBtn.setStrokeStyle(2, 0x66CF90);
     this.endTurnBtn.setInteractive({ useHandCursor: true });
 
     this.add.text(bx, by, '턴 종료', {
@@ -481,10 +487,10 @@ export class BattleScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     this.endTurnBtn.on('pointerover', () => {
-      if (this.turnPhase === 'player') this.endTurnBtn.setFillStyle(0x2ecc71);
+      if (this.turnPhase === 'player') this.endTurnBtn.setFillStyle(0x66CF90);
     });
     this.endTurnBtn.on('pointerout', () => {
-      if (this.turnPhase === 'player') this.endTurnBtn.setFillStyle(0x27ae60);
+      if (this.turnPhase === 'player') this.endTurnBtn.setFillStyle(GREEN);
     });
     this.endTurnBtn.on('pointerdown', () => {
       if (this.turnPhase !== 'player') return;
@@ -523,16 +529,16 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private renderBackButton(): void {
-    const btn = this.add.rectangle(50, 24, 80, 30, 0x2d3436);
-    btn.setStrokeStyle(1, 0x636e72);
+    const btn = this.add.rectangle(50, 24, 80, 30, BG_PANEL);
+    btn.setStrokeStyle(1, BORDER_DIM);
     btn.setInteractive({ useHandCursor: true });
 
     this.add.text(50, 24, '◀ 뒤로', {
-      fontSize: '13px', color: '#b2bec3',
+      fontSize: '13px', color: TEXT_SECONDARY, fontFamily: FONT,
     }).setOrigin(0.5);
 
-    btn.on('pointerover', () => btn.setFillStyle(0x3d4451));
-    btn.on('pointerout', () => btn.setFillStyle(0x2d3436));
+    btn.on('pointerover', () => btn.setFillStyle(BG_HOVER));
+    btn.on('pointerout', () => btn.setFillStyle(BG_PANEL));
     btn.on('pointerdown', () => {
       this.cameras.main.fadeOut(280, 0, 0, 0);
       this.cameras.main.once('camerafadeoutcomplete', () => {
@@ -547,16 +553,16 @@ export class BattleScene extends Phaser.Scene {
     const bx = 140, by = 24;
     const getLabel = () => sfx.muted ? '🔇' : '🔊';
 
-    const btn = this.add.rectangle(bx, by, 38, 28, 0x2d3436);
-    btn.setStrokeStyle(1, 0x636e72);
+    const btn = this.add.rectangle(bx, by, 38, 28, BG_PANEL);
+    btn.setStrokeStyle(1, BORDER_DIM);
     btn.setInteractive({ useHandCursor: true });
 
     const txt = this.add.text(bx, by, getLabel(), {
       fontSize: '14px',
     }).setOrigin(0.5);
 
-    btn.on('pointerover', () => btn.setFillStyle(0x3d4451));
-    btn.on('pointerout', () => btn.setFillStyle(0x2d3436));
+    btn.on('pointerover', () => btn.setFillStyle(BG_HOVER));
+    btn.on('pointerout', () => btn.setFillStyle(BG_PANEL));
     btn.on('pointerdown', () => {
       sfx.toggleMute();
       txt.setText(getLabel());
@@ -666,7 +672,7 @@ export class BattleScene extends Phaser.Scene {
   /** 플레이어 턴 종료 → 몬스터들 순차 행동 → 플레이어 턴 복귀 */
   private startMonsterTurn(): void {
     this.turnPhase = 'monster';
-    this.endTurnBtn.setFillStyle(0x4a4a4a);
+    this.endTurnBtn.setFillStyle(0x3A2A4A);
     this.endTurnBtn.disableInteractive();
 
     // 손패 비주얼 제거 + 배열 이동
@@ -731,7 +737,7 @@ export class BattleScene extends Phaser.Scene {
     this.updateUI();
     this.updateAllIntents();
 
-    this.endTurnBtn.setFillStyle(0x27ae60);
+    this.endTurnBtn.setFillStyle(GREEN);
     this.endTurnBtn.setInteractive({ useHandCursor: true });
 
     if (poisonDmg > 0) {
@@ -784,11 +790,11 @@ export class BattleScene extends Phaser.Scene {
     // 마나 pip
     this.manaPips.forEach((pip, i) => {
       if (i < player.mana) {
-        pip.setFillStyle(0x0984e3);
-        pip.setStrokeStyle(2, 0x74b9ff);
+        pip.setFillStyle(PINK);
+        pip.setStrokeStyle(2, PINK_SOFT);
       } else {
-        pip.setFillStyle(0x1e2535);
-        pip.setStrokeStyle(2, 0x3a4860);
+        pip.setFillStyle(BG_PANEL);
+        pip.setStrokeStyle(2, BORDER_DIM);
       }
     });
     this.txtMana.setText(`${player.mana}/${player.maxMana}`);

@@ -1,6 +1,11 @@
 import Phaser from 'phaser';
 import { GameState } from '../GameState';
 import type { MapNode } from '../types';
+import {
+  BG_DEEP, BG_DIVIDER,
+  PINK,
+  TEXT_SECONDARY, FONT,
+} from '../theme';
 
 // ── 레이아웃 상수 ─────────────────────────────────────────────────────────────
 const COL_X       = [290, 640, 990];
@@ -15,13 +20,13 @@ const CONTENT_H   = 650;           // 맵 뷰포트 높이 (720 - 70)
 const MAP_TOTAL_H = ROW_TOP_PAD + 9 * ROW_SPACING + ROW_BOT_PAD; // 50+810+50 = 910
 
 const NODE_INFO: Record<string, { fill: number; stroke: number; label: string }> = {
-  battle:   { fill: 0x1a2840, stroke: 0x4a7fc1, label: '전투'   },
-  elite:    { fill: 0x2d0640, stroke: 0x9b59b6, label: '엘리트' },
-  boss:     { fill: 0x3d0000, stroke: 0xe74c3c, label: '보스'   },
-  event:    { fill: 0x0d0d2a, stroke: 0x6c5ce7, label: '이벤트' },
-  shop:     { fill: 0x2d1a00, stroke: 0xf0a500, label: '상점'   },
-  rest:     { fill: 0x001a0d, stroke: 0x27ae60, label: '휴식'   },
-  treasure: { fill: 0x2a2000, stroke: 0xfdcb6e, label: '보물'   },
+  battle:   { fill: 0x2D1550, stroke: 0xC8A0FF, label: '전투'   },
+  elite:    { fill: 0x3D0D50, stroke: 0xC050C0, label: '엘리트' },
+  boss:     { fill: 0x3d0020, stroke: 0xFF1493, label: '보스'   },
+  event:    { fill: 0x2D1550, stroke: 0xFF69B4, label: '이벤트' },
+  shop:     { fill: 0x2d1a00, stroke: 0xFFD700, label: '상점'   },
+  rest:     { fill: 0x001a0d, stroke: 0x4CAF70, label: '휴식'   },
+  treasure: { fill: 0x2a2000, stroke: 0xFFD700, label: '보물'   },
 };
 
 /** row → 컨테이너-로컬 y (보스=상단, 시작=하단) */
@@ -101,9 +106,9 @@ export class MapScene extends Phaser.Scene {
   // ── 배경·헤더 ─────────────────────────────────────────────────────────────
 
   private renderBackground(): void {
-    this.add.rectangle(640, 360, 1280, 720, 0x090d14);
-    this.add.rectangle(640, 2, 1280, 4, 0x6c5ce7).setOrigin(0.5, 0);
-    this.add.rectangle(640, 718, 1280, 2, 0x21262d).setOrigin(0.5, 1);
+    this.add.rectangle(640, 360, 1280, 720, BG_DEEP);
+    this.add.rectangle(640, 2, 1280, 4, PINK).setOrigin(0.5, 0);
+    this.add.rectangle(640, 718, 1280, 2, BG_DIVIDER).setOrigin(0.5, 1);
   }
 
   /**
@@ -111,30 +116,29 @@ export class MapScene extends Phaser.Scene {
    * 맵 컨테이너보다 나중에 렌더되므로 스크롤 시 노드가 헤더 뒤로 자연스럽게 숨는다.
    */
   private renderHeaderCover(): void {
-    this.add.rectangle(640, 34, 1280, 68, 0x090d14);
-    // 상단 퍼플 라인도 재그림 (z-order 유지)
-    this.add.rectangle(640, 2, 1280, 4, 0x6c5ce7).setOrigin(0.5, 0);
+    this.add.rectangle(640, 34, 1280, 68, BG_DEEP);
+    this.add.rectangle(640, 2, 1280, 4, PINK).setOrigin(0.5, 0);
   }
 
   private renderHeader(): void {
     this.add.text(640, 28, 'Act 1  —  던전 탐험', {
-      fontSize: '20px', color: '#c8a2ff', fontStyle: 'bold',
+      fontSize: '20px', color: '#FFB6C1', fontStyle: 'bold', fontFamily: FONT,
     }).setOrigin(0.5);
 
     this.add.text(640, 52, `HP  ${GameState.playerHp} / ${GameState.playerMaxHp}   |   골드  ${GameState.gold} G`, {
-      fontSize: '13px', color: '#7d8590',
+      fontSize: '13px', color: TEXT_SECONDARY, fontFamily: FONT,
     }).setOrigin(0.5);
 
-    this.add.rectangle(640, 65, 1280, 1, 0x21262d);
+    this.add.rectangle(640, 65, 1280, 1, BG_DIVIDER);
   }
 
   private renderAbandonButton(): void {
     const btn = this.add.text(1240, 28, '런 포기', {
-      fontSize: '12px', color: '#444455',
+      fontSize: '12px', color: '#5A3A5A', fontFamily: FONT,
     }).setOrigin(1, 0.5).setInteractive({ useHandCursor: true });
 
-    btn.on('pointerover', () => btn.setColor('#e17055'));
-    btn.on('pointerout',  () => btn.setColor('#444455'));
+    btn.on('pointerover', () => btn.setColor('#FF69B4'));
+    btn.on('pointerout',  () => btn.setColor('#5A3A5A'));
     btn.on('pointerdown', () => {
       GameState.hardReset();
       this.cameras.main.fadeOut(280, 0, 0, 0);
@@ -144,7 +148,7 @@ export class MapScene extends Phaser.Scene {
 
   private addScrollHint(): void {
     const hint = this.add.text(640, 714, '↑ 스크롤로 상단 탐색', {
-      fontSize: '11px', color: '#2d2d3f',
+      fontSize: '11px', color: '#4A2A4A', fontFamily: FONT,
     }).setOrigin(0.5, 1);
 
     this.time.delayedCall(2200, () => {
@@ -173,7 +177,7 @@ export class MapScene extends Phaser.Scene {
           const nxt = (map[node.row + 1] ?? []).find(n => n.col === nc);
           if (!nxt) return;
           const pathDone = curDone && visited.has(`${nxt.row}_${nc}`);
-          g.lineStyle(2, pathDone ? 0x4a4a6a : 0x1a1a28, pathDone ? 0.85 : 0.3);
+          g.lineStyle(2, pathDone ? 0x8A4A8A : 0x3A1A3A, pathDone ? 0.85 : 0.3);
           g.beginPath();
           g.moveTo(x1, y1);
           g.lineTo(nodeX(nxt), nodeY(nxt));
@@ -210,21 +214,21 @@ export class MapScene extends Phaser.Scene {
     }
 
     // 노드 원
-    const fill   = isVisited ? 0x0d0d1a : (isAvail ? info.fill : 0x0a0a0f);
-    const stroke = isVisited ? 0x252535  : (isAvail ? info.stroke : 0x18181e);
+    const fill   = isVisited ? 0x120820 : (isAvail ? info.fill : 0x0E060E);
+    const stroke = isVisited ? 0x3A2A3A  : (isAvail ? info.stroke : 0x2A1A2A);
     const sw     = isAvail ? 3 : 1;
     const circle = this.add.circle(cx, cy, NODE_R, fill);
     circle.setStrokeStyle(sw, stroke);
     objs.push(circle);
 
     // 아이콘 (첫 글자)
-    const iconColor = isVisited ? '#252535' : (isAvail ? hexStr(info.stroke) : '#1c1c28');
+    const iconColor = isVisited ? '#3A2A3A' : (isAvail ? hexStr(info.stroke) : '#2A1A2A');
     objs.push(this.add.text(cx, cy, info.label.charAt(0), {
       fontSize: '13px', color: iconColor, fontStyle: 'bold',
     }).setOrigin(0.5));
 
     // 노드명 라벨
-    const labelColor = isAvail ? hexStr(info.stroke) : (isVisited ? '#252535' : '#1c1c28');
+    const labelColor = isAvail ? hexStr(info.stroke) : (isVisited ? '#3A2A3A' : '#2A1A2A');
     objs.push(this.add.text(cx, cy + NODE_R + 9, info.label, {
       fontSize: '10px', color: labelColor,
     }).setOrigin(0.5));
@@ -289,20 +293,20 @@ export class MapScene extends Phaser.Scene {
     this.add.rectangle(640, 360, 1280, 720, 0x000000, 0.75).setDepth(10);
 
     this.add.text(640, 270, 'Act 1 클리어!', {
-      fontSize: '52px', color: '#f9ca24', fontStyle: 'bold',
-      stroke: '#7a5a00', strokeThickness: 5,
+      fontSize: '52px', color: '#FFD700', fontStyle: 'bold', fontFamily: FONT,
+      stroke: '#8B4500', strokeThickness: 5,
     }).setOrigin(0.5).setDepth(11);
 
     this.add.text(640, 355, '어둠의 군주를 물리쳤습니다.', {
-      fontSize: '18px', color: '#adb5bd',
+      fontSize: '18px', color: '#C8A0CC', fontFamily: FONT,
     }).setOrigin(0.5).setDepth(11);
 
     const btn = this.add.text(640, 450, '[ 허브로 돌아가기 ]', {
-      fontSize: '22px', color: '#6c5ce7',
+      fontSize: '22px', color: '#FF69B4', fontFamily: FONT,
     }).setOrigin(0.5).setInteractive({ useHandCursor: true }).setDepth(11);
 
-    btn.on('pointerover', () => btn.setColor('#a29bfe'));
-    btn.on('pointerout',  () => btn.setColor('#6c5ce7'));
+    btn.on('pointerover', () => btn.setColor('#FFB6C1'));
+    btn.on('pointerout',  () => btn.setColor('#FF69B4'));
     btn.on('pointerdown', () => {
       GameState.hardReset();
       this.cameras.main.fadeOut(280, 0, 0, 0);
