@@ -2,11 +2,8 @@ import Phaser from 'phaser';
 import { GameState } from '../GameState';
 import { AchievementManager } from '../achievements/AchievementManager';
 import type { MapNode } from '../types';
-import {
-  BG_DEEP, BG_DIVIDER,
-  PINK,
-  TEXT_SECONDARY, FONT,
-} from '../theme';
+import { TEXT_SECONDARY, FONT } from '../theme';
+import { getActTheme } from '../data/actTheme';
 
 // ── 레이아웃 상수 ─────────────────────────────────────────────────────────────
 const COL_X       = [130, 385, 640, 895, 1150]; // 5열 (col 0–4)
@@ -20,14 +17,9 @@ const CONTENT_TOP = 70;            // 헤더 아래 맵 뷰포트 시작 y
 const CONTENT_H   = 650;           // 맵 뷰포트 높이 (720 - 70)
 const MAP_TOTAL_H = ROW_TOP_PAD + 9 * ROW_SPACING + ROW_BOT_PAD; // 50+990+50 = 1090
 
-const NODE_INFO: Record<string, { fill: number; stroke: number; label: string }> = {
-  battle:   { fill: 0x2D1550, stroke: 0xC8A0FF, label: '전투'   },
-  elite:    { fill: 0x3D0D50, stroke: 0xC050C0, label: '엘리트' },
-  boss:     { fill: 0x3d0020, stroke: 0xFF1493, label: '보스'   },
-  event:    { fill: 0x2D1550, stroke: 0xFF69B4, label: '이벤트' },
-  shop:     { fill: 0x2d1a00, stroke: 0xFFD700, label: '상점'   },
-  rest:     { fill: 0x001a0d, stroke: 0x4CAF70, label: '휴식'   },
-  treasure: { fill: 0x2a2000, stroke: 0xFFD700, label: '보물'   },
+const NODE_LABELS: Record<string, string> = {
+  battle: '전투', elite: '엘리트', boss: '보스',
+  event: '이벤트', shop: '상점', rest: '휴식', treasure: '보물',
 };
 
 /** row → 컨테이너-로컬 y (보스=상단, 시작=하단) */
@@ -107,9 +99,10 @@ export class MapScene extends Phaser.Scene {
   // ── 배경·헤더 ─────────────────────────────────────────────────────────────
 
   private renderBackground(): void {
-    this.add.rectangle(640, 360, 1280, 720, BG_DEEP);
-    this.add.rectangle(640, 2, 1280, 4, PINK).setOrigin(0.5, 0);
-    this.add.rectangle(640, 718, 1280, 2, BG_DIVIDER).setOrigin(0.5, 1);
+    const theme = getActTheme(GameState.currentAct);
+    this.add.rectangle(640, 360, 1280, 720, theme.bg);
+    this.add.rectangle(640, 2, 1280, 4, theme.topAccent).setOrigin(0.5, 0);
+    this.add.rectangle(640, 718, 1280, 2, theme.bottomBorder).setOrigin(0.5, 1);
   }
 
   /**
@@ -117,25 +110,27 @@ export class MapScene extends Phaser.Scene {
    * 맵 컨테이너보다 나중에 렌더되므로 스크롤 시 노드가 헤더 뒤로 자연스럽게 숨는다.
    */
   private renderHeaderCover(): void {
-    this.add.rectangle(640, 34, 1280, 68, BG_DEEP);
-    this.add.rectangle(640, 2, 1280, 4, PINK).setOrigin(0.5, 0);
+    const theme = getActTheme(GameState.currentAct);
+    this.add.rectangle(640, 34, 1280, 68, theme.bg);
+    this.add.rectangle(640, 2, 1280, 4, theme.topAccent).setOrigin(0.5, 0);
   }
 
   private renderHeader(): void {
+    const theme = getActTheme(GameState.currentAct);
     const ACT_TITLES: Record<number, string> = {
       1: 'Act 1  —  던전 탐험',
       2: 'Act 2  —  심연의 탑',
       3: 'Act 3  —  고대의 전당',
     };
     this.add.text(640, 28, ACT_TITLES[GameState.currentAct] ?? `Act ${GameState.currentAct}`, {
-      fontSize: '20px', color: '#FFB6C1', fontStyle: 'bold', fontFamily: FONT,
+      fontSize: '20px', color: theme.titleColor, fontStyle: 'bold', fontFamily: FONT,
     }).setOrigin(0.5);
 
     this.add.text(640, 52, `HP  ${GameState.playerHp} / ${GameState.playerMaxHp}   |   골드  ${GameState.gold} G`, {
       fontSize: '13px', color: TEXT_SECONDARY, fontFamily: FONT,
     }).setOrigin(0.5);
 
-    this.add.rectangle(640, 65, 1280, 1, BG_DIVIDER);
+    this.add.rectangle(640, 65, 1280, 1, getActTheme(GameState.currentAct).bottomBorder);
   }
 
   private renderAbandonButton(): void {
@@ -197,6 +192,7 @@ export class MapScene extends Phaser.Scene {
     });
 
     // 멀티패스 렌더링 (z-order: inactive → visited → glow → core)
+    const theme = getActTheme(GameState.currentAct);
     const gInactive  = this.add.graphics();
     const gVisited   = this.add.graphics();
     const gGlow      = this.add.graphics();
@@ -204,15 +200,15 @@ export class MapScene extends Phaser.Scene {
 
     for (const e of edges) {
       if (e.state === 'inactive') {
-        gInactive.lineStyle(4, 0x2A1A3A, 0.5);
+        gInactive.lineStyle(4, theme.pathInactive, 0.5);
         this.drawBezierInto(gInactive, e.x1, e.y1, e.x2, e.y2);
       } else if (e.state === 'visited') {
-        gVisited.lineStyle(5, 0x8A4A8A, 0.85);
+        gVisited.lineStyle(5, theme.pathVisited, 0.85);
         this.drawBezierInto(gVisited, e.x1, e.y1, e.x2, e.y2);
       } else {
-        gGlow.lineStyle(18, 0xFF69B4, 0.25);
+        gGlow.lineStyle(18, theme.pathGlow, 0.25);
         this.drawBezierInto(gGlow, e.x1, e.y1, e.x2, e.y2);
-        gNavigable.lineStyle(6, 0xFF69B4, 1.0);
+        gNavigable.lineStyle(6, theme.pathNavigable, 1.0);
         this.drawBezierInto(gNavigable, e.x1, e.y1, e.x2, e.y2);
       }
     }
@@ -255,7 +251,9 @@ export class MapScene extends Phaser.Scene {
     const key       = `${node.row}_${node.col}`;
     const isVisited = visited.has(key);
     const isAvail   = avail.has(key);
-    const info      = NODE_INFO[node.type] ?? NODE_INFO['battle'];
+    const theme     = getActTheme(GameState.currentAct);
+    const nc        = theme.nodeColors[node.type] ?? theme.nodeColors['battle'];
+    const label     = NODE_LABELS[node.type] ?? node.type;
 
     const cx = nodeX(node);
     const cy = nodeY(node);
@@ -264,26 +262,28 @@ export class MapScene extends Phaser.Scene {
 
     // 글로우 (가용 노드)
     if (isAvail) {
-      objs.push(this.add.circle(cx, cy, NODE_R + 8, info.stroke, 0.12));
+      objs.push(this.add.circle(cx, cy, NODE_R + 8, nc.stroke, 0.14));
     }
 
     // 노드 원
-    const fill   = isVisited ? 0x120820 : (isAvail ? info.fill : 0x0E060E);
-    const stroke = isVisited ? 0x3A2A3A  : (isAvail ? info.stroke : 0x2A1A2A);
+    const fill   = isVisited ? theme.nodeVisitedFill   : (isAvail ? nc.fill   : theme.nodeInactiveFill);
+    const stroke = isVisited ? theme.nodeVisitedStroke : (isAvail ? nc.stroke : theme.nodeInactiveStroke);
     const sw     = isAvail ? 3 : 1;
     const circle = this.add.circle(cx, cy, NODE_R, fill);
     circle.setStrokeStyle(sw, stroke);
     objs.push(circle);
 
     // 아이콘 (첫 글자)
-    const iconColor = isVisited ? '#3A2A3A' : (isAvail ? hexStr(info.stroke) : '#2A1A2A');
-    objs.push(this.add.text(cx, cy, info.label.charAt(0), {
+    const visitedHex   = hexStr(theme.nodeVisitedStroke);
+    const inactiveHex  = hexStr(theme.nodeInactiveStroke);
+    const iconColor = isVisited ? visitedHex : (isAvail ? hexStr(nc.stroke) : inactiveHex);
+    objs.push(this.add.text(cx, cy, label.charAt(0), {
       fontSize: '13px', color: iconColor, fontStyle: 'bold',
     }).setOrigin(0.5));
 
     // 노드명 라벨
-    const labelColor = isAvail ? hexStr(info.stroke) : (isVisited ? '#3A2A3A' : '#2A1A2A');
-    objs.push(this.add.text(cx, cy + NODE_R + 9, info.label, {
+    const labelColor = isAvail ? hexStr(nc.stroke) : (isVisited ? visitedHex : inactiveHex);
+    objs.push(this.add.text(cx, cy + NODE_R + 9, label, {
       fontSize: '10px', color: labelColor,
     }).setOrigin(0.5));
 
@@ -292,8 +292,8 @@ export class MapScene extends Phaser.Scene {
     // 인터랙션 (가용 & 미방문)
     if (isAvail && !isVisited) {
       circle.setInteractive({ useHandCursor: true });
-      circle.on('pointerover', () => circle.setStrokeStyle(sw + 2, info.stroke));
-      circle.on('pointerout',  () => circle.setStrokeStyle(sw, info.stroke));
+      circle.on('pointerover', () => circle.setStrokeStyle(sw + 2, nc.stroke));
+      circle.on('pointerout',  () => circle.setStrokeStyle(sw, nc.stroke));
       circle.on('pointerdown', () => this.enterNode(node));
     }
   }

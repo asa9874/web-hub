@@ -8,9 +8,10 @@ import { sfx } from '../audio/SoundManager';
 import {
   BG_DEEP, BG_PANEL, BG_HOVER, BG_DIVIDER,
   BORDER_DIM,
-  PINK, ROSE, PINK_SOFT, LAVENDER, GREEN,
+  PINK, ROSE, PINK_SOFT, LAVENDER,
   TEXT_SECONDARY, FONT,
 } from '../theme';
+import { getActTheme, type ActTheme } from '../data/actTheme';
 
 // ── 레이아웃 상수 (1280×720) ────────────────────────────────────────────────
 const W = 1280;
@@ -39,6 +40,7 @@ interface CardView {
  */
 export class BattleScene extends Phaser.Scene {
   private gs!: GameState;
+  private actTheme!: ActTheme;
   private battleMode: BattleMode = 'default';
   private returnScene = 'HubScene';
   private turnPhase: TurnPhase = 'player';
@@ -91,6 +93,7 @@ export class BattleScene extends Phaser.Scene {
 
   create(): void {
     this.turnPhase = 'player';
+    this.actTheme = getActTheme(GameState.currentAct);
     GameState.battleStartHp = GameState.playerHp; // 도전 과제 '무적' 판정용
     GameState.reset(this.battleMode);
     this.gs = GameState.instance;
@@ -114,8 +117,8 @@ export class BattleScene extends Phaser.Scene {
   // ── 렌더링 ────────────────────────────────────────────────────────────────
 
   private renderBackground(): void {
-    this.add.rectangle(W / 2, 360, W, 720, BG_DEEP);
-    this.add.rectangle(W / 2, DIVIDER_Y, W, 2, BG_DIVIDER);
+    this.add.rectangle(W / 2, 360, W, 720, this.actTheme.bg);
+    this.add.rectangle(W / 2, DIVIDER_Y, W, 2, this.actTheme.battleDivider);
   }
 
   /** 전투 모드에 맞게 몬스터 슬롯을 동적으로 생성 */
@@ -558,8 +561,9 @@ export class BattleScene extends Phaser.Scene {
   private renderEndTurnButton(): void {
     const bx = 1155, by = PILE_MANA_Y;
 
-    this.endTurnBtn = this.add.rectangle(bx, by, 140, 46, GREEN);
-    this.endTurnBtn.setStrokeStyle(2, 0x66CF90);
+    const btnColor = this.actTheme.endTurnActive;
+    this.endTurnBtn = this.add.rectangle(bx, by, 140, 46, btnColor);
+    this.endTurnBtn.setStrokeStyle(2, btnColor);
     this.endTurnBtn.setInteractive({ useHandCursor: true });
 
     this.add.text(bx, by, '턴 종료', {
@@ -567,10 +571,10 @@ export class BattleScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     this.endTurnBtn.on('pointerover', () => {
-      if (this.turnPhase === 'player') this.endTurnBtn.setFillStyle(0x66CF90);
+      if (this.turnPhase === 'player') this.endTurnBtn.setFillStyle(this.actTheme.endTurnActive);
     });
     this.endTurnBtn.on('pointerout', () => {
-      if (this.turnPhase === 'player') this.endTurnBtn.setFillStyle(GREEN);
+      if (this.turnPhase === 'player') this.endTurnBtn.setFillStyle(this.actTheme.endTurnActive);
     });
     this.endTurnBtn.on('pointerdown', () => {
       if (this.turnPhase !== 'player') return;
@@ -794,10 +798,10 @@ export class BattleScene extends Phaser.Scene {
       if (i !== nearestIdx) return;
       const { cx, cy, w, h } = this.enemyCenterPos[i];
       // 넓은 외부 글로우
-      g.lineStyle(12, 0xFF69B4, 0.22);
+      g.lineStyle(12, this.actTheme.targetGlow, 0.22);
       g.strokeRect(cx - w / 2 - 10, cy - h / 2 - 10, w + 20, h + 20);
       // 선명한 내부 아웃라인
-      g.lineStyle(3, 0xFF69B4, 0.95);
+      g.lineStyle(3, this.actTheme.targetGlow, 0.95);
       g.strokeRect(cx - w / 2 - 4, cy - h / 2 - 4, w + 8, h + 8);
     });
   }
@@ -840,7 +844,7 @@ export class BattleScene extends Phaser.Scene {
   /** 플레이어 턴 종료 → 손패 버림 애니메이션 → 몬스터들 순차 행동 → 플레이어 턴 복귀 */
   private startMonsterTurn(): void {
     this.turnPhase = 'monster';
-    this.endTurnBtn.setFillStyle(0x3A2A4A);
+    this.endTurnBtn.setFillStyle(0x1A1A2A); // dim inactive — act-agnostic
     this.endTurnBtn.disableInteractive();
 
     const views = [...this.cardViews];
@@ -996,7 +1000,7 @@ export class BattleScene extends Phaser.Scene {
     this.updateUI();
     this.updateAllIntents();
 
-    this.endTurnBtn.setFillStyle(GREEN);
+    this.endTurnBtn.setFillStyle(this.actTheme.endTurnActive);
     this.endTurnBtn.setInteractive({ useHandCursor: true });
 
     if (poisonDmg > 0) {
