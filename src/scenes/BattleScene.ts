@@ -829,19 +829,49 @@ export class BattleScene extends Phaser.Scene {
 
   // ── 턴 시스템 ──────────────────────────────────────────────────────────────
 
-  /** 플레이어 턴 종료 → 몬스터들 순차 행동 → 플레이어 턴 복귀 */
+  /** 플레이어 턴 종료 → 손패 버림 애니메이션 → 몬스터들 순차 행동 → 플레이어 턴 복귀 */
   private startMonsterTurn(): void {
     this.turnPhase = 'monster';
     this.endTurnBtn.setFillStyle(0x3A2A4A);
     this.endTurnBtn.disableInteractive();
 
-    // 손패 비주얼 제거 + 배열 이동
-    this.renderHand();
+    const views = [...this.cardViews];
+    // cardViews를 즉시 비워 renderHand()가 이 컨테이너를 다시 건드리지 않도록 함
+    this.cardViews = [];
+
+    if (views.length === 0) {
+      this._finishMonsterTurnStart();
+      return;
+    }
+
+    let completed = 0;
+    views.forEach((cv, i) => {
+      this.tweens.add({
+        targets: cv.container,
+        x: DISCARD_X,
+        y: PILE_Y,
+        scaleX: 0.35,
+        scaleY: 0.35,
+        alpha: 0,
+        duration: 220,
+        ease: 'Power2.In',
+        delay: i * 40,
+        onComplete: () => {
+          cv.container.destroy(); // 개별 카드 애니메이션 완료 즉시 제거
+          if (++completed === views.length) this._finishMonsterTurnStart();
+        },
+      });
+    });
+  }
+
+  private _finishMonsterTurnStart(): void {
+    // endPlayerTurn()을 먼저 호출해 gs.hand를 비운 뒤 renderHand()를 실행해야
+    // 빈 손패가 렌더링된다 (순서가 역전되면 카드가 다시 생성됨)
     this.gs.endPlayerTurn();
+    this.renderHand();
     this.clearAllIntents();
     this.updateUI();
     this.flashMessage('몬스터의 턴!', 0xe17055);
-
     this.time.delayedCall(700, () => this.executeNextMonsterTurn(0));
   }
 
