@@ -3,16 +3,19 @@ import { generateMap } from './data/mapGenerator';
 import { POTION_LIBRARY } from './potions/potionLibrary';
 import { applyDamage, applyPoison, addStatus, tickDuration, emptyStatuses } from './utils/combat';
 import { RELIC_LIBRARY } from './relics/relicLibrary';
-import { Slime } from './monsters/Slime';
-import { Goblin } from './monsters/Goblin';
-import { Orc } from './monsters/Orc';
-import { Skeleton } from './monsters/Skeleton';
-import { Bat } from './monsters/Bat';
+import { MemoryGhost } from './monsters/MemoryGhost';
+import { DarkKnight } from './monsters/DarkKnight';
+import { ShadowCat } from './monsters/ShadowCat';
+import { StarAbsorber } from './monsters/StarAbsorber';
+import { MirrorPhantom } from './monsters/MirrorPhantom';
+import { CorruptedKnight } from './monsters/CorruptedKnight';
+import { DarkPriest } from './monsters/DarkPriest';
+import { AbyssBeast } from './monsters/AbyssBeast';
 import { DarkLord } from './monsters/DarkLord';
+import { StarDestroyer } from './monsters/StarDestroyer';
+import { MemoryKing } from './monsters/MemoryKing';
 import { ShadowTitan } from './monsters/ShadowTitan';
 import { AncientOne } from './monsters/AncientOne';
-import { ForestGiant } from './monsters/ForestGiant';
-import { SpiderQueen } from './monsters/SpiderQueen';
 import type { Monster } from './monsters/Monster';
 
 /**
@@ -296,18 +299,21 @@ export class GameState {
     };
 
     if (mode === 'five_monsters') {
-      this.enemies = [new Slime(), new Goblin(), new Orc(), new Skeleton(), new Bat()];
+      this.enemies = [
+        GameState.spawnNormalMonster(),
+        GameState.spawnNormalMonster(),
+        GameState.spawnNormalMonster(),
+        GameState.spawnNormalMonster(),
+        GameState.spawnNormalMonster(),
+      ];
     } else if (mode === 'boss') {
-      // 현재 액트에 따라 보스 선택
       if (GameState.currentAct === 2) this.enemies = [new ShadowTitan()];
       else if (GameState.currentAct === 3) this.enemies = [new AncientOne()];
-      else this.enemies = [new DarkLord()];
-    } else if (mode === 'elite_giant') {
-      this.enemies = [new ForestGiant()];
-    } else if (mode === 'elite_spider') {
-      this.enemies = [new SpiderQueen()];
+      else this.enemies = [GameState.spawnBossMonster()];
+    } else if (mode === 'elite') {
+      this.enemies = [GameState.spawnEliteMonster()];
     } else {
-      this.enemies = [new Slime()];
+      this.enemies = [GameState.spawnNormalMonster()];
     }
     this.enemies.forEach(e => e.prepareNextAction());
 
@@ -681,5 +687,30 @@ export class GameState {
       [pool[i], pool[j]] = [pool[j], pool[i]];
     }
     return pool.slice(0, Math.min(n, pool.length));
+  }
+
+  // ── Act 1 몬스터 스폰 ─────────────────────────────────────────────────────
+
+  static spawnNormalMonster(): import('./monsters/Monster').Monster {
+    const r = Math.random() * 100;
+    if (r < 30) return new MemoryGhost();
+    if (r < 55) return new DarkKnight();
+    if (r < 75) return new ShadowCat();
+    if (r < 90) return new StarAbsorber();
+    return new MirrorPhantom();
+  }
+
+  static spawnEliteMonster(): import('./monsters/Monster').Monster {
+    const r = Math.random() * 100;
+    if (r < 45) return new CorruptedKnight();
+    if (r < 80) return new DarkPriest();
+    return new AbyssBeast();
+  }
+
+  static spawnBossMonster(): import('./monsters/Monster').Monster {
+    const r = Math.floor(Math.random() * 3);
+    if (r === 0) return new DarkLord();
+    if (r === 1) return new StarDestroyer();
+    return new MemoryKing();
   }
 }

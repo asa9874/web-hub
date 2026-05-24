@@ -310,8 +310,7 @@ export class MapScene extends Phaser.Scene {
           this.scene.start('BattleScene', { mode: 'default', returnScene: 'MapScene' });
           return;
         case 'elite': {
-          const mode = Math.random() < 0.5 ? 'elite_giant' : 'elite_spider';
-          this.scene.start('BattleScene', { mode, returnScene: 'MapScene' });
+          this.scene.start('BattleScene', { mode: 'elite', returnScene: 'MapScene' });
           return;
         }
         case 'boss':

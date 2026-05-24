@@ -55,7 +55,7 @@ export interface Card {
 export type TurnPhase = 'player' | 'monster';
 
 /** 전투 모드 — GameState 생성 시 사용할 몬스터 구성 결정 */
-export type BattleMode = 'default' | 'five_monsters' | 'boss' | 'elite_giant' | 'elite_spider';
+export type BattleMode = 'default' | 'five_monsters' | 'boss' | 'elite';
 
 // ── 맵 시스템 타입 ────────────────────────────────────────────────────────────
 

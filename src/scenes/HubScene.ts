@@ -182,10 +182,10 @@ export class HubScene extends Phaser.Scene {
       }],
       [1152, ys[2], {
         title: '엘리트 전투',
-        description: '숲 거인 / 독거미 여왕\n유물 드롭',
+        description: '오염된 엘리트 몬스터\n유물 드롭',
         accentColor: LAVENDER, cardW: 200, cardH: CH,
         onClick: () => this.launchScene('BattleScene', {
-          mode: Math.random() < 0.5 ? 'elite_giant' : 'elite_spider',
+          mode: 'elite',
         }),
       }],
     ];

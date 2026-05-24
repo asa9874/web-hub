@@ -83,7 +83,7 @@ export class BattleScene extends Phaser.Scene {
   init(data: { mode?: string; returnScene?: string }): void {
     const m = data?.mode;
     this.battleMode =
-      m === 'five_monsters' || m === 'boss' || m === 'elite_giant' || m === 'elite_spider'
+      m === 'five_monsters' || m === 'boss' || m === 'elite'
         ? (m as BattleMode)
         : 'default';
     this.returnScene = data?.returnScene ?? 'HubScene';
@@ -1037,7 +1037,7 @@ export class BattleScene extends Phaser.Scene {
           relics: GameState.getRandomRelics('boss', 3),
           returnScene: 'VictoryScene',
         });
-      } else if (this.battleMode === 'elite_giant' || this.battleMode === 'elite_spider') {
+      } else if (this.battleMode === 'elite') {
         GameState.pendingGold = Phaser.Math.Between(80, 110);
         GameState.pendingReturnScene = this.returnScene;
         const tier = Math.random() < 0.5 ? 'common' as const : 'rare' as const;

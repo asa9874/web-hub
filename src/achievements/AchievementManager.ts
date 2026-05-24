@@ -72,7 +72,7 @@ export class AchievementManager {
     if (finalHp >= GameState.battleStartHp) this.unlock('untouchable');
     if (finalHp <= 10) this.unlock('survivor');
     if (mode === 'boss') this.unlock('boss_slayer');
-    if (mode === 'elite_giant' || mode === 'elite_spider') this.unlock('elite_slayer');
+    if (mode === 'elite') this.unlock('elite_slayer');
   }
 
   /** VictoryScene에서 골드가 추가된 후 호출. */
