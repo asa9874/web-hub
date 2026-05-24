@@ -18,77 +18,8 @@ function shuffle<T>(arr: T[], rand: () => number): T[] {
   return a;
 }
 
-/**
- * 각 row에서 활성화된 col (0,1,2) 마스크.
- * bit 0 = col 0, bit 1 = col 1, bit 2 = col 2
- * 모든 액트에서 동일한 구조적 레이아웃 사용.
- */
-const ROW_COL_MASK = [
-  0b111, // row 0: 전투 시작 — 3노드
-  0b111, // row 1
-  0b111, // row 2
-  0b101, // row 3: 2노드 (col 0, 2) — 엘리트 보장
-  0b111, // row 4
-  0b111, // row 5
-  0b101, // row 6: 2노드 (col 0, 2) — 엘리트 보장
-  0b111, // row 7
-  0b111, // row 8: 보스 직전
-  0b010, // row 9: 1노드 (col 1) — 보스
-];
-
-// ── 액트별 노드 타입 풀 ────────────────────────────────────────────────────────
-
-/** Act 1 — 던전 탐험: 입문 난이도, 이벤트·상점 균형 */
-const ACT1_POOLS: NodeType[][] = [
-  ['battle', 'battle', 'battle'],    // row 0
-  ['battle', 'battle', 'event'],     // row 1
-  ['battle', 'event', 'shop'],       // row 2
-  ['elite', 'event'],                // row 3 (2노드)
-  ['battle', 'battle', 'treasure'],  // row 4
-  ['battle', 'event', 'shop'],       // row 5
-  ['elite', 'rest'],                 // row 6 (2노드)
-  ['battle', 'event', 'shop'],       // row 7
-  ['rest', 'shop', 'treasure'],      // row 8
-  ['boss'],                          // row 9 — 암흑 군주
-];
-
-/** Act 2 — 심연의 탑: 중간 난이도, 엘리트 비중 증가, 상점 의존도 상승 */
-const ACT2_POOLS: NodeType[][] = [
-  ['battle', 'battle', 'battle'],    // row 0
-  ['battle', 'battle', 'shop'],      // row 1 (이벤트 → 상점)
-  ['battle', 'elite', 'event'],      // row 2 (엘리트 조기 등장)
-  ['elite', 'shop'],                 // row 3 (2노드: 엘리트 + 상점)
-  ['battle', 'battle', 'treasure'],  // row 4
-  ['battle', 'elite', 'shop'],       // row 5 (엘리트 + 상점)
-  ['elite', 'rest'],                 // row 6 (2노드)
-  ['battle', 'event', 'shop'],       // row 7
-  ['rest', 'elite', 'treasure'],     // row 8 (보스 직전에도 엘리트!)
-  ['boss'],                          // row 9 — 그림자 타이탄
-];
-
-/** Act 3 — 고대의 전당: 최고 난이도, 엘리트 다수, 회복 희소 */
-const ACT3_POOLS: NodeType[][] = [
-  ['battle', 'battle', 'battle'],    // row 0
-  ['battle', 'elite', 'event'],      // row 1 (row 1부터 엘리트)
-  ['elite', 'battle', 'shop'],       // row 2
-  ['elite', 'rest'],                 // row 3 (2노드: 엘리트 + 휴식)
-  ['battle', 'elite', 'treasure'],   // row 4 (엘리트 + 보물)
-  ['elite', 'battle', 'rest'],       // row 5 (엘리트 + 휴식)
-  ['elite', 'shop'],                 // row 6 (2노드: 엘리트 + 상점)
-  ['battle', 'event', 'elite'],      // row 7 (row 7에도 엘리트)
-  ['rest', 'shop', 'treasure'],      // row 8 (최종 준비)
-  ['boss'],                          // row 9 — 고대인 (최종 보스)
-];
-
-const ACT_POOLS: NodeType[][][] = [ACT1_POOLS, ACT2_POOLS, ACT3_POOLS];
-
-/** 노드 시각 오프셋 범위 */
-const JITTER_X = 45;
-const JITTER_Y = 18;
-
-function activeCols(mask: number): number[] {
-  return [0, 1, 2].filter(c => (mask >> c) & 1);
-}
+const JITTER_X = 30;
+const JITTER_Y = 12;
 
 type Edge = [number, number]; // [srcCol, dstCol]
 
@@ -98,19 +29,27 @@ function crossesEdge(e1: Edge, e2: Edge): boolean {
 }
 
 /**
- * StS 스타일 연결 생성:
- * - 노드당 최대 2개 연결
- * - 교차 엣지 없음
- * - 모든 노드에 최소 1개 연결 보장
+ * Row 0, 9: 고정 cols [0, 2, 4] (정확히 3노드).
+ * Row 1–8: 무작위 3–5노드 — [0,1,2,3,4]에서 n개 선택 후 정렬.
  */
-function buildConnections(row: number, rand: () => number): number[][] {
-  const curCols  = activeCols(ROW_COL_MASK[row]);
-  const nextCols = activeCols(ROW_COL_MASK[row + 1] ?? 0);
-  if (nextCols.length === 0) return curCols.map(() => []);
+function pickActiveCols(row: number, rand: () => number): number[] {
+  if (row === 0 || row === 9) return [0, 2, 4];
+  const r = rand();
+  const n = r < 0.4 ? 3 : r < 0.75 ? 4 : 5;
+  return shuffle([0, 1, 2, 3, 4], rand).slice(0, n).sort((a, b) => a - b);
+}
+
+/**
+ * 희소 연결 생성: 소스당 최대 1개 아웃고잉 엣지.
+ * |srcCol − dstCol| ≤ 1 인접 연결만 허용 (기본).
+ * 교차 엣지 없음. 모든 소스에 최소 1개 연결 보장.
+ */
+function buildConnections(srcCols: number[], dstCols: number[], rand: () => number): number[][] {
+  if (dstCols.length === 0) return srcCols.map(() => []);
 
   const candidates: Edge[] = [];
-  curCols.forEach(c => {
-    nextCols.filter(nc => Math.abs(nc - c) <= 1).forEach(nc => {
+  srcCols.forEach(c => {
+    dstCols.filter(nc => Math.abs(nc - c) <= 1).forEach(nc => {
       candidates.push([c, nc]);
     });
   });
@@ -121,48 +60,119 @@ function buildConnections(row: number, rand: () => number): number[][] {
 
   for (const edge of shuffled) {
     const [c] = edge;
-    if ((srcCount[c] ?? 0) >= 2) continue;
+    if ((srcCount[c] ?? 0) >= 1) continue;
     if (accepted.some(ae => crossesEdge(ae, edge))) continue;
     accepted.push(edge);
     srcCount[c] = (srcCount[c] ?? 0) + 1;
   }
 
-  for (const c of curCols) {
+  // 연결이 없는 소스: 가장 가까운 목적지로 폴백
+  for (const c of srcCols) {
     if ((srcCount[c] ?? 0) === 0) {
-      const closest = nextCols.reduce((best, nc) =>
+      const closest = dstCols.reduce((best, nc) =>
         Math.abs(nc - c) < Math.abs(best - c) ? nc : best,
       );
       accepted.push([c, closest]);
     }
   }
 
-  return curCols.map(c =>
+  return srcCols.map(c =>
     accepted.filter(([ac]) => ac === c).map(([, nc]) => nc).sort((a, b) => a - b),
   );
 }
 
 /**
+ * base 풀(3개)을 n개로 패딩.
+ * 초과 슬롯은 'battle'로 채운다.
+ */
+function buildPool(base: NodeType[], n: number): NodeType[] {
+  const padded: NodeType[] = [...base];
+  while (padded.length < n) padded.push('battle');
+  return padded.slice(0, n);
+}
+
+// ── 액트별 기본 노드 풀 (3-element base; 추가 노드는 'battle'로 패딩) ────────
+
+/** Act 1 — 던전 탐험 */
+const ACT1_POOLS: NodeType[][] = [
+  ['battle', 'battle', 'battle'],    // row 0 (고정 3노드)
+  ['battle', 'battle', 'event'],     // row 1
+  ['battle', 'event',  'shop'],      // row 2
+  ['elite',  'event',  'battle'],    // row 3
+  ['battle', 'battle', 'treasure'],  // row 4
+  ['battle', 'event',  'shop'],      // row 5
+  ['elite',  'rest',   'battle'],    // row 6
+  ['battle', 'event',  'shop'],      // row 7
+  ['rest',   'shop',   'treasure'],  // row 8
+  ['boss',   'boss',   'boss'],      // row 9 (고정 3노드 — 암흑 군주)
+];
+
+/** Act 2 — 심연의 탑 */
+const ACT2_POOLS: NodeType[][] = [
+  ['battle', 'battle', 'battle'],
+  ['battle', 'battle', 'shop'],
+  ['battle', 'elite',  'event'],
+  ['elite',  'shop',   'battle'],
+  ['battle', 'battle', 'treasure'],
+  ['battle', 'elite',  'shop'],
+  ['elite',  'rest',   'battle'],
+  ['battle', 'event',  'shop'],
+  ['rest',   'elite',  'treasure'],
+  ['boss',   'boss',   'boss'],      // 그림자 타이탄
+];
+
+/** Act 3 — 고대의 전당 */
+const ACT3_POOLS: NodeType[][] = [
+  ['battle', 'battle', 'battle'],
+  ['battle', 'elite',  'event'],
+  ['elite',  'battle', 'shop'],
+  ['elite',  'rest',   'battle'],
+  ['battle', 'elite',  'treasure'],
+  ['elite',  'battle', 'rest'],
+  ['elite',  'shop',   'battle'],
+  ['battle', 'event',  'elite'],
+  ['rest',   'shop',   'treasure'],
+  ['boss',   'boss',   'boss'],      // 고대인 (최종 보스)
+];
+
+const ACT_POOLS: NodeType[][][] = [ACT1_POOLS, ACT2_POOLS, ACT3_POOLS];
+
+/**
  * 던전 맵 생성.
  * @param seed 결정론적 시드
- * @param act  액트 번호 (1 | 2 | 3) — 노드 타입 풀 결정
+ * @param act  액트 번호 (1 | 2 | 3)
  */
 export function generateMap(seed: number, act: number = 1): MapNode[][] {
-  const rand = makeLcg(seed);
+  const rand  = makeLcg(seed);
   const pools = ACT_POOLS[Math.max(0, act - 1)] ?? ACT1_POOLS;
 
-  return pools.map((pool, row) => {
-    const cols     = activeCols(ROW_COL_MASK[row]);
-    const types    = row === 9 ? [...pool] : shuffle([...pool], rand);
-    const connSets = row < 9 ? buildConnections(row, rand) : cols.map(() => []);
-    const isBoss   = row === 9;
+  // 각 row의 활성 cols를 미리 계산 (연결 생성에 다음 row 정보 필요)
+  const rowCols: number[][] = Array.from({ length: 10 }, (_, row) =>
+    pickActiveCols(row, rand),
+  );
+
+  return pools.map((basePool, row) => {
+    const cols   = rowCols[row];
+    const n      = cols.length;
+    const isBoss = row === 9;
+    const isFixed = row === 0 || row === 9;
+
+    // row 0·9는 기본 풀 그대로 사용, 중간 row는 패딩 후 셔플
+    const pool = isFixed
+      ? [...basePool]
+      : shuffle(buildPool(basePool, n), rand);
+
+    const connSets = row < 9
+      ? buildConnections(cols, rowCols[row + 1] ?? [], rand)
+      : cols.map(() => []);
 
     return cols.map((col, i) => ({
-      type: types[i] as NodeType,
+      type:        pool[i] as NodeType,
       row,
       col,
       connections: connSets[i],
-      jitterX: isBoss ? 0 : (rand() * 2 - 1) * JITTER_X,
-      jitterY: isBoss ? 0 : (rand() * 2 - 1) * JITTER_Y,
+      jitterX:     isBoss ? 0 : (rand() * 2 - 1) * JITTER_X,
+      jitterY:     isBoss ? 0 : (rand() * 2 - 1) * JITTER_Y,
     }));
   });
 }

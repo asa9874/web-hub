@@ -9,8 +9,8 @@ import {
 } from '../theme';
 
 // ── 레이아웃 상수 ─────────────────────────────────────────────────────────────
-const COL_X       = [290, 640, 990];
-const ROW_SPACING = 90;            // row 간격 (63 → 90으로 확대)
+const COL_X       = [130, 385, 640, 895, 1150]; // 5열 (col 0–4)
+const ROW_SPACING = 110;           // row 간격 확대
 const ROW_TOP_PAD = 50;            // 컨테이너 상단 여백 (보스 위)
 const ROW_BOT_PAD = 50;            // 컨테이너 하단 여백
 const NODE_R      = 22;
@@ -18,7 +18,7 @@ const NODE_R      = 22;
 // 스크롤 영역
 const CONTENT_TOP = 70;            // 헤더 아래 맵 뷰포트 시작 y
 const CONTENT_H   = 650;           // 맵 뷰포트 높이 (720 - 70)
-const MAP_TOTAL_H = ROW_TOP_PAD + 9 * ROW_SPACING + ROW_BOT_PAD; // 50+810+50 = 910
+const MAP_TOTAL_H = ROW_TOP_PAD + 9 * ROW_SPACING + ROW_BOT_PAD; // 50+990+50 = 1090
 
 const NODE_INFO: Record<string, { fill: number; stroke: number; label: string }> = {
   battle:   { fill: 0x2D1550, stroke: 0xC8A0FF, label: '전투'   },
@@ -171,32 +171,80 @@ export class MapScene extends Phaser.Scene {
       GameState.getAvailableMapNodes().map(n => `${n.row}_${n.col}`),
     );
 
-    // 연결선 (단일 Graphics)
-    const g = this.add.graphics();
+    // 엣지 분류: inactive | visited | navigable
+    type EdgeState = 'inactive' | 'visited' | 'navigable';
+    type EdgeData  = { x1: number; y1: number; x2: number; y2: number; state: EdgeState };
+    const edges: EdgeData[] = [];
+
     map.forEach(rowNodes => {
       rowNodes.forEach(node => {
-        const x1      = nodeX(node);
-        const y1      = nodeY(node);
-        const curDone = visited.has(`${node.row}_${node.col}`);
+        const x1       = nodeX(node);
+        const y1       = nodeY(node);
+        const nodeKey  = `${node.row}_${node.col}`;
+        const curVisit = visited.has(nodeKey);
 
         node.connections.forEach(nc => {
           const nxt = (map[node.row + 1] ?? []).find(n => n.col === nc);
           if (!nxt) return;
-          const pathDone = curDone && visited.has(`${nxt.row}_${nc}`);
-          g.lineStyle(2, pathDone ? 0x8A4A8A : 0x3A1A3A, pathDone ? 0.85 : 0.3);
-          g.beginPath();
-          g.moveTo(x1, y1);
-          g.lineTo(nodeX(nxt), nodeY(nxt));
-          g.strokePath();
+          const nxtKey   = `${nxt.row}_${nc}`;
+          let state: EdgeState;
+          if      (curVisit && avail.has(nxtKey))   state = 'navigable';
+          else if (curVisit && visited.has(nxtKey))  state = 'visited';
+          else                                        state = 'inactive';
+          edges.push({ x1, y1, x2: nodeX(nxt), y2: nodeY(nxt), state });
         });
       });
     });
-    this.mapContainer.add(g);
+
+    // 멀티패스 렌더링 (z-order: inactive → visited → glow → core)
+    const gInactive  = this.add.graphics();
+    const gVisited   = this.add.graphics();
+    const gGlow      = this.add.graphics();
+    const gNavigable = this.add.graphics();
+
+    for (const e of edges) {
+      if (e.state === 'inactive') {
+        gInactive.lineStyle(4, 0x2A1A3A, 0.5);
+        this.drawBezierInto(gInactive, e.x1, e.y1, e.x2, e.y2);
+      } else if (e.state === 'visited') {
+        gVisited.lineStyle(5, 0x8A4A8A, 0.85);
+        this.drawBezierInto(gVisited, e.x1, e.y1, e.x2, e.y2);
+      } else {
+        gGlow.lineStyle(18, 0xFF69B4, 0.25);
+        this.drawBezierInto(gGlow, e.x1, e.y1, e.x2, e.y2);
+        gNavigable.lineStyle(6, 0xFF69B4, 1.0);
+        this.drawBezierInto(gNavigable, e.x1, e.y1, e.x2, e.y2);
+      }
+    }
+
+    this.mapContainer.add([gInactive, gVisited, gGlow, gNavigable]);
 
     // 노드
     map.forEach(rowNodes => {
       rowNodes.forEach(node => this.renderNode(node, visited, avail));
     });
+  }
+
+  /** 베지어 S-커브 (16세그먼트). 제어점을 수직 중앙에 배치해 자연스러운 곡선 생성. */
+  private drawBezierInto(
+    g: Phaser.GameObjects.Graphics,
+    x1: number, y1: number,
+    x2: number, y2: number,
+  ): void {
+    const midY = (y1 + y2) / 2;
+    const cp1x = x1, cp1y = midY;
+    const cp2x = x2, cp2y = midY;
+
+    g.beginPath();
+    for (let i = 0; i <= 16; i++) {
+      const t  = i / 16;
+      const mt = 1 - t;
+      const bx = mt*mt*mt*x1 + 3*mt*mt*t*cp1x + 3*mt*t*t*cp2x + t*t*t*x2;
+      const by = mt*mt*mt*y1 + 3*mt*mt*t*cp1y + 3*mt*t*t*cp2y + t*t*t*y2;
+      if (i === 0) g.moveTo(bx, by);
+      else         g.lineTo(bx, by);
+    }
+    g.strokePath();
   }
 
   private renderNode(
