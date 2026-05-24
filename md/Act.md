@@ -21,6 +21,29 @@
 | 음악 | 피아노와 현악의 느린 멜랑꼴리 |
 | 키워드 | 잃어버린 일상, 무너지는 기억, 각성 |
 
+### 환경 로어 — 탐험 일지
+
+> *"가로등이 꺼진 항구는 낯설지 않다. 하지만 사람들의 눈에서도 빛이 꺼진 것은 처음 본다."*
+
+#### 항구 구역 (Harbor District)
+
+별빛항의 건물들은 2~3층 석조 구조물이다. 벽면의 크림색 석회암은 암흑 에너지의 침식으로 회색과 흑청색 반점이 번져 있고, 나무 창틀은 검은 곰팡이 같은 무언가로 덮여 있다. 기억을 잃은 주민들이 항구 벽 위에 삼삼오오 서 있다—방향을 잃은 채, 표정이 비어 있고, 눈동자가 흐릿한 회색으로 탈색되어 있다. 항구의 석조 등대는 꺼져 있지만 꼭대기에서 희미한 은빛이 가끔 깜박인다—꺼지기 직전의 불꽃처럼. 바다는 놀랍도록 고요하다. 파도 소리가 들리지 않으며, 수면은 검고 윤기 없는 거울처럼 잠들어 있다.
+
+**프롬프트 키워드:** dark navy harbor, ash-gray limestone buildings, obsidian-black wood frames, pale silver lighthouse, glassy black sea with no waves, heavy indigo fog, crimson twilight at noon, amnesiac citizens with gray washed-out irises, impressionist oil painting, magical girl aesthetic
+
+#### 성운 숲 (星雲林)
+
+도시 서쪽 관문 바로 너머의 고대 정령수 군락. 수령 수백~수천 년의 나무들은 몸통 지름이 사람 키의 두 배를 넘고, 짙은 자수정빛 남색 껍질을 가졌다. 가지가 하늘을 완전히 가려 외부 빛이 전혀 들지 않는다. 대신 나뭇잎 자체에서 은청색 발광이 있어, 숲 내부는 자체 발광하는 수중처럼 보인다. 지면에는 보랏빛과 은빛이 섞인 이끼가 두텁게 깔려 있으며, 그 사이에 작은 별의 심장 파편 결정체들이 은빛으로 빛난다. 숲에서는 방향 감각이 왜곡되어 같은 방향으로 걸어도 원점으로 돌아오는 경우가 발생한다.
+
+**프롬프트 키워드:** ancient spirit forest, amethyst-navy bark, silver-blue bioluminescent leaves, violet and silver moss ground, glowing star-crystal shards, no sky visible through canopy, otherworldly underwater atmosphere, soft ethereal light from leaves, magical girl RPG environment concept art
+
+#### 고대 별의 신전 유적
+
+성운 숲 중심부의 석조 신전 유적. 지붕이 무너져 기둥만 남아 있으며, 각 기둥에는 별자리 문자가 새겨져 있다. 암흑 에너지에 의해 반은 지워졌지만 일부는 여전히 희미하게 황금빛으로 발광한다. 신전 중심부 지하에서 암흑 에너지가 역류하고 있으며, 이것이 성운 숲 전체로 퍼져나가는 근원지다.
+
+**감각 기록:**
+냄새 — 비 직전의 젖은 흙, 차가운 석재, 달콤하고 쓴 향. 소리 — 새 소리도 벌레 소리도 없다. 아무것도 없는 방향에서 아이의 웃음소리처럼 들리는 소리가 가끔 있다. 온도 — 도시보다 항상 3~5도 낮다. 낮과 밤의 온도 차가 없다.
+
 ### 주요 등장 몬스터
 
 - **망각의 도깨비** — 사람의 기억 파편을 먹고 자라는 소형 정령
@@ -82,6 +105,29 @@
 | 색감 | 심홍색 × 검정 × 흐릿한 황금 |
 | 음악 | 불협화음 오케스트라와 오르간 |
 | 키워드 | 뒤틀린 지식, 거짓 빛, 심연의 속삭임 |
+
+### 환경 로어 — 탐험 일지
+
+> *"탑은 살아있다. 그리고 탑은 우리를 원하지 않는다."*
+
+#### 1층 — 폐허 도서관
+
+탑의 1층 전체가 원형의 대형 도서관이었다. 천장까지 이어지는 서가들이 원형 미로처럼 배열되어 있으며, 책들의 겉표지는 심홍색 벨벳이나 검은 가죽에 금장 제목이 새겨진 형태로 원형을 유지하고 있다. 그러나 내부 페이지를 열면 활자가 스스로 이동하거나 읽을수록 글자가 지워진다. 조명은 자체 발광 수정 구슬들이었으나 절반이 꺼지고 나머지는 심홍빛으로 변질되어, 이 빛 아래서 책의 그림자가 벽에 움직이는 형상을 만든다. 도서관 중앙의 구형 천체의(天體儀)는 여전히 회전하고 있으나 별자리 배치가 3년 전 별의 심장 파괴 이전의 것을 재현하고 있다.
+
+**프롬프트 키워드:** circular ruined library, floor-to-ceiling bookshelves, crimson velvet book covers, gold lettering, crimson-tinted crystal orb lights, moving text on pages, slowly rotating orrery, dark red and black, corrupted arcane aesthetic, magical girl gothic setting
+
+#### 중간 층 — 뒤틀린 실험실
+
+연금술, 시간 마법, 공간 이동, 별의 에너지 정제 등 각기 다른 연구 목적의 실험실들이 연속된다. 모두 실험이 실패한 상태로 멈춰 있다. 유리 실린더에는 변질된 에너지가 수년간 정체되어 있고, 금속 실험대는 검붉게 산화되어 있다. 가장 특이한 현상은 중력 이상이다—어떤 방에서는 물체가 위쪽으로 떨어지고, 어떤 방에서는 수평으로 이동한다. 아무도 없는 실험실에서 실험 진행 소리가 들리는 경우도 있다.
+
+#### 꼭대기 층 — 가짜 별의 천장
+
+최상층은 원형 대형 홀이며 천장 전체가 유리 돔 구조다. 돔 바깥으로 별하늘이 보이는데—이것이 어둠이 복제한 환영이다. 진짜 별과 달리 이 별들은 깜박이지 않고, 별자리 패턴도 에스텔리아의 것과 미묘하게 다르다. 돔의 유리에 손을 대면 따뜻하다—빛 복제에 필요한 에너지가 내부에서 열을 발생시킨다. 홀 바닥에는 거대한 성진 문자 배열이 새겨져 있으며, 암흑 에너지로 인해 원래의 봉인 주술이 소환 주술로 기능이 역전되어 있다.
+
+**프롬프트 키워드:** glass dome ceiling with fake stars, still non-twinkling stars, false star chart, warm glowing glass, ancient arcane floor inscription, circular hall, black and crimson and gold palette, ominous false sky, magical corruption aesthetic
+
+**감각 기록:**
+냄새 — 낡은 양피지, 구리 산화 냄새, 불에 탄 무언가. 가끔 희미하게 꽃향기가 나는데, 이것이 가장 위험한 신호다. 소리 — 탑 내부에서는 항상 낮고 불규칙한 진동음이 바닥에서 전달되며, 계단을 오를수록 강해진다. 온도 — 층마다 다르다. 도서관 층은 냉동 창고처럼 차갑고, 실험실 층은 타는 듯이 건조하고 뜨겁다.
 
 ### 주요 등장 몬스터
 
@@ -150,6 +196,29 @@
 | 색감 | 심우주 남색 × 금빛 × 순백의 에너지 |
 | 음악 | 합창과 웅장한 오케스트라, 정적 |
 | 키워드 | 태고, 순환, 소멸과 탄생의 경계 |
+
+### 환경 로어 — 탐험 일지
+
+> *"이곳은 시간이 멈춘 것이 아니다. 처음부터 시간이 존재하지 않았다."*
+
+#### 외부 공간 — 성천원 회랑
+
+성천원 외곽부는 높이 30미터에 달하는 기둥들로 이루어진 거대한 회랑이다. 기둥의 소재는 흰빛과 별빛 금색이 교차하는 반투명 결정체—별의 심장 결정과 동일한 소재로 추정된다. 기둥 표면에는 수천 년에 걸친 고대인의 문자가 새겨져 있으며, 읽는 자에 따라 다른 의미를 전달한다고 한다. 바닥은 우주를 담은 유리다—그 아래로 은하계의 실시간 이미지가 보이며, 별들이 실제로 움직이고 성운이 펼쳐진다. 천장은 없다. 기둥들이 위로 끝없이 이어지다가 진짜 별하늘 속으로 사라진다.
+
+**프롬프트 키워드:** celestial hall with towering translucent crystal pillars, white and starlight-gold, cosmic glass floor showing live galaxy beneath, no ceiling opening to real starfield, ancient carved glyphs glowing gold, timeless divine space, deep space navy and pure white energy, epic fantasy concept art, magical girl final chapter
+
+#### 중심부 — 고대인의 전당
+
+회랑 중심으로 들어갈수록 과거의 자신의 행동이 잔상으로 겹쳐 보인다—5초 전의 발걸음, 10초 전의 전투 자세가 공중에 희미하게 투영된다. 이것은 인과율의 붕괴가 아니라 이 공간이 시간을 기록하는 방식이다. 전당 중심에는 성천원 창건 이래 아무도 열지 못한 20미터 높이의 문이 있다. 문에 가까워질수록 자신이 잊고 싶었던 기억들이 생생하게 떠오른다—이것은 문이 기억으로 잠겨 있기 때문이다.
+
+#### 과거 마법소녀들의 메아리
+
+전당 곳곳에서 이곳에서 싸운 마법소녀들의 잔상이 재생된다. 이사벨라, 리라, 그리고 이름도 남기지 않은 첫 번째 마법소녀—그들의 전투가 희미한 투명체로 반복 재생된다. 공격적이지는 않지만, 장시간 목격하면 현실과 과거의 경계가 흐려진다. 루미아는 이 잔상들을 바라보면서 한참 말을 잃는다.
+
+**프롬프트 키워드:** translucent ghost silhouettes of ancient magical girls in battle poses, looping specters, white-gold ethereal afterimages, cosmic temple interior, quiet dread atmosphere, time-echo visual effect, pale blue and white ghost figures
+
+**감각 기록:**
+냄새 — 없다. 완전한 무취. 이것 자체가 비정상적이다. 소리 — 합창 소리가 들리는 것 같다. 다만 음원이 없다—공간 자체가 진동하고 있다. 온도 — 차갑지도 뜨겁지도 않다. 체온과 동일하다. 이것이 오히려 더 불안하다.
 
 ### 주요 등장 몬스터
 
