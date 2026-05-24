@@ -1,6 +1,6 @@
-import type { AttackPattern, Entity } from '../types';
-import { applyDamage, addStatus } from '../utils/combat';
-import { SeqMonster } from './SeqMonster';
+import type { AttackPattern, Entity } from '../../../types';
+import { applyDamage, addStatus } from '../../../utils/combat';
+import { SeqMonster } from '../../SeqMonster';
 
 /** 거울 환영 — 오염된 환영 정령 | Act 1 일반 | 가중치 10 */
 export class MirrorPhantom extends SeqMonster {

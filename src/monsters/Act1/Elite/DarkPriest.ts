@@ -1,8 +1,8 @@
-import type { AttackPattern, Entity } from '../types';
-import { addStatus } from '../utils/combat';
-import { SeqMonster } from './SeqMonster';
+import type { AttackPattern, Entity } from '../../../types';
+import { addStatus } from '../../../utils/combat';
+import { SeqMonster } from '../../SeqMonster';
 
-/** 어둠의 사제 — 오염된 엘리트 마법사형 | Act 1 엘리트 | 가중치 35 */
+/** 어둠의 사제 — 오염된 마법사형 | Act 1 엘리트 | 가중치 35 */
 export class DarkPriest extends SeqMonster {
   readonly name = '어둠의 사제';
   readonly description = '별빛항 신전의 사제. 암흑 의식에 빠져들어 저주와 독을 퍼뜨리는 존재가 되었다.';

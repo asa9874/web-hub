@@ -1,6 +1,6 @@
-import type { AttackPattern, Entity } from '../types';
-import { applyDamage, addStatus } from '../utils/combat';
-import { SeqMonster } from './SeqMonster';
+import type { AttackPattern, Entity } from '../../../types';
+import { applyDamage, addStatus } from '../../../utils/combat';
+import { SeqMonster } from '../../SeqMonster';
 
 /** 심연 괴수 — 심연에서 소환된 엘리트 | Act 1 엘리트 | 가중치 20 */
 export class AbyssBeast extends SeqMonster {

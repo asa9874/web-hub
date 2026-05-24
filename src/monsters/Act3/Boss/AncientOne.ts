@@ -1,22 +1,16 @@
-import type { Entity } from '../types';
-import { applyDamage, addStatus } from '../utils/combat';
-import { Boss } from './Boss';
+import type { Entity } from '../../../types';
+import { applyDamage, addStatus } from '../../../utils/combat';
+import { Boss } from '../../Boss';
 
-/**
- * Act 3 최종 보스 — 고대인.
- * HP 40%에서 페이즈 전환 (일반 보스의 50%보다 빠름).
- * 페이즈 2에서 힘 +5 — 가장 강력한 적.
- */
+/** 고대인 — 원초 법칙의 화신 | Act 3 최종 보스 | HP 360 | 페이즈 전환: 40% | 페이즈 2: 힘+5 */
 export class AncientOne extends Boss {
   readonly name = '고대인';
   readonly description = '시간과 공간을 초월한 존재. 그의 의지 하나로 세계가 뒤틀린다.';
   readonly phaseChangeMessage = '고대인의 진정한 각성이 시작되었다!';
 
-  // 40% HP에서 페이즈 전환
   protected override phaseThreshold = 0.4;
 
   readonly phasePatterns = [
-    // ── 페이즈 1 (순차) ─────────────────────────────────────────────────────
     [
       {
         id: 'primordial_strike',
@@ -54,7 +48,6 @@ export class AncientOne extends Boss {
         },
       },
     ],
-    // ── 페이즈 2 (순차) ─────────────────────────────────────────────────────
     [
       {
         id: 'obliterate',
@@ -94,9 +87,7 @@ export class AncientOne extends Boss {
     ],
   ];
 
-  constructor() {
-    super(360);
-  }
+  constructor() { super(360); }
 
   protected override onPhaseChange(): void {
     this.statuses.strength += 5;

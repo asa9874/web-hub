@@ -1,14 +1,14 @@
-import type { Entity } from '../types';
-import { applyDamage, addStatus } from '../utils/combat';
-import { Boss } from './Boss';
+import type { Entity } from '../../../types';
+import { applyDamage, addStatus } from '../../../utils/combat';
+import { Boss } from '../../Boss';
 
+/** 암흑 군주 — 오염된 기사단장 케인 아스타르 | Act 1 보스 | HP 240 | 페이즈 2: 힘+3 */
 export class DarkLord extends Boss {
   readonly name = '암흑 군주';
   readonly description = '고대의 어둠을 지배하는 존재. 전투가 길어질수록 더욱 강해진다.';
   readonly phaseChangeMessage = '암흑 군주가 진정한 힘을 해방했다!';
 
   readonly phasePatterns = [
-    // ── 페이즈 1 (순차) ─────────────────────────────────────────────────────
     [
       {
         id: 'dark_strike',
@@ -45,7 +45,6 @@ export class DarkLord extends Boss {
         },
       },
     ],
-    // ── 페이즈 2 (순차) ─────────────────────────────────────────────────────
     [
       {
         id: 'rage_strike',
@@ -84,9 +83,7 @@ export class DarkLord extends Boss {
     ],
   ];
 
-  constructor() {
-    super(240);
-  }
+  constructor() { super(240); }
 
   protected override onPhaseChange(): void {
     this.statuses.strength += 3;

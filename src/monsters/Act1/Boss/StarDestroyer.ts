@@ -1,15 +1,14 @@
-import type { Entity } from '../types';
-import { applyDamage, addStatus } from '../utils/combat';
-import { Boss } from './Boss';
+import type { Entity } from '../../../types';
+import { applyDamage, addStatus } from '../../../utils/combat';
+import { Boss } from '../../Boss';
 
-/** 별빛 파괴자 — Act 1 보스 | HP 220 | 페이즈 2: 힘+3 */
+/** 별빛 파괴자 — 기억 소실 선행 마법소녀 이사벨라 루에스 | Act 1 보스 | HP 220 | 페이즈 2: 힘+3 */
 export class StarDestroyer extends Boss {
   readonly name = '별빛 파괴자';
   readonly description = '성운 숲의 수호자였던 고대 마법사. 암흑 에너지에 완전히 잠식되어 별빛 자체를 무기로 삼는다.';
   readonly phaseChangeMessage = '별빛 파괴자가 금지된 마법을 해방했다!';
 
   readonly phasePatterns = [
-    // ── 페이즈 1 ──────────────────────────────────────────────────────────────
     [
       {
         id: 'starlight_destroy',
@@ -40,7 +39,6 @@ export class StarDestroyer extends Boss {
         execute: (_t: Entity, s: Entity) => { s.block += 20; },
       },
     ],
-    // ── 페이즈 2 ──────────────────────────────────────────────────────────────
     [
       {
         id: 'light_of_annihilation',

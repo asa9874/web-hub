@@ -3,19 +3,29 @@ import { generateMap } from './data/mapGenerator';
 import { POTION_LIBRARY } from './potions/potionLibrary';
 import { applyDamage, applyPoison, addStatus, tickDuration, emptyStatuses } from './utils/combat';
 import { RELIC_LIBRARY } from './relics/relicLibrary';
-import { MemoryGhost } from './monsters/MemoryGhost';
-import { DarkKnight } from './monsters/DarkKnight';
-import { ShadowCat } from './monsters/ShadowCat';
-import { StarAbsorber } from './monsters/StarAbsorber';
-import { MirrorPhantom } from './monsters/MirrorPhantom';
-import { CorruptedKnight } from './monsters/CorruptedKnight';
-import { DarkPriest } from './monsters/DarkPriest';
-import { AbyssBeast } from './monsters/AbyssBeast';
-import { DarkLord } from './monsters/DarkLord';
-import { StarDestroyer } from './monsters/StarDestroyer';
-import { MemoryKing } from './monsters/MemoryKing';
-import { ShadowTitan } from './monsters/ShadowTitan';
-import { AncientOne } from './monsters/AncientOne';
+import { MemoryGhost } from './monsters/Act1/Normal/MemoryGhost';
+import { DarkKnight } from './monsters/Act1/Normal/DarkKnight';
+import { ShadowCat } from './monsters/Act1/Normal/ShadowCat';
+import { StarAbsorber } from './monsters/Act1/Normal/StarAbsorber';
+import { MirrorPhantom } from './monsters/Act1/Normal/MirrorPhantom';
+import { CorruptedKnight } from './monsters/Act1/Elite/CorruptedKnight';
+import { DarkPriest } from './monsters/Act1/Elite/DarkPriest';
+import { AbyssBeast } from './monsters/Act1/Elite/AbyssBeast';
+import { DarkLord } from './monsters/Act1/Boss/DarkLord';
+import { StarDestroyer } from './monsters/Act1/Boss/StarDestroyer';
+import { MemoryKing } from './monsters/Act1/Boss/MemoryKing';
+import { AbyssGuard } from './monsters/Act2/Normal/AbyssGuard';
+import { KnowledgeCollector } from './monsters/Act2/Normal/KnowledgeCollector';
+import { TwistedDoll } from './monsters/Act2/Normal/TwistedDoll';
+import { EchoDemon } from './monsters/Act2/Normal/EchoDemon';
+import { BookSpirit } from './monsters/Act2/Normal/BookSpirit';
+import { TowerWatcher } from './monsters/Act2/Elite/TowerWatcher';
+import { FearCrystal } from './monsters/Act2/Elite/FearCrystal';
+import { AbyssMage } from './monsters/Act2/Elite/AbyssMage';
+import { ShadowTitan } from './monsters/Act2/Boss/ShadowTitan';
+import { FearQueen } from './monsters/Act2/Boss/FearQueen';
+import { TowerMaster } from './monsters/Act2/Boss/TowerMaster';
+import { AncientOne } from './monsters/Act3/Boss/AncientOne';
 import type { Monster } from './monsters/Monster';
 
 /**
@@ -307,7 +317,7 @@ export class GameState {
         GameState.spawnNormalMonster(),
       ];
     } else if (mode === 'boss') {
-      if (GameState.currentAct === 2) this.enemies = [new ShadowTitan()];
+      if (GameState.currentAct === 2) this.enemies = [GameState.spawnAct2BossMonster()];
       else if (GameState.currentAct === 3) this.enemies = [new AncientOne()];
       else this.enemies = [GameState.spawnBossMonster()];
     } else if (mode === 'elite') {
@@ -691,7 +701,8 @@ export class GameState {
 
   // ── Act 1 몬스터 스폰 ─────────────────────────────────────────────────────
 
-  static spawnNormalMonster(): import('./monsters/Monster').Monster {
+  static spawnNormalMonster(): Monster {
+    if (GameState.currentAct === 2) return GameState.spawnAct2NormalMonster();
     const r = Math.random() * 100;
     if (r < 30) return new MemoryGhost();
     if (r < 55) return new DarkKnight();
@@ -700,17 +711,43 @@ export class GameState {
     return new MirrorPhantom();
   }
 
-  static spawnEliteMonster(): import('./monsters/Monster').Monster {
+  static spawnEliteMonster(): Monster {
+    if (GameState.currentAct === 2) return GameState.spawnAct2EliteMonster();
     const r = Math.random() * 100;
     if (r < 45) return new CorruptedKnight();
     if (r < 80) return new DarkPriest();
     return new AbyssBeast();
   }
 
-  static spawnBossMonster(): import('./monsters/Monster').Monster {
+  static spawnBossMonster(): Monster {
     const r = Math.floor(Math.random() * 3);
     if (r === 0) return new DarkLord();
     if (r === 1) return new StarDestroyer();
     return new MemoryKing();
+  }
+
+  // ── Act 2 몬스터 스폰 ─────────────────────────────────────────────────────
+
+  static spawnAct2NormalMonster(): Monster {
+    const r = Math.random() * 100;
+    if (r < 30) return new AbyssGuard();
+    if (r < 55) return new KnowledgeCollector();
+    if (r < 75) return new TwistedDoll();
+    if (r < 90) return new EchoDemon();
+    return new BookSpirit();
+  }
+
+  static spawnAct2EliteMonster(): Monster {
+    const r = Math.random() * 100;
+    if (r < 40) return new TowerWatcher();
+    if (r < 75) return new FearCrystal();
+    return new AbyssMage();
+  }
+
+  static spawnAct2BossMonster(): Monster {
+    const r = Math.floor(Math.random() * 3);
+    if (r === 0) return new ShadowTitan();
+    if (r === 1) return new FearQueen();
+    return new TowerMaster();
   }
 }

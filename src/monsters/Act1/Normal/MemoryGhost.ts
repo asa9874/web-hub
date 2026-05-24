@@ -1,6 +1,6 @@
-import type { AttackPattern, Entity } from '../types';
-import { applyDamage, addStatus } from '../utils/combat';
-import { SeqMonster } from './SeqMonster';
+import type { AttackPattern, Entity } from '../../../types';
+import { applyDamage, addStatus } from '../../../utils/combat';
+import { SeqMonster } from '../../SeqMonster';
 
 /** 망각의 도깨비 — 소형 기억 정령 | Act 1 일반 | 가중치 30 */
 export class MemoryGhost extends SeqMonster {

@@ -1,6 +1,6 @@
-import type { AttackPattern, Entity } from '../types';
-import { applyDamage, addStatus } from '../utils/combat';
-import { SeqMonster } from './SeqMonster';
+import type { AttackPattern, Entity } from '../../../types';
+import { applyDamage, addStatus } from '../../../utils/combat';
+import { SeqMonster } from '../../SeqMonster';
 
 /** 별빛 흡수충 — 오염된 곤충 정령 | Act 1 일반 | 가중치 15 */
 export class StarAbsorber extends SeqMonster {

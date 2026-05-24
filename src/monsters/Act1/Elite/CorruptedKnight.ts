@@ -1,8 +1,8 @@
-import type { AttackPattern, Entity } from '../types';
-import { applyDamage } from '../utils/combat';
-import { SeqMonster } from './SeqMonster';
+import type { AttackPattern, Entity } from '../../../types';
+import { applyDamage } from '../../../utils/combat';
+import { SeqMonster } from '../../SeqMonster';
 
-/** 오염된 수호 기사 — 오염된 엘리트 인간형 | Act 1 엘리트 | 가중치 45 */
+/** 오염된 수호 기사 — 오염된 인간형 (고위) | Act 1 엘리트 | 가중치 45 */
 export class CorruptedKnight extends SeqMonster {
   readonly name = '오염된 수호 기사';
   readonly description = '수호 기사단의 정예 병사. 암흑 파편에 깊이 물들어 잔혹한 심판자로 변질되었다.';

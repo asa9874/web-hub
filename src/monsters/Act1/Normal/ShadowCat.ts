@@ -1,6 +1,6 @@
-import type { AttackPattern, Entity } from '../types';
-import { applyDamage, addStatus } from '../utils/combat';
-import { SeqMonster } from './SeqMonster';
+import type { AttackPattern, Entity } from '../../../types';
+import { applyDamage, addStatus } from '../../../utils/combat';
+import { SeqMonster } from '../../SeqMonster';
 
 /** 그림자 고양이 — 오염된 소형 정령 | Act 1 일반 | 가중치 20 */
 export class ShadowCat extends SeqMonster {

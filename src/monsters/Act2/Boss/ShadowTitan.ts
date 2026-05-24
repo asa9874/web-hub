@@ -1,15 +1,14 @@
-import type { Entity } from '../types';
-import { applyDamage, addStatus } from '../utils/combat';
-import { Boss } from './Boss';
+import type { Entity } from '../../../types';
+import { applyDamage, addStatus } from '../../../utils/combat';
+import { Boss } from '../../Boss';
 
-/** Act 2 보스 — 그림자 타이탄. 강력한 독과 압박으로 플레이어를 제압한다. */
+/** 그림자 타이탄 — 공포 결정화 거인 | Act 2 보스 | HP 280 | 페이즈 2: 힘+4 */
 export class ShadowTitan extends Boss {
   readonly name = '그림자 타이탄';
-  readonly description = '심연에서 소환된 고대 전사. 공포의 오라가 전장을 뒤덮는다.';
+  readonly description = '탑에서 수백 년간 축적된 인간의 공포와 절망이 결정화된 존재. 높이 5미터의 검은 수정 거인.';
   readonly phaseChangeMessage = '그림자 타이탄이 분노의 힘을 해방했다!';
 
   readonly phasePatterns = [
-    // ── 페이즈 1 (순차) ─────────────────────────────────────────────────────
     [
       {
         id: 'shadow_strike',
@@ -46,7 +45,6 @@ export class ShadowTitan extends Boss {
         },
       },
     ],
-    // ── 페이즈 2 (순차) ─────────────────────────────────────────────────────
     [
       {
         id: 'annihilate',
@@ -85,9 +83,7 @@ export class ShadowTitan extends Boss {
     ],
   ];
 
-  constructor() {
-    super(280);
-  }
+  constructor() { super(280); }
 
   protected override onPhaseChange(): void {
     this.statuses.strength += 4;

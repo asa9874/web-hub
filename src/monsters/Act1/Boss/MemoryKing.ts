@@ -1,15 +1,14 @@
-import type { Entity } from '../types';
-import { applyDamage, addStatus } from '../utils/combat';
-import { Boss } from './Boss';
+import type { Entity } from '../../../types';
+import { applyDamage, addStatus } from '../../../utils/combat';
+import { Boss } from '../../Boss';
 
-/** 기억 도적왕 — Act 1 보스 | HP 200 | 페이즈 2: 힘+4 */
+/** 기억 도적왕 — 감정 결집체 | Act 1 보스 | HP 200 | 페이즈 2: 힘+4 */
 export class MemoryKing extends Boss {
   readonly name = '기억 도적왕';
   readonly description = '별빛항 주민들의 기억을 훔쳐 힘을 축적해온 고대의 도적. 수많은 기억이 응집된 최강의 악의.';
   readonly phaseChangeMessage = '기억 도적왕이 모든 기억을 해방했다!';
 
   readonly phasePatterns = [
-    // ── 페이즈 1 ──────────────────────────────────────────────────────────────
     [
       {
         id: 'memory_absorb',
@@ -40,7 +39,6 @@ export class MemoryKing extends Boss {
         execute: (t: Entity, s: Entity) => applyDamage(t, 14, s),
       },
     ],
-    // ── 페이즈 2 ──────────────────────────────────────────────────────────────
     [
       {
         id: 'memory_of_despair',
