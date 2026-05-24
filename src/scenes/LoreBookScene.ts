@@ -120,6 +120,23 @@ export class LoreBookScene extends Phaser.Scene {
     this.returnScene = data?.returnScene ?? 'TitleScene';
   }
 
+  preload(): void {
+    const loadEntries = (entries?: import('../data/bestiaryTypes').LoreEntry[]) => {
+      entries?.forEach(e => {
+        if (e.imagePath && !this.textures.exists(e.id)) {
+          this.load.image(e.id, e.imagePath);
+        }
+      });
+    };
+    for (const group of ALL_TOC_GROUPS) {
+      loadEntries(group.entries);
+      group.sub?.forEach(s => {
+        loadEntries(s.entries);
+        s.sub?.forEach(ss => loadEntries(ss.entries));
+      });
+    }
+  }
+
   create(): void {
     this.cameras.main.fadeIn(300, 0, 0, 0);
     // Render order: masks(depth 0) → backgrounds(depth 0, added after → on top) →
@@ -374,13 +391,14 @@ export class LoreBookScene extends Phaser.Scene {
     imgFrame.beginPath(); imgFrame.moveTo(mrx - CS, mry); imgFrame.lineTo(mrx, mry); imgFrame.lineTo(mrx, mry - CS); imgFrame.strokePath();
     items.push(imgFrame);
 
-    if (entry.imagePath) {
-      // 이미지 로드 후 표시할 자리 (추후 this.add.image로 교체)
-      const imgLabel = this.add.text(W / 2, y + IMG_H / 2, entry.imagePath, {
-        fontSize: '10px', color: C_DIM, fontFamily: FONT,
-        wordWrap: { width: W - 20 },
-      }).setOrigin(0.5);
-      items.push(imgLabel);
+    if (entry.imagePath && this.textures.exists(entry.id)) {
+      const tex = this.textures.get(entry.id);
+      const src = tex.getSourceImage() as HTMLImageElement;
+      const scale = Math.min(W / src.width, IMG_H / src.height, 1);
+      const img = this.add.image(W / 2, y + IMG_H / 2, entry.id)
+        .setScale(scale)
+        .setOrigin(0.5);
+      items.push(img);
     } else {
       const starText = this.add.text(W / 2, y + IMG_H / 2 - 14, '✦', {
         fontSize: '22px', color: C_GOLD, fontFamily: FONT,

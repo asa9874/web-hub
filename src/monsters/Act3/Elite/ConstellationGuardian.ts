@@ -8,6 +8,7 @@ export class ConstellationGuardian extends SeqMonster {
   readonly subtitle = '별자리 수호 정령 | Act 3 엘리트';
   readonly lore = '별의 심장을 구성하는 성좌에 깃든 수호 정령. 키 2미터의 이 존재는 투명한 수정 갑옷과 그 내부에서 방사되는 성좌 빛으로 온몸이 구성되어 있다. 갑주의 소재는 완전히 투명하며, 내부를 통해 성좌 에너지가 직접 보인다. 그 색조는 별자리별로 다르다—청백색, 금빛, 붉은빛이 영역마다 달라진다. 가장 압도적인 것은 어깨 위다—12개의 성좌 문양이 광원체 형태로 어깨 주변을 공전하고 있으며, 각 문양의 크기는 주먹만 하다. 공격할 때 이 공전체 중 하나가 지정 방향으로 발사된다. 눈은 두 개이며 완벽하게 황금색이고, 동공은 별 형태다. 이 존재를 쓰러뜨리면 공전하던 성좌 광원들이 하나씩 꺼지며 사라진다.';
   readonly quote = '"당신이 보는 별자리는 모두 나의 방패입니다."';
+  readonly imagePath = 'images/monster/book/constellation_guardian.png';
   readonly statType = '별자리 수호 정령';
   readonly weight = 35;
   readonly isElite = true;

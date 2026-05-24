@@ -8,6 +8,7 @@ export class DarkLord extends Boss {
   readonly subtitle = '오염된 기사단장 케인 아스타르 | Act 1 보스';
   readonly lore = '케인 아스타르. 기사단장. 한때 별빛항에서 가장 용맹한 이름이었다. 지금 내 앞에 선 것은 그 이름의 껍데기다. 키 2미터에 달하는 거체를 감싼 전신 갑주는 빛 흡수율이 거의 완벽한 흑체에 가깝다. 단 하나의 예외가 있다—가슴 한복판을 대각선으로 가로지르는 균열이다. 그 균열에서 새어나오는 빛은 달빛을 닮은 은청색으로, 규칙적이지 않게 맥동한다. 심장 박동처럼, 혹은 고통의 경련처럼. 어깨판은 날카로운 검은 가시가 돋아있으며, 투구는 완전히 봉인된 형태로 눈 슬릿조차 없다. 그 대신 투구 전면에서 짙은 보랏빛 안개가 끊임없이 스며 나온다. 등 뒤에는 반쯤 피어난 어둠의 날개—깃털 하나하나가 검은 결정체처럼 날카롭다. 걸음을 딛을 때마다 바닥에 어둠의 문장이 새겨진다.';
   readonly quote = '"나는 한때 이 도시를 지켰다. 그러나 빛이란 결국 사람을 배신하더군."';
+  readonly imagePath = 'images/monster/book/dark_lord.png';
   readonly statType = '오염된 인간 (의식 잔존)';
   readonly phaseChangeMessage = '암흑 군주가 진정한 힘을 해방했다!';
   readonly phase2BuffDescription = '힘 +3';

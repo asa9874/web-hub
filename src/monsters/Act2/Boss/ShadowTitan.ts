@@ -8,6 +8,7 @@ export class ShadowTitan extends Boss {
   readonly subtitle = '공포 결정화 거인 | Act 2 보스';
   readonly lore = '5미터. 그게 이것의 키다. 처음 봤을 때 내가 한 일은 뒤로 물러서는 것뿐이었다. 전신이 검은 수정으로 이루어져 있으며, 그 표면에서 냉기가 방사된다. 수정 내부는 텅 비어있지 않다—짙은 자주색의 어둠 에너지가 내부에서 끊임없이 소용돌이치며, 가끔 그 속에서 알 수 없는 얼굴들의 파편이 맺혔다가 소멸한다. 발걸음이 지면에 닿을 때마다 수정 결정이 방사상으로 균열이 퍼지며 갈라진다—곧 수선되지만, 그 균열에서 찰나의 심연이 보인다. 눈은 두 개의 심연색 공동으로, 내부에서 아주 희미한 보라색 빛만 방사된다. 손가락 하나하나가 검은 결정으로 날카롭다. 수백 년치 인간의 공포가 한 덩어리로 압축된 형태라는 말이 딱 맞는 무게감이다.';
   readonly quote = '"당신의 공포가 나를 이루고 있습니다."';
+  readonly imagePath = 'images/monster/book/shadow_titan.png';
   readonly statType = '공포 결정화 거인';
   readonly phase2BuffDescription = '힘 +4';
   readonly phaseChangeMessage = '그림자 타이탄이 분노의 힘을 해방했다!';
