@@ -8,6 +8,8 @@ import { Monster } from './Monster';
 export abstract class Boss extends Monster {
   protected phase = 1;
   protected seqIdx = 0;
+  /** HP 비율 — 이 값 이하로 떨어지면 페이즈 2 전환. 기본 50%. */
+  protected phaseThreshold = 0.5;
 
   abstract readonly phasePatterns: AttackPattern[][];
   abstract readonly phaseChangeMessage: string;
@@ -32,7 +34,7 @@ export abstract class Boss extends Monster {
    * BattleScene이 카드 사용 직후 호출 — 전환 시 true 반환.
    */
   checkPhaseTransition(): boolean {
-    if (this.phase === 1 && this.hp > 0 && this.hp <= this.maxHp / 2) {
+    if (this.phase === 1 && this.hp > 0 && this.hp <= this.maxHp * this.phaseThreshold) {
       this.phase = 2;
       this.seqIdx = 1;
       this.onPhaseChange();

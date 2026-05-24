@@ -9,6 +9,8 @@ import { Orc } from './monsters/Orc';
 import { Skeleton } from './monsters/Skeleton';
 import { Bat } from './monsters/Bat';
 import { DarkLord } from './monsters/DarkLord';
+import { ShadowTitan } from './monsters/ShadowTitan';
+import { AncientOne } from './monsters/AncientOne';
 import { ForestGiant } from './monsters/ForestGiant';
 import { SpiderQueen } from './monsters/SpiderQueen';
 import type { Monster } from './monsters/Monster';
@@ -263,6 +265,10 @@ export class GameState {
 
   static readonly MAX_RELICS = 5;
 
+  // ── 액트 진행 ─────────────────────────────────────────────────────────────
+  /** 현재 액트 번호 (1 = 던전 탐험, 2 = 심연의 탑, 3 = 고대의 전당) */
+  static currentAct = 1;
+
   // ── 도전 과제 추적용 ─────────────────────────────────────────────────────
   /** 현재 런에서 전투 승리 횟수 */
   static totalBattlesWon = 0;
@@ -292,7 +298,10 @@ export class GameState {
     if (mode === 'five_monsters') {
       this.enemies = [new Slime(), new Goblin(), new Orc(), new Skeleton(), new Bat()];
     } else if (mode === 'boss') {
-      this.enemies = [new DarkLord()];
+      // 현재 액트에 따라 보스 선택
+      if (GameState.currentAct === 2) this.enemies = [new ShadowTitan()];
+      else if (GameState.currentAct === 3) this.enemies = [new AncientOne()];
+      else this.enemies = [new DarkLord()];
     } else if (mode === 'elite_giant') {
       this.enemies = [new ForestGiant()];
     } else if (mode === 'elite_spider') {
@@ -469,6 +478,7 @@ export class GameState {
     GameState.visitedNodeKeys = [];
     GameState.currentMapNode = null;
     GameState.lastBattleWon = false;
+    GameState.currentAct = 1;
     GameState.totalBattlesWon = 0;
     GameState.battleStartHp = 80;
   }
@@ -592,7 +602,7 @@ export class GameState {
   /** 새 던전 맵을 생성. seed 생략 시 랜덤 시드 사용. */
   static initMap(seed?: number): void {
     GameState.mapSeed = seed ?? Math.floor(Math.random() * 999999) + 1;
-    GameState.mapNodes = generateMap(GameState.mapSeed);
+    GameState.mapNodes = generateMap(GameState.mapSeed, GameState.currentAct);
     GameState.visitedNodeKeys = [];
     GameState.currentMapNode = null;
     GameState.lastBattleWon = false;

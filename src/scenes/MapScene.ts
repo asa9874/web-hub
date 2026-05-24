@@ -122,7 +122,12 @@ export class MapScene extends Phaser.Scene {
   }
 
   private renderHeader(): void {
-    this.add.text(640, 28, 'Act 1  —  던전 탐험', {
+    const ACT_TITLES: Record<number, string> = {
+      1: 'Act 1  —  던전 탐험',
+      2: 'Act 2  —  심연의 탑',
+      3: 'Act 3  —  고대의 전당',
+    };
+    this.add.text(640, 28, ACT_TITLES[GameState.currentAct] ?? `Act ${GameState.currentAct}`, {
       fontSize: '20px', color: '#FFB6C1', fontStyle: 'bold', fontFamily: FONT,
     }).setOrigin(0.5);
 
@@ -291,27 +296,91 @@ export class MapScene extends Phaser.Scene {
   }
 
   private showActComplete(): void {
-    this.add.rectangle(640, 360, 1280, 720, 0x000000, 0.75).setDepth(10);
+    const act = GameState.currentAct;
 
-    this.add.text(640, 270, 'Act 1 클리어!', {
-      fontSize: '52px', color: '#FFD700', fontStyle: 'bold', fontFamily: FONT,
-      stroke: '#8B4500', strokeThickness: 5,
-    }).setOrigin(0.5).setDepth(11);
+    this.add.rectangle(640, 360, 1280, 720, 0x000000, 0.82).setDepth(10);
 
-    this.add.text(640, 355, '어둠의 군주를 물리쳤습니다.', {
-      fontSize: '18px', color: '#C8A0CC', fontFamily: FONT,
-    }).setOrigin(0.5).setDepth(11);
+    const ACT_BOSS_NAMES: Record<number, string> = {
+      1: '암흑 군주를 물리쳤습니다.',
+      2: '그림자 타이탄을 물리쳤습니다.',
+      3: '고대인을 물리쳤습니다. 세계가 구원받았습니다!',
+    };
 
-    const btn = this.add.text(640, 450, '[ 허브로 돌아가기 ]', {
-      fontSize: '22px', color: '#FF69B4', fontFamily: FONT,
-    }).setOrigin(0.5).setInteractive({ useHandCursor: true }).setDepth(11);
+    if (act < 3) {
+      // ── 액트 전환 오버레이 ────────────────────────────────────────────────
+      this.add.text(640, 255, `Act ${act} 클리어!`, {
+        fontSize: '52px', color: '#FFD700', fontStyle: 'bold', fontFamily: FONT,
+        stroke: '#8B4500', strokeThickness: 5,
+      }).setOrigin(0.5).setDepth(11);
 
-    btn.on('pointerover', () => btn.setColor('#FFB6C1'));
-    btn.on('pointerout',  () => btn.setColor('#FF69B4'));
-    btn.on('pointerdown', () => {
-      GameState.hardReset(); AchievementManager.reset();
-      this.cameras.main.fadeOut(280, 0, 0, 0);
-      this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('HubScene'));
-    });
+      this.add.text(640, 330, ACT_BOSS_NAMES[act] ?? '', {
+        fontSize: '18px', color: '#C8A0CC', fontFamily: FONT,
+      }).setOrigin(0.5).setDepth(11);
+
+      const ACT_NEXT_NAMES: Record<number, string> = {
+        2: 'Act 2  —  심연의 탑',
+        3: 'Act 3  —  고대의 전당',
+      };
+      this.add.text(640, 380, `다음: ${ACT_NEXT_NAMES[act + 1] ?? ''}`, {
+        fontSize: '15px', color: '#FF69B4', fontFamily: FONT,
+      }).setOrigin(0.5).setDepth(11);
+
+      this.add.text(640, 418, `HP ${GameState.playerHp} / ${GameState.playerMaxHp}   |   골드 ${GameState.gold} G   |   유물 ${GameState.equippedRelics.length}개`, {
+        fontSize: '13px', color: '#8A6A8A', fontFamily: FONT,
+      }).setOrigin(0.5).setDepth(11);
+
+      const nextBtn = this.add.text(640, 475, `[ Act ${act + 1}으로 진행 ]`, {
+        fontSize: '24px', color: '#FF69B4', fontStyle: 'bold', fontFamily: FONT,
+      }).setOrigin(0.5).setInteractive({ useHandCursor: true }).setDepth(11);
+
+      nextBtn.on('pointerover', () => nextBtn.setColor('#FFB6C1'));
+      nextBtn.on('pointerout',  () => nextBtn.setColor('#FF69B4'));
+      nextBtn.on('pointerdown', () => {
+        GameState.currentAct++;
+        GameState.initMap();
+        this.cameras.main.fadeOut(350, 0, 0, 0);
+        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.restart());
+      });
+
+    } else {
+      // ── 최종 승리 오버레이 (Act 3 클리어) ────────────────────────────────
+      this.add.text(640, 210, '🏆 최종 승리! 🏆', {
+        fontSize: '56px', color: '#FFD700', fontStyle: 'bold', fontFamily: FONT,
+        stroke: '#8B4500', strokeThickness: 6,
+      }).setOrigin(0.5).setDepth(11);
+
+      this.add.text(640, 295, ACT_BOSS_NAMES[3], {
+        fontSize: '18px', color: '#C8A0CC', fontFamily: FONT,
+      }).setOrigin(0.5).setDepth(11);
+
+      this.add.text(640, 340, '모든 액트를 완료했습니다!', {
+        fontSize: '15px', color: '#FF69B4', fontFamily: FONT,
+      }).setOrigin(0.5).setDepth(11);
+
+      // 최종 통계
+      const stats = [
+        `최종 HP:  ${GameState.playerHp} / ${GameState.playerMaxHp}`,
+        `보유 골드:  ${GameState.gold} G`,
+        `수집 유물:  ${GameState.equippedRelics.length}개`,
+        `총 전투 승리:  ${GameState.totalBattlesWon}회`,
+      ];
+      stats.forEach((line, i) => {
+        this.add.text(640, 390 + i * 26, line, {
+          fontSize: '14px', color: '#8A6A8A', fontFamily: FONT,
+        }).setOrigin(0.5).setDepth(11);
+      });
+
+      const hubBtn = this.add.text(640, 530, '[ 메인 메뉴로 돌아가기 ]', {
+        fontSize: '22px', color: '#FF69B4', fontFamily: FONT,
+      }).setOrigin(0.5).setInteractive({ useHandCursor: true }).setDepth(11);
+
+      hubBtn.on('pointerover', () => hubBtn.setColor('#FFB6C1'));
+      hubBtn.on('pointerout',  () => hubBtn.setColor('#FF69B4'));
+      hubBtn.on('pointerdown', () => {
+        GameState.hardReset(); AchievementManager.reset();
+        this.cameras.main.fadeOut(350, 0, 0, 0);
+        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('HubScene'));
+      });
+    }
   }
 }

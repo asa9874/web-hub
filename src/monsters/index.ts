@@ -6,5 +6,7 @@ export { Orc } from './Orc';
 export { Skeleton } from './Skeleton';
 export { Bat } from './Bat';
 export { DarkLord } from './DarkLord';
+export { ShadowTitan } from './ShadowTitan';
+export { AncientOne } from './AncientOne';
 export { ForestGiant } from './ForestGiant';
 export { SpiderQueen } from './SpiderQueen';

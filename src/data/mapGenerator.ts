@@ -21,6 +21,7 @@ function shuffle<T>(arr: T[], rand: () => number): T[] {
 /**
  * 각 row에서 활성화된 col (0,1,2) 마스크.
  * bit 0 = col 0, bit 1 = col 1, bit 2 = col 2
+ * 모든 액트에서 동일한 구조적 레이아웃 사용.
  */
 const ROW_COL_MASK = [
   0b111, // row 0: 전투 시작 — 3노드
@@ -35,19 +36,51 @@ const ROW_COL_MASK = [
   0b010, // row 9: 1노드 (col 1) — 보스
 ];
 
-/** 각 row의 노드 타입 풀 (셔플 대상) */
-const ROW_TYPE_POOLS: NodeType[][] = [
-  ['battle', 'battle', 'battle'],   // row 0
-  ['battle', 'battle', 'event'],    // row 1
-  ['battle', 'event', 'shop'],      // row 2
-  ['elite', 'event'],               // row 3 (2노드)
-  ['battle', 'battle', 'treasure'], // row 4
-  ['battle', 'event', 'shop'],      // row 5
-  ['elite', 'rest'],                // row 6 (2노드)
-  ['battle', 'event', 'shop'],      // row 7
-  ['rest', 'shop', 'treasure'],     // row 8
-  ['boss'],                         // row 9
+// ── 액트별 노드 타입 풀 ────────────────────────────────────────────────────────
+
+/** Act 1 — 던전 탐험: 입문 난이도, 이벤트·상점 균형 */
+const ACT1_POOLS: NodeType[][] = [
+  ['battle', 'battle', 'battle'],    // row 0
+  ['battle', 'battle', 'event'],     // row 1
+  ['battle', 'event', 'shop'],       // row 2
+  ['elite', 'event'],                // row 3 (2노드)
+  ['battle', 'battle', 'treasure'],  // row 4
+  ['battle', 'event', 'shop'],       // row 5
+  ['elite', 'rest'],                 // row 6 (2노드)
+  ['battle', 'event', 'shop'],       // row 7
+  ['rest', 'shop', 'treasure'],      // row 8
+  ['boss'],                          // row 9 — 암흑 군주
 ];
+
+/** Act 2 — 심연의 탑: 중간 난이도, 엘리트 비중 증가, 상점 의존도 상승 */
+const ACT2_POOLS: NodeType[][] = [
+  ['battle', 'battle', 'battle'],    // row 0
+  ['battle', 'battle', 'shop'],      // row 1 (이벤트 → 상점)
+  ['battle', 'elite', 'event'],      // row 2 (엘리트 조기 등장)
+  ['elite', 'shop'],                 // row 3 (2노드: 엘리트 + 상점)
+  ['battle', 'battle', 'treasure'],  // row 4
+  ['battle', 'elite', 'shop'],       // row 5 (엘리트 + 상점)
+  ['elite', 'rest'],                 // row 6 (2노드)
+  ['battle', 'event', 'shop'],       // row 7
+  ['rest', 'elite', 'treasure'],     // row 8 (보스 직전에도 엘리트!)
+  ['boss'],                          // row 9 — 그림자 타이탄
+];
+
+/** Act 3 — 고대의 전당: 최고 난이도, 엘리트 다수, 회복 희소 */
+const ACT3_POOLS: NodeType[][] = [
+  ['battle', 'battle', 'battle'],    // row 0
+  ['battle', 'elite', 'event'],      // row 1 (row 1부터 엘리트)
+  ['elite', 'battle', 'shop'],       // row 2
+  ['elite', 'rest'],                 // row 3 (2노드: 엘리트 + 휴식)
+  ['battle', 'elite', 'treasure'],   // row 4 (엘리트 + 보물)
+  ['elite', 'battle', 'rest'],       // row 5 (엘리트 + 휴식)
+  ['elite', 'shop'],                 // row 6 (2노드: 엘리트 + 상점)
+  ['battle', 'event', 'elite'],      // row 7 (row 7에도 엘리트)
+  ['rest', 'shop', 'treasure'],      // row 8 (최종 준비)
+  ['boss'],                          // row 9 — 고대인 (최종 보스)
+];
+
+const ACT_POOLS: NodeType[][][] = [ACT1_POOLS, ACT2_POOLS, ACT3_POOLS];
 
 /** 노드 시각 오프셋 범위 */
 const JITTER_X = 45;
@@ -61,7 +94,6 @@ type Edge = [number, number]; // [srcCol, dstCol]
 
 /** 두 엣지가 시각적으로 교차하는지 확인 */
 function crossesEdge(e1: Edge, e2: Edge): boolean {
-  // (c1-c2)와 (n1-n2)의 부호가 반대이면 교차
   return (e1[0] - e2[0]) * (e1[1] - e2[1]) < 0;
 }
 
@@ -76,7 +108,6 @@ function buildConnections(row: number, rand: () => number): number[][] {
   const nextCols = activeCols(ROW_COL_MASK[row + 1] ?? 0);
   if (nextCols.length === 0) return curCols.map(() => []);
 
-  // 거리 ≤1 조건을 만족하는 후보 엣지 전부 수집
   const candidates: Edge[] = [];
   curCols.forEach(c => {
     nextCols.filter(nc => Math.abs(nc - c) <= 1).forEach(nc => {
@@ -84,10 +115,7 @@ function buildConnections(row: number, rand: () => number): number[][] {
     });
   });
 
-  // 시드 셔플로 다양성 확보
   const shuffled = shuffle(candidates, rand);
-
-  // 탐욕적 할당: 교차 없음 & 출발 노드당 최대 2개
   const accepted: Edge[] = [];
   const srcCount: Record<number, number> = {};
 
@@ -99,7 +127,6 @@ function buildConnections(row: number, rand: () => number): number[][] {
     srcCount[c] = (srcCount[c] ?? 0) + 1;
   }
 
-  // 연결이 0개인 출발 노드에 가장 가까운 다음 col 강제 연결
   for (const c of curCols) {
     if ((srcCount[c] ?? 0) === 0) {
       const closest = nextCols.reduce((best, nc) =>
@@ -114,10 +141,16 @@ function buildConnections(row: number, rand: () => number): number[][] {
   );
 }
 
-export function generateMap(seed: number): MapNode[][] {
+/**
+ * 던전 맵 생성.
+ * @param seed 결정론적 시드
+ * @param act  액트 번호 (1 | 2 | 3) — 노드 타입 풀 결정
+ */
+export function generateMap(seed: number, act: number = 1): MapNode[][] {
   const rand = makeLcg(seed);
+  const pools = ACT_POOLS[Math.max(0, act - 1)] ?? ACT1_POOLS;
 
-  return ROW_TYPE_POOLS.map((pool, row) => {
+  return pools.map((pool, row) => {
     const cols     = activeCols(ROW_COL_MASK[row]);
     const types    = row === 9 ? [...pool] : shuffle([...pool], rand);
     const connSets = row < 9 ? buildConnections(row, rand) : cols.map(() => []);
