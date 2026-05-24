@@ -148,7 +148,7 @@ export class MapScene extends Phaser.Scene {
     btn.on('pointerdown', () => {
       GameState.hardReset(); AchievementManager.reset();
       this.cameras.main.fadeOut(280, 0, 0, 0);
-      this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('HubScene'));
+      this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('TitleScene'));
     });
   }
 
@@ -426,7 +426,7 @@ export class MapScene extends Phaser.Scene {
       hubBtn.on('pointerdown', () => {
         GameState.hardReset(); AchievementManager.reset();
         this.cameras.main.fadeOut(350, 0, 0, 0);
-        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('HubScene'));
+        this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('TitleScene'));
       });
     }
   }

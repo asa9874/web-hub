@@ -112,8 +112,13 @@ export class LoreBookScene extends Phaser.Scene {
   private selectedId: string | null = null;
   private entryTexts: Array<{ text: Phaser.GameObjects.Text; entry: LoreEntry }> = [];
   private mouseX = 640;
+  private returnScene = 'TitleScene';
 
   constructor() { super({ key: 'LoreBookScene' }); }
+
+  init(data?: { returnScene?: string }): void {
+    this.returnScene = data?.returnScene ?? 'TitleScene';
+  }
 
   create(): void {
     this.cameras.main.fadeIn(300, 0, 0, 0);
@@ -566,7 +571,7 @@ export class LoreBookScene extends Phaser.Scene {
     btn.on('pointerout',  () => btn.setColor(C_DIM));
     btn.on('pointerdown', () => {
       this.cameras.main.fadeOut(250, 0, 0, 0);
-      this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('HubScene'));
+      this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start(this.returnScene));
     });
   }
 

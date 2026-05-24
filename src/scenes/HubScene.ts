@@ -59,7 +59,7 @@ export class HubScene extends Phaser.Scene {
     loreBtn.on('pointerout',  () => loreBtn.setColor('#5A3A7A'));
     loreBtn.on('pointerdown', () => {
       this.cameras.main.fadeOut(250, 0, 0, 0);
-      this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('LoreBookScene'));
+      this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('LoreBookScene', { returnScene: 'HubScene' }));
     });
   }
 

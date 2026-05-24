@@ -12,6 +12,7 @@ import { EventScene } from './scenes/EventScene';
 import { MapScene } from './scenes/MapScene';
 import { ToastScene } from './scenes/ToastScene';
 import { LoreBookScene } from './scenes/LoreBookScene';
+import { TitleScene } from './scenes/TitleScene';
 
 // 씬 배열의 첫 번째(HubScene)가 자동으로 시작됨. ToastScene은 HubScene에서 launch됨.
 const config: Phaser.Types.Core.GameConfig = {
@@ -25,7 +26,7 @@ const config: Phaser.Types.Core.GameConfig = {
     width: 1280,
     height: 720,
   },
-  scene: [HubScene, BattleScene, DialogueScene, VictoryScene, CardRewardScene, PileViewerScene, RestScene, RelicRewardScene, ShopScene, EventScene, MapScene, ToastScene, LoreBookScene],
+  scene: [TitleScene, HubScene, BattleScene, DialogueScene, VictoryScene, CardRewardScene, PileViewerScene, RestScene, RelicRewardScene, ShopScene, EventScene, MapScene, ToastScene, LoreBookScene],
   parent: 'app',
 };
 

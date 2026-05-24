@@ -86,7 +86,7 @@ export class VictoryScene extends Phaser.Scene {
       this.cameras.main.fadeOut(300, 0, 0, 0);
       this.cameras.main.once('camerafadeoutcomplete', () => {
         GameState.hardReset(); AchievementManager.reset();
-        this.scene.start('HubScene');
+        this.scene.start('TitleScene');
       });
     });
 

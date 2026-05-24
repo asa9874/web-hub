@@ -41,7 +41,6 @@ export class BattleScene extends Phaser.Scene {
   private gs!: GameState;
   private battleMode: BattleMode = 'default';
   private returnScene = 'HubScene';
-  private midBattleTriggered = false;
   private turnPhase: TurnPhase = 'player';
 
   // ── 플레이어 UI ────────────────────────────────────────────────────────
@@ -91,7 +90,6 @@ export class BattleScene extends Phaser.Scene {
   }
 
   create(): void {
-    this.midBattleTriggered = false;
     this.turnPhase = 'player';
     GameState.battleStartHp = GameState.playerHp; // 도전 과제 '무적' 판정용
     GameState.reset(this.battleMode);
@@ -1021,7 +1019,7 @@ export class BattleScene extends Phaser.Scene {
         this.cameras.main.fadeOut(400, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => {
           GameState.hardReset(); AchievementManager.reset();
-          this.scene.start('HubScene');
+          this.scene.start('TitleScene');
         });
       });
     });
@@ -1106,19 +1104,6 @@ export class BattleScene extends Phaser.Scene {
       }
     }
 
-    // 단일 일반 적 전투에서만 중간 대화 트리거
-    if (this.gs.enemies.length === 1 && !('phasePatterns' in this.gs.enemies[0])) {
-      const enemy = this.gs.enemies[0];
-      if (!this.midBattleTriggered && enemy.hp <= enemy.maxHp / 2) {
-        this.midBattleTriggered = true;
-        this.scene.pause();
-        this.scene.launch('DialogueScene', {
-          scriptId: 'battle_mid',
-          returnScene: 'BattleScene',
-          resumeScene: 'BattleScene',
-        });
-      }
-    }
   }
 
   /**
