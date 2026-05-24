@@ -2,7 +2,6 @@ import Phaser from 'phaser';
 import { GameState } from '../GameState';
 import { AchievementManager } from '../achievements/AchievementManager';
 import type { BattleMode, Card, StatusEffects, TurnPhase } from '../types';
-import type { Monster } from '../monsters/Monster';
 import { applyDamage, addStatus } from '../utils/combat';
 import { shakeObject, flashHit, spawnDamageNumber, spawnHealNumber, playDeathTween } from '../utils/fx';
 import { sfx } from '../audio/SoundManager';
@@ -21,12 +20,17 @@ const PLAYER_CY = 400;       // 플레이어 스프라이트 중심 y
 const DIVIDER_Y = 492;       // 패 영역 구분선 y
 const PILE_Y = 615;          // 덱·버림·카드 중심 y
 const PILE_MANA_Y = 515;     // 마나 pip 및 턴종료 버튼 y
+const SNAP_RADIUS = 140;     // 공격 카드 근접 자동 타겟 범위 (px)
+const DECK_X = 65;           // 덱 아이콘 x (드로우 애니메이션 출발점)
+const DISCARD_X = 1215;      // 버림 더미 아이콘 x (버림 애니메이션 도착점)
 
 interface CardView {
   cardId: string;
   container: Phaser.GameObjects.Container;
   originX: number;
   originY: number;
+  /** 드래그 중 호버 스케일을 억제하기 위한 상태 토글. */
+  setDragging: (v: boolean) => void;
 }
 
 /**
@@ -67,6 +71,11 @@ export class BattleScene extends Phaser.Scene {
   private cardViews: CardView[] = [];
   private potionSlotObjs: Phaser.GameObjects.GameObject[] = [];
 
+  // ── 타겟 하이라이트 ────────────────────────────────────────────────────
+  private enemyHighlights: Phaser.GameObjects.Graphics[] = [];
+  private enemyCenterPos: { cx: number; cy: number; w: number; h: number }[] = [];
+  private currentSnapTarget = -1;
+
   constructor() {
     super({ key: 'BattleScene' });
   }
@@ -95,7 +104,7 @@ export class BattleScene extends Phaser.Scene {
     this.renderRelicPanel();
     this.renderPileUI();
     this.renderPotionSlots();
-    this.renderHand();
+    this.renderHand(true);   // 첫 드로우 애니메이션
     this.renderEndTurnButton();
     this.renderBackButton();
     this.setupDragDrop();
@@ -120,6 +129,8 @@ export class BattleScene extends Phaser.Scene {
     this.txtEnemyStatus = [];
     this.txtIntentLabels = [];
     this.enemyDropZones = [];
+    this.enemyHighlights = [];
+    this.enemyCenterPos = [];
 
     const positions = this.getEnemyPositions(this.gs.enemies.length);
     const cy = ENEMY_CY;
@@ -153,6 +164,11 @@ export class BattleScene extends Phaser.Scene {
       this.enemyBodies.push(body);
       this.enemyBodyColors.push(bodyColor);
       this.enemyDeathTriggered.push(false);
+
+      // 타겟 하이라이트 — 드래그 시 근접 범위 안에서 활성화됨
+      const highlight = this.add.graphics().setDepth(2);
+      this.enemyHighlights.push(highlight);
+      this.enemyCenterPos.push({ cx, cy, w: bodyW, h: bodyH });
 
       // 보스/엘리트 배지
       if (isBossMonster) {
@@ -416,8 +432,11 @@ export class BattleScene extends Phaser.Scene {
     this.updateUI();
   }
 
-  /** 현재 손패를 화면 하단 중앙에 균등 배치 */
-  private renderHand(): void {
+  /**
+   * 현재 손패를 화면 하단 중앙에 균등 배치.
+   * animate=true 이면 각 카드가 덱 위치에서 슬라이드인 (드로우 VFX).
+   */
+  private renderHand(animate = false): void {
     this.cardViews.forEach(cv => cv.container.destroy());
     this.cardViews = [];
 
@@ -428,7 +447,27 @@ export class BattleScene extends Phaser.Scene {
     const startX = W / 2 - ((hand.length - 1) * GAP) / 2;
 
     hand.forEach((card, i) => {
-      const view = this.createCardView(card, startX + i * GAP, PILE_Y, CARD_W, CARD_H);
+      const tx = startX + i * GAP;
+      const view = this.createCardView(card, tx, PILE_Y, CARD_W, CARD_H);
+
+      if (animate) {
+        // 덱 위치에서 시작해 목표 위치로 슬라이드
+        view.container.setPosition(DECK_X, PILE_Y);
+        view.container.setAlpha(0);
+        view.container.setScale(0.35);
+        this.tweens.add({
+          targets: view.container,
+          x: tx,
+          y: PILE_Y,
+          alpha: 1,
+          scaleX: 1,
+          scaleY: 1,
+          duration: 270,
+          ease: 'Back.Out',
+          delay: i * 75,
+        });
+      }
+
       this.cardViews.push(view);
     });
   }
@@ -470,7 +509,47 @@ export class BattleScene extends Phaser.Scene {
     this.input.setDraggable(container);
     container.setDepth(1);
 
-    return { cardId: card.id, container, originX: x, originY: y };
+    // ── 호버 스케일 VFX ────────────────────────────────────────────────
+    let dragging = false;
+
+    container.on('pointerover', () => {
+      if (dragging) return;
+      this.tweens.killTweensOf(container);
+      this.tweens.add({
+        targets: container,
+        scaleX: 1.14, scaleY: 1.14,
+        duration: 100,
+        ease: 'Power2',
+      });
+      container.setDepth(5);
+    });
+
+    container.on('pointerout', () => {
+      if (dragging) return;
+      this.tweens.killTweensOf(container);
+      this.tweens.add({
+        targets: container,
+        scaleX: 1, scaleY: 1,
+        duration: 120,
+        ease: 'Power2',
+      });
+      container.setDepth(1);
+    });
+
+    return {
+      cardId: card.id,
+      container,
+      originX: x,
+      originY: y,
+      setDragging: (v: boolean) => {
+        dragging = v;
+        if (v) {
+          // 드래그 시작 시 호버 트윈 즉시 취소 + 스케일 리셋
+          this.tweens.killTweensOf(container);
+          container.setScale(1);
+        }
+      },
+    };
   }
 
   /**
@@ -575,12 +654,24 @@ export class BattleScene extends Phaser.Scene {
 
   private setupDragDrop(): void {
     this.input.on('dragstart', (_p: unknown, obj: unknown) => {
-      (obj as Phaser.GameObjects.Container).setDepth(10);
+      const container = obj as Phaser.GameObjects.Container;
+      const view = this.cardViews.find(cv => cv.container === container);
+      view?.setDragging(true);
+      container.setDepth(10);
       sfx.playCardPickup();
     });
 
     this.input.on('drag', (_p: unknown, obj: unknown, dragX: number, dragY: number) => {
-      (obj as Phaser.GameObjects.Container).setPosition(dragX, dragY);
+      const container = obj as Phaser.GameObjects.Container;
+      container.setPosition(dragX, dragY);
+
+      // 공격 카드일 때만 근접 타겟 하이라이트 갱신
+      const view = this.cardViews.find(cv => cv.container === container);
+      if (view) {
+        const card = this.gs.hand.find(c => c.id === view.cardId);
+        if (card?.cardType === 'attack') this.updateSnapHighlight(dragX, dragY);
+        else this.clearSnapHighlights();
+      }
     });
 
     this.input.on('dragend', (pointer: Phaser.Input.Pointer, obj: unknown) => {
@@ -588,34 +679,65 @@ export class BattleScene extends Phaser.Scene {
       const view = this.cardViews.find(cv => cv.container === container);
       if (!view) return;
 
+      view.setDragging(false);
+      this.clearSnapHighlights();
+
       if (this.turnPhase !== 'player') {
         this.returnCard(container, view);
         return;
       }
 
-      // 어느 몬스터 드롭 존에 올려놨는지 탐색
-      let targetMonster: Monster | null = null;
+      const card = this.gs.hand.find(c => c.id === view.cardId);
+      const isAttack = card?.cardType === 'attack';
+
+      // ① 정확한 드롭 존 탐색 (모든 카드 유형)
+      let targetIdx = -1;
       for (let i = 0; i < this.gs.enemies.length; i++) {
         const zone = this.enemyDropZones[i];
         if (zone && this.gs.enemies[i].hp > 0 &&
             Phaser.Geom.Rectangle.Contains(zone, pointer.x, pointer.y)) {
-          targetMonster = this.gs.enemies[i];
+          targetIdx = i;
           break;
         }
       }
 
-      if (targetMonster) {
-        const card = this.gs.hand.find(c => c.id === view.cardId);
-        const isAttack = card?.cardType === 'attack';
-        const hpBefore = this.gs.enemies.map(e => e.hp);
+      // ② 근접 자동 스냅 — 공격 카드이고 드롭 존 미스 시
+      if (targetIdx === -1 && isAttack) {
+        let nearestDist = SNAP_RADIUS;
+        for (let i = 0; i < this.gs.enemies.length; i++) {
+          if (this.gs.enemies[i].hp <= 0) continue;
+          const pos = this.enemyCenterPos[i];
+          const dist = Phaser.Math.Distance.Between(pointer.x, pointer.y, pos.cx, pos.cy);
+          if (dist < nearestDist) { nearestDist = dist; targetIdx = i; }
+        }
+      }
 
+      const targetMonster = targetIdx >= 0 ? this.gs.enemies[targetIdx] : null;
+
+      if (targetMonster) {
+        const hpBefore = this.gs.enemies.map(e => e.hp);
         const success = this.gs.playCard(view.cardId, targetMonster);
+
         if (success) {
           isAttack ? sfx.playAttack() : sfx.playDefend();
-          container.destroy();
-          this.cardViews = this.cardViews.filter(cv => cv !== view);
 
-          // 피격 이펙트 — HP 변화가 있는 적에게 적용
+          // 뷰 배열에서 즉시 제거 → 재드래그 방지
+          this.cardViews = this.cardViews.filter(cv => cv !== view);
+          container.disableInteractive();
+          container.setDepth(2);
+
+          // 버림 더미로 날아가는 버림 VFX
+          this.tweens.add({
+            targets: container,
+            x: DISCARD_X, y: PILE_Y,
+            scaleX: 0.3, scaleY: 0.3,
+            alpha: 0,
+            duration: 260,
+            ease: 'Power2.In',
+            onComplete: () => container.destroy(),
+          });
+
+          // 피격 이펙트
           const positions = this.getEnemyPositions(this.gs.enemies.length);
           let maxDmg = 0;
           this.gs.enemies.forEach((enemy, i) => {
@@ -639,6 +761,42 @@ export class BattleScene extends Phaser.Scene {
         this.returnCard(container, view);
       }
     });
+  }
+
+  /**
+   * 드래그 중인 공격 카드가 적 근접 범위(SNAP_RADIUS) 안에 있을 때
+   * 가장 가까운 살아있는 적 하나에만 핑크 글로우 아웃라인을 표시한다.
+   */
+  private updateSnapHighlight(px: number, py: number): void {
+    let nearestIdx = -1;
+    let nearestDist = SNAP_RADIUS;
+
+    for (let i = 0; i < this.gs.enemies.length; i++) {
+      if (this.gs.enemies[i].hp <= 0) continue;
+      const pos = this.enemyCenterPos[i];
+      const dist = Phaser.Math.Distance.Between(px, py, pos.cx, pos.cy);
+      if (dist < nearestDist) { nearestDist = dist; nearestIdx = i; }
+    }
+
+    if (nearestIdx === this.currentSnapTarget) return; // 변화 없으면 재드로우 생략
+    this.currentSnapTarget = nearestIdx;
+
+    this.enemyHighlights.forEach((g, i) => {
+      g.clear();
+      if (i !== nearestIdx) return;
+      const { cx, cy, w, h } = this.enemyCenterPos[i];
+      // 넓은 외부 글로우
+      g.lineStyle(12, 0xFF69B4, 0.22);
+      g.strokeRect(cx - w / 2 - 10, cy - h / 2 - 10, w + 20, h + 20);
+      // 선명한 내부 아웃라인
+      g.lineStyle(3, 0xFF69B4, 0.95);
+      g.strokeRect(cx - w / 2 - 4, cy - h / 2 - 4, w + 8, h + 8);
+    });
+  }
+
+  private clearSnapHighlights(): void {
+    this.currentSnapTarget = -1;
+    this.enemyHighlights.forEach(g => g.clear());
   }
 
   private returnCard(container: Phaser.GameObjects.Container, view: CardView): void {
@@ -735,7 +893,7 @@ export class BattleScene extends Phaser.Scene {
   private beginPlayerTurn(): void {
     const poisonDmg = this.gs.startPlayerTurn();
     this.turnPhase = 'player';
-    this.renderHand();
+    this.renderHand(true);   // 턴 시작 드로우 애니메이션
     this.updateUI();
     this.updateAllIntents();
 
