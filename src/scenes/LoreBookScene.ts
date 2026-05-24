@@ -3,8 +3,9 @@ import { FONT } from '../theme';
 import { STATIC_TOC_GROUPS } from '../data/loreData';
 import type { TocGroup, LoreEntry } from '../data/bestiaryTypes';
 import { buildMonsterTocGroup } from '../monsters/MonsterRegistry';
+import { buildCardTocGroup } from '../data/cardRegistry';
 
-const ALL_TOC_GROUPS: TocGroup[] = [...STATIC_TOC_GROUPS, buildMonsterTocGroup()];
+const ALL_TOC_GROUPS: TocGroup[] = [...STATIC_TOC_GROUPS, buildMonsterTocGroup(), buildCardTocGroup()];
 
 // ── Layout constants ──────────────────────────────────────────────────────────
 const LP_X = 42,  LP_W = 526;
@@ -78,6 +79,12 @@ function buildFlatToc(tocGroups: TocGroup[]): { items: TocFlatItem[]; totalH: nu
       for (const act of g.sub) {
         items.push({ kind: 'act', text: act.label });
         h += H_ACT;
+        if (act.entries) {
+          for (const e of act.entries) {
+            items.push({ kind: 'entry', text: `    • ${e.title}`, entry: e });
+            h += H_ITEM;
+          }
+        }
         if (act.sub) {
           for (const typ of act.sub) {
             items.push({ kind: 'type', text: typ.label });
@@ -121,7 +128,7 @@ export class LoreBookScene extends Phaser.Scene {
   }
 
   preload(): void {
-    const loadEntries = (entries?: import('../data/bestiaryTypes').LoreEntry[]) => {
+    const loadEntries = (entries?: LoreEntry[]) => {
       entries?.forEach(e => {
         if (e.imagePath && !this.textures.exists(e.id)) {
           this.load.image(e.id, e.imagePath);
@@ -342,6 +349,8 @@ export class LoreBookScene extends Phaser.Scene {
   }
 
   private buildDetailContent(entry: LoreEntry): { items: Phaser.GameObjects.GameObject[]; totalH: number } {
+    if (entry.cardStats) return this.buildCardDetailContent(entry);
+
     const items: Phaser.GameObjects.GameObject[] = [];
     const W = DT_MW - 20;
     let y = 8;
@@ -494,6 +503,131 @@ export class LoreBookScene extends Phaser.Scene {
     }
 
     y += 24;
+    return { items, totalH: y };
+  }
+
+  // ── Detail — card ─────────────────────────────────────────────────────────
+
+  private buildCardDetailContent(entry: LoreEntry): { items: Phaser.GameObjects.GameObject[]; totalH: number } {
+    const items: Phaser.GameObjects.GameObject[] = [];
+    const W = DT_MW - 20;
+    let y = 8;
+    const cs = entry.cardStats!;
+
+    // Title
+    const tTitle = this.add.text(4, y, entry.title, {
+      fontSize: '19px', color: C_TITLE, fontFamily: FONT, fontStyle: 'bold',
+      wordWrap: { width: W },
+    });
+    items.push(tTitle); y += tTitle.height + 4;
+
+    // Subtitle (rarity · type · cost)
+    const tSub = this.add.text(4, y, entry.subtitle, {
+      fontSize: '11px', color: C_SUBHEAD, fontFamily: FONT,
+    });
+    items.push(tSub); y += tSub.height + 10;
+
+    items.push(this.makeSep(y)); y += 14;
+
+    // Art frame (same golden-corner style as monster illustration slot)
+    const IMG_H = 148;
+    const imgFrame = this.add.graphics();
+    imgFrame.fillStyle(N_STAT_BG, 1);
+    imgFrame.fillRoundedRect(0, y, W, IMG_H, 6);
+    imgFrame.lineStyle(3, N_GOLD_AGD, 0.9);
+    imgFrame.strokeRoundedRect(0, y, W, IMG_H, 6);
+    imgFrame.lineStyle(1, N_GOLD_AGD, 0.4);
+    imgFrame.strokeRoundedRect(4, y + 4, W - 8, IMG_H - 8, 4);
+    const CS = 14, mx = 8, my = y + 8, mrx = W - 8, mry = y + IMG_H - 8;
+    imgFrame.lineStyle(2, N_GOLD_AGD, 0.8);
+    imgFrame.beginPath(); imgFrame.moveTo(mx, my + CS); imgFrame.lineTo(mx, my); imgFrame.lineTo(mx + CS, my); imgFrame.strokePath();
+    imgFrame.beginPath(); imgFrame.moveTo(mrx - CS, my); imgFrame.lineTo(mrx, my); imgFrame.lineTo(mrx, my + CS); imgFrame.strokePath();
+    imgFrame.beginPath(); imgFrame.moveTo(mx, mry - CS); imgFrame.lineTo(mx, mry); imgFrame.lineTo(mx + CS, mry); imgFrame.strokePath();
+    imgFrame.beginPath(); imgFrame.moveTo(mrx - CS, mry); imgFrame.lineTo(mrx, mry); imgFrame.lineTo(mrx, mry - CS); imgFrame.strokePath();
+    items.push(imgFrame);
+
+    if (entry.imagePath && this.textures.exists(entry.id)) {
+      const tex = this.textures.get(entry.id);
+      const src = tex.getSourceImage() as HTMLImageElement;
+      const scale = Math.min(W / src.width, IMG_H / src.height, 1);
+      items.push(this.add.image(W / 2, y + IMG_H / 2, entry.id).setScale(scale).setOrigin(0.5));
+    } else {
+      items.push(this.add.text(W / 2, y + IMG_H / 2 - 14, '✦', {
+        fontSize: '22px', color: C_GOLD, fontFamily: FONT,
+      }).setOrigin(0.5));
+      items.push(this.add.text(W / 2, y + IMG_H / 2 + 12, '일러스트 준비 중', {
+        fontSize: '11px', color: C_DIM, fontFamily: FONT,
+      }).setOrigin(0.5));
+    }
+    y += IMG_H + 12;
+
+    // Stats badges: cost | type | rarity
+    const badgeH = 28;
+    const badgeBg = this.add.graphics();
+    badgeBg.fillStyle(N_STAT_BG, 1);
+    badgeBg.fillRoundedRect(0, y, W, badgeH, 4);
+    badgeBg.lineStyle(1, N_GOLD_AGD, 0.5);
+    badgeBg.strokeRoundedRect(0, y, W, badgeH, 4);
+    items.push(badgeBg);
+
+    const typeKr = cs.cardType === 'attack' ? '공격' : cs.cardType === 'power' ? '파워' : '기술';
+    const rarityKr = cs.rarity === 'rare' ? '희귀' : cs.rarity === 'uncommon' ? '고급' : '일반';
+    const typeColor = cs.cardType === 'attack' ? '#CC1111' : cs.cardType === 'power' ? '#886600' : '#553399';
+
+    items.push(this.add.text(10, y + 7, `비용 ${cs.cost}`, {
+      fontSize: '11px', color: C_HP, fontFamily: FONT, fontStyle: 'bold',
+    }));
+    items.push(this.add.text(W / 2, y + 7, typeKr, {
+      fontSize: '11px', color: typeColor, fontFamily: FONT, fontStyle: 'bold',
+    }).setOrigin(0.5, 0));
+    items.push(this.add.text(W - 10, y + 7, rarityKr, {
+      fontSize: '11px', color: C_ACT, fontFamily: FONT,
+    }).setOrigin(1, 0));
+    y += badgeH + 10;
+
+    // Description box
+    const descBg = this.add.graphics();
+    const descText = this.add.text(10, y + 8, cs.description, {
+      fontSize: '12px', color: C_SECTION, fontFamily: FONT,
+      wordWrap: { width: W - 20 }, lineSpacing: 4,
+    });
+    const descH = descText.height + 16;
+    descBg.fillStyle(N_PAT_ODD, 1);
+    descBg.fillRoundedRect(0, y, W, descH, 4);
+    descBg.lineStyle(1, N_SEP, 0.5);
+    descBg.strokeRoundedRect(0, y, W, descH, 4);
+    items.push(descBg, descText);
+    y += descH + 14;
+
+    // 기원 로어
+    items.push(this.makeSep(y)); y += 12;
+    const hLore = this.add.text(4, y, '[ 기원 로어 ]', {
+      fontSize: '12px', color: C_SECTION, fontFamily: FONT, fontStyle: 'bold',
+    });
+    items.push(hLore); y += hLore.height + 6;
+
+    const tLore = this.add.text(4, y, entry.lore, {
+      fontSize: '12px', color: C_LORE, fontFamily: FONT,
+      wordWrap: { width: W }, lineSpacing: 5,
+    });
+    items.push(tLore); y += tLore.height + 14;
+
+    // 비화
+    if (entry.quote) {
+      items.push(this.makeSep(y)); y += 12;
+      const hTrivia = this.add.text(4, y, '[ 비화 ]', {
+        fontSize: '12px', color: C_SECTION, fontFamily: FONT, fontStyle: 'bold',
+      });
+      items.push(hTrivia); y += hTrivia.height + 6;
+
+      const tTrivia = this.add.text(12, y, entry.quote, {
+        fontSize: '11px', color: C_QUOTE, fontFamily: FONT, fontStyle: 'italic',
+        wordWrap: { width: W - 16 }, lineSpacing: 4,
+      });
+      items.push(tTrivia); y += tTrivia.height + 14;
+    }
+
+    y += 20;
     return { items, totalH: y };
   }
 

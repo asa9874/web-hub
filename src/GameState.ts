@@ -1,8 +1,9 @@
 import type { Card, Entity, Player, AttackPattern, BattleMode, Relic, RelicId, RelicTier, MapNode, Potion } from './types';
 import { generateMap } from './data/mapGenerator';
 import { POTION_LIBRARY } from './potions/potionLibrary';
-import { applyDamage, applyPoison, addStatus, tickDuration, emptyStatuses } from './utils/combat';
+import { applyPoison, addStatus, tickDuration, emptyStatuses } from './utils/combat';
 import { RELIC_LIBRARY } from './relics/relicLibrary';
+import { CARD_LIBRARY, STARTER_DECK_IDS } from './data/cardLibrary';
 import { MemoryGhost } from './monsters/Act1/Normal/MemoryGhost';
 import { DarkKnight } from './monsters/Act1/Normal/DarkKnight';
 import { ShadowCat } from './monsters/Act1/Normal/ShadowCat';
@@ -38,225 +39,6 @@ import { StarHeartGuardian } from './monsters/Act3/Boss/StarHeartGuardian';
 import { LordOfTime } from './monsters/Act3/Boss/LordOfTime';
 import type { Monster } from './monsters/Monster';
 
-/**
- * 카드 라이브러리.
- * - targetType 'single': 드롭된 적 한 명에게만 적용
- * - targetType 'all':    살아있는 모든 적에게 적용
- * 공격 카드는 모두 applyDamage(target, amount, u)를 사용하여
- * 플레이어의 strength/weak 상태이상이 반영됨.
- */
-const CARD_LIBRARY: Card[] = [
-  // ── 기본 카드 ──────────────────────────────────────────────────────────────
-  {
-    id: 'strike_a',
-    name: '타격',
-    cost: 1,
-    cardType: 'attack',
-    targetType: 'single',
-    description: '적에게 6의\n피해를 입힙니다.',
-    onPlay: (u, targets) => applyDamage(targets[0], 6, u),
-    upgrade: (c) => {
-      c.upgraded = true;
-      c.description = '적에게 9의\n피해를 입힙니다.';
-      c.onPlay = (u, targets) => applyDamage(targets[0], 9, u);
-    },
-  },
-  {
-    id: 'strike_b',
-    name: '타격',
-    cost: 1,
-    cardType: 'attack',
-    targetType: 'single',
-    description: '적에게 6의\n피해를 입힙니다.',
-    onPlay: (u, targets) => applyDamage(targets[0], 6, u),
-    upgrade: (c) => {
-      c.upgraded = true;
-      c.description = '적에게 9의\n피해를 입힙니다.';
-      c.onPlay = (u, targets) => applyDamage(targets[0], 9, u);
-    },
-  },
-  {
-    id: 'defend_a',
-    name: '방어',
-    cost: 1,
-    cardType: 'skill',
-    targetType: 'single',
-    description: '방어도 5를\n획득합니다.',
-    onPlay: (u, _targets) => { u.block += 5; },
-    upgrade: (c) => {
-      c.upgraded = true;
-      c.description = '방어도 8을\n획득합니다.';
-      c.onPlay = (u, _t) => { u.block += 8; };
-    },
-  },
-  {
-    id: 'heavy_blow',
-    name: '강타',
-    cost: 2,
-    cardType: 'attack',
-    targetType: 'single',
-    description: '적에게 14의\n피해를 입힙니다.',
-    onPlay: (u, targets) => applyDamage(targets[0], 14, u),
-    upgrade: (c) => {
-      c.upgraded = true;
-      c.description = '적에게 18의\n피해를 입힙니다.';
-      c.onPlay = (u, targets) => applyDamage(targets[0], 18, u);
-    },
-  },
-  {
-    id: 'twin_strike',
-    name: '쌍격',
-    cost: 1,
-    cardType: 'attack',
-    targetType: 'single',
-    description: '5의 피해를\n2번 입힙니다.',
-    onPlay: (u, targets) => {
-      applyDamage(targets[0], 5, u);
-      applyDamage(targets[0], 5, u);
-    },
-    upgrade: (c) => {
-      c.upgraded = true;
-      c.description = '7의 피해를\n2번 입힙니다.';
-      c.onPlay = (u, targets) => {
-        applyDamage(targets[0], 7, u);
-        applyDamage(targets[0], 7, u);
-      };
-    },
-  },
-  {
-    id: 'explosion',
-    name: '폭발',
-    cost: 2,
-    cardType: 'attack',
-    targetType: 'all',
-    description: '모든 적에게\n4의 피해를 입힙니다.',
-    onPlay: (u, targets) => targets.forEach(t => applyDamage(t, 4, u)),
-    upgrade: (c) => {
-      c.upgraded = true;
-      c.cost = 1;
-      c.description = '모든 적에게\n4의 피해를 입힙니다.';
-    },
-  },
-  {
-    id: 'chain_attack',
-    name: '연쇄 공격',
-    cost: 1,
-    cardType: 'attack',
-    targetType: 'single',
-    description: '3의 피해를\n3번 입힙니다.',
-    onPlay: (u, targets) => {
-      applyDamage(targets[0], 3, u);
-      applyDamage(targets[0], 3, u);
-      applyDamage(targets[0], 3, u);
-    },
-    upgrade: (c) => {
-      c.upgraded = true;
-      c.description = '4의 피해를\n3번 입힙니다.';
-      c.onPlay = (u, targets) => {
-        applyDamage(targets[0], 4, u);
-        applyDamage(targets[0], 4, u);
-        applyDamage(targets[0], 4, u);
-      };
-    },
-  },
-  {
-    id: 'storm_blast',
-    name: '폭풍격',
-    cost: 3,
-    cardType: 'attack',
-    targetType: 'all',
-    description: '모든 적에게\n8의 피해를 입힙니다.',
-    onPlay: (u, targets) => targets.forEach(t => applyDamage(t, 8, u)),
-    upgrade: (c) => {
-      c.upgraded = true;
-      c.cost = 2;
-      c.description = '모든 적에게\n8의 피해를 입힙니다.';
-    },
-  },
-  // ── 상태이상 카드 ──────────────────────────────────────────────────────────
-  {
-    id: 'poison_strike',
-    name: '독침',
-    cost: 1,
-    cardType: 'attack',
-    targetType: 'single',
-    description: '5의 피해 +\n독 3을 부여합니다.',
-    onPlay: (u, targets) => {
-      applyDamage(targets[0], 5, u);
-      addStatus(targets[0], 'poison', 3);
-    },
-    upgrade: (c) => {
-      c.upgraded = true;
-      c.description = '8의 피해 +\n독 4를 부여합니다.';
-      c.onPlay = (u, targets) => {
-        applyDamage(targets[0], 8, u);
-        addStatus(targets[0], 'poison', 4);
-      };
-    },
-  },
-  {
-    id: 'toxic_cloud',
-    name: '독기 방출',
-    cost: 1,
-    cardType: 'skill',
-    targetType: 'single',
-    description: '대상에게\n독 5를 부여합니다.',
-    onPlay: (_u, targets) => addStatus(targets[0], 'poison', 5),
-    upgrade: (c) => {
-      c.upgraded = true;
-      c.description = '대상에게\n독 8을 부여합니다.';
-      c.onPlay = (_u, targets) => addStatus(targets[0], 'poison', 8);
-    },
-  },
-  {
-    id: 'weaken',
-    name: '취약화',
-    cost: 1,
-    cardType: 'attack',
-    targetType: 'single',
-    description: '8의 피해 +\n취약 2를 부여합니다.',
-    onPlay: (u, targets) => {
-      applyDamage(targets[0], 8, u);
-      addStatus(targets[0], 'vulnerable', 2);
-    },
-    upgrade: (c) => {
-      c.upgraded = true;
-      c.description = '11의 피해 +\n취약 2를 부여합니다.';
-      c.onPlay = (u, targets) => {
-        applyDamage(targets[0], 11, u);
-        addStatus(targets[0], 'vulnerable', 2);
-      };
-    },
-  },
-  {
-    id: 'empower',
-    name: '역량 강화',
-    cost: 1,
-    cardType: 'skill',
-    targetType: 'single',
-    description: '힘 2를 획득합니다.\n(자신에게 적용)',
-    onPlay: (u, _targets) => addStatus(u, 'strength', 2),
-    upgrade: (c) => {
-      c.upgraded = true;
-      c.description = '힘 3을 획득합니다.\n(자신에게 적용)';
-      c.onPlay = (u, _t) => addStatus(u, 'strength', 3);
-    },
-  },
-  {
-    id: 'mass_poison',
-    name: '독 폭풍',
-    cost: 2,
-    cardType: 'skill',
-    targetType: 'all',
-    description: '모든 적에게\n독 3을 부여합니다.',
-    onPlay: (_u, targets) => targets.forEach(t => addStatus(t, 'poison', 3)),
-    upgrade: (c) => {
-      c.upgraded = true;
-      c.cost = 1;
-      c.description = '모든 적에게\n독 3을 부여합니다.';
-    },
-  },
-];
 
 /** 전체 게임 상태를 관리하는 싱글톤 */
 export class GameState {
@@ -306,9 +88,28 @@ export class GameState {
 
   private firstAttackPlayedThisTurn = false; // Flame Amulet용
 
+  private static buildRunCards(): Card[] {
+    const libMap = new Map(CARD_LIBRARY.map(c => [c.id, c]));
+    const starterInstances = STARTER_DECK_IDS
+      .map((baseId, i) => {
+        const tmpl = libMap.get(baseId);
+        return tmpl ? { ...tmpl, id: `${baseId}_s${i}` } : null;
+      })
+      .filter(Boolean) as Card[];
+
+    return [
+      ...starterInstances
+        .filter(c => !GameState.removedCardIds.includes(c.id))
+        .map(c => GameState.applyUpgrade({ ...c })),
+      ...GameState.bonusCards
+        .filter(c => !GameState.removedCardIds.includes(c.id))
+        .map(c => GameState.applyUpgrade({ ...c })),
+    ];
+  }
+
   private constructor(mode: BattleMode = 'default') {
     this.player = {
-      name: '영웅',
+      name: '루나 실버',
       hp: GameState.playerHp,
       maxHp: GameState.playerMaxHp,
       block: 0,
@@ -337,14 +138,7 @@ export class GameState {
     }
     this.enemies.forEach(e => e.prepareNextAction());
 
-    this.deck = this.shuffleArray([
-      ...CARD_LIBRARY
-        .filter(c => !GameState.removedCardIds.includes(c.id))
-        .map(c => GameState.applyUpgrade({ ...c })),
-      ...GameState.bonusCards
-        .filter(c => !GameState.removedCardIds.includes(c.id))
-        .map(c => GameState.applyUpgrade({ ...c })),
-    ]);
+    this.deck = this.shuffleArray(GameState.buildRunCards());
     this.discard = [];
     this.hand = [];
     this.drawCards(GameState.DRAW_PER_TURN);
@@ -418,6 +212,12 @@ export class GameState {
       : [primaryTarget];
     card.onPlay(this.player, targets);
 
+    // pendingDraw: draw-card effects signal via player field (avoids circular import)
+    if (this.player.pendingDraw && this.player.pendingDraw > 0) {
+      this.drawCards(this.player.pendingDraw);
+      this.player.pendingDraw = 0;
+    }
+
     // Toxic Crystal 사후 처리
     if (GameState.hasRelic('toxic_crystal')) {
       this.enemies.forEach((e, i) => {
@@ -478,6 +278,16 @@ export class GameState {
     this.firstAttackPlayedThisTurn = false;
 
     this.drawCards(GameState.DRAW_PER_TURN);
+
+    // starAura: 턴 시작 시 방어도 추가
+    if (this.player.statuses.starAura > 0) {
+      this.player.block += this.player.statuses.starAura;
+    }
+    // constellation: 턴 시작 시 추가 드로우
+    if (this.player.statuses.constellation > 0) {
+      this.drawCards(this.player.statuses.constellation);
+    }
+
     return poisonDmg;
   }
 
@@ -595,14 +405,7 @@ export class GameState {
 
   /** 현재 런의 전체 카드 목록 (업그레이드 상태 반영). 캠프파이어 UI에서 사용. */
   static getAllRunCards(): Card[] {
-    return [
-      ...CARD_LIBRARY
-        .filter(c => !GameState.removedCardIds.includes(c.id))
-        .map(c => GameState.applyUpgrade({ ...c })),
-      ...GameState.bonusCards
-        .filter(c => !GameState.removedCardIds.includes(c.id))
-        .map(c => GameState.applyUpgrade({ ...c })),
-    ];
+    return GameState.buildRunCards();
   }
 
   private static applyUpgrade(copy: Card): Card {

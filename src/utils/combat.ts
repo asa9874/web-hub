@@ -2,7 +2,7 @@ import type { Entity, StatusEffects, StatusId } from '../types';
 
 /** 빈 상태이상 객체를 새로 생성 (엔티티 초기화용) */
 export function emptyStatuses(): StatusEffects {
-  return { poison: 0, strength: 0, vulnerable: 0, weak: 0 };
+  return { poison: 0, strength: 0, vulnerable: 0, weak: 0, starAura: 0, constellation: 0 };
 }
 
 /**

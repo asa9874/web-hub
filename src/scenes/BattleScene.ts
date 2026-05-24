@@ -8,7 +8,7 @@ import { sfx } from '../audio/SoundManager';
 import {
   BG_DEEP, BG_PANEL, BG_HOVER, BG_DIVIDER,
   BORDER_DIM,
-  PINK, ROSE, PINK_SOFT, LAVENDER,
+  PINK, ROSE, PINK_SOFT, LAVENDER, GOLD,
   TEXT_SECONDARY, FONT,
 } from '../theme';
 import { getActTheme, type ActTheme } from '../data/actTheme';
@@ -496,7 +496,8 @@ export class BattleScene extends Phaser.Scene {
     const container = this.add.container(x, y);
 
     const bg = this.add.rectangle(0, 0, w, h, BG_PANEL);
-    bg.setStrokeStyle(2, card.targetType === 'all' ? ROSE : LAVENDER);
+    const borderColor = card.cardType === 'attack' ? ROSE : card.cardType === 'power' ? GOLD : LAVENDER;
+    bg.setStrokeStyle(2, borderColor);
 
     const badge = this.add.circle(-w / 2 + 14, -h / 2 + 14, 12, PINK);
     const costText = this.add.text(-w / 2 + 14, -h / 2 + 14, String(card.cost), {
@@ -1185,10 +1186,12 @@ export class BattleScene extends Phaser.Scene {
 
   private formatStatuses(s: StatusEffects): string {
     const parts: string[] = [];
-    if (s.poison > 0)     parts.push(`독${s.poison}`);
-    if (s.strength > 0)   parts.push(`힘${s.strength}`);
-    if (s.vulnerable > 0) parts.push(`취약${s.vulnerable}`);
-    if (s.weak > 0)       parts.push(`약화${s.weak}`);
+    if (s.poison > 0)        parts.push(`독${s.poison}`);
+    if (s.strength > 0)      parts.push(`힘${s.strength}`);
+    if (s.vulnerable > 0)    parts.push(`취약${s.vulnerable}`);
+    if (s.weak > 0)          parts.push(`약화${s.weak}`);
+    if (s.starAura > 0)      parts.push(`별기${s.starAura}`);
+    if (s.constellation > 0) parts.push(`성좌${s.constellation}`);
     return parts.join(' ');
   }
 }

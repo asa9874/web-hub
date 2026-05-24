@@ -1,7 +1,7 @@
 // ── 상태이상 ──────────────────────────────────────────────────────────────────
 
 /** 상태이상 종류 식별자 */
-export type StatusId = 'poison' | 'strength' | 'vulnerable' | 'weak';
+export type StatusId = 'poison' | 'strength' | 'vulnerable' | 'weak' | 'starAura' | 'constellation';
 
 /**
  * 엔티티가 가진 모든 상태이상 수치.
@@ -26,6 +26,8 @@ export interface Player extends Entity {
   mana: number;
   maxMana: number;
   bonusDmg: number; // 유물(Blood Sword 등)에서 오는 일시적 공격 보너스
+  /** onPlay 내부에서 설정 → playCard() 직후 drawCards() 처리 */
+  pendingDraw?: number;
 }
 
 /**
@@ -34,8 +36,10 @@ export interface Player extends Entity {
  * - targetType 'single': primaryTarget 1개만 targets에 담겨 전달
  * - targetType 'all':    살아있는 모든 적이 targets에 담겨 전달
  */
-/** 카드 종류 — Flame Amulet 등 일부 유물이 cardType을 참조 */
-export type CardType = 'attack' | 'skill';
+/** 카드 종류 */
+export type CardType = 'attack' | 'skill' | 'power';
+/** 카드 희귀도 */
+export type CardRarity = 'common' | 'uncommon' | 'rare';
 
 export interface Card {
   id: string;
@@ -43,7 +47,14 @@ export interface Card {
   cost: number;
   description: string;
   targetType: 'single' | 'all';
-  cardType?: CardType;
+  cardType: CardType;
+  rarity: CardRarity;
+  /** 도감용 카드 일러스트 경로 */
+  artPath?: string;
+  /** 카드를 얻게 된 이야기 (도감 기원 로어) */
+  originLore: string;
+  /** 감성적·일지 형식 풍미 텍스트 */
+  trivia: string;
   onPlay: (user: Player, targets: Entity[]) => void;
   upgraded?: boolean;
   upgrade?: (self: Card) => void;
