@@ -50,6 +50,17 @@ export class HubScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     this.add.rectangle(640, 148, 860, 1, BG_DIVIDER);
+
+    // 별빛 마법서 (로어 북) 버튼
+    const loreBtn = this.add.text(1240, 56, '📖 별빛 마법서', {
+      fontSize: '13px', color: '#5A3A7A', fontFamily: FONT,
+    }).setOrigin(1, 0.5).setInteractive({ useHandCursor: true });
+    loreBtn.on('pointerover', () => loreBtn.setColor('#FFD700'));
+    loreBtn.on('pointerout',  () => loreBtn.setColor('#5A3A7A'));
+    loreBtn.on('pointerdown', () => {
+      this.cameras.main.fadeOut(250, 0, 0, 0);
+      this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('LoreBookScene'));
+    });
   }
 
   private renderRunStatus(): void {
