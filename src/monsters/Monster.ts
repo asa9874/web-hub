@@ -14,8 +14,9 @@ export abstract class Monster implements Entity {
   abstract readonly statType: string;  // 유형 문자열 ("소형 기억 정령")
   abstract readonly patterns: AttackPattern[];
 
-  readonly quote?: string;   // 인용구 (선택)
-  readonly weight?: number;  // 스폰 가중치 (보스는 undefined)
+  readonly quote?: string;      // 인용구 (선택)
+  readonly weight?: number;     // 스폰 가중치 (보스는 undefined)
+  readonly imagePath?: string;  // 일러스트 이미지 경로 (선택)
 
   hp: number;
   maxHp: number;
@@ -39,6 +40,7 @@ export abstract class Monster implements Entity {
       category,
       quote: this.quote,
       lore: this.lore,
+      imagePath: this.imagePath,
       stats: {
         hp: this.maxHp,
         type: this.statType,

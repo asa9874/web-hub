@@ -22,6 +22,7 @@ export interface LoreEntry {
   category: string;
   quote?: string;
   lore: string;
+  imagePath?: string;
   sections?: Array<{ heading: string; body: string }>;
   stats?: { hp: number; type: string; weight?: number };
   patterns?: LorePattern[];

@@ -354,6 +354,44 @@ export class LoreBookScene extends Phaser.Scene {
       items.push(tQ); y += tQ.height + 12;
     }
 
+    // Illustration slot
+    const IMG_H = 148;
+    const imgFrame = this.add.graphics();
+    // parchment-darker background
+    imgFrame.fillStyle(N_STAT_BG, 1);
+    imgFrame.fillRoundedRect(0, y, W, IMG_H, 6);
+    // aged-gold double border
+    imgFrame.lineStyle(3, N_GOLD_AGD, 0.9);
+    imgFrame.strokeRoundedRect(0, y, W, IMG_H, 6);
+    imgFrame.lineStyle(1, N_GOLD_AGD, 0.4);
+    imgFrame.strokeRoundedRect(4, y + 4, W - 8, IMG_H - 8, 4);
+    // corner ornaments
+    const CS = 14, mx = 8, my = y + 8, mrx = W - 8, mry = y + IMG_H - 8;
+    imgFrame.lineStyle(2, N_GOLD_AGD, 0.8);
+    imgFrame.beginPath(); imgFrame.moveTo(mx, my + CS); imgFrame.lineTo(mx, my); imgFrame.lineTo(mx + CS, my); imgFrame.strokePath();
+    imgFrame.beginPath(); imgFrame.moveTo(mrx - CS, my); imgFrame.lineTo(mrx, my); imgFrame.lineTo(mrx, my + CS); imgFrame.strokePath();
+    imgFrame.beginPath(); imgFrame.moveTo(mx, mry - CS); imgFrame.lineTo(mx, mry); imgFrame.lineTo(mx + CS, mry); imgFrame.strokePath();
+    imgFrame.beginPath(); imgFrame.moveTo(mrx - CS, mry); imgFrame.lineTo(mrx, mry); imgFrame.lineTo(mrx, mry - CS); imgFrame.strokePath();
+    items.push(imgFrame);
+
+    if (entry.imagePath) {
+      // 이미지 로드 후 표시할 자리 (추후 this.add.image로 교체)
+      const imgLabel = this.add.text(W / 2, y + IMG_H / 2, entry.imagePath, {
+        fontSize: '10px', color: C_DIM, fontFamily: FONT,
+        wordWrap: { width: W - 20 },
+      }).setOrigin(0.5);
+      items.push(imgLabel);
+    } else {
+      const starText = this.add.text(W / 2, y + IMG_H / 2 - 14, '✦', {
+        fontSize: '22px', color: C_GOLD, fontFamily: FONT,
+      }).setOrigin(0.5);
+      const phText = this.add.text(W / 2, y + IMG_H / 2 + 12, '일러스트 준비 중', {
+        fontSize: '11px', color: C_DIM, fontFamily: FONT,
+      }).setOrigin(0.5);
+      items.push(starText, phText);
+    }
+    y += IMG_H + 14;
+
     // Lore
     const tLore = this.add.text(4, y, entry.lore, {
       fontSize: '12px', color: C_LORE, fontFamily: FONT,
