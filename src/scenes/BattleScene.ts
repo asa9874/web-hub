@@ -45,6 +45,7 @@ export class BattleScene extends Phaser.Scene {
   private turnPhase: TurnPhase = 'player';
 
   // ── 플레이어 UI ────────────────────────────────────────────────────────
+  private playerBody!: Phaser.GameObjects.Rectangle;
   private txtPlayerHp!: Phaser.GameObjects.Text;
   private txtPlayerBlock!: Phaser.GameObjects.Text;
   private txtPlayerStatus!: Phaser.GameObjects.Text;
@@ -230,7 +231,7 @@ export class BattleScene extends Phaser.Scene {
     const { player } = this.gs;
     const cx = PLAYER_CX, cy = PLAYER_CY;
 
-    this.add.rectangle(cx, cy, 80, 100, ROSE).setStrokeStyle(2, PINK);
+    this.playerBody = this.add.rectangle(cx, cy, 80, 100, ROSE).setStrokeStyle(2, PINK);
     this.add.text(cx, cy - 68, player.name, {
       fontSize: '15px', color: '#ffffff', fontStyle: 'bold', fontFamily: FONT,
     }).setOrigin(0.5);
@@ -737,19 +738,28 @@ export class BattleScene extends Phaser.Scene {
             onComplete: () => container.destroy(),
           });
 
-          // 피격 이펙트
+          // 피격 이펙트 — 공격 카드는 런지 피크(onLand)에서, 나머지는 즉시
           const positions = this.getEnemyPositions(this.gs.enemies.length);
-          let maxDmg = 0;
-          this.gs.enemies.forEach((enemy, i) => {
-            const dmg = hpBefore[i] - enemy.hp;
-            if (dmg > 0) {
-              spawnDamageNumber(this, positions[i], ENEMY_CY + 35, dmg);
-              shakeObject(this, this.enemyBodies[i]);
-              flashHit(this, this.enemyBodies[i], this.enemyBodyColors[i]);
-              maxDmg = Math.max(maxDmg, dmg);
-            }
-          });
-          if (maxDmg >= 10) this.cameras.main.shake(130, 0.004);
+          const applyHitEffects = () => {
+            let maxDmg = 0;
+            this.gs.enemies.forEach((enemy, i) => {
+              const dmg = hpBefore[i] - enemy.hp;
+              if (dmg > 0) {
+                spawnDamageNumber(this, positions[i], ENEMY_CY + 35, dmg);
+                shakeObject(this, this.enemyBodies[i]);
+                flashHit(this, this.enemyBodies[i], this.enemyBodyColors[i]);
+                maxDmg = Math.max(maxDmg, dmg);
+              }
+            });
+            if (maxDmg >= 10) this.cameras.main.shake(130, 0.004);
+          };
+
+          if (isAttack) {
+            this.flashAttackSprite(this.playerBody, ROSE);
+            this.lungeAndReturn(this.playerBody, 70, 0, applyHitEffects);
+          } else {
+            applyHitEffects();
+          }
 
           this.updateUI();
           this.handlePostCardPlay();
@@ -875,6 +885,56 @@ export class BattleScene extends Phaser.Scene {
     this.time.delayedCall(700, () => this.executeNextMonsterTurn(0));
   }
 
+  // ── 공격 모션 헬퍼 ────────────────────────────────────────────────────
+
+  /**
+   * 전진-복귀 런지 트윈.
+   * sprite를 (ox+dx, oy+dy)로 빠르게 밀었다가 원래 위치로 탄성 복귀.
+   * onLand: 전진 완료 즉시 호출 — 피격 이펙트 타이밍에 사용.
+   */
+  private lungeAndReturn(
+    sprite: Phaser.GameObjects.Rectangle,
+    dx: number,
+    dy: number,
+    onLand?: () => void,
+  ): void {
+    const ox = sprite.x, oy = sprite.y;
+    this.tweens.add({
+      targets: sprite,
+      x: ox + dx,
+      y: oy + dy,
+      duration: 110,
+      ease: 'Power2.Out',
+      onComplete: () => {
+        onLand?.();
+        this.tweens.add({
+          targets: sprite,
+          x: ox,
+          y: oy,
+          duration: 190,
+          ease: 'Back.Out',
+        });
+      },
+    });
+  }
+
+  /**
+   * 공격 스프라이트 색 플래시 플레이스홀더.
+   * 실제 공격 이미지가 준비되면 이 메서드 내부만 교체하면 됨.
+   * 현재: 스프라이트를 attackColor로 순간 변경 후 baseColor로 복원.
+   */
+  private flashAttackSprite(
+    sprite: Phaser.GameObjects.Rectangle,
+    baseColor: number,
+    attackColor = 0xff2233,
+    holdMs = 100,
+  ): void {
+    sprite.setFillStyle(attackColor);
+    this.time.delayedCall(holdMs, () => {
+      if (sprite.active) sprite.setFillStyle(baseColor);
+    });
+  }
+
   /** idx번 몬스터부터 순차적으로 행동. 전부 끝나면 플레이어 턴 복귀. */
   private executeNextMonsterTurn(idx: number): void {
     // 이미 죽은 몬스터는 건너뜀
@@ -888,6 +948,7 @@ export class BattleScene extends Phaser.Scene {
     }
 
     const monster = this.gs.enemies[idx];
+    const body = this.enemyBodies[idx];
     const playerHpBefore = this.gs.player.hp;
     const pattern = this.gs.executeMonsterTurn(idx);
 
@@ -898,11 +959,6 @@ export class BattleScene extends Phaser.Scene {
     }
 
     const playerDmg = playerHpBefore - this.gs.player.hp;
-    if (playerDmg > 0) {
-      spawnDamageNumber(this, PLAYER_CX, PLAYER_CY - 30, playerDmg);
-      this.cameras.main.shake(90, 0.0035);
-    }
-
     this.updateUI();
 
     if (this.gs.player.hp <= 0) {
@@ -915,6 +971,21 @@ export class BattleScene extends Phaser.Scene {
       GameState.savePlayerState(this.gs.player.hp);
       this.handleVictory();
       return;
+    }
+
+    // 런지 + 피격 이펙트 — 런지 피크(onLand)에 플레이어 피해 팝업
+    const applyPlayerHitEffects = () => {
+      if (playerDmg > 0) {
+        spawnDamageNumber(this, PLAYER_CX, PLAYER_CY - 30, playerDmg);
+        this.cameras.main.shake(90, 0.0035);
+      }
+    };
+
+    if (body?.active) {
+      this.flashAttackSprite(body, this.enemyBodyColors[idx]);
+      this.lungeAndReturn(body, -70, 0, applyPlayerHitEffects);
+    } else {
+      applyPlayerHitEffects();
     }
 
     this.time.delayedCall(700, () => this.executeNextMonsterTurn(idx + 1));
