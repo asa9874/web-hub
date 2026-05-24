@@ -16,8 +16,8 @@ import { getActTheme, type ActTheme } from '../data/actTheme';
 // ── 레이아웃 상수 (1280×720) ────────────────────────────────────────────────
 const W = 1280;
 const ENEMY_CY = 185;        // 몬스터 스프라이트 중심 y
-const PLAYER_CX = 90;        // 플레이어 스프라이트 중심 x
-const PLAYER_CY = 400;       // 플레이어 스프라이트 중심 y
+const PLAYER_CX = 160;       // 플레이어 스프라이트 중심 x
+const PLAYER_CY = 460;       // 플레이어 스프라이트 중심 y (하단 30%가 카드 섹션에 가려짐)
 const DIVIDER_Y = 492;       // 패 영역 구분선 y
 const PILE_Y = 615;          // 덱·버림·카드 중심 y
 const PILE_MANA_Y = 515;     // 마나 pip 및 턴종료 버튼 y
@@ -46,7 +46,7 @@ export class BattleScene extends Phaser.Scene {
   private turnPhase: TurnPhase = 'player';
 
   // ── 플레이어 UI ────────────────────────────────────────────────────────
-  private playerBody!: Phaser.GameObjects.Rectangle;
+  private playerSprite!: Phaser.GameObjects.Image;
   private txtPlayerHp!: Phaser.GameObjects.Text;
   private txtPlayerBlock!: Phaser.GameObjects.Text;
   private txtPlayerStatus!: Phaser.GameObjects.Text;
@@ -80,6 +80,13 @@ export class BattleScene extends Phaser.Scene {
 
   constructor() {
     super({ key: 'BattleScene' });
+  }
+
+  preload(): void {
+    if (!this.textures.exists('player_standing'))
+      this.load.image('player_standing', 'images/Player/Player_standing.png');
+    if (!this.textures.exists('player_attack'))
+      this.load.image('player_attack', 'images/Player/Player_attack.png');
   }
 
   init(data: { mode?: string; returnScene?: string }): void {
@@ -119,6 +126,11 @@ export class BattleScene extends Phaser.Scene {
   private renderBackground(): void {
     this.add.rectangle(W / 2, 360, W, 720, this.actTheme.bg);
     this.add.rectangle(W / 2, DIVIDER_Y, W, 2, this.actTheme.battleDivider);
+    // 카드 섹션 패널 — 90% 불투명도로 플레이어 하단이 은은하게 비침
+    const cardSectionH = 720 - DIVIDER_Y;
+    this.add.rectangle(W / 2, DIVIDER_Y + cardSectionH / 2, W, cardSectionH, this.actTheme.bg)
+      .setAlpha(0.9)
+      .setDepth(2);
   }
 
   /** 전투 모드에 맞게 몬스터 슬롯을 동적으로 생성 */
@@ -168,7 +180,7 @@ export class BattleScene extends Phaser.Scene {
       this.enemyDeathTriggered.push(false);
 
       // 타겟 하이라이트 — 드래그 시 근접 범위 안에서 활성화됨
-      const highlight = this.add.graphics().setDepth(2);
+      const highlight = this.add.graphics().setDepth(3);
       this.enemyHighlights.push(highlight);
       this.enemyCenterPos.push({ cx, cy, w: bodyW, h: bodyH });
 
@@ -231,21 +243,27 @@ export class BattleScene extends Phaser.Scene {
   private renderPlayer(): void {
     const { player } = this.gs;
     const cx = PLAYER_CX, cy = PLAYER_CY;
+    const TARGET_H = 480;
+    const imgTop = cy - TARGET_H / 2; // 380
 
-    this.playerBody = this.add.rectangle(cx, cy, 80, 100, ROSE).setStrokeStyle(2, PINK);
-    this.add.text(cx, cy - 68, player.name, {
+    this.playerSprite = this.add.image(cx, cy, 'player_standing');
+    this.playerSprite.setScale(TARGET_H / this.playerSprite.height);
+    this.playerSprite.setDepth(1);
+
+    // 플레이어 정보는 이미지 위에 표기
+    this.add.text(cx, imgTop - 62, player.name, {
       fontSize: '15px', color: '#ffffff', fontStyle: 'bold', fontFamily: FONT,
     }).setOrigin(0.5);
 
-    this.txtPlayerHp = this.add.text(cx, cy + 62, `HP ${player.hp}/${player.maxHp}`, {
+    this.txtPlayerHp = this.add.text(cx, imgTop - 46, `HP ${player.hp}/${player.maxHp}`, {
       fontSize: '12px', color: '#ff7675',
     }).setOrigin(0.5);
 
-    this.txtPlayerBlock = this.add.text(cx, cy + 78, `방어도: ${player.block}`, {
+    this.txtPlayerBlock = this.add.text(cx, imgTop - 30, `방어도: ${player.block}`, {
       fontSize: '12px', color: '#74b9ff',
     }).setOrigin(0.5);
 
-    this.txtPlayerStatus = this.add.text(cx, cy + 92, '', {
+    this.txtPlayerStatus = this.add.text(cx, imgTop - 14, '', {
       fontSize: '10px', color: '#a29bfe',
       wordWrap: { width: 140 }, align: 'center',
     }).setOrigin(0.5);
@@ -262,10 +280,10 @@ export class BattleScene extends Phaser.Scene {
     // ── 덱 (좌측) — 클릭 시 내용 보기 ────────────────────────────────
     this.add.text(65, PY - 40, '덱', {
       fontSize: '11px', color: '#5888a8',
-    }).setOrigin(0.5);
-    this.add.rectangle(68, PY - 3, 40, 54, 0x1e2535).setStrokeStyle(1, 0x2d4060);
+    }).setOrigin(0.5).setDepth(3);
+    this.add.rectangle(68, PY - 3, 40, 54, 0x1e2535).setStrokeStyle(1, 0x2d4060).setDepth(3);
     const deckRect = this.add.rectangle(65, PY, 40, 54, 0x2a3548);
-    deckRect.setStrokeStyle(1.5, 0x4080b0);
+    deckRect.setStrokeStyle(1.5, 0x4080b0).setDepth(3);
     deckRect.setInteractive({ useHandCursor: true });
     deckRect.on('pointerover', () => deckRect.setStrokeStyle(2, 0x74b9ff));
     deckRect.on('pointerout',  () => deckRect.setStrokeStyle(1.5, 0x4080b0));
@@ -275,15 +293,15 @@ export class BattleScene extends Phaser.Scene {
     ));
     this.txtDeckCount = this.add.text(65, PY + 36, `${this.gs.deck.length}장`, {
       fontSize: '12px', color: '#90a0b0',
-    }).setOrigin(0.5);
+    }).setOrigin(0.5).setDepth(3);
 
     // ── 버림 더미 (우측) — 클릭 시 내용 보기 ──────────────────────────
     this.add.text(1215, PY - 40, '버림', {
       fontSize: '11px', color: '#a86050',
-    }).setOrigin(0.5);
-    this.add.rectangle(1218, PY - 3, 40, 54, 0x1e2535).setStrokeStyle(1, 0x2d4060);
+    }).setOrigin(0.5).setDepth(3);
+    this.add.rectangle(1218, PY - 3, 40, 54, 0x1e2535).setStrokeStyle(1, 0x2d4060).setDepth(3);
     const discardRect = this.add.rectangle(1215, PY, 40, 54, 0x3d2a2a);
-    discardRect.setStrokeStyle(1.5, 0xb06040);
+    discardRect.setStrokeStyle(1.5, 0xb06040).setDepth(3);
     discardRect.setInteractive({ useHandCursor: true });
     discardRect.on('pointerover', () => discardRect.setStrokeStyle(2, 0xff9f7f));
     discardRect.on('pointerout',  () => discardRect.setStrokeStyle(1.5, 0xb06040));
@@ -293,19 +311,19 @@ export class BattleScene extends Phaser.Scene {
     ));
     this.txtDiscardCount = this.add.text(1215, PY + 36, `${this.gs.discard.length}장`, {
       fontSize: '12px', color: '#90a0b0',
-    }).setOrigin(0.5);
+    }).setOrigin(0.5).setDepth(3);
 
     // ── 마나 pip (패 영역 우측 상단) ────────────────────────────────────
     this.add.text(890, PILE_MANA_Y, '마나', {
       fontSize: '11px', color: '#6060a0',
-    }).setOrigin(0.5);
+    }).setOrigin(0.5).setDepth(3);
 
     this.manaPips = [];
     const pipStartX = 916;
     const pipSpacing = 24;
     for (let i = 0; i < player.maxMana; i++) {
       const pip = this.add.circle(pipStartX + i * pipSpacing, PILE_MANA_Y, 10, PINK);
-      pip.setStrokeStyle(2, PINK_SOFT);
+      pip.setStrokeStyle(2, PINK_SOFT).setDepth(3);
       this.manaPips.push(pip);
     }
     this.txtMana = this.add.text(
@@ -313,7 +331,7 @@ export class BattleScene extends Phaser.Scene {
       PILE_MANA_Y,
       `${player.mana}/${player.maxMana}`,
       { fontSize: '13px', color: '#8080c0' },
-    ).setOrigin(0, 0.5);
+    ).setOrigin(0, 0.5).setDepth(3);
   }
 
   /** 포션 슬롯 2개를 PILE_MANA_Y 행 좌측에 렌더링. 재호출 시 이전 오브젝트 제거. */
@@ -323,7 +341,7 @@ export class BattleScene extends Phaser.Scene {
 
     const label = this.add.text(150, PILE_MANA_Y - 20, '포션', {
       fontSize: '10px', color: '#556688',
-    }).setOrigin(0.5);
+    }).setOrigin(0.5).setDepth(3);
     this.potionSlotObjs.push(label);
 
     const SLOT_W = 58, SLOT_H = 46;
@@ -348,18 +366,18 @@ export class BattleScene extends Phaser.Scene {
       if (potion) {
         const col = POTION_COLORS[potion.id] ?? 0x74b9ff;
         const bg = this.add.rectangle(cx, PILE_MANA_Y, SLOT_W, SLOT_H, col, 0.22);
-        bg.setStrokeStyle(1.5, col);
+        bg.setStrokeStyle(1.5, col).setDepth(3);
         bg.setInteractive({ useHandCursor: true });
         this.potionSlotObjs.push(bg);
 
         const txt = this.add.text(cx, PILE_MANA_Y - 6, POTION_SHORT[potion.id] ?? potion.name, {
           fontSize: '10px', color: '#ffffff', fontStyle: 'bold',
-        }).setOrigin(0.5);
+        }).setOrigin(0.5).setDepth(3);
         this.potionSlotObjs.push(txt);
 
         const hint = this.add.text(cx, PILE_MANA_Y + 10, '클릭 사용', {
           fontSize: '8px', color: '#aaaacc',
-        }).setOrigin(0.5);
+        }).setOrigin(0.5).setDepth(3);
         this.potionSlotObjs.push(hint);
 
         const slotIdx = i;
@@ -370,12 +388,12 @@ export class BattleScene extends Phaser.Scene {
         });
       } else {
         const bg = this.add.rectangle(cx, PILE_MANA_Y, SLOT_W, SLOT_H, BG_DEEP);
-        bg.setStrokeStyle(1, BORDER_DIM);
+        bg.setStrokeStyle(1, BORDER_DIM).setDepth(3);
         this.potionSlotObjs.push(bg);
 
         const empty = this.add.text(cx, PILE_MANA_Y, '비어있음', {
           fontSize: '8px', color: '#333355',
-        }).setOrigin(0.5);
+        }).setOrigin(0.5).setDepth(3);
         this.potionSlotObjs.push(empty);
       }
     }
@@ -509,7 +527,7 @@ export class BattleScene extends Phaser.Scene {
     container.setSize(w, h);
     container.setInteractive({ useHandCursor: true });
     this.input.setDraggable(container);
-    container.setDepth(1);
+    container.setDepth(3);
 
     // ── 호버 스케일 VFX ────────────────────────────────────────────────
     let dragging = false;
@@ -535,7 +553,7 @@ export class BattleScene extends Phaser.Scene {
         duration: 120,
         ease: 'Power2',
       });
-      container.setDepth(1);
+      container.setDepth(3);
     });
 
     return {
@@ -563,12 +581,12 @@ export class BattleScene extends Phaser.Scene {
 
     const btnColor = this.actTheme.endTurnActive;
     this.endTurnBtn = this.add.rectangle(bx, by, 140, 46, btnColor);
-    this.endTurnBtn.setStrokeStyle(2, btnColor);
+    this.endTurnBtn.setStrokeStyle(2, btnColor).setDepth(3);
     this.endTurnBtn.setInteractive({ useHandCursor: true });
 
     this.add.text(bx, by, '턴 종료', {
       fontSize: '16px', color: '#ffffff', fontStyle: 'bold',
-    }).setOrigin(0.5);
+    }).setOrigin(0.5).setDepth(3);
 
     this.endTurnBtn.on('pointerover', () => {
       if (this.turnPhase === 'player') this.endTurnBtn.setFillStyle(this.actTheme.endTurnActive);
@@ -727,7 +745,7 @@ export class BattleScene extends Phaser.Scene {
           // 뷰 배열에서 즉시 제거 → 재드래그 방지
           this.cardViews = this.cardViews.filter(cv => cv !== view);
           container.disableInteractive();
-          container.setDepth(2);
+          container.setDepth(3);
 
           // 버림 더미로 날아가는 버림 VFX
           this.tweens.add({
@@ -757,8 +775,8 @@ export class BattleScene extends Phaser.Scene {
           };
 
           if (isAttack) {
-            this.flashAttackSprite(this.playerBody, ROSE);
-            this.lungeAndReturn(this.playerBody, 70, 0, applyHitEffects);
+            this.flashPlayerAttack();
+            this.lungeAndReturn(this.playerSprite, 70, 0, applyHitEffects);
           } else {
             applyHitEffects();
           }
@@ -812,6 +830,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private returnCard(container: Phaser.GameObjects.Container, view: CardView): void {
+    container.setDepth(3);
     this.tweens.add({
       targets: container,
       x: view.originX,
@@ -819,7 +838,6 @@ export class BattleScene extends Phaser.Scene {
       duration: 180,
       ease: 'Back.Out',
     });
-    container.setDepth(1);
   }
 
   private flashMessage(text: string, color: number): void {
@@ -895,7 +913,7 @@ export class BattleScene extends Phaser.Scene {
    * onLand: 전진 완료 즉시 호출 — 피격 이펙트 타이밍에 사용.
    */
   private lungeAndReturn(
-    sprite: Phaser.GameObjects.Rectangle,
+    sprite: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle,
     dx: number,
     dy: number,
     onLand?: () => void,
@@ -920,11 +938,16 @@ export class BattleScene extends Phaser.Scene {
     });
   }
 
-  /**
-   * 공격 스프라이트 색 플래시 플레이스홀더.
-   * 실제 공격 이미지가 준비되면 이 메서드 내부만 교체하면 됨.
-   * 현재: 스프라이트를 attackColor로 순간 변경 후 baseColor로 복원.
-   */
+  /** 플레이어 공격 모션: attack 텍스처로 전환 후 standing으로 복원 */
+  private flashPlayerAttack(holdMs = 280): void {
+    if (!this.playerSprite.active) return;
+    this.playerSprite.setTexture('player_attack');
+    this.time.delayedCall(holdMs, () => {
+      if (this.playerSprite.active) this.playerSprite.setTexture('player_standing');
+    });
+  }
+
+  /** 몬스터 피격 색 플래시 */
   private flashAttackSprite(
     sprite: Phaser.GameObjects.Rectangle,
     baseColor: number,
