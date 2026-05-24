@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GameState } from '../GameState';
+import { AchievementManager } from '../achievements/AchievementManager';
 import type { Relic, RelicRewardSceneData } from '../types';
 import {
   BG_DEEP, BG_PANEL, BG_HOVER,
@@ -142,6 +143,7 @@ export class RelicRewardScene extends Phaser.Scene {
 
   private pickRelic(relic: Relic): void {
     GameState.addRelic(relic);
+    AchievementManager.checkAfterRelicAdded();
 
     const tierColor = TIER_COLOR[relic.tier] ?? PINK;
     const flash = this.add.text(W / 2, H / 2, `"${relic.name}" 획득!`, {

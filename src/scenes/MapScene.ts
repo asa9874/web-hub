@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GameState } from '../GameState';
+import { AchievementManager } from '../achievements/AchievementManager';
 import type { MapNode } from '../types';
 import {
   BG_DEEP, BG_DIVIDER,
@@ -140,7 +141,7 @@ export class MapScene extends Phaser.Scene {
     btn.on('pointerover', () => btn.setColor('#FF69B4'));
     btn.on('pointerout',  () => btn.setColor('#5A3A5A'));
     btn.on('pointerdown', () => {
-      GameState.hardReset();
+      GameState.hardReset(); AchievementManager.reset();
       this.cameras.main.fadeOut(280, 0, 0, 0);
       this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('HubScene'));
     });
@@ -308,7 +309,7 @@ export class MapScene extends Phaser.Scene {
     btn.on('pointerover', () => btn.setColor('#FFB6C1'));
     btn.on('pointerout',  () => btn.setColor('#FF69B4'));
     btn.on('pointerdown', () => {
-      GameState.hardReset();
+      GameState.hardReset(); AchievementManager.reset();
       this.cameras.main.fadeOut(280, 0, 0, 0);
       this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('HubScene'));
     });

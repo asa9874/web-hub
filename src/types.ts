@@ -179,3 +179,30 @@ export interface RelicRewardSceneData {
   relics: Relic[];
   returnScene: string;
 }
+
+// ── 도전 과제 시스템 타입 ──────────────────────────────────────────────────────
+
+export type AchievementId =
+  | 'first_victory'
+  | 'untouchable'
+  | 'boss_slayer'
+  | 'elite_slayer'
+  | 'relic_collector'
+  | 'card_master'
+  | 'big_earner'
+  | 'survivor';
+
+export type AchievementRewardType = 'gold' | 'heal' | 'max_hp';
+
+export interface AchievementReward {
+  type: AchievementRewardType;
+  amount: number;
+  description: string;
+}
+
+export interface Achievement {
+  id: AchievementId;
+  name: string;
+  description: string;
+  reward: AchievementReward;
+}

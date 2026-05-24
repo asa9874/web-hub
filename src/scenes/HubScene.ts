@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GameState } from '../GameState';
+import { AchievementManager } from '../achievements/AchievementManager';
 import {
   BG_DEEP, BG_PANEL, BG_HOVER, BG_DIVIDER,
   BORDER_DIM,
@@ -23,6 +24,10 @@ export class HubScene extends Phaser.Scene {
 
   create(): void {
     this.cameras.main.fadeIn(350, 0, 0, 0);
+    // ToastScene은 항상 살아있는 오버레이 씬 — 중복 실행 방지 후 최초 1회만 launch
+    if (!this.scene.isActive('ToastScene')) {
+      this.scene.launch('ToastScene');
+    }
     this.renderBackground();
     this.renderTitle();
     this.renderRunStatus();
@@ -80,7 +85,7 @@ export class HubScene extends Phaser.Scene {
     resetBtn.on('pointerover', () => resetBtn.setColor('#FFB6C1'));
     resetBtn.on('pointerout',  () => resetBtn.setColor('#FF69B4'));
     resetBtn.on('pointerdown', () => {
-      GameState.hardReset();
+      GameState.hardReset(); AchievementManager.reset();
       this.scene.restart();
     });
   }

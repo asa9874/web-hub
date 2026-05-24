@@ -115,6 +115,14 @@ export class SoundManager {
     this.playTone(380, 0.06, 0.07, 'sine', 420);
   }
 
+  /** 도전 과제 달성 (상승 팡파르 3음) */
+  playAchievement(): void {
+    const notes = [523, 784, 1047]; // C5 → G5 → C6
+    notes.forEach((freq, i) => {
+      setTimeout(() => this.playTone(freq, 0.22, 0.16, 'sine'), i * 100);
+    });
+  }
+
   // ── 음소거 ────────────────────────────────────────────────────────────────
 
   get muted(): boolean { return this._muted; }

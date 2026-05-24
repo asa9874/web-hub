@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GameState } from '../GameState';
+import { AchievementManager } from '../achievements/AchievementManager';
 import type { BattleMode, Card, StatusEffects, TurnPhase } from '../types';
 import type { Monster } from '../monsters/Monster';
 import { applyDamage, addStatus } from '../utils/combat';
@@ -82,6 +83,7 @@ export class BattleScene extends Phaser.Scene {
   create(): void {
     this.midBattleTriggered = false;
     this.turnPhase = 'player';
+    GameState.battleStartHp = GameState.playerHp; // 도전 과제 '무적' 판정용
     GameState.reset(this.battleMode);
     this.gs = GameState.instance;
 
@@ -759,7 +761,7 @@ export class BattleScene extends Phaser.Scene {
       this.time.delayedCall(1800, () => {
         this.cameras.main.fadeOut(400, 0, 0, 0);
         this.cameras.main.once('camerafadeoutcomplete', () => {
-          GameState.hardReset();
+          GameState.hardReset(); AchievementManager.reset();
           this.scene.start('HubScene');
         });
       });
@@ -866,6 +868,7 @@ export class BattleScene extends Phaser.Scene {
    * - 일반: VictoryScene에 gold 직접 전달
    */
   private handleVictory(): void {
+    AchievementManager.checkAfterVictory(this.gs.player.hp, this.battleMode);
     sfx.playVictory();
     this.cameras.main.fadeOut(450, 0, 0, 0);
     this.cameras.main.once('camerafadeoutcomplete', () => {

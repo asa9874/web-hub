@@ -263,6 +263,12 @@ export class GameState {
 
   static readonly MAX_RELICS = 5;
 
+  // ── 도전 과제 추적용 ─────────────────────────────────────────────────────
+  /** 현재 런에서 전투 승리 횟수 */
+  static totalBattlesWon = 0;
+  /** 현재 전투 시작 시 플레이어 HP (무적 달성 여부 판정용) */
+  static battleStartHp = 80;
+
   player: Player;
   enemies: Monster[];  // 최대 5마리
   hand: Card[];
@@ -463,6 +469,8 @@ export class GameState {
     GameState.visitedNodeKeys = [];
     GameState.currentMapNode = null;
     GameState.lastBattleWon = false;
+    GameState.totalBattlesWon = 0;
+    GameState.battleStartHp = 80;
   }
 
   // ── 유물 관련 정적 메서드 ────────────────────────────────────────────────

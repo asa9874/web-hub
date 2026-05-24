@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GameState } from '../GameState';
+import { AchievementManager } from '../achievements/AchievementManager';
 import type { VictorySceneData } from '../types';
 import {
   BG_DEEP, BG_PANEL,
@@ -23,6 +24,7 @@ export class VictoryScene extends Phaser.Scene {
     GameState.pendingReturnScene = '';
     GameState.lastBattleWon = true;
     GameState.gold += this.goldEarned;
+    AchievementManager.checkAfterGoldAdded();
   }
 
   create(): void {
@@ -83,7 +85,7 @@ export class VictoryScene extends Phaser.Scene {
     this.createButton(850, 500, '메인 메뉴', BG_PANEL, BG_PANEL, () => {
       this.cameras.main.fadeOut(300, 0, 0, 0);
       this.cameras.main.once('camerafadeoutcomplete', () => {
-        GameState.hardReset();
+        GameState.hardReset(); AchievementManager.reset();
         this.scene.start('HubScene');
       });
     });

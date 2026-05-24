@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GameState } from '../GameState';
+import { AchievementManager } from '../achievements/AchievementManager';
 import type { Card, CardRewardSceneData } from '../types';
 import {
   BG_DEEP, BG_PANEL, BG_HOVER, BG_DIVIDER,
@@ -146,6 +147,7 @@ export class CardRewardScene extends Phaser.Scene {
     this.selected = true;
 
     GameState.addBonusCard(card);
+    AchievementManager.checkAfterCardAdded();
 
     const msg = this.add.text(640, 580, `"${card.name}" 카드가 덱에 추가되었습니다!`, {
       fontSize: '16px', color: TEXT_GOLD, fontStyle: 'bold', fontFamily: FONT,
