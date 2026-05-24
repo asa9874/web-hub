@@ -5,7 +5,11 @@ import { SeqMonster } from '../../SeqMonster';
 /** 오염된 수호 기사 — 오염된 인간형 (고위) | Act 1 엘리트 | 가중치 45 */
 export class CorruptedKnight extends SeqMonster {
   readonly name = '오염된 수호 기사';
-  readonly description = '수호 기사단의 정예 병사. 암흑 파편에 깊이 물들어 잔혹한 심판자로 변질되었다.';
+  readonly subtitle = '오염된 인간형 (고위) | Act 1 엘리트';
+  readonly lore = '기사단 고참 부관. 단장 실종 후 홀로 도시를 지키다 암흑 파편에 직접 잠식되었다. 등 뒤에 검은 날개 흔적이 있다.';
+  readonly quote = '"케인 단장이 쓰러진 뒤, 부관은 혼자 방어선에 남았다."';
+  readonly statType = '오염된 인간형 (고위)';
+  readonly weight = 45;
   readonly isElite = true;
 
   readonly patterns: AttackPattern[] = [

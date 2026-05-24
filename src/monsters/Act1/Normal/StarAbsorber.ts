@@ -5,7 +5,11 @@ import { SeqMonster } from '../../SeqMonster';
 /** 별빛 흡수충 — 오염된 곤충 정령 | Act 1 일반 | 가중치 15 */
 export class StarAbsorber extends SeqMonster {
   readonly name = '별빛 흡수충';
-  readonly description = '성운 숲에 서식하던 광명충 정령. 빛을 흡수하는 특성이 뒤틀려 검은 나방이 되었다.';
+  readonly subtitle = '오염된 곤충 정령 | Act 1 일반';
+  readonly lore = '성운 숲에 서식하던 광명충 정령. 빛을 흡수해 에너지로 전환하는 특성이 뒤틀려, 커다란 검은 나방 형태가 되었다.';
+  readonly quote = '"성운 숲의 반딧불이들이 달라진 것 같아요."';
+  readonly statType = '오염된 곤충 정령';
+  readonly weight = 15;
 
   readonly patterns: AttackPattern[] = [
     {

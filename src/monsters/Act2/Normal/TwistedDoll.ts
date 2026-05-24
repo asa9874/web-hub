@@ -5,7 +5,11 @@ import { SeqMonster } from '../../SeqMonster';
 /** 뒤틀린 인형 — 오염된 마법 인형 | Act 2 일반 | 가중치 20 */
 export class TwistedDoll extends SeqMonster {
   readonly name = '뒤틀린 인형';
-  readonly description = '실험실에서 연구 목적으로 제작된 마법 인형. 암흑 에너지 유입으로 명령 체계가 붕괴되었다.';
+  readonly subtitle = '오염된 마법 인형 | Act 2 일반';
+  readonly lore = '실험실에서 연구 목적으로 제작된 마법 인형. 암흑 에너지 유입으로 명령 체계가 붕괴되었다. 관절 사이로 검은 에너지가 새어 나온다.';
+  readonly quote = '"우리가 만든 것들이 맞는데, 왜 우리를 보고 고개를 젓는지 모르겠습니다."';
+  readonly statType = '오염된 마법 인형';
+  readonly weight = 20;
 
   readonly patterns: AttackPattern[] = [
     {

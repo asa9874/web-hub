@@ -1,6 +1,10 @@
 import Phaser from 'phaser';
 import { FONT } from '../theme';
-import { TOC_GROUPS, type LoreEntry } from '../data/loreData';
+import { STATIC_TOC_GROUPS } from '../data/loreData';
+import type { TocGroup, LoreEntry } from '../data/bestiaryTypes';
+import { buildMonsterTocGroup } from '../monsters/MonsterRegistry';
+
+const ALL_TOC_GROUPS: TocGroup[] = [...STATIC_TOC_GROUPS, buildMonsterTocGroup()];
 
 // ── Layout constants ──────────────────────────────────────────────────────────
 const LP_X = 42,  LP_W = 526;
@@ -58,10 +62,10 @@ const GAP    = 10;
 type TocItemKind = 'cat' | 'act' | 'type' | 'entry';
 interface TocFlatItem { kind: TocItemKind; text: string; entry?: LoreEntry; }
 
-function buildFlatToc(): { items: TocFlatItem[]; totalH: number } {
+function buildFlatToc(tocGroups: TocGroup[]): { items: TocFlatItem[]; totalH: number } {
   const items: TocFlatItem[] = [];
   let h = 0;
-  for (const g of TOC_GROUPS) {
+  for (const g of tocGroups) {
     items.push({ kind: 'cat', text: g.header });
     h += H_CAT;
     if (g.entries) {
@@ -196,7 +200,7 @@ export class LoreBookScene extends Phaser.Scene {
   // ── TOC ───────────────────────────────────────────────────────────────────
 
   private buildToc(): void {
-    const { items } = buildFlatToc();
+    const { items } = buildFlatToc(ALL_TOC_GROUPS);
 
     this.tocContainer = this.add.container(TOC_MX, TOC_MY).setDepth(5) as Phaser.GameObjects.Container;
     this.tocContainer.setMask(this.tocMask);

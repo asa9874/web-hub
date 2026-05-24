@@ -2,10 +2,14 @@ import type { AttackPattern, Entity } from '../../../types';
 import { applyDamage, addStatus } from '../../../utils/combat';
 import { SeqMonster } from '../../SeqMonster';
 
-/** 심연 괴수 — 심연에서 소환된 엘리트 | Act 1 엘리트 | 가중치 20 */
+/** 심연 괴수 — 오염된 대형 야수 | Act 1 엘리트 | 가중치 20 */
 export class AbyssBeast extends SeqMonster {
   readonly name = '심연 괴수';
-  readonly description = '별빛항 항만 아래 심연에서 암흑 에너지에 이끌려 올라온 거대 괴수.';
+  readonly subtitle = '오염된 대형 야수 | Act 1 엘리트';
+  readonly lore = '성운 숲 깊은 곳에 서식하던 별늑대 정령. 심연 에너지 파열 지점에 오래 노출되어 변질했다. 말 크기이며 털이 모두 검은 가시로 변해 있다.';
+  readonly quote = '"성운 숲의 별늑대가 이렇게 변한 건지 모르겠어요."';
+  readonly statType = '오염된 대형 야수';
+  readonly weight = 20;
   readonly isElite = true;
 
   readonly patterns: AttackPattern[] = [

@@ -5,7 +5,11 @@ import { Boss } from '../../Boss';
 /** 고대인 — 원초 법칙의 화신 | Act 3 최종 보스 | HP 360 | 페이즈 전환: 40% | 페이즈 2: 힘+5 */
 export class AncientOne extends Boss {
   readonly name = '고대인';
-  readonly description = '시간과 공간을 초월한 존재. 그의 의지 하나로 세계가 뒤틀린다.';
+  readonly subtitle = '원초 법칙의 화신 | Act 3 최종 보스';
+  readonly lore = '시간과 공간을 초월한 존재. 별의 심장에 깃들어 우주의 법칙을 집행해온 의식체. 그의 의지 하나로 세계가 뒤틀린다.';
+  readonly quote = '"법칙이 있는 곳에 나는 존재한다."';
+  readonly statType = '원초 의식 · 우주 법칙 화신';
+  readonly phase2BuffDescription = '힘 +5';
   readonly phaseChangeMessage = '고대인의 진정한 각성이 시작되었다!';
 
   protected override phaseThreshold = 0.4;

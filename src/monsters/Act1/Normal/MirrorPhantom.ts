@@ -2,10 +2,14 @@ import type { AttackPattern, Entity } from '../../../types';
 import { applyDamage, addStatus } from '../../../utils/combat';
 import { SeqMonster } from '../../SeqMonster';
 
-/** 거울 환영 — 오염된 환영 정령 | Act 1 일반 | 가중치 10 */
+/** 거울 환영 — 유적 결박 정령 | Act 1 일반 | 가중치 10 */
 export class MirrorPhantom extends SeqMonster {
   readonly name = '거울 환영';
-  readonly description = '별빛항 대거울에 깃들었던 반사 정령. 암흑에 물들어 뒤틀린 복사본을 만들어낸다.';
+  readonly subtitle = '유적 결박 정령 | Act 1 일반';
+  readonly lore = '고대 신전 유적의 의식용 거울에 깃든 정령이 암흑 에너지로 자아를 잃었다. 루나의 실루엣과 흡사하지만 표정이 없다.';
+  readonly quote = '"유적 안의 거울을 만지지 마세요. 당신의 모습이 웃고 있을 테니까요."';
+  readonly statType = '유적 결박 정령';
+  readonly weight = 10;
 
   readonly patterns: AttackPattern[] = [
     {

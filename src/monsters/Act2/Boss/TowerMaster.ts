@@ -5,7 +5,11 @@ import { Boss } from '../../Boss';
 /** 탑의 주인 — 오염된 탑 창건자 마기스터 암브로시우스 | Act 2 보스 | HP 300 | 페이즈 2: 힘+3 */
 export class TowerMaster extends Boss {
   readonly name = '탑의 주인';
-  readonly description = '별의 첨탑을 설계하고 건립한 전설적 마법사. 별의 심장 연구 도중 고대인의 의지에 직접 닿아 잠식되었다.';
+  readonly subtitle = '오염된 탑 창건자 마기스터 암브로시우스 | Act 2 보스';
+  readonly lore = '별의 첨탑을 설계하고 건립한 전설적 마법사. 별의 심장 연구 도중 고대인의 의지에 직접 닿아 잠식되었다. 그의 연구 노트가 아직 탑 꼭대기에 남아있다.';
+  readonly quote = '"이 탑은 나의 인생 작품이오. 이제는 나의 무덤이기도 하지."';
+  readonly statType = '오염된 탑 창건자';
+  readonly phase2BuffDescription = '힘 +3';
   readonly phaseChangeMessage = '탑의 주인이 금지된 고대 마술을 해방했다!';
 
   readonly phasePatterns = [

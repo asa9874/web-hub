@@ -37,5 +37,19 @@ export { ShadowTitan } from './Act2/Boss/ShadowTitan';
 export { FearQueen } from './Act2/Boss/FearQueen';
 export { TowerMaster } from './Act2/Boss/TowerMaster';
 
+// ── Act 3 — 일반 ─────────────────────────────────────────────────────────────
+export { TimeWarden } from './Act3/Normal/TimeWarden';
+export { AncientGuardDoll } from './Act3/Normal/AncientGuardDoll';
+export { StarJudge } from './Act3/Normal/StarJudge';
+export { DimensionRift } from './Act3/Normal/DimensionRift';
+export { ConstellationFragment } from './Act3/Normal/ConstellationFragment';
+
+// ── Act 3 — 엘리트 ───────────────────────────────────────────────────────────
+export { CosmicWarden } from './Act3/Elite/CosmicWarden';
+export { ConstellationGuardian } from './Act3/Elite/ConstellationGuardian';
+export { TimeRuler } from './Act3/Elite/TimeRuler';
+
 // ── Act 3 — 보스 ─────────────────────────────────────────────────────────────
+export { StarHeartGuardian } from './Act3/Boss/StarHeartGuardian';
+export { LordOfTime } from './Act3/Boss/LordOfTime';
 export { AncientOne } from './Act3/Boss/AncientOne';

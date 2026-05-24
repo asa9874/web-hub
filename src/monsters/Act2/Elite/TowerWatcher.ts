@@ -5,7 +5,11 @@ import { SeqMonster } from '../../SeqMonster';
 /** 탑의 감시자 — 최상급 자동인형 | Act 2 엘리트 | 가중치 40 */
 export class TowerWatcher extends SeqMonster {
   readonly name = '탑의 감시자';
-  readonly description = '탑 창건자가 최후의 방어를 위해 만든 최고급 경비 인형. 암흑 에너지가 전원을 강제 가동시켰다.';
+  readonly subtitle = '최상급 자동인형 | Act 2 엘리트';
+  readonly lore = '탑 창건자가 최후의 방어를 위해 만든 최고급 경비 인형. 암흑 에너지가 전원을 강제 가동시켰다. 갑주 표면 전체에 금서 봉인 문양이 새겨져 있다.';
+  readonly quote = '"가동하지 않는 것이 원칙이라고 적혀 있었어요."';
+  readonly statType = '최상급 자동인형';
+  readonly weight = 40;
   readonly isElite = true;
 
   readonly patterns: AttackPattern[] = [

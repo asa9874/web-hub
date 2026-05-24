@@ -5,7 +5,11 @@ import { SeqMonster } from '../../SeqMonster';
 /** 공포의 결정체 — 감정 결정화 | Act 2 엘리트 | 가중치 35 */
 export class FearCrystal extends SeqMonster {
   readonly name = '공포의 결정체';
-  readonly description = '탑을 방문한 수백 년치 마법사들의 패닉과 실패가 축적되어 결정화된 존재.';
+  readonly subtitle = '감정 결정화 | Act 2 엘리트';
+  readonly lore = '탑을 방문한 수백 년치 마법사들의 패닉과 실패가 축적되어 결정화된 존재. 수정 표면에 역대 방문자들의 얼굴이 어렴풋이 맺힌다.';
+  readonly quote = '"이것이 수백 명의 절망을 합친 형태입니다."';
+  readonly statType = '감정 결정화';
+  readonly weight = 35;
   readonly isElite = true;
 
   readonly patterns: AttackPattern[] = [

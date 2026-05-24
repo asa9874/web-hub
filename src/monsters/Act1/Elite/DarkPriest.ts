@@ -5,7 +5,11 @@ import { SeqMonster } from '../../SeqMonster';
 /** 어둠의 사제 — 오염된 마법사형 | Act 1 엘리트 | 가중치 35 */
 export class DarkPriest extends SeqMonster {
   readonly name = '어둠의 사제';
-  readonly description = '별빛항 신전의 사제. 암흑 의식에 빠져들어 저주와 독을 퍼뜨리는 존재가 되었다.';
+  readonly subtitle = '오염된 마법사형 | Act 1 엘리트';
+  readonly lore = '고대 신전 유적을 연구하던 마법사. 별의 파편이 뿜는 암흑 에너지를 자발적으로 흡수했다. 손에서 계속 어둠의 문자가 흘러나온다.';
+  readonly quote = '"떠날 때는 스스로 돌아가지 않겠다고 했고요."';
+  readonly statType = '오염된 마법사형';
+  readonly weight = 35;
   readonly isElite = true;
 
   readonly patterns: AttackPattern[] = [

@@ -26,6 +26,16 @@ import { ShadowTitan } from './monsters/Act2/Boss/ShadowTitan';
 import { FearQueen } from './monsters/Act2/Boss/FearQueen';
 import { TowerMaster } from './monsters/Act2/Boss/TowerMaster';
 import { AncientOne } from './monsters/Act3/Boss/AncientOne';
+import { TimeWarden } from './monsters/Act3/Normal/TimeWarden';
+import { AncientGuardDoll } from './monsters/Act3/Normal/AncientGuardDoll';
+import { StarJudge } from './monsters/Act3/Normal/StarJudge';
+import { DimensionRift } from './monsters/Act3/Normal/DimensionRift';
+import { ConstellationFragment } from './monsters/Act3/Normal/ConstellationFragment';
+import { CosmicWarden } from './monsters/Act3/Elite/CosmicWarden';
+import { ConstellationGuardian } from './monsters/Act3/Elite/ConstellationGuardian';
+import { TimeRuler } from './monsters/Act3/Elite/TimeRuler';
+import { StarHeartGuardian } from './monsters/Act3/Boss/StarHeartGuardian';
+import { LordOfTime } from './monsters/Act3/Boss/LordOfTime';
 import type { Monster } from './monsters/Monster';
 
 /**
@@ -317,8 +327,8 @@ export class GameState {
         GameState.spawnNormalMonster(),
       ];
     } else if (mode === 'boss') {
-      if (GameState.currentAct === 2) this.enemies = [GameState.spawnAct2BossMonster()];
-      else if (GameState.currentAct === 3) this.enemies = [new AncientOne()];
+      if (GameState.currentAct === 3) this.enemies = [GameState.spawnAct3BossMonster()];
+      else if (GameState.currentAct === 2) this.enemies = [GameState.spawnAct2BossMonster()];
       else this.enemies = [GameState.spawnBossMonster()];
     } else if (mode === 'elite') {
       this.enemies = [GameState.spawnEliteMonster()];
@@ -702,6 +712,7 @@ export class GameState {
   // ── Act 1 몬스터 스폰 ─────────────────────────────────────────────────────
 
   static spawnNormalMonster(): Monster {
+    if (GameState.currentAct === 3) return GameState.spawnAct3NormalMonster();
     if (GameState.currentAct === 2) return GameState.spawnAct2NormalMonster();
     const r = Math.random() * 100;
     if (r < 30) return new MemoryGhost();
@@ -712,6 +723,7 @@ export class GameState {
   }
 
   static spawnEliteMonster(): Monster {
+    if (GameState.currentAct === 3) return GameState.spawnAct3EliteMonster();
     if (GameState.currentAct === 2) return GameState.spawnAct2EliteMonster();
     const r = Math.random() * 100;
     if (r < 45) return new CorruptedKnight();
@@ -749,5 +761,30 @@ export class GameState {
     if (r === 0) return new ShadowTitan();
     if (r === 1) return new FearQueen();
     return new TowerMaster();
+  }
+
+  // ── Act 3 몬스터 스폰 ─────────────────────────────────────────────────────
+
+  static spawnAct3NormalMonster(): Monster {
+    const r = Math.random() * 100;
+    if (r < 30) return new TimeWarden();
+    if (r < 55) return new AncientGuardDoll();
+    if (r < 75) return new StarJudge();
+    if (r < 90) return new DimensionRift();
+    return new ConstellationFragment();
+  }
+
+  static spawnAct3EliteMonster(): Monster {
+    const r = Math.random() * 100;
+    if (r < 40) return new CosmicWarden();
+    if (r < 75) return new ConstellationGuardian();
+    return new TimeRuler();
+  }
+
+  static spawnAct3BossMonster(): Monster {
+    const r = Math.floor(Math.random() * 3);
+    if (r === 0) return new StarHeartGuardian();
+    if (r === 1) return new LordOfTime();
+    return new AncientOne();
   }
 }

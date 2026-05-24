@@ -5,7 +5,11 @@ import { Boss } from '../../Boss';
 /** 공포의 여왕 — 수정화된 선행 마법소녀 리라 아세나 | Act 2 보스 | HP 260 | 페이즈 2: 힘+4 */
 export class FearQueen extends Boss {
   readonly name = '공포의 여왕';
-  readonly description = '60년 전 탑에서 공포에 굴복한 마법소녀. 자신의 두려움에 삼켜져 수정이 되었다가 암흑 에너지에 의해 각성했다.';
+  readonly subtitle = '수정화된 선행 마법소녀 리라 아세나 | Act 2 보스';
+  readonly lore = '60년 전 탑에서 공포에 굴복한 마법소녀. 자신의 두려움에 삼켜져 수정이 되었다가 암흑 에너지에 의해 각성했다. 수정화된 몸 속에 아직 심장 박동이 느껴진다.';
+  readonly quote = '"나는 무서웠어요. 그게 죄가 되었죠."';
+  readonly statType = '수정화된 마법소녀';
+  readonly phase2BuffDescription = '힘 +4';
   readonly phaseChangeMessage = '공포의 여왕이 절대 공포를 해방했다!';
 
   readonly phasePatterns = [

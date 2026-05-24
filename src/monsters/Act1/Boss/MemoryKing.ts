@@ -5,8 +5,12 @@ import { Boss } from '../../Boss';
 /** 기억 도적왕 — 감정 결집체 | Act 1 보스 | HP 200 | 페이즈 2: 힘+4 */
 export class MemoryKing extends Boss {
   readonly name = '기억 도적왕';
-  readonly description = '별빛항 주민들의 기억을 훔쳐 힘을 축적해온 고대의 도적. 수많은 기억이 응집된 최강의 악의.';
+  readonly subtitle = '감정 결집체 — 이름 없는 군주 | Act 1 보스';
+  readonly lore = '별빛항 전체 주민의 잃어버린 기억이 단 하나의 의식으로 집결된 존재. 수천 개의 기억 파편이 왕관처럼 떠 있는 반투명 거대 실루엣이며, 얼굴이 계속 바뀐다.';
+  readonly quote = '"별빛항 사람들이 잃은 기억이 한 곳에 모여 왕좌에 앉았습니다."';
+  readonly statType = '감정 결집체';
   readonly phaseChangeMessage = '기억 도적왕이 모든 기억을 해방했다!';
+  readonly phase2BuffDescription = '힘 +4';
 
   readonly phasePatterns = [
     [

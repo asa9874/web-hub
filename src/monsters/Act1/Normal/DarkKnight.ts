@@ -5,7 +5,11 @@ import { SeqMonster } from '../../SeqMonster';
 /** 암흑 갑주병 — 오염된 인간형 | Act 1 일반 | 가중치 25 */
 export class DarkKnight extends SeqMonster {
   readonly name = '암흑 갑주병';
-  readonly description = '수호 기사단 병사. 암흑 파편에 닿아 의식을 잃고 변질되었다.';
+  readonly subtitle = '오염된 인간형 | Act 1 일반';
+  readonly lore = '수호 기사단 병사. 암흑 파편에 닿아 의식을 잃고 변질되었다. 빛을 흡수해 완전히 검어진 갑주를 두르고 있으며, 투구 안은 비어있다.';
+  readonly quote = '"명령이 없어도 그들은 행진합니다. 빛을 향해."';
+  readonly statType = '오염된 인간형';
+  readonly weight = 25;
 
   readonly patterns: AttackPattern[] = [
     {

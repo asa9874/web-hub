@@ -5,8 +5,12 @@ import { Boss } from '../../Boss';
 /** 별빛 파괴자 — 기억 소실 선행 마법소녀 이사벨라 루에스 | Act 1 보스 | HP 220 | 페이즈 2: 힘+3 */
 export class StarDestroyer extends Boss {
   readonly name = '별빛 파괴자';
-  readonly description = '성운 숲의 수호자였던 고대 마법사. 암흑 에너지에 완전히 잠식되어 별빛 자체를 무기로 삼는다.';
+  readonly subtitle = '기억 소실 선행 마법소녀 이사벨라 루에스 | Act 1 보스';
+  readonly lore = '100년 전 별 정령과 계약한 마법소녀. 기억을 전부 소모하고 힘만 남아 폭주 상태가 된 비극의 선행자. 루나와 닮은 외형이지만 눈에 감정이 없다.';
+  readonly quote = '"그 눈이 아무것도 담고 있지 않다는 걸 깨달았을 때는 이미 늦었습니다."';
+  readonly statType = '기억 소실 마법소녀 (역전)';
   readonly phaseChangeMessage = '별빛 파괴자가 금지된 마법을 해방했다!';
+  readonly phase2BuffDescription = '힘 +3';
 
   readonly phasePatterns = [
     [

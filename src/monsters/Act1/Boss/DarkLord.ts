@@ -5,8 +5,12 @@ import { Boss } from '../../Boss';
 /** 암흑 군주 — 오염된 기사단장 케인 아스타르 | Act 1 보스 | HP 240 | 페이즈 2: 힘+3 */
 export class DarkLord extends Boss {
   readonly name = '암흑 군주';
-  readonly description = '고대의 어둠을 지배하는 존재. 전투가 길어질수록 더욱 강해진다.';
+  readonly subtitle = '오염된 기사단장 케인 아스타르 | Act 1 보스';
+  readonly lore = '별빛항 수호 기사단 단장 케인 아스타르가 암흑 에너지에 잠식된 형태. 본인의 의식은 갑옷 깊은 곳에 남아 있다. 칠흑색 전신 갑옷에 가슴에 달빛 같은 균열이 나 있다.';
+  readonly quote = '"나는 한때 이 도시를 지켰다. 그러나 빛이란 결국 사람을 배신하더군."';
+  readonly statType = '오염된 인간 (의식 잔존)';
   readonly phaseChangeMessage = '암흑 군주가 진정한 힘을 해방했다!';
+  readonly phase2BuffDescription = '힘 +3';
 
   readonly phasePatterns = [
     [

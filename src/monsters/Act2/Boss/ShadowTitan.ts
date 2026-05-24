@@ -5,7 +5,11 @@ import { Boss } from '../../Boss';
 /** 그림자 타이탄 — 공포 결정화 거인 | Act 2 보스 | HP 280 | 페이즈 2: 힘+4 */
 export class ShadowTitan extends Boss {
   readonly name = '그림자 타이탄';
-  readonly description = '탑에서 수백 년간 축적된 인간의 공포와 절망이 결정화된 존재. 높이 5미터의 검은 수정 거인.';
+  readonly subtitle = '공포 결정화 거인 | Act 2 보스';
+  readonly lore = '탑에서 수백 년간 축적된 인간의 공포와 절망이 결정화된 존재. 높이 5미터의 검은 수정 거인으로, 발걸음마다 바닥이 갈라진다.';
+  readonly quote = '"당신의 공포가 나를 이루고 있습니다."';
+  readonly statType = '공포 결정화 거인';
+  readonly phase2BuffDescription = '힘 +4';
   readonly phaseChangeMessage = '그림자 타이탄이 분노의 힘을 해방했다!';
 
   readonly phasePatterns = [

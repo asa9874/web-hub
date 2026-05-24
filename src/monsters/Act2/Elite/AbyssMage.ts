@@ -5,7 +5,11 @@ import { SeqMonster } from '../../SeqMonster';
 /** 심연의 마법사 — 오염된 고위 마법사 | Act 2 엘리트 | 가중치 25 */
 export class AbyssMage extends SeqMonster {
   readonly name = '심연의 마법사';
-  readonly description = '탑의 고위 연구원이 심연과 연결된 통로를 직접 들여다보다 완전히 잠식되었다.';
+  readonly subtitle = '오염된 고위 마법사 | Act 2 엘리트';
+  readonly lore = '탑의 고위 연구원이 심연과 연결된 통로를 직접 들여다보다 완전히 잠식되었다. 눈에서 검은 안개가 끊임없이 흘러나온다.';
+  readonly quote = '"아름다운 지식이야. 돌아올 수가 없어."';
+  readonly statType = '오염된 고위 마법사';
+  readonly weight = 25;
   readonly isElite = true;
 
   readonly patterns: AttackPattern[] = [

@@ -5,7 +5,11 @@ import { SeqMonster } from '../../SeqMonster';
 /** 지식 수집귀 — 오염된 지식 정령 | Act 2 일반 | 가중치 25 */
 export class KnowledgeCollector extends SeqMonster {
   readonly name = '지식 수집귀';
-  readonly description = '탑 도서관에 깃들어 있던 지식 수집 정령이 금서에 닿아 암흑 지식에 오염되었다.';
+  readonly subtitle = '오염된 지식 정령 | Act 2 일반';
+  readonly lore = '탑 도서관에 깃들어 있던 지식 수집 정령이 금서에 닿아 암흑 지식에 오염되었다. 손에서 어둠의 문자가 끊임없이 흘러나온다.';
+  readonly quote = '"도서관의 책들이 스스로 자리를 바꾼다고 보고가 들어왔을 때, 우리는 웃었습니다."';
+  readonly statType = '오염된 지식 정령';
+  readonly weight = 25;
 
   readonly patterns: AttackPattern[] = [
     {
