@@ -30,7 +30,11 @@ interface CardView {
   container: Phaser.GameObjects.Container;
   originX: number;
   originY: number;
-  /** 드래그 중 호버 스케일을 억제하기 위한 상태 토글. */
+  /** 팬 레이아웃에서 이 카드의 기본 회전각 (degrees). */
+  baseAngle: number;
+  /** 팬 레이아웃에서 이 카드의 기본 depth. */
+  baseDepth: number;
+  /** 드래그 중 호버 스케일 및 회전을 억제하기 위한 상태 토글. */
   setDragging: (v: boolean) => void;
 }
 
@@ -453,8 +457,9 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /**
-   * 현재 손패를 화면 하단 중앙에 균등 배치.
-   * animate=true 이면 각 카드가 덱 위치에서 슬라이드인 (드로우 VFX).
+   * 현재 손패를 부채꼴(팬) 호 형태로 화면 하단 중앙에 배치.
+   * - 중앙 카드가 가장 높고(회전 0°), 양끝 카드일수록 바깥쪽으로 기울며 내려감.
+   * - animate=true 이면 각 카드가 덱 위치에서 팬 위치로 슬라이드인 (드로우 VFX).
    */
   private renderHand(animate = false): void {
     this.cardViews.forEach(cv => cv.container.destroy());
@@ -463,28 +468,50 @@ export class BattleScene extends Phaser.Scene {
     const { hand } = this.gs;
     if (hand.length === 0) return;
 
-    const CARD_W = 100, CARD_H = 138, GAP = 120;
-    const startX = W / 2 - ((hand.length - 1) * GAP) / 2;
+    const N          = hand.length;
+    const CARD_W     = 118;   // 기존 100 → 18% 확대
+    const CARD_H     = 163;   // 기존 138 → 18% 확대
+    const HAND_CY    = 615;   // 중앙 카드 Y (팬의 최고점)
+
+    // 총 스프레드 각도: 카드가 많을수록 넓어지나 최대 26°로 제한
+    const totalSpread = N > 1 ? Math.min(26, N * 3.2) : 0;
+    const angleStep   = N > 1 ? totalSpread / (N - 1) : 0;
+
+    // Y 드롭 계수: 중앙에서의 상대 거리² × K (포물선 곡선)
+    const FAN_Y_K = 4.5;
+
+    // 가용 너비 안에서 카드 간격 동적 조정
+    const AVAILABLE_W = 1080;
+    const gap = N > 1
+      ? Math.min(CARD_W + 18, AVAILABLE_W / (N - 1))
+      : 0;
+    const startX = W / 2 - ((N - 1) * gap) / 2;
+
+    const centerIdx = (N - 1) / 2;
 
     hand.forEach((card, i) => {
-      const tx = startX + i * GAP;
-      const view = this.createCardView(card, tx, PILE_Y, CARD_W, CARD_H);
+      const tx       = startX + i * gap;
+      const relPos   = i - centerIdx;           // 중심 기준 상대 위치 (-2, -1, 0, 1, 2 ...)
+      const cardAngle = relPos * angleStep;     // 기울기 (좌=음, 우=양)
+      const yDrop    = relPos * relPos * FAN_Y_K; // 포물선 낙하량
+      const ty       = HAND_CY + yDrop;
+      const depth    = 3 + i;                  // 오른쪽 카드가 위에 렌더링
+
+      const view = this.createCardView(card, tx, ty, CARD_W, CARD_H, cardAngle, depth);
 
       if (animate) {
-        // 덱 위치에서 시작해 목표 위치로 슬라이드
         view.container.setPosition(DECK_X, PILE_Y);
         view.container.setAlpha(0);
         view.container.setScale(0.35);
+        view.container.setAngle(0);
         this.tweens.add({
           targets: view.container,
-          x: tx,
-          y: PILE_Y,
-          alpha: 1,
-          scaleX: 1,
-          scaleY: 1,
-          duration: 270,
+          x: tx, y: ty,
+          angle: cardAngle,
+          alpha: 1, scaleX: 1, scaleY: 1,
+          duration: 280,
           ease: 'Back.Out',
-          delay: i * 75,
+          delay: i * 70,
         });
       }
 
@@ -492,45 +519,59 @@ export class BattleScene extends Phaser.Scene {
     });
   }
 
-  private createCardView(card: Card, x: number, y: number, w: number, h: number): CardView {
+  private createCardView(
+    card: Card,
+    x: number, y: number,
+    w: number, h: number,
+    baseAngle: number,
+    baseDepth: number,
+  ): CardView {
     const container = this.add.container(x, y);
+    container.setAngle(baseAngle);
+    container.setDepth(baseDepth);
 
     const bg = this.add.rectangle(0, 0, w, h, BG_PANEL);
     const borderColor = card.cardType === 'attack' ? ROSE : card.cardType === 'power' ? GOLD : LAVENDER;
     bg.setStrokeStyle(2, borderColor);
 
-    const badge = this.add.circle(-w / 2 + 14, -h / 2 + 14, 12, PINK);
-    const costText = this.add.text(-w / 2 + 14, -h / 2 + 14, String(card.cost), {
-      fontSize: '13px', color: '#ffffff', fontStyle: 'bold',
+    const badge = this.add.circle(-w / 2 + 16, -h / 2 + 16, 13, PINK);
+    const costText = this.add.text(-w / 2 + 16, -h / 2 + 16, String(card.cost), {
+      fontSize: '15px', color: '#ffffff', fontStyle: 'bold',
     }).setOrigin(0.5);
 
-    const nameText = this.add.text(0, -h / 2 + 30, card.name, {
-      fontSize: '13px', color: '#dfe6e9', fontStyle: 'bold',
-      wordWrap: { width: w - 20 }, align: 'center',
+    const nameText = this.add.text(0, -h / 2 + 34, card.name, {
+      fontSize: '14px', color: '#dfe6e9', fontStyle: 'bold',
+      wordWrap: { width: w - 18 }, align: 'center',
     }).setOrigin(0.5);
 
-    const divider = this.add.rectangle(0, -h / 2 + 44, w - 20, 1, BG_DIVIDER);
+    const divider = this.add.rectangle(0, -h / 2 + 52, w - 20, 1, BG_DIVIDER);
 
-    const descText = this.add.text(0, 14, card.description, {
-      fontSize: '11px', color: '#b2bec3',
-      wordWrap: { width: w - 16 }, align: 'center',
+    // 카드 유형 뱃지 (공격/기술/파워)
+    const typeLabel = card.cardType === 'attack' ? '공격' : card.cardType === 'power' ? '파워' : '기술';
+    const typeColor = card.cardType === 'attack' ? '#ff7675' : card.cardType === 'power' ? '#fdcb6e' : '#a29bfe';
+    const typeText = this.add.text(0, -h / 2 + 64, typeLabel, {
+      fontSize: '10px', color: typeColor,
+    }).setOrigin(0.5);
+
+    const descText = this.add.text(0, 18, card.description, {
+      fontSize: '12px', color: '#b2bec3',
+      wordWrap: { width: w - 16 }, align: 'center', lineSpacing: 3,
     }).setOrigin(0.5);
 
     // AoE 카드에 작은 "전체" 태그 표시
     if (card.targetType === 'all') {
-      const tag = this.add.text(w / 2 - 4, -h / 2 + 4, '전체', {
+      const tag = this.add.text(w / 2 - 5, -h / 2 + 5, '전체', {
         fontSize: '9px', color: '#e17055',
       }).setOrigin(1, 0);
       container.add(tag);
     }
 
-    container.add([bg, badge, costText, nameText, divider, descText]);
+    container.add([bg, badge, costText, nameText, divider, typeText, descText]);
     container.setSize(w, h);
     container.setInteractive({ useHandCursor: true });
     this.input.setDraggable(container);
-    container.setDepth(3);
 
-    // ── 호버 스케일 VFX ────────────────────────────────────────────────
+    // ── 호버 VFX: 회전 해제 + 위로 들어올리기 + 확대 ─────────────────
     let dragging = false;
 
     container.on('pointerover', () => {
@@ -538,8 +579,10 @@ export class BattleScene extends Phaser.Scene {
       this.tweens.killTweensOf(container);
       this.tweens.add({
         targets: container,
-        scaleX: 1.14, scaleY: 1.14,
-        duration: 100,
+        scaleX: 1.18, scaleY: 1.18,
+        angle: 0,              // 팬 기울기 해제 → 정면으로
+        y: y - 26,             // 위로 들어올리기
+        duration: 130,
         ease: 'Power2',
       });
       container.setDepth(5);
@@ -551,10 +594,13 @@ export class BattleScene extends Phaser.Scene {
       this.tweens.add({
         targets: container,
         scaleX: 1, scaleY: 1,
-        duration: 120,
+        angle: baseAngle,
+        x,                     // x 위치도 원위치 복원
+        y,
+        duration: 160,
         ease: 'Power2',
       });
-      container.setDepth(3);
+      container.setDepth(baseDepth);
     });
 
     return {
@@ -562,12 +608,15 @@ export class BattleScene extends Phaser.Scene {
       container,
       originX: x,
       originY: y,
+      baseAngle,
+      baseDepth,
       setDragging: (v: boolean) => {
         dragging = v;
         if (v) {
-          // 드래그 시작 시 호버 트윈 즉시 취소 + 스케일 리셋
+          // 드래그 시작 시 트윈 취소 + 스케일·회전 즉시 리셋
           this.tweens.killTweensOf(container);
           container.setScale(1);
+          container.setAngle(0);
         }
       },
     };
@@ -701,11 +750,12 @@ export class BattleScene extends Phaser.Scene {
       const view = this.cardViews.find(cv => cv.container === container);
       if (!view) return;
 
-      view.setDragging(false);
+      // setDragging(false)는 returnCard의 onComplete에서 처리 —
+      // 복귀 애니메이션 도중 pointerout이 개입하지 못하도록 dragging 플래그를 유지
       this.clearSnapHighlights();
 
       if (this.turnPhase !== 'player') {
-        this.returnCard(container, view);
+        this.returnCard(container, view, () => view.setDragging(false));
         return;
       }
 
@@ -752,6 +802,7 @@ export class BattleScene extends Phaser.Scene {
           this.tweens.add({
             targets: container,
             x: DISCARD_X, y: PILE_Y,
+            angle: 0,
             scaleX: 0.3, scaleY: 0.3,
             alpha: 0,
             duration: 260,
@@ -785,11 +836,11 @@ export class BattleScene extends Phaser.Scene {
           this.updateUI();
           this.handlePostCardPlay();
         } else {
-          this.returnCard(container, view);
+          this.returnCard(container, view, () => view.setDragging(false));
           this.flashMessage('마나가 부족합니다!', 0xff7675);
         }
       } else {
-        this.returnCard(container, view);
+        this.returnCard(container, view, () => view.setDragging(false));
       }
     });
   }
@@ -830,14 +881,22 @@ export class BattleScene extends Phaser.Scene {
     this.enemyHighlights.forEach(g => g.clear());
   }
 
-  private returnCard(container: Phaser.GameObjects.Container, view: CardView): void {
-    container.setDepth(3);
+  private returnCard(
+    container: Phaser.GameObjects.Container,
+    view: CardView,
+    onComplete?: () => void,
+  ): void {
+    this.tweens.killTweensOf(container);
+    container.setDepth(view.baseDepth);
     this.tweens.add({
       targets: container,
       x: view.originX,
       y: view.originY,
-      duration: 180,
+      angle: view.baseAngle,
+      scaleX: 1, scaleY: 1,
+      duration: 200,
       ease: 'Back.Out',
+      onComplete,
     });
   }
 
