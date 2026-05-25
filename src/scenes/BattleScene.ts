@@ -3,7 +3,7 @@ import { GameState } from '../GameState';
 import { AchievementManager } from '../achievements/AchievementManager';
 import type { BattleMode, Card, StatusEffects, TurnPhase } from '../types';
 import { applyDamage, addStatus } from '../utils/combat';
-import { shakeObject, flashHit, spawnDamageNumber, spawnHealNumber, playDeathTween } from '../utils/fx';
+import { shakeObject, flashHit, flashHitImage, spawnDamageNumber, spawnHealNumber, playDeathTween, hitStop, squashOnHit, spawnParticleBurst, spawnMagicBurst, spawnSlashTrail } from '../utils/fx';
 import { sfx } from '../audio/SoundManager';
 import {
   BG_DEEP, BG_PANEL, BG_HOVER, BG_DIVIDER,
@@ -82,6 +82,12 @@ export class BattleScene extends Phaser.Scene {
   private enemyCenterPos: { cx: number; cy: number; w: number; h: number }[] = [];
   private currentSnapTarget = -1;
 
+  // ── VFX 상태 ──────────────────────────────────────────────────────────────
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private bloomFx: any = null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private chromFx: any = null;
+
   constructor() {
     super({ key: 'BattleScene' });
   }
@@ -110,6 +116,7 @@ export class BattleScene extends Phaser.Scene {
     this.gs = GameState.instance;
 
     this.cameras.main.fadeIn(350, 0, 0, 0);
+    this.initVFX();
 
     this.renderBackground();
     this.renderEnemies();
@@ -123,6 +130,55 @@ export class BattleScene extends Phaser.Scene {
     this.setupDragDrop();
     this.updateAllIntents();
     this.updateUI();
+  }
+
+  // ── VFX 초기화 및 헬퍼 ───────────────────────────────────────────────────
+
+  private initVFX(): void {
+    // 파티클용 8×8 흰색 원 텍스처 런타임 생성
+    const g = this.add.graphics();
+    g.fillStyle(0xffffff, 1);
+    g.fillCircle(4, 4, 4);
+    g.generateTexture('vfx_dot', 8, 8);
+    g.destroy();
+
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const cam = this.cameras.main as any;
+      this.bloomFx = cam.postFX.addBloom(0xffffff, 1, 1, 0.5, 1.0, 10);
+      this.chromFx = cam.postFX.addChromaticAberration(0);
+    } catch { /* WebGL 미지원 환경 — 효과 없이 진행 */ }
+  }
+
+  private pulseBloom(peak = 2.8): void {
+    if (!this.bloomFx) return;
+    this.bloomFx.strength = peak;
+    this.tweens.add({
+      targets: this.bloomFx,
+      strength: 1.0,
+      duration: 600,
+      ease: 'Power2.Out',
+    });
+  }
+
+  private triggerChromAber(strength = 0.07, holdMs = 180): void {
+    if (!this.chromFx) return;
+    this.chromFx.aberration = strength;
+    this.time.delayedCall(holdMs, () => {
+      if (this.chromFx) {
+        this.tweens.add({
+          targets: this.chromFx,
+          aberration: 0,
+          duration: 200,
+          ease: 'Power2.Out',
+        });
+      }
+    });
+  }
+
+  private zoomToAction(zoom = 1.06, holdMs = 300): void {
+    this.cameras.main.zoomTo(zoom, 220, 'Power2.Out');
+    this.time.delayedCall(holdMs, () => this.cameras.main.zoomTo(1, 350, 'Power2.Out'));
   }
 
   // ── 렌더링 ────────────────────────────────────────────────────────────────
@@ -810,6 +866,13 @@ export class BattleScene extends Phaser.Scene {
             onComplete: () => container.destroy(),
           });
 
+          const isPower = card?.cardType === 'power';
+          if (isPower) {
+            this.zoomToAction();
+            this.pulseBloom();
+            spawnMagicBurst(this, W / 2, 360);
+          }
+
           // 피격 이펙트 — 공격 카드는 런지 피크(onLand)에서, 나머지는 즉시
           const positions = this.getEnemyPositions(this.gs.enemies.length);
           const applyHitEffects = () => {
@@ -820,17 +883,26 @@ export class BattleScene extends Phaser.Scene {
                 spawnDamageNumber(this, positions[i], ENEMY_CY + 35, dmg);
                 shakeObject(this, this.enemyBodies[i]);
                 flashHit(this, this.enemyBodies[i], this.enemyBodyColors[i]);
+                squashOnHit(this, this.enemyBodies[i]);
+                spawnParticleBurst(this, positions[i], ENEMY_CY, 0xff7675);
                 maxDmg = Math.max(maxDmg, dmg);
               }
             });
             if (maxDmg >= 10) this.cameras.main.shake(130, 0.004);
+            if (maxDmg >= 20) this.triggerChromAber(0.05, 150);
           };
 
           if (isAttack) {
             this.flashPlayerAttack();
-            this.lungeAndReturn(this.playerSprite, 70, 0, applyHitEffects);
+            hitStop(this, 40, () => {
+              spawnSlashTrail(this, this.playerSprite.x, this.playerSprite.y, 70, 0xffe8f0, 60, 100);
+              this.lungeAndReturn(this.playerSprite, 70, 0, () => {
+                hitStop(this, 55, applyHitEffects);
+              });
+            });
           } else {
             applyHitEffects();
+            if (!isPower) spawnMagicBurst(this, W / 2, 300);
           }
 
           this.updateUI();
@@ -1061,14 +1133,25 @@ export class BattleScene extends Phaser.Scene {
     // 런지 + 피격 이펙트 — 런지 피크(onLand)에 플레이어 피해 팝업
     const applyPlayerHitEffects = () => {
       if (playerDmg > 0) {
+        flashHitImage(this, this.playerSprite);
+        squashOnHit(this, this.playerSprite, 0.6);
+        spawnParticleBurst(this, PLAYER_CX, PLAYER_CY, 0xff7675, 8);
         spawnDamageNumber(this, PLAYER_CX, PLAYER_CY - 30, playerDmg);
-        this.cameras.main.shake(90, 0.0035);
+        const isHeavy = playerDmg >= 15;
+        this.cameras.main.shake(isHeavy ? 150 : 90, isHeavy ? 0.008 : 0.004);
+        if (isHeavy) this.triggerChromAber(0.06, 200);
       }
     };
 
     if (body?.active) {
       this.flashAttackSprite(body, this.enemyBodyColors[idx]);
-      this.lungeAndReturn(body, -70, 0, applyPlayerHitEffects);
+      const { w: bw, h: bh } = this.enemyCenterPos[idx] ?? { cx: body.x, cy: body.y, w: 70, h: 80 };
+      hitStop(this, 20, () => {
+        spawnSlashTrail(this, body.x, body.y, -70, 0xff2233, bw, bh);
+        this.lungeAndReturn(body, -70, 0, () => {
+          hitStop(this, 60, applyPlayerHitEffects);
+        });
+      });
     } else {
       applyPlayerHitEffects();
     }
@@ -1184,9 +1267,27 @@ export class BattleScene extends Phaser.Scene {
         const boss = monster as unknown as { checkPhaseTransition(): boolean; phaseChangeMessage: string };
         if (boss.checkPhaseTransition()) {
           sfx.playBossPhase();
-          this.cameras.main.shake(300, 0.008);
+          this.cameras.main.shake(300, 0.012);
           this.flashMessage(boss.phaseChangeMessage, 0xff4757);
           this.updateAllIntents();
+          this.triggerChromAber(0.10, 300);
+          this.pulseBloom(4.0);
+          const overlay = this.add.rectangle(W / 2, 360, W, 720, 0x000000).setAlpha(0).setDepth(50);
+          this.tweens.add({
+            targets: overlay,
+            alpha: 0.65,
+            duration: 120,
+            onComplete: () => {
+              this.tweens.add({
+                targets: overlay,
+                alpha: 0,
+                duration: 500,
+                onComplete: () => overlay.destroy(),
+              });
+            },
+          });
+          this.cameras.main.zoomTo(0.93, 150, 'Power2.Out', true);
+          this.time.delayedCall(300, () => this.cameras.main.zoomTo(1, 500, 'Power2.Out', true));
         }
       }
     }
