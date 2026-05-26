@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { bgm } from '../audio/BGMManager';
+import { bgm, BGM_PRELOAD_KEYS, BGM_PATHS } from '../audio/BGMManager';
 import {
   BG_DEEP, BG_PANEL,
   PINK, ROSE, LAVENDER, GOLD,
@@ -364,35 +364,11 @@ export class PreloadScene extends Phaser.Scene {
     this.loadBgm();
   }
 
+  // Act 1 필수 트랙만 초기 로딩 — Act 2/3는 BGMManager가 백그라운드에서 fetch()
   private loadBgm(): void {
-    const tracks: [string, string][] = [
-      ['bgm01', 'sounds/bgm/BGM-01_타이틀 테마_별이 부서진 밤.mp3'],
-      ['bgm02', 'sounds/bgm/BGM-02_허브 테마_루나의 방.mp3'],
-      ['bgm03', 'sounds/bgm/BGM-03_맵 탐험 테마_별자리를 따라서.mp3'],
-      ['bgm04', 'sounds/bgm/BGM-04_일반 전투 테마_달빛 공세.mp3'],
-      ['bgm05', 'sounds/bgm/BGM-05_엘리트 전투 테마_성운의 검.mp3'],
-      ['bgm06', 'sounds/bgm/BGM-06_보스 전투 테마_기억의 심연.mp3'],
-      ['bgm07', 'sounds/bgm/BGM-07_승리 팡파르_별빛 귀환.mp3'],
-      ['bgm08', 'sounds/bgm/BGM-08_게임 오버 테마_흩어진 별.mp3'],
-      ['bgm09', 'sounds/bgm/BGM-09_상점 테마_별빛 상단.mp3'],
-      ['bgm10', 'sounds/bgm/BGM-10_휴식 처 테마_달이 기다리는 곳.mp3'],
-      ['bgm11', 'sounds/bgm/BGM-11_이벤트 테마_기억 속 갈림길.mp3'],
-      ['bgm12', 'sounds/bgm/BGM-12_로어북 테마_아이스텔리아의 역사.mp3'],
-      ['bgm13', 'sounds/bgm/BGM-13_다이얼로그 컷씬 테마_루나의 기억.mp3'],
-      ['bgm14', 'sounds/bgm/BGM-14_Act 2 필드 테마_첨탑의 공명.mp3'],
-      ['bgm15', 'sounds/bgm/BGM-15_Act 3 필드 테마_성천원의 침묵.mp3'],
-      ['bgm16', 'sounds/bgm/BGM-16_보스 전투_암흑 군주_케인의 타락.mp3'],
-      ['bgm17', 'sounds/bgm/BGM-17_보스 전투_별빛 파괴자_이사벨라의 공백.mp3'],
-      ['bgm18', 'sounds/bgm/BGM-18_보스 전투_기억 도적왕_천 개의 얼굴.mp3'],
-      ['bgm19', 'sounds/bgm/BGM-19_보스 전투_공포의 여왕_리라의 결정.mp3'],
-      ['bgm20', 'sounds/bgm/BGM-20_보스 전투_그림자 타이탄_공포의 결정체.mp3'],
-      ['bgm21', 'sounds/bgm/BGM-21_보스 전투_탑의 주인_암브로시우스의 묘비.mp3'],
-      ['bgm22', 'sounds/bgm/BGM-22_보스 전투_고대인_만물귀원.mp3'],
-      ['bgm23', 'sounds/bgm/BGM-23_보스 전투_시간의 군주_크로노스의 영역.mp3'],
-      ['bgm24', 'sounds/bgm/BGM-24_보스 전투_별의 심장 수호자_최초의 계약.mp3'],
-    ];
-    for (const [key, path] of tracks) {
-      this.load.audio(key, path);
+    for (const key of BGM_PRELOAD_KEYS) {
+      const path = BGM_PATHS[key];
+      if (path) this.load.audio(key, path);
     }
   }
 }

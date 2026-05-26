@@ -29,6 +29,7 @@ export class TitleScene extends Phaser.Scene {
 
   create(): void {
     bgm.play('bgm01');
+    bgm.startBackgroundLoad(); // Act 2/3 트랙 백그라운드 로드 시작
     this.cameras.main.fadeIn(700, 0, 0, 0);
     this.renderBackground();
     this.renderRightHero();
