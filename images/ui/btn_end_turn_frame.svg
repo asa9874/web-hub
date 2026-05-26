@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="140" height="46" viewBox="0 0 140 46">
+  <defs>
+    <linearGradient id="ts" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.17"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="fc">
+      <rect x="1" y="1" width="138" height="44" rx="7"/>
+    </clipPath>
+  </defs>
+
+  <!-- Top shine overlay (clipped) -->
+  <g clip-path="url(#fc)">
+    <rect x="1" y="1" width="138" height="21" fill="url(#ts)"/>
+  </g>
+
+  <!-- Gold outer border -->
+  <rect x="1" y="1" width="138" height="44" rx="7" fill="none" stroke="#FFD700" stroke-width="1.8"/>
+  <!-- Faint outer glow ring -->
+  <rect x="0" y="0" width="140" height="46" rx="8" fill="none" stroke="#FFD700" stroke-width="0.5" stroke-opacity="0.30"/>
+  <!-- Inner white ring -->
+  <rect x="3.5" y="3.5" width="133" height="39" rx="5.5" fill="none" stroke="#FFFFFF" stroke-width="0.5" stroke-opacity="0.14"/>
+
+  <!-- CORNER BRACKETS — gold L-shapes, drawn from outer arm to corner to inner arm -->
+  <!-- Top-left -->
+  <path d="M17,4 L7,4 L7,15" fill="none" stroke="#FFD700" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Top-right -->
+  <path d="M123,4 L133,4 L133,15" fill="none" stroke="#FFD700" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Bottom-left -->
+  <path d="M17,42 L7,42 L7,31" fill="none" stroke="#FFD700" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Bottom-right -->
+  <path d="M123,42 L133,42 L133,31" fill="none" stroke="#FFD700" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Top center diamond -->
+  <path d="M70,1 L73.5,5 L70,9 L66.5,5 Z" fill="#FFD700" fill-opacity="0.82"/>
+  <!-- Bottom center diamond -->
+  <path d="M70,37 L73.5,41 L70,45 L66.5,41 Z" fill="#FFD700" fill-opacity="0.82"/>
+
+  <!-- Side mid dots -->
+  <circle cx="3"   cy="23" r="2" fill="#FFD700" fill-opacity="0.65"/>
+  <circle cx="137" cy="23" r="2" fill="#FFD700" fill-opacity="0.65"/>
+</svg>
