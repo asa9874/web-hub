@@ -3,7 +3,7 @@ import { bgm, BGM_PRELOAD_KEYS, BGM_PATHS } from '../audio/BGMManager';
 import {
   BG_DEEP, BG_PANEL,
   PINK, ROSE, LAVENDER, GOLD,
-  TEXT_PRIMARY, TEXT_SECONDARY, TEXT_GOLD,
+  TEXT_SECONDARY, TEXT_GOLD,
   FONT,
 } from '../theme';
 

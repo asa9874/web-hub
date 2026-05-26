@@ -12,7 +12,6 @@ const DIAG_TOP_X = 480;   // 왼쪽 패널 오른쪽-상단 x (대각선 시작)
 const DIAG_BOT_X = 560;   // 왼쪽 패널 오른쪽-하단 x (대각선 끝)
 const BTN_CX     = 248;   // 버튼/콘텐츠 중심 x
 const BTN_H      = 90;    // 버튼 높이
-const BTN_GAP    = 0;     // 버튼 간 간격
 
 // 왼쪽 패널 다각형 좌표 (반시계 방향)
 const PANEL_POLY = [
