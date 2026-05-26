@@ -4,7 +4,7 @@ import { bgm } from '../audio/BGMManager';
 import { addSettingsButton } from './SettingsScene';
 import {
   BG_DEEP, BG_PANEL,
-  PINK, ROSE, PINK_SOFT, LAVENDER, GOLD,
+  PINK, ROSE, LAVENDER, GOLD,
   TEXT_PRIMARY, FONT,
 } from '../theme';
 
@@ -237,26 +237,10 @@ export class TitleScene extends Phaser.Scene {
     glow.fillRoundedRect(-BW / 2 - 14, -BH / 2 - 14, BW + 28, BH + 28, R + 5);
     glow.setAlpha(0);
 
-    // 그라디언트 바디: 핑크(상) → 라벤더(하)
-    const body = this.add.graphics();
-    body.fillGradientStyle(PINK_SOFT, PINK_SOFT, LAVENDER, LAVENDER, 0.92);
-    body.fillRoundedRect(-BW / 2, -BH / 2, BW, BH, R);
+    // SVG 버튼 배경 (그라디언트 + 광택 + 골드 테두리 + 별 장식 내장)
+    const btnBg = this.add.image(0, 0, 'btn_primary');
 
-    // 상단 광택 레이어
-    const hilight = this.add.graphics();
-    hilight.fillStyle(0xFFFFFF, 0.18);
-    hilight.fillRoundedRect(
-      -BW / 2 + 5, -BH / 2 + 5,
-      BW - 10, BH * 0.36,
-      { tl: R - 2, tr: R - 2, bl: 0, br: 0 },
-    );
-
-    // 골드 테두리
-    const border = this.add.graphics();
-    border.lineStyle(2.5, GOLD, 1);
-    border.strokeRoundedRect(-BW / 2, -BH / 2, BW, BH, R);
-
-    // 빛 줄기 (좌→우 스윕)
+    // 빛 줄기 (좌→우 스윕) — SVG 위, 텍스트 아래
     const shine = this.add.graphics();
     shine.fillStyle(0xFFFFFF, 0.55);
     shine.fillRect(0, -BH / 2 + 8, 16, BH - 16);
@@ -269,7 +253,7 @@ export class TitleScene extends Phaser.Scene {
       fontStyle: 'bold', fontFamily: FONT,
     }).setOrigin(0.5);
 
-    container.add([glow, body, hilight, shine, border, txt]);
+    container.add([glow, btnBg, shine, txt]);
     container.setSize(BW, BH);
     container.setInteractive({ useHandCursor: true });
 

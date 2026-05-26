@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="46" viewBox="0 0 200 46">
+  <defs>
+    <linearGradient id="sbg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3A1E5C" stop-opacity="0.93"/>
+      <stop offset="100%" stop-color="#1E0A38" stop-opacity="0.95"/>
+    </linearGradient>
+    <linearGradient id="ssh" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.09"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="sc">
+      <rect x="1" y="1" width="198" height="44" rx="8"/>
+    </clipPath>
+  </defs>
+
+  <!-- Main dark body -->
+  <rect x="1" y="1" width="198" height="44" rx="8" fill="url(#sbg)"/>
+
+  <!-- Top shine (clipped) -->
+  <g clip-path="url(#sc)">
+    <rect x="1" y="1" width="198" height="20" fill="url(#ssh)"/>
+  </g>
+
+  <!-- Lavender outer border -->
+  <rect x="1" y="1" width="198" height="44" rx="8" fill="none" stroke="#8A3A8A" stroke-width="1.4"/>
+  <!-- Faint outer glow ring -->
+  <rect x="0" y="0" width="200" height="46" rx="9" fill="none" stroke="#C8A0FF" stroke-width="0.5" stroke-opacity="0.22"/>
+  <!-- Inner subtle ring -->
+  <rect x="3.5" y="3.5" width="193" height="39" rx="7" fill="none" stroke="#C8A0FF" stroke-width="0.4" stroke-opacity="0.20"/>
+
+  <!-- CORNER DIAMONDS — outer dark, inner lavender highlight -->
+  <!-- Top-left -->
+  <path d="M8,1 L12,5 L8,9 L4,5 Z"       fill="#7A3A7A"/>
+  <path d="M8,2.5 L10.5,5 L8,7.5 L5.5,5 Z" fill="#C8A0FF" fill-opacity="0.32"/>
+  <!-- Top-right -->
+  <path d="M192,1 L196,5 L192,9 L188,5 Z"       fill="#7A3A7A"/>
+  <path d="M192,2.5 L194.5,5 L192,7.5 L189.5,5 Z" fill="#C8A0FF" fill-opacity="0.32"/>
+  <!-- Bottom-left -->
+  <path d="M8,37 L12,41 L8,45 L4,41 Z"       fill="#7A3A7A"/>
+  <path d="M8,38.5 L10.5,41 L8,43.5 L5.5,41 Z" fill="#C8A0FF" fill-opacity="0.32"/>
+  <!-- Bottom-right -->
+  <path d="M192,37 L196,41 L192,45 L188,41 Z"       fill="#7A3A7A"/>
+  <path d="M192,38.5 L194.5,41 L192,43.5 L189.5,41 Z" fill="#C8A0FF" fill-opacity="0.32"/>
+
+  <!-- Side center tiny accents -->
+  <circle cx="2.5"   cy="23" r="1.8" fill="#8A3A8A" fill-opacity="0.70"/>
+  <circle cx="197.5" cy="23" r="1.8" fill="#8A3A8A" fill-opacity="0.70"/>
+</svg>

@@ -71,6 +71,9 @@ export class ShopScene extends Phaser.Scene {
 
   private renderBase(): void {
     this.add.rectangle(640, 360, 1280, 720, BG_DEEP);
+    if (this.textures.exists('bg_shop')) {
+      this.add.image(640, 360, 'bg_shop').setAlpha(0.55);
+    }
     this.add.rectangle(640, 2, 1280, 4, GOLD).setOrigin(0.5, 0);
     this.add.rectangle(640, 718, 1280, 2, BG_DIVIDER).setOrigin(0.5, 1);
   }

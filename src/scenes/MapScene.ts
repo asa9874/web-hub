@@ -107,6 +107,11 @@ export class MapScene extends Phaser.Scene {
   private renderBackground(): void {
     const theme = getActTheme(GameState.currentAct);
     this.add.rectangle(640, 360, 1280, 720, theme.bg);
+    // 액트별 맵 배경 이미지 (전체 화면)
+    const bgKey = `bg_map_${GameState.currentAct}`;
+    if (this.textures.exists(bgKey)) {
+      this.add.image(640, 360, bgKey).setDisplaySize(1280, 720).setAlpha(0.45);
+    }
     this.add.rectangle(640, 2, 1280, 4, theme.topAccent).setOrigin(0.5, 0);
     this.add.rectangle(640, 718, 1280, 2, theme.bottomBorder).setOrigin(0.5, 1);
   }

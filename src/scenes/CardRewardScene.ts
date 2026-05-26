@@ -3,7 +3,7 @@ import { GameState } from '../GameState';
 import { AchievementManager } from '../achievements/AchievementManager';
 import type { Card, CardRewardSceneData } from '../types';
 import {
-  BG_DEEP, BG_PANEL, BG_HOVER, BG_DIVIDER,
+  BG_DEEP, BG_PANEL, BG_DIVIDER,
   BORDER_DIM,
   PINK, ROSE,
   TEXT_PRIMARY, TEXT_SECONDARY, TEXT_DIM, TEXT_GOLD, FONT,
@@ -126,17 +126,21 @@ export class CardRewardScene extends Phaser.Scene {
 
   private renderSkipButton(): void {
     const bx = 640, by = 610;
-    const btn = this.add.rectangle(bx, by, 180, 44, BG_PANEL);
-    btn.setStrokeStyle(1, BORDER_DIM);
-    btn.setInteractive({ useHandCursor: true });
+    const BW = 200, BH = 46;
+
+    const btnImg = this.add.image(bx, by, 'btn_skip');
+    btnImg.setInteractive({ useHandCursor: true });
+
+    // 호버 시 밝아지는 흰 오버레이
+    const hover = this.add.rectangle(bx, by, BW, BH, 0xFFFFFF).setAlpha(0);
 
     this.add.text(bx, by, '건너뛰기', {
       fontSize: '15px', color: TEXT_SECONDARY, fontFamily: FONT,
     }).setOrigin(0.5);
 
-    btn.on('pointerover', () => btn.setFillStyle(BG_HOVER));
-    btn.on('pointerout', () => btn.setFillStyle(BG_PANEL));
-    btn.on('pointerdown', () => {
+    btnImg.on('pointerover', () => this.tweens.add({ targets: hover, alpha: 0.07, duration: 100 }));
+    btnImg.on('pointerout',  () => this.tweens.add({ targets: hover, alpha: 0,    duration: 140 }));
+    btnImg.on('pointerdown', () => {
       if (this.selected) return;
       this.finish(null);
     });

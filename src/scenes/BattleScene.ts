@@ -53,6 +53,7 @@ export class BattleScene extends Phaser.Scene {
 
   // ── 플레이어 UI ────────────────────────────────────────────────────────
   private playerSprite!: Phaser.GameObjects.Image;
+  private playerBaseScale = 1;
   private txtPlayerHp!: Phaser.GameObjects.Text;
   private txtPlayerBlock!: Phaser.GameObjects.Text;
   private txtPlayerStatus!: Phaser.GameObjects.Text;
@@ -75,6 +76,7 @@ export class BattleScene extends Phaser.Scene {
 
   // ── 턴 종료 버튼 ────────────────────────────────────────────────────────
   private endTurnBtn!: Phaser.GameObjects.Rectangle;
+  private endTurnFrame!: Phaser.GameObjects.Image;
 
   private cardViews: CardView[] = [];
   private potionSlotObjs: Phaser.GameObjects.GameObject[] = [];
@@ -195,12 +197,20 @@ export class BattleScene extends Phaser.Scene {
 
   private renderBackground(): void {
     this.add.rectangle(W / 2, 360, W, 720, this.actTheme.bg);
+    // 액트별 전투 배경 이미지 (전체 화면)
+    const bgKey = `bg_battle_${GameState.currentAct}`;
+    if (this.textures.exists(bgKey)) {
+      this.add.image(W / 2, 360, bgKey).setDisplaySize(W, 720).setAlpha(0.55);
+    }
     this.add.rectangle(W / 2, DIVIDER_Y, W, 2, this.actTheme.battleDivider);
-    // 카드 섹션 패널 — 90% 불투명도로 플레이어 하단이 은은하게 비침
+    // 카드 섹션 패널
     const cardSectionH = 720 - DIVIDER_Y;
-    this.add.rectangle(W / 2, DIVIDER_Y + cardSectionH / 2, W, cardSectionH, this.actTheme.bg)
-      .setAlpha(0.9)
-      .setDepth(2);
+    const panelY = DIVIDER_Y + cardSectionH / 2;
+    if (this.textures.exists('bg_panel')) {
+      this.add.image(W / 2, panelY, 'bg_panel').setDisplaySize(W, cardSectionH).setAlpha(0.9).setDepth(2);
+    } else {
+      this.add.rectangle(W / 2, panelY, W, cardSectionH, this.actTheme.bg).setAlpha(0.9).setDepth(2);
+    }
   }
 
   /** 전투 모드에 맞게 몬스터 슬롯을 동적으로 생성 */
@@ -317,7 +327,8 @@ export class BattleScene extends Phaser.Scene {
     const imgTop = cy - TARGET_H / 2; // 380
 
     this.playerSprite = this.add.image(cx, cy, 'player_standing');
-    this.playerSprite.setScale(TARGET_H / this.playerSprite.height);
+    this.playerBaseScale = TARGET_H / this.playerSprite.height;
+    this.playerSprite.setScale(this.playerBaseScale);
     this.playerSprite.setDepth(1);
 
     // 플레이어 정보는 이미지 위에 표기
@@ -697,8 +708,11 @@ export class BattleScene extends Phaser.Scene {
 
     const btnColor = this.actTheme.endTurnActive;
     this.endTurnBtn = this.add.rectangle(bx, by, 140, 46, btnColor);
-    this.endTurnBtn.setStrokeStyle(2, btnColor).setDepth(3);
+    this.endTurnBtn.setDepth(3);
     this.endTurnBtn.setInteractive({ useHandCursor: true });
+
+    // SVG 프레임 오버레이 (골드 코너 브라켓 + 다이아몬드 장식)
+    this.endTurnFrame = this.add.image(bx, by, 'btn_end_turn_frame').setDepth(3);
 
     this.add.text(bx, by, '턴 종료', {
       fontSize: '16px', color: '#ffffff', fontStyle: 'bold',
@@ -1005,6 +1019,7 @@ export class BattleScene extends Phaser.Scene {
   private startMonsterTurn(): void {
     this.turnPhase = 'monster';
     this.endTurnBtn.setFillStyle(0x1A1A2A); // dim inactive — act-agnostic
+    this.endTurnFrame.setAlpha(0.28);
     this.endTurnBtn.disableInteractive();
 
     const views = [...this.cardViews];
@@ -1144,7 +1159,7 @@ export class BattleScene extends Phaser.Scene {
     const applyPlayerHitEffects = () => {
       if (playerDmg > 0) {
         flashHitImage(this, this.playerSprite);
-        squashOnHit(this, this.playerSprite, 0.6);
+        squashOnHit(this, this.playerSprite, 0.6, this.playerBaseScale, this.playerBaseScale);
         spawnParticleBurst(this, PLAYER_CX, PLAYER_CY, 0xff7675, 8);
         spawnDamageNumber(this, PLAYER_CX, PLAYER_CY - 30, playerDmg);
         const isHeavy = playerDmg >= 15;
@@ -1177,6 +1192,7 @@ export class BattleScene extends Phaser.Scene {
     this.updateAllIntents();
 
     this.endTurnBtn.setFillStyle(this.actTheme.endTurnActive);
+    this.endTurnFrame.setAlpha(1);
     this.endTurnBtn.setInteractive({ useHandCursor: true });
 
     if (poisonDmg > 0) {

@@ -4,7 +4,6 @@ import { AchievementManager } from '../achievements/AchievementManager';
 import type { Relic, RelicRewardSceneData } from '../types';
 import {
   BG_DEEP, BG_PANEL, BG_HOVER,
-  BORDER_DIM,
   PINK, ROSE, LAVENDER, GOLD,
   TEXT_PRIMARY, TEXT_SECONDARY, TEXT_DIM, TEXT_PINK, FONT,
 } from '../theme';
@@ -130,15 +129,20 @@ export class RelicRewardScene extends Phaser.Scene {
   }
 
   private renderSkipButton(): void {
-    const btn = this.add.rectangle(W / 2, H - 52, 200, 46, BG_PANEL);
-    btn.setStrokeStyle(1, BORDER_DIM);
-    btn.setInteractive({ useHandCursor: true });
-    btn.on('pointerover', () => btn.setFillStyle(BG_HOVER));
-    btn.on('pointerout',  () => btn.setFillStyle(BG_PANEL));
-    btn.on('pointerdown', () => this.leave());
-    this.add.text(W / 2, H - 52, '건너뛰기', {
+    const bx = W / 2, by = H - 52;
+
+    const btnImg = this.add.image(bx, by, 'btn_skip');
+    btnImg.setInteractive({ useHandCursor: true });
+
+    const hover = this.add.rectangle(bx, by, 200, 46, 0xFFFFFF).setAlpha(0);
+
+    this.add.text(bx, by, '건너뛰기', {
       fontSize: '16px', color: TEXT_SECONDARY, fontFamily: FONT,
     }).setOrigin(0.5);
+
+    btnImg.on('pointerover', () => this.tweens.add({ targets: hover, alpha: 0.07, duration: 100 }));
+    btnImg.on('pointerout',  () => this.tweens.add({ targets: hover, alpha: 0,    duration: 140 }));
+    btnImg.on('pointerdown', () => this.leave());
   }
 
   private pickRelic(relic: Relic): void {

@@ -156,9 +156,11 @@ export function squashOnHit(
   scene: Phaser.Scene,
   target: RectOrImage,
   intensity = 1,              // 1 = normal, 0.5 = gentler (for large sprites)
+  baseScaleX = 1,
+  baseScaleY = 1,
 ): void {
-  const sqX = 1 + 0.35 * intensity;
-  const sqY = 1 - 0.32 * intensity;
+  const sqX = baseScaleX * (1 + 0.35 * intensity);
+  const sqY = baseScaleY * (1 - 0.32 * intensity);
 
   scene.tweens.killTweensOf(target);
   scene.tweens.add({
@@ -170,8 +172,8 @@ export function squashOnHit(
     onComplete: () => {
       scene.tweens.add({
         targets: target,
-        scaleX: 1,
-        scaleY: 1,
+        scaleX: baseScaleX,
+        scaleY: baseScaleY,
         duration: 380,
         ease: 'Elastic.Out',
       });

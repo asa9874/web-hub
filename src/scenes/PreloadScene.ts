@@ -307,6 +307,25 @@ export class PreloadScene extends Phaser.Scene {
   // ── Asset manifest ────────────────────────────────────────────────────────
 
   private loadAll(): void {
+    // UI button SVGs
+    this.load.svg('btn_primary',        'images/ui/btn_primary.svg',        { width: 340, height: 62 });
+    this.load.svg('btn_end_turn_frame', 'images/ui/btn_end_turn_frame.svg', { width: 140, height: 46 });
+    this.load.svg('btn_skip',           'images/ui/btn_skip.svg',           { width: 200, height: 46 });
+
+    // Scene backgrounds
+    this.load.image('bg_battle_1',  'images/bg/battle_act1.png');
+    this.load.image('bg_battle_2',  'images/bg/battle_act2.png');
+    this.load.image('bg_battle_3',  'images/bg/battle_act3.png');
+    this.load.image('bg_panel',     'images/bg/battle_panel.png');
+    this.load.image('bg_map_1',    'images/bg/map_act1.png');
+    this.load.image('bg_map_2',    'images/bg/map_act2.png');
+    this.load.image('bg_map_3',    'images/bg/map_act3.png');
+    this.load.image('bg_rest',     'images/bg/rest_campfire.png');
+    this.load.image('bg_shop',     'images/bg/shop_bg.png');
+    this.load.image('bg_event',    'images/bg/event_bg.png');
+    this.load.image('bg_victory',  'images/bg/victory_bg.png');
+    this.load.image('bg_dialogue', 'images/bg/dialogue_bg.png');
+
     // Player
     this.load.image('player_standing', 'images/Player/Player_standing.png');
     this.load.image('player_attack',   'images/Player/Player_attack.png');

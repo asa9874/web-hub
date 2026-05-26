@@ -67,6 +67,9 @@ export class DialogueScene extends Phaser.Scene {
   private renderBackground(): void {
     // 하늘 배경 (상단 516px)
     this.add.rectangle(640, 258, 1280, 516, 0x0d1b2a);
+    if (this.textures.exists('bg_dialogue')) {
+      this.add.image(640, 258, 'bg_dialogue').setAlpha(0.65);
+    }
     // 바닥 (캐릭터가 서 있는 면)
     this.add.rectangle(640, 469, 1280, 53, 0x0a141e);
     // 바닥 하이라이트 경계선
