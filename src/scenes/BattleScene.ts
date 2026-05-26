@@ -5,6 +5,8 @@ import type { BattleMode, Card, StatusEffects, TurnPhase } from '../types';
 import { applyDamage, addStatus } from '../utils/combat';
 import { shakeObject, flashHit, flashHitImage, spawnDamageNumber, spawnHealNumber, playDeathTween, hitStop, squashOnHit, spawnParticleBurst, spawnMagicBurst, spawnSlashTrail } from '../utils/fx';
 import { sfx } from '../audio/SoundManager';
+import { bgm } from '../audio/BGMManager';
+import { addSettingsButton } from './SettingsScene';
 import {
   BG_DEEP, BG_PANEL, BG_HOVER, BG_DIVIDER,
   BORDER_DIM,
@@ -110,6 +112,7 @@ export class BattleScene extends Phaser.Scene {
 
     this.cameras.main.fadeIn(350, 0, 0, 0);
     this.initVFX();
+    this.playBgm();
 
     this.renderBackground();
     this.renderEnemies();
@@ -123,6 +126,20 @@ export class BattleScene extends Phaser.Scene {
     this.setupDragDrop();
     this.updateAllIntents();
     this.updateUI();
+    addSettingsButton(this);
+  }
+
+  // ── BGM 선택 ─────────────────────────────────────────────────────────────
+
+  private playBgm(): void {
+    if (this.battleMode === 'boss') {
+      const boss = this.gs.enemies[0];
+      bgm.play(boss ? bgm.getBossBgmKey(boss) : 'bgm06');
+    } else if (this.battleMode === 'elite') {
+      bgm.play('bgm05');
+    } else {
+      bgm.play('bgm04');
+    }
   }
 
   // ── VFX 초기화 및 헬퍼 ───────────────────────────────────────────────────

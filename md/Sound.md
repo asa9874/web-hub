@@ -80,7 +80,7 @@
 
 ---
 
-### BGM-01. 타이틀 테마 — *"별이 부서진 밤"*
+### BGM-01_타이틀 테마_별이 부서진 밤.mp3
 
 | 항목 | 내용 |
 |---|---|
@@ -102,7 +102,7 @@ Opening with sparse solo piano playing a gentle, melancholic waltz-like theme in
 
 ---
 
-### BGM-02. 허브 테마 — *"루나의 방"*
+### BGM-02_허브 테마_루나의 방.mp3
 
 | 항목 | 내용 |
 |---|---|
@@ -124,7 +124,7 @@ A gentle fingerpicked acoustic guitar carries the main melody in a soft waltz te
 
 ---
 
-### BGM-03. 맵 탐험 테마 — *"별자리를 따라서"*
+### BGM-03_맵 탐험 테마_별자리를 따라서.mp3
 
 | 항목 | 내용 |
 |---|---|
@@ -146,7 +146,7 @@ Opens with pizzicato strings creating a forward momentum. Marimba or xylophone p
 
 ---
 
-### BGM-04. 일반 전투 테마 — *"달빛 공세"*
+### BGM-04_일반 전투 테마_달빛 공세.mp3
 
 | 항목 | 내용 |
 |---|---|
@@ -168,7 +168,7 @@ Opens with aggressive electric guitar riff immediately establishing the combat e
 
 ---
 
-### BGM-05. 엘리트 전투 테마 — *"성운의 검"*
+### BGM-05_엘리트 전투 테마_성운의 검.mp3
 
 | 항목 | 내용 |
 |---|---|
@@ -190,7 +190,7 @@ Opens with distorted strings and heavy synth bass creating immediate oppressive 
 
 ---
 
-### BGM-06. 보스 전투 테마 — *"기억의 심연"*
+### BGM-06_보스 전투 테마_기억의 심연.mp3
 
 | 항목 | 내용 |
 |---|---|
@@ -212,7 +212,7 @@ Opens with timpani and brass creating a massive, overwhelming atmosphere. The ch
 
 ---
 
-### BGM-07. 승리 팡파르 — *"별빛 귀환"*
+### BGM-07_승리 팡파르_별빛 귀환.mp3
 
 | 항목 | 내용 |
 |---|---|
@@ -235,7 +235,7 @@ A short, emotionally resonant victory fanfare. Opens with a soft brass motif —
 
 ---
 
-### BGM-08. 게임 오버 테마 — *"흩어진 별"*
+### BGM-08_게임 오버 테마_흩어진 별.mp3
 
 | 항목 | 내용 |
 |---|---|
@@ -258,7 +258,7 @@ Opens with a single piano playing the main title melody — but slowly, with lon
 
 ---
 
-### BGM-09. 상점 테마 — *"별빛 상단"*
+### BGM-09_상점 테마_별빛 상단.mp3
 
 | 항목 | 내용 |
 |---|---|
@@ -280,7 +280,7 @@ A whimsical, slightly off-kilter theme for a mysterious shop. The accordion or m
 
 ---
 
-### BGM-10. 휴식 처 테마 — *"달이 기다리는 곳"*
+### BGM-10_휴식 처 테마_달이 기다리는 곳.mp3
 
 | 항목 | 내용 |
 |---|---|
@@ -302,7 +302,7 @@ A profoundly calm piece built on classical guitar fingerpicking in a free-flowin
 
 ---
 
-### BGM-11. 이벤트 테마 — *"기억 속 갈림길"*
+### BGM-11_이벤트 테마_기억 속 갈림길.mp3
 
 | 항목 | 내용 |
 |---|---|
@@ -324,7 +324,7 @@ A mysterious, atmospheric piece that creates a sense of standing at a crossroads
 
 ---
 
-### BGM-12. 로어북 테마 — *"아이스텔리아의 역사"*
+### BGM-12_로어북 테마_아이스텔리아의 역사.mp3
 
 | 항목 | 내용 |
 |---|---|
@@ -346,7 +346,7 @@ A measured, contemplative piece evoking the reading of ancient texts. A harpsich
 
 ---
 
-### BGM-13. 다이얼로그 / 컷씬 테마 — *"루나의 기억"*
+### BGM-13_다이얼로그 컷씬 테마_루나의 기억.mp3
 
 | 항목 | 내용 |
 |---|---|
@@ -368,7 +368,7 @@ A deeply emotional, intimate conversation between piano and violin — represent
 
 ---
 
-### BGM-14. Act 2 필드 테마 — *"첨탑의 공명"*
+### BGM-14_Act 2 필드 테마_첨탑의 공명.mp3
 
 | 항목 | 내용 |
 |---|---|
@@ -390,7 +390,7 @@ Tremolo strings create an unsettling shimmer. Glass harmonica or singing bowls a
 
 ---
 
-### BGM-15. Act 3 필드 테마 — *"성천원의 침묵"*
+### BGM-15_Act 3 필드 테마_성천원의 침묵.mp3
 
 | 항목 | 내용 |
 |---|---|
@@ -408,6 +408,204 @@ Tremolo strings create an unsettling shimmer. Glass harmonica or singing bowls a
 [Key: D minor (returns to the root key of the title theme)]
 
 An oppressive, sacred silence. A choir sings barely-audible Latin phrases in the far distance. A pipe organ holds long, unresolved chords. A solo cello plays a mournful, slow descent. Occasional deep percussion hits land with the weight of fate. Crystalline synth tones shimmer like ancient stars. The piece feels like standing in the hall of something ancient that has been waiting — aware of you. The connection back to the title theme's D minor key signals that all things return to this moment.
+```
+
+---
+
+### BGM-16_보스 전투_암흑 군주_케인의 타락.mp3
+
+| 항목 | 내용 |
+|---|---|
+| **사용 씬** | BattleScene (Act 1 보스 — 암흑 군주 케인 아스타르) |
+| **반복** | 루프 (페이즈 2 전환 시 강도 상승 가능) |
+| **길이** | 3분+ |
+| **분위기** | 한때 도시를 지켰던 기사의 비극적 타락. 고귀함과 어둠이 충돌. 빛을 증오하면서도 그리워하는 아이러니. |
+
+```
+[Instrumental]
+[Genre: dark anime boss battle OST, fallen knight theme, tragic orchestral]
+[Mood: tragic nobility, corrupted honor, dark grandeur, bitter betrayal]
+[Instruments: heavy war drums, dark brass fanfare (distorted), choir (low Latin chant), electric guitar (heavy, distorted), full strings (driving), solo trumpet (muted, distant — representing former glory), pipe organ]
+[Tempo: 144 BPM, 4/4]
+[Key: A minor]
+
+Opens with a militant war drum cadence — the ghost of a knight's march, now corrupted. Low brass and distorted guitar establish oppressive weight. A muted solo trumpet briefly echoes a noble fanfare in the distance, immediately swallowed by dark strings and choir chanting. The piece captures a warrior who once stood for something and lost it — each musical phrase hints at former glory before twisting into darkness. Pipe organ surges in phase 2, overwhelming the remaining traces of nobility. The crystalline darkness in his wings is reflected in high, glassy string harmonics cutting through the heavy low-end. Reminiscent of Nier Automata's boss themes meets Yuki Kajiura's darkness.
+```
+
+---
+
+### BGM-17_보스 전투_별빛 파괴자_이사벨라의 공백.mp3
+
+| 항목 | 내용 |
+|---|---|
+| **사용 씬** | BattleScene (Act 1 보스 — 별빛 파괴자 이사벨라 루에스) |
+| **반복** | 루프 |
+| **길이** | 3분+ |
+| **분위기** | 기억을 잃은 마법소녀. 루나와 닮았지만 눈 속에 아무것도 없음. 아름다우나 공허한 공포. |
+
+```
+[Instrumental]
+[Genre: dark magical girl OST, corrupted lullaby, cold electronic orchestral]
+[Mood: hollow beauty, emotionless dread, uncanny valley, cold perfection]
+[Instruments: distorted music box (main motif — corrupted lullaby), cold synth pads, dissonant strings (col legno), icy celesta, industrial noise pulses, distant wordless soprano (empty, flat affect), glass harmonica]
+[Tempo: 126 BPM, 4/4 with irregular phrase lengths]
+[Key: F minor (modal, ambiguous)]
+
+Opens with a music box playing what sounds like a gentle magical girl theme — but slowed, pitched down, and slightly wrong, like a lullaby heard through broken glass. Cold synth pads replace warmth with void. Dissonant col legno strings create a sense of wrongness — something that looks human but isn't. The wordless soprano sings identically every repeat, with no dynamic variation, no feeling — representing empty eyes that reflect light but contain nothing. Black star fragment attacks are represented by sudden bursts of industrial noise and glass-shattering sounds. The piece evokes the horror of meeting someone who looks exactly like someone you love but contains no soul. Inspired by Nier Automata's 2B themes meets Madoka's Walpurgisnacht.
+```
+
+---
+
+### BGM-18_보스 전투_기억 도적왕_천 개의 얼굴.mp3
+
+| 항목 | 내용 |
+|---|---|
+| **사용 씬** | BattleScene (Act 1 보스 — 기억 도적왕) |
+| **반복** | 루프 |
+| **길이** | 3분+ |
+| **분위기** | 도시의 모든 잃어버린 기억이 하나로 뭉쳐 왕좌에 앉음. 끊임없이 변하는 얼굴. 수천 개의 목소리. |
+
+```
+[Instrumental]
+[Genre: psychological horror OST, fragmented orchestral, chorus of memories]
+[Mood: chaotic layering, identity dissolution, collective dread, haunting familiarity]
+[Instruments: layered vocal fragments (wordless, many voices overlapping), shifting string textures (constantly changing articulation), piano (fragments of different melodies interrupting each other), bass drum, vibraphone, cluster chords in brass, distorted choir]
+[Tempo: 118 BPM, shifting between 4/4 and 3/4 irregularly]
+[Key: C minor with constant modal shifts]
+
+The piece is built on constant interruption and layering — no single melody survives more than 8 bars before another emerges over it, representing the thousands of absorbed memories all speaking at once. Voices overlap in wordless fragments, each trying to be heard. Piano phrases start as recognizable emotional patterns (joy, sorrow, childhood) before being cut off and absorbed into the mass. The crown of orbiting memory crystals is represented by vibraphone and celesta figures that appear and disappear. Phase 2 erupts in a terrifying full-choir swell where all memories scream simultaneously. The piece should feel like trying to remember something important while thousands of other people's memories flood your mind. Inspired by Taro Yoko's psychological boss themes.
+```
+
+---
+
+### BGM-19_보스 전투_공포의 여왕_리라의 결정.mp3
+
+| 항목 | 내용 |
+|---|---|
+| **사용 씬** | BattleScene (Act 2 보스 — 공포의 여왕 리라 아세나) |
+| **반복** | 루프 |
+| **길이** | 3분+ |
+| **분위기** | 공포로 수정화된 마법소녀. 심장은 아직 뛴다. 아름다운 자수정 결정체 속에 갇힌 존재. 공포 자체가 무기이자 감옥. |
+
+```
+[Instrumental]
+[Genre: dark magical girl OST, crystalline horror, tragic beautiful]
+[Mood: fearful beauty, crystalline fragility, desperate power, trapped anguish]
+[Instruments: glass harmonica (main motif — crystalline, eerie), trembling solo violin (represents her beating heart), harp (shattered, irregular arpeggios), high strings (sustained, tense), cold electronic pulses representing fear, explosive brass hits (overwhelming fear attacks), resonating crystal bowl sounds]
+[Tempo: 108 BPM, 3/4 waltz feel (beautiful yet unstable)]
+[Key: Eb minor]
+
+Opens with glass harmonica playing a delicate, eerily beautiful theme — the crystalline prison that is simultaneously her armor and her cage. A trembling solo violin enters beneath, representing her still-beating heart and lingering humanity. The 3/4 waltz rhythm creates beauty that feels wrong — like dancing in fear. The contrast between crystalline high tones and deep bass horror pulses represents the duality of fear as weapon and imprisonment. Brass attacks hit like sudden overwhelming waves of terror. Phase 2 shatters the glass harmonica motif with explosive dissonance before fragments reassemble into something darker. Her one exposed arm and face — still human — are represented by brief moments of unadorned solo violin before the crystal sound swallows them again.
+```
+
+---
+
+### BGM-20_보스 전투_그림자 타이탄_공포의 결정체.mp3
+
+| 항목 | 내용 |
+|---|---|
+| **사용 씬** | BattleScene (Act 2 보스 — 그림자 타이탄) |
+| **반복** | 루프 |
+| **길이** | 3분+ |
+| **분위기** | 인류 수백 년의 공포가 5미터 흑수정 거인으로 응결. 얼어붙는 기운. 압도적 질량. 무지성의 공포. |
+
+```
+[Instrumental]
+[Genre: dark industrial boss OST, massive orchestral, oppressive doom metal]
+[Mood: overwhelming mass, primal terror, cold crushing weight, inhuman scale]
+[Instruments: 8 string bass guitar (ultra-low), massive taiko drums (8+ layers), distorted cello section, industrial metal percussion, sub-bass synth (felt more than heard), freezing synth drones (high frequency contrasting), low brass cluster chords, no melody — rhythmic and textural]
+[Tempo: 96 BPM, 4/4 with crushing downbeats]
+[Key: E minor (mostly drone-based)]
+
+Unlike other boss themes, this piece deliberately eschews melody — there is no humanity left here. The texture is entirely rhythmic and tectonic: massive layered taiko drums create seismic impact. Ultra-low bass guitar and sub-bass synth generate physical pressure. Freezing high-frequency drones contrast with the crushing low end to represent the entity's aura — the cold radiating from black crystal. Brief fragments of human voices (screaming, murmuring) appear and disappear inside the mix, like faces pressing against the crystal surface — the absorbed fears still trapped within. Ground-cracking crystalline fracture sounds punctuate heavy beats. Phase 2 doubles all rhythmic elements and adds a massive choir of undifferentiated human screaming. There is no hope in this music — only mass and inevitability.
+```
+
+---
+
+### BGM-21_보스 전투_탑의 주인_암브로시우스의 묘비.mp3
+
+| 항목 | 내용 |
+|---|---|
+| **사용 씬** | BattleScene (Act 2 보스 — 탑의 주인 마기스터 암브로시우스) |
+| **반복** | 루프 |
+| **길이** | 3분+ |
+| **분위기** | 500년 전 탑을 세운 전설의 마법사. 연구 중 고대인에게 잠식. 탑 자체가 그의 마법 회로. 학자의 비극적 최후. |
+
+```
+[Instrumental]
+[Genre: dark academic boss OST, baroque-to-cosmic horror, corrupted wizard theme]
+[Mood: ancient wisdom corrupted, scholarly tragedy, cosmic horror dawning, forbidden knowledge]
+[Instruments: harpsichord (opening — baroque, dignified, then increasingly distorted), church organ (dominating, escalating), strings (baroque phrasing that deteriorates into dissonance), bass clarinet, deep bells, choral voices (Latin scholarly chant), synth representing the tower's ancient magical circuits, timpani]
+[Tempo: 120 BPM, 4/4, with baroque-style ornamentation in opening]
+[Key: B minor (opening) shifting to atonal (phase 2)]
+
+Opens with a dignified harpsichord playing a baroque-influenced theme — the ghost of a legendary wizard who spent 500 years in pursuit of knowledge. The music is initially structured and intelligent, befitting a master of ancient arts. But as it progresses, wrong notes appear, the tower's ancient stone magic interferes, and the harpsichord becomes increasingly corrupted. Church organ swells represent the moment 500 years ago when he touched the Ancient One's will and was consumed. Latin choral phrases suggest ancient academic texts being recited endlessly. Phase 2 sees the baroque structure completely collapse into cosmic dissonance — his body fused with the tower walls, his mind gone, only the magical circuits of a 500-year-old obsession remaining. Inspired by Castlevania's scholarly boss themes meets Bloodborne's cosmic horror OST.
+```
+
+---
+
+### BGM-22_보스 전투_고대인_만물귀원.mp3
+
+| 항목 | 내용 |
+|---|---|
+| **사용 씬** | BattleScene (Act 3 보스 — 고대인) |
+| **반복** | 루프 |
+| **길이** | 3분+ |
+| **분위기** | 악이 아닌 우주의 법칙 그 자체. "모든 것은 시작으로 돌아간다." 그 주변의 물리법칙이 뒤틀림. 압도적 무관심. |
+
+```
+[Instrumental]
+[Genre: cosmic horror OST, primordial ambient boss, alien orchestral]
+[Mood: incomprehensible vastness, indifferent cosmos, primordial law, awe without malice]
+[Instruments: sine wave drones (layered, pure tones — representing universal constants), massive choir (wordless, inhuman vowels), reversed orchestral samples, crystalline synth (high frequency), deep space rumble (sub-bass), occasional full orchestra hit (like a universe being reset), no traditional melody or rhythm — pulsing and expansive]
+[Tempo: no fixed tempo — pulsing at cosmic scale]
+[Key: not applicable — pure harmonic series and overtones]
+
+This piece has no traditional structure because the Ancient One transcends human musical concepts. It is built on sine wave drones corresponding to the harmonic series — mathematically pure, utterly alien. The choir does not sing words or even emotional vowels — it produces sound as a physical phenomenon. Reversed orchestral samples suggest time running backwards. Massive sub-bass rumbles represent the weight of a consciousness that has existed since creation. Periodic full-orchestra hits are like moments of universal reset — brief, cataclysmic, then silence. The player should feel not that they are fighting a villain, but that they have accidentally collided with a fundamental law of existence. Inspired by Interstellar OST meets Evangelion's final battle themes.
+```
+
+---
+
+### BGM-23_보스 전투_시간의 군주_크로노스의 영역.mp3
+
+| 항목 | 내용 |
+|---|---|
+| **사용 씬** | BattleScene (Act 3 보스 — 시간의 군주 크로노스 벡터) |
+| **반복** | 루프 |
+| **길이** | 3분+ |
+| **분위기** | 시공간 법칙의 화신. 과거·현재·미래가 동시에 존재. 피격 후 0.2초 뒤 사라졌다 나타남. 논리적이고 냉혹한 운명. |
+
+```
+[Instrumental]
+[Genre: time-distortion boss OST, mechanical precision meets cosmic, rhythmically complex]
+[Mood: inevitable fate, temporal logic, cold omniscience, structured but shifting]
+[Instruments: mechanical clock percussion (multiple overlapping time signatures), prepared piano (hitting strings directly for metallic clock sounds), strings (same phrase played at 3 different speeds simultaneously), brass (rational, march-like), synth representing time axis distortion, vibraphone (precise, mathematical), electronic stutter/glitch effects]
+[Tempo: 152 BPM main pulse, but with 3:4:5 polyrhythm layers]
+[Key: D major (orderly, logical) with sudden atonal interruptions]
+
+The defining feature is polyrhythm — three rhythmic layers running simultaneously at different speeds, representing past, present, and future existing concurrently. The mechanical clock percussion is precise and unforgiving. A prepared piano creates metallic, clock-like tones. The strings play the same musical phrase at three different tempos layered atop each other — the same moment seen from different temporal positions. Brass marches with rational authority. The 0.2-second disappearance between hits is represented by sudden rhythmic gaps, brief silence, then reappearance. Phase 2 introduces electronic time-distortion effects: glitches, stutters, brief moments where the music plays backward before snapping forward. The hourglass energy is embodied by music that accelerates and then suddenly resets. Cold, precise, inevitable — not cruel, just beyond human time.
+```
+
+---
+
+### BGM-24_보스 전투_별의 심장 수호자_최초의 계약.mp3
+
+| 항목 | 내용 |
+|---|---|
+| **사용 씬** | BattleScene (Act 3 보스 — 별의 심장 수호자) |
+| **반복** | 루프 |
+| **길이** | 3분+ |
+| **분위기** | 태고부터 이어진 계약의 첫 번째 마법소녀. 모든 기억을 잃고 의무만 남음. 봉인이 풀릴 때 별빛 눈물을 흘림. 가장 오래되고 가장 슬픈 존재. |
+
+```
+[Instrumental]
+[Genre: ancient tragic magical girl OST, primordial lullaby, sorrowful climax]
+[Mood: ancient sorrow, duty without self, tearful resolution, sacred tragedy, final contract]
+[Instruments: solo piano (simple, child-like melody — but ancient, the first magical girl's lullaby), distant wordless soprano (representing memory that no longer exists), harp (slow, tear-drop arpeggios), solo cello (deep, aching), full orchestra (builds from silence to overwhelming), choir (ancient prayer, non-Latin — invented sacred language), crystalline bell tree (sealing glyphs releasing)]
+[Tempo: 84 BPM, 3/4, free in emotional passages]
+[Key: C major (pure, ancient — the "first" key, the beginning of all music)]
+
+Opens with solo piano playing the simplest possible melody — a child's lullaby that has existed since the beginning of the world. This is the song sung at the very first magical girl contract, now played by memory-depleted hands that no longer know why they remember it. A distant soprano hums wordlessly — not a character's voice, but the echo of a person who no longer exists. Harp tear-drops fall at irregular intervals like starlight tears from eyes that cannot cry with meaning. As sealing glyphs release one by one, bell tree crystalline tones mark each broken seal, and the orchestra builds. Phase 2 erupts as all seals break simultaneously — an overwhelmingly massive full-orchestra explosion carrying the weight of ages, the duty of an entire civilization, the sacrifice of a child who became ancient. The choir sings in an invented ancient language — the language of the original contract, lost to time, known only by muscle memory. The piece should destroy the player emotionally — not because of a villain, but because of a name that was never known. The most tragic theme in the game.
 ```
 
 ---
@@ -438,6 +636,7 @@ An oppressive, sacred silence. A choir sings barely-audible Latin phrases in the
 | ⭐ 보통 | BGM-02 허브, BGM-09 상점, BGM-10 휴식 | 분위기 완성 |
 | ⭐ 보통 | BGM-05 엘리트 전투 | 04와 구분되는 레이어 |
 | ⭐ 낮음 | BGM-11~15 | 스토리·씬별 심화 연출 |
+| ⭐ 낮음 | BGM-16~24 보스 개별 테마 | 각 보스전 몰입감 극대화 (BGM-06 범용 보스 브금 이후 교체) |
 
 ---
 

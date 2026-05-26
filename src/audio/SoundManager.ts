@@ -1,9 +1,7 @@
+import { BGMManager } from './BGMManager';
+
 /**
  * Web Audio API 기반 효과음 매니저.
- *
- * 오디오 파일 없이 오실레이터 톤으로 효과음을 생성한다.
- * 실제 에셋이 준비되면 playTone() 호출 블록을 Phaser sound.play('sfx_xxx') 로 교체하면 된다.
- *
  * 싱글톤이므로 씬이 교체되어도 인스턴스와 muted 상태가 유지된다.
  */
 export class SoundManager {
@@ -54,7 +52,8 @@ export class SoundManager {
     if (freqEnd !== undefined) {
       osc.frequency.linearRampToValueAtTime(freqEnd, ctx.currentTime + duration);
     }
-    gain.gain.setValueAtTime(volume, ctx.currentTime);
+    const sfxVol = BGMManager.instance.sfxVolume;
+    gain.gain.setValueAtTime(volume * sfxVol, ctx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
     osc.start(ctx.currentTime);
     osc.stop(ctx.currentTime + duration + 0.01);

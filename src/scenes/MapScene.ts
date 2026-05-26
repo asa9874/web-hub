@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 import { GameState } from '../GameState';
+import { bgm } from '../audio/BGMManager';
+import { addSettingsButton } from './SettingsScene';
 import { AchievementManager } from '../achievements/AchievementManager';
 import type { MapNode } from '../types';
 import { TEXT_SECONDARY, FONT } from '../theme';
@@ -62,6 +64,9 @@ export class MapScene extends Phaser.Scene {
     // 2. 맵 초기화 (없으면 새로 생성)
     if (GameState.mapNodes.length === 0) GameState.initMap();
 
+    const act = GameState.currentAct;
+    bgm.play(act === 3 ? 'bgm15' : act === 2 ? 'bgm14' : 'bgm03');
+
     this.cameras.main.fadeIn(300, 0, 0, 0);
 
     this.renderBackground();
@@ -70,6 +75,7 @@ export class MapScene extends Phaser.Scene {
     this.renderHeader();       // 헤더 텍스트
     this.renderAbandonButton();
     this.addScrollHint();
+    addSettingsButton(this);
 
     if (this.isActComplete()) this.showActComplete();
   }

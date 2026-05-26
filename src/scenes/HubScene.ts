@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 import { GameState } from '../GameState';
+import { bgm } from '../audio/BGMManager';
+import { addSettingsButton } from './SettingsScene';
 import { AchievementManager } from '../achievements/AchievementManager';
 import {
   BG_DEEP, BG_PANEL, BG_HOVER, BG_DIVIDER,
@@ -37,6 +39,7 @@ export class HubScene extends Phaser.Scene {
   }
 
   create(): void {
+    bgm.play('bgm02');
     this.cameras.main.fadeIn(350, 0, 0, 0);
     if (!this.scene.isActive('ToastScene')) this.scene.launch('ToastScene');
     this.renderBackground();
@@ -44,6 +47,7 @@ export class HubScene extends Phaser.Scene {
     this.renderRunStatus();
     this.renderScrollableList();
     this.setupScroll();
+    addSettingsButton(this);
   }
 
   private renderBackground(): void {

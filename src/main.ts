@@ -14,6 +14,7 @@ import { ToastScene } from './scenes/ToastScene';
 import { LoreBookScene } from './scenes/LoreBookScene';
 import { TitleScene } from './scenes/TitleScene';
 import { PreloadScene } from './scenes/PreloadScene';
+import { SettingsScene } from './scenes/SettingsScene';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -26,7 +27,7 @@ const config: Phaser.Types.Core.GameConfig = {
     width: 1280,
     height: 720,
   },
-  scene: [PreloadScene, TitleScene, HubScene, BattleScene, DialogueScene, VictoryScene, CardRewardScene, PileViewerScene, RestScene, RelicRewardScene, ShopScene, EventScene, MapScene, ToastScene, LoreBookScene],
+  scene: [PreloadScene, TitleScene, HubScene, BattleScene, DialogueScene, VictoryScene, CardRewardScene, PileViewerScene, RestScene, RelicRewardScene, ShopScene, EventScene, MapScene, ToastScene, LoreBookScene, SettingsScene],
   parent: 'app',
 };
 

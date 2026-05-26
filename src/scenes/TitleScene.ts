@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 import { GameState } from '../GameState';
+import { bgm } from '../audio/BGMManager';
+import { addSettingsButton } from './SettingsScene';
 import {
   BG_DEEP, BG_PANEL,
   PINK, ROSE, PINK_SOFT, LAVENDER, GOLD,
@@ -26,6 +28,7 @@ export class TitleScene extends Phaser.Scene {
   constructor() { super({ key: 'TitleScene' }); }
 
   create(): void {
+    bgm.play('bgm01');
     this.cameras.main.fadeIn(700, 0, 0, 0);
     this.renderBackground();
     this.renderRightHero();
@@ -33,6 +36,7 @@ export class TitleScene extends Phaser.Scene {
     this.renderLeftPanel();
     this.renderTitleLogo();
     this.renderButtons();
+    addSettingsButton(this);
   }
 
   // ── 배경 (우측 영역 위주) ────────────────────────────────────────────────

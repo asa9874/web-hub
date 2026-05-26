@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GameState } from '../GameState';
+import { bgm } from '../audio/BGMManager';
 import type { Card, Potion, Relic, ShopSceneData } from '../types';
 import {
   BG_DEEP, BG_PANEL, BG_DIVIDER,
@@ -30,6 +31,7 @@ export class ShopScene extends Phaser.Scene {
   }
 
   create(): void {
+    bgm.play('bgm09');
     this.cameras.main.fadeIn(350, 0, 0, 0);
     this.generateInventory();
     this.renderBase();

@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GameState } from '../GameState';
+import { bgm } from '../audio/BGMManager';
 import { AchievementManager } from '../achievements/AchievementManager';
 import type { VictorySceneData } from '../types';
 import {
@@ -28,6 +29,7 @@ export class VictoryScene extends Phaser.Scene {
   }
 
   create(): void {
+    bgm.play('bgm07', false);
     this.cameras.main.fadeIn(450, 0, 0, 0);
     this.renderBackground();
     this.renderTitle();

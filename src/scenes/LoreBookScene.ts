@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { FONT } from '../theme';
+import { bgm } from '../audio/BGMManager';
 import { STATIC_TOC_GROUPS } from '../data/loreData';
 import type { TocGroup, LoreEntry } from '../data/bestiaryTypes';
 import { buildMonsterTocGroup } from '../monsters/MonsterRegistry';
@@ -145,6 +146,7 @@ export class LoreBookScene extends Phaser.Scene {
   }
 
   create(): void {
+    bgm.play('bgm12');
     this.cameras.main.fadeIn(300, 0, 0, 0);
     // Render order: masks(depth 0) → backgrounds(depth 0, added after → on top) →
     // containers(depth 5) → covers(depth 10) → decorations(depth 15) → button(depth 20)

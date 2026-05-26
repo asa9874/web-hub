@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GameState } from '../GameState';
+import { bgm } from '../audio/BGMManager';
 import type { Card, EventSceneData } from '../types';
 import { EVENT_LIBRARY, type EventData, type EventChoice, type EventEffect } from '../data/events';
 import {
@@ -30,6 +31,7 @@ export class EventScene extends Phaser.Scene {
   }
 
   create(): void {
+    bgm.play('bgm11');
     this.cameras.main.fadeIn(350, 0, 0, 0);
     this.renderBase();
     this.showEvent();

@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GameState } from '../GameState';
+import { bgm } from '../audio/BGMManager';
 import type { Card, RestSceneData } from '../types';
 import {
   BG_DEEP, BG_PANEL, BG_HOVER,
@@ -29,6 +30,7 @@ export class RestScene extends Phaser.Scene {
   }
 
   create(): void {
+    bgm.play('bgm10');
     this.cameras.main.fadeIn(300, 0, 0, 0);
     this.renderBg();
     this.showChoice();
