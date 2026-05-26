@@ -92,13 +92,6 @@ export class BattleScene extends Phaser.Scene {
     super({ key: 'BattleScene' });
   }
 
-  preload(): void {
-    if (!this.textures.exists('player_standing'))
-      this.load.image('player_standing', 'images/Player/Player_standing.png');
-    if (!this.textures.exists('player_attack'))
-      this.load.image('player_attack', 'images/Player/Player_attack.png');
-  }
-
   init(data: { mode?: string; returnScene?: string }): void {
     const m = data?.mode;
     this.battleMode =
