@@ -68,7 +68,7 @@ export class DialogueScene extends Phaser.Scene {
     // 하늘 배경 (상단 516px)
     this.add.rectangle(640, 258, 1280, 516, 0x0d1b2a);
     if (this.textures.exists('bg_dialogue')) {
-      this.add.image(640, 258, 'bg_dialogue').setAlpha(0.65);
+      this.add.image(640, 360, 'bg_dialogue').setDisplaySize(1280, 720).setAlpha(0.65);
     }
     // 바닥 (캐릭터가 서 있는 면)
     this.add.rectangle(640, 469, 1280, 53, 0x0a141e);

@@ -1,20 +1,18 @@
 import Phaser from 'phaser';
 import { GameState } from '../GameState';
 import { bgm } from '../audio/BGMManager';
-import { addSettingsButton } from './SettingsScene';
 import {
-  BG_DEEP, BG_PANEL,
+  BG_DEEP,
   PINK, ROSE, LAVENDER, GOLD,
-  TEXT_PRIMARY, FONT,
+  FONT,
 } from '../theme';
 
 // ── 레이아웃 ─────────────────────────────────────────────────────────────────
 const DIAG_TOP_X = 480;   // 왼쪽 패널 오른쪽-상단 x (대각선 시작)
 const DIAG_BOT_X = 560;   // 왼쪽 패널 오른쪽-하단 x (대각선 끝)
 const BTN_CX     = 248;   // 버튼/콘텐츠 중심 x
-const BTN_W      = 340;   // 버튼 너비
-const BTN_H      = 62;    // 버튼 높이
-const BTN_GAP    = 16;    // 버튼 간 간격
+const BTN_H      = 90;    // 버튼 높이
+const BTN_GAP    = 0;     // 버튼 간 간격
 
 // 왼쪽 패널 다각형 좌표 (반시계 방향)
 const PANEL_POLY = [
@@ -37,7 +35,6 @@ export class TitleScene extends Phaser.Scene {
     this.renderLeftPanel();
     this.renderTitleLogo();
     this.renderButtons();
-    addSettingsButton(this);
   }
 
   // ── 배경 (우측 영역 위주) ────────────────────────────────────────────────
@@ -83,51 +80,11 @@ export class TitleScene extends Phaser.Scene {
     }
   }
 
-  // ── 우측 히어로 아트 플레이스홀더 ────────────────────────────────────────
+  // ── 우측 배경 이미지 ──────────────────────────────────────────────────────
 
   private renderRightHero(): void {
-    const rx = 890, ry = 360;
-    const rw = 600, rh = 580;
-
-    // 외부 장식 프레임
-    const outerFrame = this.add.graphics();
-    outerFrame.lineStyle(1, GOLD, 0.22);
-    outerFrame.strokeRoundedRect(rx - rw / 2, ry - rh / 2, rw, rh, 10);
-
-    // 이미지 교체 영역 (어두운 배경)
-    const imgArea = this.add.graphics();
-    imgArea.fillStyle(0x18062E, 0.55);
-    imgArea.fillRoundedRect(rx - rw / 2 + 8, ry - rh / 2 + 8, rw - 16, rh - 16, 7);
-
-    // 코너 장식
-    const corners = this.add.graphics();
-    corners.lineStyle(2, GOLD, 0.5);
-    const cs = 22, mx = rx - rw / 2 + 12, my = ry - rh / 2 + 12;
-    const mxr = rx + rw / 2 - 12, myr = ry + rh / 2 - 12;
-    // top-left
-    corners.beginPath(); corners.moveTo(mx, my + cs); corners.lineTo(mx, my); corners.lineTo(mx + cs, my); corners.strokePath();
-    // top-right
-    corners.beginPath(); corners.moveTo(mxr - cs, my); corners.lineTo(mxr, my); corners.lineTo(mxr, my + cs); corners.strokePath();
-    // bottom-left
-    corners.beginPath(); corners.moveTo(mx, myr - cs); corners.lineTo(mx, myr); corners.lineTo(mx + cs, myr); corners.strokePath();
-    // bottom-right
-    corners.beginPath(); corners.moveTo(mxr - cs, myr); corners.lineTo(mxr, myr); corners.lineTo(mxr, myr - cs); corners.strokePath();
-
-    // 플레이스홀더 텍스트
-    const placeholderStar = this.add.text(rx, ry - 42, '✦', {
-      fontSize: '40px', color: '#FFD70028', fontFamily: FONT,
-    }).setOrigin(0.5);
-    this.tweens.add({
-      targets: placeholderStar, alpha: { from: 0.15, to: 0.6 },
-      duration: 2400, yoyo: true, repeat: -1, ease: 'Sine.InOut',
-    });
-
-    this.add.text(rx, ry + 22, '캐릭터 일러스트', {
-      fontSize: '16px', color: '#2A0A3A', fontFamily: FONT,
-    }).setOrigin(0.5);
-    this.add.text(rx, ry + 50, '이미지 교체 영역', {
-      fontSize: '12px', color: '#1E0828', fontFamily: FONT,
-    }).setOrigin(0.5);
+    // 우측 영역(x 480~1280, 800×720)을 titlebg로 꽉 채움
+    this.add.image(880, 360, 'title_bg').setDisplaySize(800, 720);
   }
 
   // ── 대각선 그림자 (패널 오른쪽 모서리 뎁스) ─────────────────────────────
@@ -152,149 +109,165 @@ export class TitleScene extends Phaser.Scene {
   // ── 왼쪽 패널 ────────────────────────────────────────────────────────────
 
   private renderLeftPanel(): void {
-    // 메인 패널 채우기
+    // 메인 패널 — 우주 검정
     const panel = this.add.graphics();
-    panel.fillStyle(BG_PANEL, 0.97);
+    panel.fillStyle(0x04040C, 0.96);
     panel.fillPoints(PANEL_POLY as unknown as Phaser.Math.Vector2[], true);
 
-    // 패널 안쪽 핑크 서브틀 그라디언트 (상단)
-    const topGlow = this.add.graphics();
-    topGlow.fillStyle(PINK, 0.04);
-    topGlow.fillPoints(PANEL_POLY as unknown as Phaser.Math.Vector2[], true);
+    // 상단 은하 티끌 — 아주 미세한 보랏빛 그라디언트
+    const topTint = this.add.graphics();
+    topTint.fillStyle(0x8888FF, 0.025);
+    topTint.fillPoints(PANEL_POLY as unknown as Phaser.Math.Vector2[], true);
 
-    // 골드 상·하단 라인
-    this.add.rectangle(BTN_CX, 2, BTN_CX * 2 + 60, 3, GOLD)
-      .setOrigin(0.5, 0).setAlpha(0.65);
-    this.add.rectangle(BTN_CX, 718, BTN_CX * 2 + 60, 3, GOLD)
-      .setOrigin(0.5, 1).setAlpha(0.65);
+    // 상·하단 실버 라인
+    this.add.rectangle(BTN_CX, 2, BTN_CX * 2 + 60, 1, 0x6670A0)
+      .setOrigin(0.5, 0).setAlpha(0.6);
+    this.add.rectangle(BTN_CX, 718, BTN_CX * 2 + 60, 1, 0x6670A0)
+      .setOrigin(0.5, 1).setAlpha(0.6);
 
-    // 대각선 모서리 골드 하이라이트
+    // 대각선 경계 — 냉청색
     const edge = this.add.graphics();
-    edge.lineStyle(1.5, GOLD, 0.55);
+    edge.lineStyle(1, 0x4455AA, 0.35);
     edge.beginPath();
     edge.moveTo(DIAG_TOP_X, 0);
     edge.lineTo(DIAG_BOT_X, 720);
     edge.strokePath();
   }
 
-  // ── 타이틀 로고 플레이스홀더 ─────────────────────────────────────────────
+  // ── 타이틀 로고 ──────────────────────────────────────────────────────────
+
+  private panelRightEdge(y: number): number {
+    return DIAG_TOP_X + (DIAG_BOT_X - DIAG_TOP_X) * (y / 720);
+  }
 
   private renderTitleLogo(): void {
-    const lx = BTN_CX, ly = 148, lw = BTN_W, lh = 92;
-
-    // 로고 이미지 교체 영역
-    const logoBg = this.add.graphics();
-    logoBg.fillStyle(0xFFFFFF, 0.03);
-    logoBg.fillRoundedRect(lx - lw / 2, ly - lh / 2, lw, lh, 10);
-    logoBg.lineStyle(1.5, GOLD, 0.35);
-    logoBg.strokeRoundedRect(lx - lw / 2, ly - lh / 2, lw, lh, 10);
-
-    // 타이틀 텍스트 (이미지로 교체될 자리)
-    this.add.text(lx, ly - 14, '마법 덱 어드벤처', {
-      fontSize: '25px', color: TEXT_PRIMARY,
-      fontStyle: 'bold', fontFamily: FONT,
-      stroke: '#8B0045', strokeThickness: 4,
-      shadow: { offsetX: 0, offsetY: 0, color: '#FF69B4', blur: 14, fill: true },
-    }).setOrigin(0.5);
-
-    this.add.text(lx, ly + 24, '↑ 타이틀 로고 이미지 교체', {
-      fontSize: '10px', color: '#3A1A5A', fontFamily: FONT,
-    }).setOrigin(0.5);
+    const ly = 200;
+    const re = this.panelRightEdge(ly);
+    const lw = re - 8;    // 양쪽 4px 여백
+    const lx = re / 2;
+    const lh = 360;
+    const img = this.add.image(lx, ly, 'title_logo').setOrigin(0.5);
+    img.setScale(Math.min(lw / img.width, lh / img.height));
   }
 
   // ── 버튼 배치 ────────────────────────────────────────────────────────────
 
   private renderButtons(): void {
-    const START_Y = 278;
+    const START_Y = 405;
     const defs: [string, () => void][] = [
       ['게임 시작',          () => { GameState.hardReset(); this.goto('MapScene'); }],
       ['별빛 마법서 (도감)', () => this.goto('LoreBookScene')],
       ['개발자 테스트',      () => this.goto('HubScene')],
+      ['설정',               () => this.scene.launch('SettingsScene')],
     ];
     defs.forEach(([label, cb], i) => {
-      this.createMagicalButton(BTN_CX, START_Y + i * (BTN_H + BTN_GAP), label, cb);
+      this.createButton(START_Y + i * BTN_H, label, cb);
     });
-
-    // 하단 버전 텍스트
-    this.add.text(BTN_CX, 695, 'ver 0.1 · Prototype', {
-      fontSize: '10px', color: '#2A1040', fontFamily: FONT,
-    }).setOrigin(0.5);
   }
 
-  // ── 마법소녀 버튼 ────────────────────────────────────────────────────────
+  // ── 사다리꼴 버튼 (패널 대각선에 우측면 밀착) ────────────────────────────
 
-  private createMagicalButton(
-    x: number, y: number,
-    label: string,
-    onClick: () => void,
-  ): void {
-    const BW = BTN_W, BH = BTN_H, R = 14;
-    const container = this.add.container(x, y);
+  private createButton(y: number, label: string, onClick: () => void): void {
+    const BH = BTN_H, ML = 0;
 
-    // 외부 글로우 (호버 시 활성)
-    const glow = this.add.graphics();
-    glow.fillStyle(PINK, 0.20);
-    glow.fillRoundedRect(-BW / 2 - 14, -BH / 2 - 14, BW + 28, BH + 28, R + 5);
-    glow.setAlpha(0);
+    // 버튼 상단·하단 각각의 패널 우측 엣지 좌표
+    const xTR = this.panelRightEdge(y - BH / 2);
+    const xBR = this.panelRightEdge(y + BH / 2);
 
-    // SVG 버튼 배경 (그라디언트 + 광택 + 골드 테두리 + 별 장식 내장)
-    const btnBg = this.add.image(0, 0, 'btn_primary');
+    // 사다리꼴 꼭짓점 (절대 좌표)
+    const trap = [
+      { x: ML,  y: y - BH / 2 },
+      { x: xTR, y: y - BH / 2 },
+      { x: xBR, y: y + BH / 2 },
+      { x: ML,  y: y + BH / 2 },
+    ] as unknown as Phaser.Math.Vector2[];
 
-    // 빛 줄기 (좌→우 스윕) — SVG 위, 텍스트 아래
-    const shine = this.add.graphics();
-    shine.fillStyle(0xFFFFFF, 0.55);
-    shine.fillRect(0, -BH / 2 + 8, 16, BH - 16);
-    shine.x = -BW / 2 - 30;
-    shine.setAlpha(0);
+    // 외부 글로우용 살짝 확장된 사다리꼴
+    const G = 7;
+    const trapGlow = [
+      { x: ML - G,  y: y - BH / 2 - G },
+      { x: xTR + G, y: y - BH / 2 - G },
+      { x: xBR + G, y: y + BH / 2 + G },
+      { x: ML - G,  y: y + BH / 2 + G },
+    ] as unknown as Phaser.Math.Vector2[];
 
-    // 레이블
-    const txt = this.add.text(0, 1, label, {
-      fontSize: '21px', color: '#3D0A1E',
+    // 글로우 (호버 시 활성)
+    const glowG = this.add.graphics();
+    glowG.fillStyle(0x2244AA, 0.25);
+    glowG.fillPoints(trapGlow, true);
+    glowG.setAlpha(0);
+
+    // 베이스
+    const base = this.add.graphics();
+    base.fillStyle(0x06060E, 0.95);
+    base.fillPoints(trap, true);
+    base.lineStyle(1, 0x334477, 0.55);
+    base.strokePoints(trap, true);
+
+    // 호버 색상 오버레이 (딥 인디고)
+    const hoverG = this.add.graphics();
+    hoverG.fillStyle(0x1A2860, 0.78);
+    hoverG.fillPoints(trap, true);
+    hoverG.lineStyle(1.5, 0x6688EE, 1.0);
+    hoverG.strokePoints(trap, true);
+    hoverG.setAlpha(0);
+
+    // 레이블 — 사다리꼴 수평 중심
+    const labelX = (ML + (xTR + xBR) / 2) / 2;
+    const txt = this.add.text(labelX, y, label, {
+      fontSize: '26px', color: '#9AAACE',
       fontStyle: 'bold', fontFamily: FONT,
     }).setOrigin(0.5);
 
-    container.add([glow, btnBg, shine, txt]);
-    container.setSize(BW, BH);
-    container.setInteractive({ useHandCursor: true });
+    // 히트 영역 — base Graphics에 사각형으로 등록
+    base.setInteractive(
+      new Phaser.Geom.Rectangle(ML, y - BH / 2, xBR - ML, BH),
+      Phaser.Geom.Rectangle.Contains,
+    );
+    base.input!.cursor = 'pointer';
 
-    // 호버 진입
-    container.on('pointerover', () => {
-      this.tweens.killTweensOf([container, glow, shine]);
-      this.tweens.add({ targets: container, scaleX: 1.06, scaleY: 1.06, duration: 140, ease: 'Back.Out' });
-      this.tweens.add({ targets: glow, alpha: 1, duration: 180 });
-      // 빛 줄기 스윕
-      shine.x = -BW / 2 - 30;
-      this.tweens.add({
-        targets: shine, alpha: 0.55, duration: 60,
-        onComplete: () => {
-          this.tweens.add({
-            targets: shine, x: BW / 2 + 30, duration: 440, ease: 'Power1.Out',
-            onComplete: () => this.tweens.add({ targets: shine, alpha: 0, duration: 130 }),
-          });
-        },
-      });
+    base.on('pointerover', () => {
+      this.tweens.killTweensOf([hoverG, glowG]);
+      this.tweens.add({ targets: hoverG, alpha: 1, duration: 180, ease: 'Sine.Out' });
+      this.tweens.add({ targets: glowG,  alpha: 1, duration: 180, ease: 'Sine.Out' });
+      txt.setStyle({ color: '#D8E4FF' });
     });
 
-    // 호버 이탈
-    container.on('pointerout', () => {
-      this.tweens.killTweensOf([container, glow]);
-      this.tweens.add({ targets: container, scaleX: 1, scaleY: 1, duration: 200, ease: 'Power2.Out' });
-      this.tweens.add({ targets: glow, alpha: 0, duration: 260 });
+    base.on('pointerout', () => {
+      this.tweens.killTweensOf([hoverG, glowG]);
+      this.tweens.add({ targets: hoverG, alpha: 0, duration: 220, ease: 'Sine.Out' });
+      this.tweens.add({ targets: glowG,  alpha: 0, duration: 220, ease: 'Sine.Out' });
+      txt.setStyle({ color: '#9AAACE' });
     });
 
-    // 클릭: 인덴트 → 반동 → 씬 이동
-    container.on('pointerdown', () => {
-      this.tweens.killTweensOf(container);
+    base.on('pointerdown', () => {
+      base.disableInteractive();
+      // 호버 상태 즉시 초기화
+      this.tweens.killTweensOf([hoverG, glowG]);
+      hoverG.setAlpha(0);
+      glowG.setAlpha(0);
+      txt.setStyle({ color: '#9AAACE' });
+
       this.tweens.add({
-        targets: container, scaleX: 0.94, scaleY: 0.94,
-        duration: 75, ease: 'Power2.In',
-        onComplete: () => {
-          this.tweens.add({
-            targets: container, scaleX: 1.04, scaleY: 1.04,
-            duration: 110, ease: 'Back.Out',
-            onComplete: () => { container.disableInteractive(); onClick(); },
-          });
-        },
+        targets: base, alpha: 0.55, duration: 60,
+        onComplete: () => this.tweens.add({
+          targets: base, alpha: 1, duration: 80,
+          onComplete: () => {
+            onClick();
+            // SettingsScene처럼 현재 씬이 유지되는 경우 버튼 재활성화
+            this.time.delayedCall(80, () => {
+              if (this.scene.isActive('SettingsScene')) {
+                this.scene.get('SettingsScene')!.events.once('shutdown', () => {
+                  base.setInteractive(
+                    new Phaser.Geom.Rectangle(ML, y - BH / 2, xBR - ML, BH),
+                    Phaser.Geom.Rectangle.Contains,
+                  );
+                  base.input!.cursor = 'pointer';
+                });
+              }
+            });
+          },
+        }),
       });
     });
   }

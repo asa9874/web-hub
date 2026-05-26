@@ -205,12 +205,16 @@ export class BattleScene extends Phaser.Scene {
     this.add.rectangle(W / 2, DIVIDER_Y, W, 2, this.actTheme.battleDivider);
     // 카드 섹션 패널
     const cardSectionH = 720 - DIVIDER_Y;
-    const panelY = DIVIDER_Y + cardSectionH / 2;
-    if (this.textures.exists('bg_panel')) {
-      this.add.image(W / 2, panelY, 'bg_panel').setDisplaySize(W, cardSectionH).setAlpha(0.9).setDepth(2);
-    } else {
-      this.add.rectangle(W / 2, panelY, W, cardSectionH, this.actTheme.bg).setAlpha(0.9).setDepth(2);
-    }
+    const g = this.add.graphics().setDepth(2);
+    // 베이스 — 심우주 다크 (액트 bg 5% 반영)
+    g.fillStyle(0x05050E, 0.93);
+    g.fillRect(0, DIVIDER_Y, W, cardSectionH);
+    // 상단 액트 컬러 워시
+    g.fillStyle(this.actTheme.topAccent, 0.06);
+    g.fillRect(0, DIVIDER_Y, W, 40);
+    // 구분선 바로 아래 액트 컬러 하이라이트
+    g.lineStyle(1.5, this.actTheme.battleDivider, 0.9);
+    g.lineBetween(0, DIVIDER_Y + 2, W, DIVIDER_Y + 2);
   }
 
   /** 전투 모드에 맞게 몬스터 슬롯을 동적으로 생성 */

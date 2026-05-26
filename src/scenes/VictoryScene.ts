@@ -40,7 +40,7 @@ export class VictoryScene extends Phaser.Scene {
   private renderBackground(): void {
     this.add.rectangle(640, 360, 1280, 720, BG_DEEP);
     if (this.textures.exists('bg_victory')) {
-      this.add.image(640, 360, 'bg_victory').setAlpha(0.72);
+      this.add.image(640, 360, 'bg_victory').setDisplaySize(1280, 720).setAlpha(0.72);
     }
     this.add.rectangle(640, 2, 1280, 4, PINK).setOrigin(0.5, 0);
     this.add.circle(640, 320, 320, ROSE, 0.08);

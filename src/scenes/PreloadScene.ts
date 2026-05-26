@@ -174,12 +174,11 @@ export class PreloadScene extends Phaser.Scene {
   // ── Title ─────────────────────────────────────────────────────────────────
 
   private buildTitle(): void {
-    this.add.text(CX, 112, '✦ 마법 덱 어드벤처 ✦', {
-      fontSize: '28px', color: TEXT_PRIMARY,
-      fontStyle: 'bold', fontFamily: FONT,
-      stroke: '#8B0045', strokeThickness: 4,
-      shadow: { offsetX: 0, offsetY: 0, color: '#FF69B4', blur: 18, fill: true },
-    }).setOrigin(0.5);
+    this.load.once('complete', () => {
+      const img = this.add.image(CX, 112, 'title_logo').setOrigin(0.5);
+      const scale = Math.min(900 / img.width, 180 / img.height);
+      img.setScale(scale);
+    });
 
     const sub = this.add.text(CX, 155, '불러오는 중...', {
       fontSize: '13px', color: TEXT_SECONDARY, fontFamily: FONT,
@@ -307,6 +306,9 @@ export class PreloadScene extends Phaser.Scene {
   // ── Asset manifest ────────────────────────────────────────────────────────
 
   private loadAll(): void {
+    this.load.image('title_logo', 'images/ui/title.png');
+    this.load.image('title_bg',   'images/bg/titlebg.png');
+
     // UI button SVGs
     this.load.svg('btn_primary',        'images/ui/btn_primary.svg',        { width: 340, height: 62 });
     this.load.svg('btn_end_turn_frame', 'images/ui/btn_end_turn_frame.svg', { width: 140, height: 46 });

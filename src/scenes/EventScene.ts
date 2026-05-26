@@ -50,7 +50,7 @@ export class EventScene extends Phaser.Scene {
   private renderBase(): void {
     this.add.rectangle(640, 360, 1280, 720, BG_DEEP);
     if (this.textures.exists('bg_event')) {
-      this.add.image(640, 360, 'bg_event').setAlpha(0.50);
+      this.add.image(640, 360, 'bg_event').setDisplaySize(1280, 720).setAlpha(0.50);
     }
     this.add.rectangle(640, 2, 1280, 4, PINK).setOrigin(0.5, 0);
     this.add.rectangle(640, 718, 1280, 2, BG_DIVIDER).setOrigin(0.5, 1);

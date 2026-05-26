@@ -40,9 +40,11 @@ export class SettingsScene extends Phaser.Scene {
   // ── 배경 오버레이 ─────────────────────────────────────────────────────────
 
   private renderOverlay(): void {
-    const overlay = this.add.rectangle(CX, CY, 1280, 720, BG_DEEP, 0.75)
-      .setInteractive();
-    overlay.on('pointerup', () => this.close());
+    const overlay = this.add.rectangle(CX, CY, 1280, 720, BG_DEEP, 0.75);
+    this.time.delayedCall(200, () => {
+      overlay.setInteractive();
+      overlay.on('pointerup', () => this.close());
+    });
   }
 
   // ── 패널 ──────────────────────────────────────────────────────────────────

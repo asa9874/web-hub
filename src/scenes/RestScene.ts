@@ -39,7 +39,7 @@ export class RestScene extends Phaser.Scene {
   private renderBg(): void {
     this.add.rectangle(W / 2, H / 2, W, H, BG_DEEP);
     if (this.textures.exists('bg_rest')) {
-      this.add.image(W / 2, H / 2, 'bg_rest').setAlpha(0.65);
+      this.add.image(W / 2, H / 2, 'bg_rest').setDisplaySize(1280, 720).setAlpha(0.65);
     }
     // magical campfire glow — pink/purple tones
     const glows: [number, number][] = [[160, 0.07], [100, 0.14], [55, 0.26]];
