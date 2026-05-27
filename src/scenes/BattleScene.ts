@@ -612,8 +612,17 @@ export class BattleScene extends Phaser.Scene {
     container.setDepth(baseDepth);
 
     const bg = this.add.rectangle(0, 0, w, h, BG_PANEL);
-    const borderColor = card.cardType === 'attack' ? ROSE : card.cardType === 'power' ? GOLD : LAVENDER;
-    bg.setStrokeStyle(2, borderColor);
+
+    const frameKey = card.cardType === 'attack' ? 'card_frame_attack'
+                   : card.cardType === 'power'  ? 'card_frame_power'
+                   : 'card_frame_skill';
+    const frameImg = this.textures.exists(frameKey)
+      ? this.add.image(0, 0, frameKey).setDisplaySize(w, h)
+      : null;
+    if (!frameImg) {
+      const borderColor = card.cardType === 'attack' ? ROSE : card.cardType === 'power' ? GOLD : LAVENDER;
+      bg.setStrokeStyle(2, borderColor);
+    }
 
     const badge = this.add.circle(-w / 2 + 16, -h / 2 + 16, 13, PINK);
     const costText = this.add.text(-w / 2 + 16, -h / 2 + 16, String(card.cost), {
@@ -647,7 +656,10 @@ export class BattleScene extends Phaser.Scene {
       container.add(tag);
     }
 
-    container.add([bg, badge, costText, nameText, divider, typeText, descText]);
+    const baseElems: Phaser.GameObjects.GameObject[] = frameImg
+      ? [bg, frameImg, badge, costText, nameText, divider, typeText, descText]
+      : [bg, badge, costText, nameText, divider, typeText, descText];
+    container.add(baseElems);
     container.setSize(w, h);
     container.setInteractive({ useHandCursor: true });
     this.input.setDraggable(container);

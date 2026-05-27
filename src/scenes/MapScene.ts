@@ -9,10 +9,10 @@ import { getActTheme } from '../data/actTheme';
 
 // ── 레이아웃 상수 ─────────────────────────────────────────────────────────────
 const COL_X       = [130, 385, 640, 895, 1150]; // 5열 (col 0–4)
-const ROW_SPACING = 110;           // row 간격 확대
+const ROW_SPACING = 135;           // row 간격
 const ROW_TOP_PAD = 50;            // 컨테이너 상단 여백 (보스 위)
 const ROW_BOT_PAD = 50;            // 컨테이너 하단 여백
-const NODE_R      = 22;
+const NODE_R      = 33;            // 노드 반지름 (기존 22의 1.5x)
 
 // 스크롤 영역
 const CONTENT_TOP = 70;            // 헤더 아래 맵 뷰포트 시작 y
@@ -110,8 +110,9 @@ export class MapScene extends Phaser.Scene {
     // 액트별 맵 배경 이미지 (전체 화면)
     const bgKey = `bg_map_${GameState.currentAct}`;
     if (this.textures.exists(bgKey)) {
-      this.add.image(640, 360, bgKey).setDisplaySize(1280, 720).setAlpha(0.45);
+      this.add.image(640, 360, bgKey).setDisplaySize(1280, 720).setAlpha(0.25);
     }
+    this.add.rectangle(640, 360, 1280, 720, 0x000000, 0.45);
     this.add.rectangle(640, 2, 1280, 4, theme.topAccent).setOrigin(0.5, 0);
     this.add.rectangle(640, 718, 1280, 2, theme.bottomBorder).setOrigin(0.5, 1);
   }
@@ -273,28 +274,45 @@ export class MapScene extends Phaser.Scene {
 
     // 글로우 (가용 노드)
     if (isAvail) {
-      objs.push(this.add.circle(cx, cy, NODE_R + 8, nc.stroke, 0.14));
+      objs.push(this.add.circle(cx, cy, NODE_R + 10, nc.stroke, 0.18));
     }
 
-    // 노드 원
-    const fill   = isVisited ? theme.nodeVisitedFill   : (isAvail ? nc.fill   : theme.nodeInactiveFill);
-    const stroke = isVisited ? theme.nodeVisitedStroke : (isAvail ? nc.stroke : theme.nodeInactiveStroke);
-    const sw     = isAvail ? 3 : 1;
-    const circle = this.add.circle(cx, cy, NODE_R, fill);
-    circle.setStrokeStyle(sw, stroke);
-    objs.push(circle);
+    const visitedHex  = hexStr(theme.nodeVisitedStroke);
+    const inactiveHex = hexStr(theme.nodeInactiveStroke);
+    const labelColor  = isAvail ? hexStr(nc.stroke) : (isVisited ? visitedHex : inactiveHex);
 
-    // 아이콘 (첫 글자)
-    const visitedHex   = hexStr(theme.nodeVisitedStroke);
-    const inactiveHex  = hexStr(theme.nodeInactiveStroke);
-    const iconColor = isVisited ? visitedHex : (isAvail ? hexStr(nc.stroke) : inactiveHex);
-    objs.push(this.add.text(cx, cy, label.charAt(0), {
-      fontSize: '13px', color: iconColor, fontStyle: 'bold',
-    }).setOrigin(0.5));
+    const imgKey = `node_${node.type}`;
+    const hasImg = this.textures.exists(imgKey);
+    const NODE_IMG_SIZE = NODE_R * 2 + 12; // 56px
+
+    let interactTarget: Phaser.GameObjects.Image | Phaser.GameObjects.Arc;
+
+    if (hasImg) {
+      // 이미지 노드
+      const img = this.add.image(cx, cy, imgKey).setDisplaySize(NODE_IMG_SIZE, NODE_IMG_SIZE);
+      if (isVisited) img.setAlpha(0.5).setTint(0x999999);
+      else if (!isAvail) img.setAlpha(0.6).setTint(0x888888);
+      objs.push(img);
+      interactTarget = img;
+    } else {
+      // 폴백: 원
+      const fill   = isVisited ? theme.nodeVisitedFill   : (isAvail ? nc.fill   : theme.nodeInactiveFill);
+      const stroke = isVisited ? theme.nodeVisitedStroke : (isAvail ? nc.stroke : theme.nodeInactiveStroke);
+      const sw     = isAvail ? 3 : 1;
+      const circle = this.add.circle(cx, cy, NODE_R, fill);
+      circle.setStrokeStyle(sw, stroke);
+      objs.push(circle);
+
+      const iconColor = isVisited ? visitedHex : (isAvail ? hexStr(nc.stroke) : inactiveHex);
+      objs.push(this.add.text(cx, cy, label.charAt(0), {
+        fontSize: '13px', color: iconColor, fontStyle: 'bold',
+      }).setOrigin(0.5));
+      interactTarget = circle;
+    }
 
     // 노드명 라벨
-    const labelColor = isAvail ? hexStr(nc.stroke) : (isVisited ? visitedHex : inactiveHex);
-    objs.push(this.add.text(cx, cy + NODE_R + 9, label, {
+    const labelOffsetY = hasImg ? NODE_IMG_SIZE / 2 + 8 : NODE_R + 9;
+    objs.push(this.add.text(cx, cy + labelOffsetY, label, {
       fontSize: '10px', color: labelColor,
     }).setOrigin(0.5));
 
@@ -302,10 +320,21 @@ export class MapScene extends Phaser.Scene {
 
     // 인터랙션 (가용 & 미방문)
     if (isAvail && !isVisited) {
-      circle.setInteractive({ useHandCursor: true });
-      circle.on('pointerover', () => circle.setStrokeStyle(sw + 2, nc.stroke));
-      circle.on('pointerout',  () => circle.setStrokeStyle(sw, nc.stroke));
-      circle.on('pointerdown', () => this.enterNode(node));
+      interactTarget.setInteractive({ useHandCursor: true });
+
+      if (hasImg) {
+        const img = interactTarget as Phaser.GameObjects.Image;
+        const hoverSize = NODE_IMG_SIZE * 1.12;
+        img.on('pointerover', () => img.setDisplaySize(hoverSize, hoverSize));
+        img.on('pointerout',  () => img.setDisplaySize(NODE_IMG_SIZE, NODE_IMG_SIZE));
+      } else {
+        const circle = interactTarget as Phaser.GameObjects.Arc;
+        const sw = 3;
+        circle.on('pointerover', () => circle.setStrokeStyle(sw + 2, nc.stroke));
+        circle.on('pointerout',  () => circle.setStrokeStyle(sw, nc.stroke));
+      }
+
+      interactTarget.on('pointerdown', () => this.enterNode(node));
     }
   }
 

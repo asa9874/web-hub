@@ -328,6 +328,20 @@ export class PreloadScene extends Phaser.Scene {
     this.load.image('bg_victory',  'images/bg/victory_bg.png');
     this.load.image('bg_dialogue', 'images/bg/dialogue_bg.png');
 
+    // Map node icons
+    this.load.image('node_battle', 'images/map/node_battle.png');
+    this.load.image('node_elite',  'images/map/node_elite.png');
+    this.load.image('node_boss',   'images/map/node_boss.png');
+    this.load.image('node_event',  'images/map/node_event.png');
+    this.load.image('node_shop',   'images/map/node_shop.png');
+    this.load.image('node_rest',     'images/map/node_rest.png');
+    this.load.image('node_treasure', 'images/map/node_treasure.png');
+
+    // Card frames
+    this.load.image('card_frame_attack', 'images/ui/card_frame_attack.png');
+    this.load.image('card_frame_power',  'images/ui/card_frame_power.png');
+    this.load.image('card_frame_skill',  'images/ui/card_frame_skill.png');
+
     // Player
     this.load.image('player_standing', 'images/Player/Player_standing.png');
     this.load.image('player_attack',   'images/Player/Player_attack.png');
