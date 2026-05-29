@@ -73,6 +73,22 @@ export const ROOM_SCENES: Readonly<Record<string, string>> = {
   'c1-walk': 'c1_riverside',
   'c1-dep':  'c1_depot',
 
+  // ── C2 심층 구역 경계 ──────────────────────────────────────────
+  'c2-nc1':  'c2_entrance',
+  'c2-base': 'c2_eunbyeol',
+  'c2-obs':  'c2_observation',
+  'c2-line': 'c2_boundary',
+  'c2-vent': 'c2_vent',
+
+  // ── D1 부정의 탑 ───────────────────────────────────────────────
+  'c2-nd1':  'd1_entrance',   // C2 exit → D1 첫 씬
+  'd1-sq':   'd1_square',
+  'd1-hana': 'd1_hana',
+  'd1-1f':   'd1_floor1',
+  'd1-2f':   'd1_floor2',
+  'd1-3f':   'd1_floor3',
+  'd1-sub':  'd1_abyss_core',
+
   // ── TX 테스트 공간 ─────────────────────────────────────────────
   'tx-hub':    'tx_hub',
   'tx-scene':  'tx_scene_link',

@@ -26,6 +26,7 @@ export interface ChoiceRequirement {
   readonly items?:         readonly string[];  // 인벤토리에 모두 있어야 함
   readonly minHp?:         number;             // HP >= minHp
   readonly maxCorruption?: number;             // corruption <= maxCorruption
+  readonly minCorruption?: number;             // corruption >= minCorruption
 }
 
 export interface DeterministicChoice {

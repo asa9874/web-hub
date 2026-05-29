@@ -16,6 +16,22 @@ export default function ChoicesSection() {
   const { year, month, day, minuteOfDay } = useTimeStore();
   const addEntry              = useLogStore(s => s.addEntry);
 
+  if (state.currentSceneId.startsWith('ending_')) {
+    return (
+      <div id="choices-section">
+        <PanelTitle>[ 엔 딩 ]</PanelTitle>
+        <section id="choices-panel" aria-label="행동 선택">
+          <button
+            className="choice-btn choice-btn--restart"
+            onClick={() => dispatch({ type: 'RESET' })}
+          >
+            <span className="choice-label">처음부터 시작하겠는가.</span>
+          </button>
+        </section>
+      </div>
+    );
+  }
+
   if (!state.isAlive) {
     const isCorruptionDeath = state.hp > 0 && state.corruption >= state.maxCorruption;
     const deathMsg = isCorruptionDeath

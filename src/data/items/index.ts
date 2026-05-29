@@ -18,4 +18,5 @@ export const items: Record<string, Item> = {
   'sphinx_doc':     { id: 'sphinx_doc',     name: '스핑크스 문서',description: '정도석이 복사한 마법소녀 군단 기밀. 탑 정화 조건 기록.' },
   'a2_key':         { id: 'a2_key',         name: 'A2 봉인 열쇠', description: '발전기실 철판 뒤에서 찾은 열쇠. A2 봉인 사무실 전용.' },
   'iseah_pact':     { id: 'iseah_pact',     name: '이세아와의 약속', description: '이세아가 내밀었다. D1까지 함께 간다는 증표.' },
+  'special_key':    { id: 'special_key',    name: '특수 열쇠',      description: '하나가 남긴 열쇠. 탑 3층 특수구역 문을 열 수 있다.' },
 };

@@ -430,7 +430,7 @@ const D1_R: readonly Room[] = [
   { id:'d1-hana',name:'하나의 흔적',      desc:'검게 탄 바닥 (원형 3m) · 가끔 따뜻해짐',      cx:22, cy:29, type:'npc'    },
   { id:'d1-1f',  name:'탑 1층 상업구역', desc:'멈춘 시계들 · 오래 있으면 생각이 느려짐',      cx:50, cy:47, type:'danger' },
   { id:'d1-2f',  name:'탑 2층 전망대',   desc:'심연 목소리 가장 또렷 · 부정적 감정 증폭',     cx:50, cy:63, type:'danger' },
-  { id:'d1-3f',  name:'탑 3층 특수구역', desc:'스핑크스 마지막 기록 · 특수 열쇠 필요',        cx:50, cy:76, type:'locked' },
+  { id:'d1-3f',  name:'탑 3층 특수구역', desc:'스핑크스 마지막 기록 · 특수 열쇠 필요',        cx:50, cy:76, type:'item'   },
   { id:'d1-sub', name:'지하 심연의 핵',   desc:'D1-03 · 최종 스토리 분기점 · 특수 조건 필수', cx:50, cy:89, type:'danger' },
   { id:'d1-nc2', name:'→ C2 심층 경계',  desc:'남쪽 — C2 심층 구역 경계 방향',               cx:50, cy:97, type:'exit',   connectsTo:'C2' },
 ];

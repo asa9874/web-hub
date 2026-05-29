@@ -29,6 +29,15 @@ import {
 import {
   a2Generator, a2SealedOffice, a2SealedOpen,
 } from './a2-deep-scenes.ts';
+import {
+  c2Entrance, c2Eunbyeol, c2Observation, c2Boundary, c2Vent,
+} from './c2-scenes.ts';
+import {
+  d1Entrance, d1Square, d1Hana,
+  d1Floor1, d1Floor2, d1Floor3, d1Floor3Open,
+  d1AbyssCore,
+  endingPurify, endingEscape, endingMerge, endingSilence,
+} from './d1-scenes.ts';
 import { txHub, txSceneLink, txItem, txDanger, txCond, txNpc, txSave } from './tx-scenes.ts';
 
 export const scenes: Record<string, Scene> = {
@@ -110,6 +119,29 @@ export const scenes: Record<string, Scene> = {
   [c1Observation.id]:       c1Observation,
   [c1Riverside.id]:         c1Riverside,
   [c1Depot.id]:             c1Depot,
+
+  // ── C2 심층 구역 경계 ──
+  [c2Entrance.id]:          c2Entrance,
+  [c2Eunbyeol.id]:          c2Eunbyeol,
+  [c2Observation.id]:       c2Observation,
+  [c2Boundary.id]:          c2Boundary,
+  [c2Vent.id]:              c2Vent,
+
+  // ── D1 부정의 탑 ──
+  [d1Entrance.id]:          d1Entrance,
+  [d1Square.id]:            d1Square,
+  [d1Hana.id]:              d1Hana,
+  [d1Floor1.id]:            d1Floor1,
+  [d1Floor2.id]:            d1Floor2,
+  [d1Floor3.id]:            d1Floor3,
+  [d1Floor3Open.id]:        d1Floor3Open,
+  [d1AbyssCore.id]:         d1AbyssCore,
+
+  // ── 엔딩 ──
+  [endingPurify.id]:        endingPurify,
+  [endingEscape.id]:        endingEscape,
+  [endingMerge.id]:         endingMerge,
+  [endingSilence.id]:       endingSilence,
 
   // ── TX 개발 테스트 ──
   [txHub.id]:               txHub,

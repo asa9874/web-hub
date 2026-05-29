@@ -9,6 +9,7 @@ export function meetsRequirement(
   if (required.items && !required.items.every(id => state.inventory.includes(id))) return false;
   if (required.minHp         !== undefined && state.hp         <  required.minHp)         return false;
   if (required.maxCorruption !== undefined && state.corruption >  required.maxCorruption) return false;
+  if (required.minCorruption !== undefined && state.corruption <  required.minCorruption) return false;
   return true;
 }
 
@@ -27,5 +28,7 @@ export function getLockReason(
     return `HP ${required.minHp} 이상 필요 (현재 ${state.hp})`;
   if (required.maxCorruption !== undefined && state.corruption > required.maxCorruption)
     return `오염도 ${required.maxCorruption} 이하 필요 (현재 ${state.corruption})`;
+  if (required.minCorruption !== undefined && state.corruption < required.minCorruption)
+    return `오염도 ${required.minCorruption} 이상 필요 (현재 ${state.corruption})`;
   return '';
 }
