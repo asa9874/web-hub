@@ -603,13 +603,6 @@ body::after {
   overflow-y: auto;
 }
 
-.choices-already-done {
-  font-size: 10px;
-  letter-spacing: 0.1em;
-  color: rgba(255, 176, 0, 0.45);
-  padding: 5px 14px 3px;
-  flex-shrink: 0;
-}
 
 .choice-btn {
   font-family: inherit;

@@ -14,6 +14,7 @@ const INITIAL_PLAYER: PlayerState = {
   currentSceneId: 'apartment_start',
   isAlive: true,
   chosenScenes: [],
+  usedChoices:  [],
 };
 
 interface GameState {
@@ -32,15 +33,19 @@ function reducer(state: GameState, action: GameAction): GameState {
 
     case 'CHOOSE': {
       const sceneId = state.player.currentSceneId;
-      if (state.player.chosenScenes.includes(sceneId)) return state;
+      if (state.player.usedChoices.includes(action.choiceId)) return state;
       const scene  = resolveScene(sceneId, scenes);
       const choice = scene.choices.find(c => c.id === action.choiceId);
       if (!choice) return state;
       if (!meetsRequirement(state.player, choice.required)) return state;
-      const outcome = calculateOutcome(choice);
-      const next    = applyOutcome(state.player, outcome);
+      const outcome      = calculateOutcome(choice);
+      const next         = applyOutcome(state.player, outcome);
+      const usedChoices  = [...state.player.usedChoices, action.choiceId];
+      const chosenScenes = state.player.chosenScenes.includes(sceneId)
+        ? state.player.chosenScenes
+        : [...state.player.chosenScenes, sceneId];
       return {
-        player:        { ...next, chosenScenes: [...state.player.chosenScenes, sceneId] },
+        player:        { ...next, usedChoices, chosenScenes },
         narrativeText: outcome.narrativeText,
       };
     }
@@ -89,6 +94,7 @@ function reducer(state: GameState, action: GameAction): GameState {
       return {
         player:        { ...action.data,
                          chosenScenes: action.data.chosenScenes ?? [],
+                         usedChoices:  action.data.usedChoices  ?? [],
                          isAlive: action.data.hp > 0 && action.data.corruption < action.data.maxCorruption },
         narrativeText: '',
       };

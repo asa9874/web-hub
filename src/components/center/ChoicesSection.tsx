@@ -6,10 +6,27 @@ import { resolveScene }        from '../../engine/scene-resolver.ts';
 import { meetsRequirement, getLockReason } from '../../engine/requirements.ts';
 import { scenes }              from '../../data/scenes/index.ts';
 import { items }               from '../../data/items/index.ts';
+import type { Choice }         from '../../types/index.ts';
 import { useTimeStore, formatGameTime, formatGameDate } from '../../state/timeStore.ts';
 import { useLogStore }         from '../../state/logStore.ts';
 
 const MINUTES_PER_CHOICE = 5;
+
+/** 모든 결과가 현재 씬에 머무는 선택지 (탐색·정보·아이템) → 사용 후 숨김 */
+function isSameSceneChoice(choice: Choice, sceneId: string): boolean {
+  if (choice.type === 'deterministic') {
+    return choice.outcomes.success.nextSceneId === sceneId;
+  }
+  return (
+    choice.outcomes.success.nextSceneId === sceneId &&
+    choice.outcomes.failure.nextSceneId === sceneId
+  );
+}
+
+/** 순수 이동 선택지: back() 헬퍼처럼 성공 내러티브가 빈 문자열 → 항상 자유롭게 사용 가능 */
+function isPureNav(choice: Choice): boolean {
+  return (choice.outcomes.success.narrativeText ?? '') === '';
+}
 
 export default function ChoicesSection() {
   const { state, dispatch }   = useGameStore();
@@ -50,11 +67,9 @@ export default function ChoicesSection() {
     );
   }
 
-  const scene      = resolveScene(state.currentSceneId, scenes);
-  const alreadyChosen = state.chosenScenes.includes(state.currentSceneId);
+  const scene = resolveScene(state.currentSceneId, scenes);
 
   const handleChoose = (choiceLabel: string, choiceId: string) => {
-    if (alreadyChosen) return;
     const timeStr = formatGameTime(minuteOfDay);
     const dateStr = formatGameDate(year, month, day);
 
@@ -65,23 +80,30 @@ export default function ChoicesSection() {
       dateStr,
       sceneTitle: scene.title,
       choice:     choiceLabel,
-      narrative:  '',  // 내러티브는 App에서 watch 후 업데이트
+      narrative:  '',
     });
   };
 
   return (
     <div id="choices-section">
       <PanelTitle>[ 행 동 선 택 ]</PanelTitle>
-      {alreadyChosen && (
-        <div className="choices-already-done">이미 선택한 장면입니다.</div>
-      )}
       <section id="choices-panel" aria-label="행동 선택">
         {scene.choices.map(choice => {
+          const isUsed    = state.usedChoices.includes(choice.id);
+          const sameScene = isSameSceneChoice(choice, state.currentSceneId);
+          const pureNav   = isPureNav(choice);
+
+          // 같은 씬 선택지: 사용 후 버튼 완전 숨김 (아이템·탐색·정보)
+          if (isUsed && sameScene) return null;
+
+          // 스토리/행동 선택지: 사용 후 비활성화 (씬을 이동시키는 의미있는 선택)
+          const usedLock  = isUsed && !sameScene && !pureNav;
           const reqLocked = !meetsRequirement(state, choice.required);
-          const locked    = alreadyChosen || reqLocked;
+          const locked    = reqLocked || usedLock;
           const reason    = reqLocked && choice.required
             ? getLockReason(state, choice.required, items)
             : undefined;
+
           return (
             <ChoiceButton
               key={choice.id}
