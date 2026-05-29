@@ -43,8 +43,14 @@ export function buildShell(): void {
       <!-- 중앙: 위치명 / 아스키아트 / 텍스트 / 선택지 -->
       <main id="center-panel">
 
-        <!-- ① 최상단: 위치 이름 -->
+        <!-- ① 최상단: 현재 위치 + 씬 이름 -->
         <div id="scene-header">
+          <div id="location-bar">
+            <span class="loc-icon">◈</span>
+            <span id="loc-main">—</span>
+            <span class="loc-sep">─</span>
+            <span id="loc-room">—</span>
+          </div>
           <div id="scene-title"></div>
         </div>
 

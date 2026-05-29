@@ -223,7 +223,38 @@ body::after {
   flex-shrink: 0;
   border-bottom: 1px solid var(--c-border);
   background: rgba(0, 255, 65, 0.025);
-  padding: 8px 22px;
+  padding: 6px 22px 8px;
+}
+
+/* ── 현재 위치 표시바 ── */
+#location-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 5px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+
+.loc-icon {
+  color: var(--c-green-dim);
+  font-size: 9px;
+}
+
+#loc-main {
+  color: var(--c-amber);
+  text-shadow: 0 0 6px rgba(255,176,0,0.3);
+  font-weight: bold;
+}
+
+.loc-sep {
+  color: var(--c-green-dim);
+  opacity: 0.5;
+}
+
+#loc-room {
+  color: var(--c-green);
+  text-shadow: var(--glow-g);
 }
 
 #scene-title {
@@ -1309,6 +1340,35 @@ body::after {
   color: rgba(0,255,65,0.55);
   letter-spacing: 0.06em;
   margin: 6px 0 2px;
+}
+
+/* ── 이동 버튼 (내부지도 인접 구역) ── */
+.rds-move-btn {
+  font-family: inherit;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  width: 100%;
+  background: rgba(0,255,65,0.04);
+  color: var(--c-green-md);
+  border: 1px solid rgba(0,255,65,0.28);
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  margin-top: 8px;
+  transition: background .12s, border-color .12s, color .12s, box-shadow .12s;
+
+  &:hover {
+    background: rgba(0,255,65,0.1);
+    border-color: rgba(0,255,65,0.55);
+    color: var(--c-green);
+    box-shadow: 0 0 14px rgba(0,255,65,0.2);
+  }
+
+  &:active {
+    background: rgba(0,255,65,0.15);
+  }
 }
 
 .rds-locked-note {

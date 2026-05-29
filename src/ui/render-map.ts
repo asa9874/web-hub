@@ -56,10 +56,12 @@ export function initMap(): void {
   if (!app) return;
   app.appendChild(buildOverlay());
   document.getElementById('map-close-btn')!.addEventListener('click', closeMap);
+  document.getElementById('map-int-close-btn')!.addEventListener('click', closeMap);
   document.getElementById('map-back-btn')!.addEventListener('click', showGlobal);
   buildNodes();
   new ResizeObserver(() => drawEdges()).observe(document.getElementById('map-graph-section')!);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && isOpen()) closeMap(); });
+  updateLocationBar();
 }
 
 export function openMap(): void {
@@ -75,8 +77,19 @@ export function closeMap(): void {
 export function setPlayerPosition(locId: string, roomId: string): void {
   playerLocId  = locId;
   playerRoomId = roomId;
+  updateLocationBar();
   refreshWorldNodes();
   if (curInteriorLoc) refreshInteriorNodes();
+}
+
+function updateLocationBar(): void {
+  const mainEl = document.getElementById('loc-main');
+  const roomEl = document.getElementById('loc-room');
+  if (!mainEl || !roomEl) return;
+  const loc  = LOCATIONS.find(l => l.id === playerLocId);
+  const room = loc?.rooms.find(r => r.id === playerRoomId);
+  mainEl.textContent = loc  ? `${loc.id}  ${loc.name}`  : '—';
+  roomEl.textContent = room ? room.name : '—';
 }
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -181,12 +194,12 @@ function renderLocInfo(loc: LocationInfo): void {
 }
 
 function travelToLoc(destLoc: LocationInfo): void {
-  // Arrive at the exit room in destination that connects back to current location
   const arrival = destLoc.rooms.find(r => r.connectsTo === playerLocId)
     ?? destLoc.rooms.find(r => r.type !== 'danger' && r.type !== 'locked')
     ?? destLoc.rooms[0];
   playerLocId  = destLoc.id;
   playerRoomId = arrival.id;
+  updateLocationBar();
   refreshWorldNodes();
   selectLoc(destLoc);
   drawEdges();
@@ -336,24 +349,11 @@ function refreshInteriorNodes(): void {
 }
 
 function handleRoomClick(room: Room, loc: LocationInfo): void {
-  const isMyLoc = loc.id === playerLocId;
-
-  if (isMyLoc && room.id !== playerRoomId && isAdjacent(loc, playerRoomId, room.id)) {
-    // Move player to adjacent room
-    playerRoomId = room.id;
-    activeRoomId = room.id;
-    refreshInteriorNodes();
-    refreshWorldNodes(); // exit-room status may have changed
-    drawRoomEdges(loc);
-  } else {
-    // Just select for info (no movement)
-    activeRoomId = room.id;
-    drawRoomEdges(loc);
-  }
-
+  // Clicking only selects for info — actual movement via "이동" button in sidebar
+  activeRoomId = room.id;
+  drawRoomEdges(loc);
   document.querySelectorAll<HTMLElement>('.room-node').forEach(n =>
     n.classList.toggle('active', n.dataset.rid === activeRoomId));
-
   renderRoomDetail(room, loc);
 }
 
@@ -420,16 +420,17 @@ function renderRoomDetail(room: Room, loc: LocationInfo): void {
   const isMyLoc   = loc.id === playerLocId;
   const isCurrent = isMyLoc && room.id === playerRoomId;
   const isAdj     = isMyLoc && !isCurrent && isAdjacent(loc, playerRoomId, room.id);
-  const isLocked  = !isMyLoc || (!isCurrent && !isAdj);
 
-  let moveBadge = '';
+  let statusBadge = '';
   if (isCurrent) {
-    moveBadge = '<div class="rds-pos-badge">◎ 현재 위치</div>';
-  } else if (isAdj) {
-    moveBadge = '<div class="rds-adj-badge">↩ 클릭하면 이동</div>';
-  } else if (isLocked) {
-    moveBadge = '<div class="rds-locked-note">⊘ 직접 연결된 구역이 아닙니다</div>';
+    statusBadge = '<div class="rds-pos-badge">◎ 현재 위치</div>';
+  } else if (!isMyLoc || !isAdj) {
+    statusBadge = '<div class="rds-locked-note">⊘ 직접 연결된 구역이 아닙니다</div>';
   }
+
+  const moveBtnHtml = isAdj
+    ? `<button class="rds-move-btn" id="rds-move">▶ 이 구역으로 이동</button>`
+    : '';
 
   const worldExitBadge = room.connectsTo
     ? `<div class="rds-world-exit">↗ 세계 이동 : <strong>${room.connectsTo}</strong></div>`
@@ -441,7 +442,8 @@ function renderRoomDetail(room: Room, loc: LocationInfo): void {
     </div>
     <div class="rds-name">${room.name}</div>
     <span class="rds-type rdt-${room.type}">${ROOM_TYPE_LABEL[room.type]}</span>
-    ${moveBadge}
+    ${statusBadge}
+    ${moveBtnHtml}
     ${worldExitBadge}
     <div class="rds-sep"></div>
     <div class="rds-desc">${room.desc}</div>`;
@@ -450,6 +452,17 @@ function renderRoomDetail(room: Room, loc: LocationInfo): void {
     activeRoomId = null;
     document.querySelectorAll<HTMLElement>('.room-node').forEach(n => n.classList.remove('active'));
     if (curInteriorLoc) { drawRoomEdges(curInteriorLoc); renderDefaultSidebar(curInteriorLoc); }
+  });
+
+  document.getElementById('rds-move')?.addEventListener('click', () => {
+    playerRoomId = room.id;
+    activeRoomId = room.id;
+    updateLocationBar();
+    refreshInteriorNodes();
+    refreshWorldNodes();
+    drawRoomEdges(loc);
+    // Sidebar refreshes to show "현재 위치" after moving
+    renderRoomDetail(room, loc);
   });
 }
 
@@ -568,6 +581,7 @@ function buildOverlay(): HTMLElement {
         </div>
         <span id="map-int-cur-badge" class="mit-cur-badge"></span>
         <span id="map-int-zone" class="mit-zone"></span>
+        <button id="map-int-close-btn" class="map-x">✕</button>
       </div>
       <div id="map-int-body">
         <div id="map-int-graph-section">
