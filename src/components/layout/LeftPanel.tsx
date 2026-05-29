@@ -1,8 +1,9 @@
-import PlayerAvatar     from '../left/PlayerAvatar.tsx';
-import StatsSection     from '../left/StatsSection.tsx';
-import InventorySection from '../left/InventorySection.tsx';
-import TestPanel        from '../dev/TestPanel.tsx';
-import { useDevStore }  from '../../state/devStore.ts';
+import PlayerAvatar      from '../left/PlayerAvatar.tsx';
+import StatsSection      from '../left/StatsSection.tsx';
+import ObjectiveSection  from '../left/ObjectiveSection.tsx';
+import InventorySection  from '../left/InventorySection.tsx';
+import TestPanel         from '../dev/TestPanel.tsx';
+import { useDevStore }   from '../../state/devStore.ts';
 
 export default function LeftPanel() {
   const { isOpen, toggle } = useDevStore();
@@ -12,6 +13,7 @@ export default function LeftPanel() {
       <aside id="left-panel">
         <PlayerAvatar />
         <StatsSection />
+        <ObjectiveSection />
         <InventorySection />
 
         {/* ── DEV 토글 버튼 (하단 고정) ── */}
