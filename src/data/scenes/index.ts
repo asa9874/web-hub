@@ -17,6 +17,18 @@ import {
   b3Hall, b3Escalator, b3PlatformA, b3PlatformB, b3Tunnel,
   a2Tunnel, a2Checkpoint, a2Corridor, a2Main, a2Office,
 } from './b3a2-scenes.ts';
+import {
+  b4Entrance, b4Emergency, b4Treatment,
+  b4Corridor3f, b4Surgery303,
+  b4Floor4f, b4DangerousHall, b4Facility,
+} from './b4-scenes.ts';
+import {
+  b6Main, b6Library, b6Square, b6Engineering, b6LabDoseok,
+  c1Road, c1Observation, c1Riverside, c1Depot,
+} from './b6c1-scenes.ts';
+import {
+  a2Generator, a2SealedOffice, a2SealedOpen,
+} from './a2-deep-scenes.ts';
 import { txHub, txSceneLink, txItem, txDanger, txCond, txNpc, txSave } from './tx-scenes.ts';
 
 export const scenes: Record<string, Scene> = {
@@ -72,6 +84,32 @@ export const scenes: Record<string, Scene> = {
   [a2Corridor.id]:          a2Corridor,
   [a2Main.id]:              a2Main,
   [a2Office.id]:            a2Office,
+  [a2Generator.id]:         a2Generator,
+  [a2SealedOffice.id]:      a2SealedOffice,
+  [a2SealedOpen.id]:        a2SealedOpen,
+
+  // ── B4 붕괴된 병원 ──
+  [b4Entrance.id]:          b4Entrance,
+  [b4Emergency.id]:         b4Emergency,
+  [b4Treatment.id]:         b4Treatment,
+  [b4Corridor3f.id]:        b4Corridor3f,
+  [b4Surgery303.id]:        b4Surgery303,
+  [b4Floor4f.id]:           b4Floor4f,
+  [b4DangerousHall.id]:     b4DangerousHall,
+  [b4Facility.id]:          b4Facility,
+
+  // ── B6 연세대 폐허 ──
+  [b6Main.id]:              b6Main,
+  [b6Library.id]:           b6Library,
+  [b6Square.id]:            b6Square,
+  [b6Engineering.id]:       b6Engineering,
+  [b6LabDoseok.id]:         b6LabDoseok,
+
+  // ── C1 한강변 ──
+  [c1Road.id]:              c1Road,
+  [c1Observation.id]:       c1Observation,
+  [c1Riverside.id]:         c1Riverside,
+  [c1Depot.id]:             c1Depot,
 
   // ── TX 개발 테스트 ──
   [txHub.id]:               txHub,

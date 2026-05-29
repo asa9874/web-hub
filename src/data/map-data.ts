@@ -119,7 +119,7 @@ const A2_R: readonly Room[] = [
   { id:'a2-sup',   name:'배급 창고',     desc:'자물쇠 3중 잠금 · 오기범 관리',           cx:78, cy:32, type:'locked' },
   { id:'a2-off',   name:'오기범 집무실', desc:'지도·무전기·서랍 · 신호장비 문서(숨김)',  cx:78, cy:50, type:'npc'    },
   { id:'a2-gen',   name:'발전기실',      desc:'대형 발전기 2기 · 철판 뒤 숨겨진 통로',  cx:78, cy:68, type:'item'   },
-  { id:'a2-seal',  name:'봉인 사무실',   desc:'자물쇠 2중 봉인 · 신호장비 보관 (핵심)', cx:78, cy:86, type:'locked' },
+  { id:'a2-seal',  name:'봉인 사무실',   desc:'자물쇠 2중 봉인 · 신호장비 보관 (핵심)', cx:78, cy:86, type:'item'   },
 ];
 const A2_E: readonly [string,string][] = [
   ['a2-tun','a2-gate'],['a2-gate','a2-hall'],['a2-hall','a2-main'],

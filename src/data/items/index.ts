@@ -13,4 +13,9 @@ export const items: Record<string, Item> = {
   'a2_pass':        { id: 'a2_pass',        name: 'A2 입장 허가', description: '오기범이 발급한 A2 지하 3구역 입장 허가증.' },
   'signal_device':  { id: 'signal_device',  name: '신호장비',     description: 'A2 봉인 사무실의 무선 신호장비. 외부 통신 가능.' },
   'food_can':       { id: 'food_can',       name: '통조림',       description: '유통기한이 지났지만 먹을 수 있다.', effect: { hpDelta: 15 } },
+  'memo_iwon':      { id: 'memo_iwon',      name: '이주원 메모',  description: '수술실 303의 마지막 연구 기록. "오염은 공명 주파수다."' },
+  'stethoscope':    { id: 'stethoscope',    name: '청진기',       description: '이주원이 남긴 청진기. 오염 주파수를 감지할 수 있을지도.' },
+  'sphinx_doc':     { id: 'sphinx_doc',     name: '스핑크스 문서',description: '정도석이 복사한 마법소녀 군단 기밀. 탑 정화 조건 기록.' },
+  'a2_key':         { id: 'a2_key',         name: 'A2 봉인 열쇠', description: '발전기실 철판 뒤에서 찾은 열쇠. A2 봉인 사무실 전용.' },
+  'iseah_pact':     { id: 'iseah_pact',     name: '이세아와의 약속', description: '이세아가 내밀었다. D1까지 함께 간다는 증표.' },
 };

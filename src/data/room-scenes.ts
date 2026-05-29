@@ -47,6 +47,31 @@ export const ROOM_SCENES: Readonly<Record<string, string>> = {
   'a2-hall': 'a2_corridor',
   'a2-main': 'a2_main',
   'a2-off':  'a2_office',
+  'a2-gen':  'a2_generator',
+  'a2-seal': 'a2_sealed_office',
+
+  // ── B4 붕괴된 병원 ─────────────────────────────────────────────
+  'b4-exit': 'b4_entrance',
+  'b4-er':   'b4_emergency',
+  'b4-tr':   'b4_treatment',
+  'b4-3f':   'b4_corridor_3f',
+  'b4-303':  'b4_surgery_303',
+  'b4-4f':   'b4_floor_4f',
+  'b4-cor':  'b4_dangerous_hall',
+  'b4-fac':  'b4_facility',
+
+  // ── B6 연세대 폐허 ─────────────────────────────────────────────
+  'b6-main': 'b6_main',
+  'b6-lib':  'b6_library',
+  'b6-sq':   'b6_square',
+  'b6-eng':  'b6_engineering',
+  'b6-lab':  'b6_lab_doseok',
+
+  // ── C1 한강변 ──────────────────────────────────────────────────
+  'c1-rd':   'c1_road',
+  'c1-obs':  'c1_observation',
+  'c1-walk': 'c1_riverside',
+  'c1-dep':  'c1_depot',
 
   // ── TX 테스트 공간 ─────────────────────────────────────────────
   'tx-hub':    'tx_hub',
