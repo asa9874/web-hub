@@ -11,7 +11,7 @@
 |-------|------|--------|------|
 | Phase 1 — 개발 환경 전환 | ✅ 완료 | 2026-05-29 | react 19.2, zustand 5.0, @vitejs/plugin-react 6.0 |
 | Phase 2 — 진입점 & 루트 뼈대 | ✅ 완료 | 2026-05-29 | main.tsx + App.tsx (JSX 셸 + 레거시 useEffect) |
-| Phase 3 — 게임 상태 (Context) | ⏳ 대기 | — | |
+| Phase 3 — 게임 상태 (Context) | ✅ 완료 | 2026-05-29 | GameContext.tsx + useGameStore.ts, GameProvider로 App 감싸기 |
 | Phase 4 — 맵 위치 상태 (Zustand) | ⏳ 대기 | — | |
 | Phase 5 — 레이아웃 셸 | ⏳ 대기 | — | |
 | Phase 6 — 좌측 패널 | ⏳ 대기 | — | |

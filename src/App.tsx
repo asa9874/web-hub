@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import type { PlayerState } from './types/index.ts';
+import { GameProvider } from './state/GameContext.tsx';
 import { scenes }              from './data/scenes/index.ts';
 import { items }               from './data/items/index.ts';
 import { createStore }         from './state/store.ts';
@@ -73,6 +74,7 @@ export default function App() {
 
   // ── JSX 셸 구조 (game-shell.ts buildShell() 대체) ────────────────────────
   return (
+    <GameProvider>
     <div id="game-container">
 
       {/* ── 좌측 패널 — 프로필 / 상태 / 소지품 ── */}
@@ -145,5 +147,6 @@ export default function App() {
       </aside>
 
     </div>
+    </GameProvider>
   );
 }
