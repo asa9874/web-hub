@@ -110,7 +110,7 @@ const A2_LAYOUT: LocationLayout = {
 
 const A2_R: readonly Room[] = [
   { id:'a2-tun',   name:'B3 터널',       desc:'→ B3 지하철역 (허가 필요)',               cx: 5, cy:15, type:'exit',   connectsTo:'B3' },
-  { id:'a2-gate',  name:'검문소 A2-01',  desc:'철문·창구 · 오기범 허가 필요',            cx:20, cy:15, type:'locked' },
+  { id:'a2-gate',  name:'검문소 A2-01',  desc:'철문·창구 · 오기범 허가 필요',            cx:20, cy:15, type:'npc'    },
   { id:'a2-hall',  name:'입구 복도',     desc:'벽에 생존자 이름·그림 빼곡히',            cx:37, cy:15, type:'normal' },
   { id:'a2-main',  name:'메인 홀',       desc:'배급카운터·공지게시판 · 오후 비공식 시장', cx:55, cy:15, type:'npc'    },
   { id:'a2-resA',  name:'거주구역 A',    desc:'가족 세대 ~30세대 · 서하 거주',           cx:47, cy:36, type:'npc'    },
