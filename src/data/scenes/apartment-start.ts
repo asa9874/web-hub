@@ -51,6 +51,7 @@ export const apartmentStart: Scene = {
             `반쯤 비어 있는 진통제 한 병.\n` +
             `다시는 바로 쳐다보지 않는 사진 한 장.\n\n` +
             `먹을 것은 없다. 밖에 있는 것을 막아 줄 것도 없다.`,
+          itemsGained: ['lighter', 'painkiller', 'photo'],
         },
       },
     },

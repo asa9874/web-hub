@@ -7,5 +7,6 @@ export const items: Record<string, Item> = {
   'master_key': { id: 'master_key', name: '마스터키',     description: '관리실에서 찾은 마스터키.' },
   'bandage':    { id: 'bandage',    name: '붕대',         description: '응급처치용 붕대.', effect: { hpDelta: 10 } },
   'herb':       { id: 'herb',       name: '정화 약초',    description: '오염을 조금 씻어내는 약초.', effect: { corruptionDelta: -15 } },
-  'test_item':  { id: 'test_item',  name: '테스트 아이템', description: 'DEV 전용 테스트 아이템.' },
+  'test_item':    { id: 'test_item',    name: '테스트 아이템', description: 'DEV 전용 테스트 아이템.' },
+  'survival_memo':{ id: 'survival_memo', name: '생존 기록',   description: '203호 벽의 생존 일지 조각. "지하에 사람들이 있다."' },
 };
