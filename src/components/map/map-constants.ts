@@ -5,11 +5,13 @@ export const NODE_POS: Record<string, { cx: number; cy: number }> = {
   B6: { cx: 25, cy: 41 }, B5: { cx: 55, cy: 41 }, B4: { cx: 78, cy: 41 },
   B1: { cx: 44, cy: 55 }, A1: { cx: 20, cy: 67 }, B2: { cx: 62, cy: 67 },
   B3: { cx: 62, cy: 79 }, A2: { cx: 62, cy: 91 },
+  TX: { cx:  5, cy: 80 },
 };
 
 export const EDGES: readonly [string, string][] = [
   ['D1','C2'],['C2','C1'],['C1','B6'],['C1','B5'],['B6','B5'],
   ['B5','B4'],['B5','B1'],['B1','A1'],['B1','B2'],['B2','B3'],['B3','A2'],
+  ['A1','TX'],
 ];
 
 export const ZONE_CLS: Record<LocationInfo['zone'], string> = {

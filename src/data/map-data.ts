@@ -83,6 +83,7 @@ const A1_R: readonly Room[] = [
   { id:'a1-b1f',   name:'지하 주차장', desc:'전기실·창고 · 깊은 쪽에서 이상한 소리', cx:50, cy:64, type:'danger' },
   { id:'a1-elec',  name:'전기실',      desc:'배전반 · 건물 전원 제어 가능',           cx:22, cy:64, type:'item'   },
   { id:'a1-stor',  name:'창고',        desc:'물자 보관 · 일부 잔류',                  cx:78, cy:64, type:'item'   },
+  { id:'a1-test',  name:'[DEV] 비밀 통로', desc:'→ TX 테스트 공간 (개발 전용)',       cx:50, cy:71, type:'exit',   connectsTo:'TX' },
 ];
 const A1_E: readonly [string,string][] = [
   ['a1-roof','a1-4f'],
@@ -90,7 +91,7 @@ const A1_E: readonly [string,string][] = [
   ['a1-3f','a1-302'],['a1-3f','a1-301'],['a1-3f','a1-304'],['a1-3f','a1-2f'],
   ['a1-2f','a1-203'],['a1-2f','a1-1f'],
   ['a1-1f','a1-mgmt'],['a1-1f','a1-exit'],['a1-1f','a1-b1f'],
-  ['a1-b1f','a1-elec'],['a1-b1f','a1-stor'],
+  ['a1-b1f','a1-elec'],['a1-b1f','a1-stor'],['a1-b1f','a1-test'],
 ];
 
 // ── A2 지하 3구역 ── 수평 진입로 + 동쪽 수직 서비스 통로 ─────────────────────
@@ -438,6 +439,41 @@ const D1_E: readonly [string,string][] = [
   ['d1-1f','d1-2f'],['d1-2f','d1-3f'],['d1-3f','d1-sub'],
 ];
 
+// ── TX 테스트 공간 ── 기능 구현 전 테스트용 개발 전용 공간 ──────────────────
+const TX_LAYOUT: LocationLayout = {
+  regions: [
+    { style:'outdoor',  label:'[DEV] 진입구',       x:25, y: 0, w:50, h:15 },
+    { style:'floor',    label:'허브',                x:15, y:15, w:70, h:18 },
+    { style:'floor',    label:'씬 · 위험 · NPC',     x: 0, y:33, w:48, h:67 },
+    { style:'floor',    label:'아이템 · 조건 · 저장', x:52, y:33, w:48, h:67 },
+  ],
+  seps: [
+    { x1:  0, y1:15, x2:100, y2:15 },
+    { x1:  0, y1:33, x2:100, y2:33 },
+    { x1: 50, y1:33, x2:  50, y2:100, style:'dashed' },
+  ],
+};
+
+const TX_R: readonly Room[] = [
+  { id:'tx-gate',   name:'[OUT] A1 연결구',     desc:'→ A1 폐허 아파트 지하 주차장',                cx:50, cy: 7, type:'exit',   connectsTo:'A1' },
+  { id:'tx-hub',    name:'허브',                 desc:'각 테스트 방으로 이어지는 중심 구역',          cx:50, cy:24, type:'normal' },
+  { id:'tx-scene',  name:'씬 연결 테스트',       desc:'맵 이동 → 씬 자동 전환 기능 테스트',          cx:25, cy:46, type:'npc'    },
+  { id:'tx-item',   name:'아이템 테스트',         desc:'아이템 획득·소지·사용·효과 기능 테스트',       cx:75, cy:46, type:'item'   },
+  { id:'tx-danger', name:'위험 패널티 테스트',    desc:'danger 방 진입 시 HP·오염도 패널티 기능 테스트',cx:25, cy:66, type:'danger' },
+  { id:'tx-cond',   name:'조건부 선택지 테스트',  desc:'아이템·스탯 조건부 선택지 잠금 기능 테스트',   cx:75, cy:66, type:'npc'    },
+  { id:'tx-npc',    name:'NPC 대화 테스트',      desc:'NPC 조우 시스템·대화 트리 기능 테스트',        cx:25, cy:86, type:'npc'    },
+  { id:'tx-save',   name:'저장/기록지 테스트',   desc:'저장·불러오기·기록지 패널 기능 테스트',        cx:75, cy:86, type:'normal' },
+];
+const TX_E: readonly [string, string][] = [
+  ['tx-gate',   'tx-hub'],
+  ['tx-hub',    'tx-scene'],
+  ['tx-hub',    'tx-item'],
+  ['tx-scene',  'tx-danger'],
+  ['tx-item',   'tx-cond'],
+  ['tx-danger', 'tx-npc'],
+  ['tx-cond',   'tx-save'],
+];
+
 // ── LOCATIONS ─────────────────────────────────────────────────────────────────
 
 export const LOCATIONS: readonly LocationInfo[] = [
@@ -452,4 +488,5 @@ export const LOCATIONS: readonly LocationInfo[] = [
   { id:'C1', name:'한강변',          zone:'경계 구역', dangerDisplay:'★★★★☆', npc:'이세아',          rooms:C1_R, roomEdges:C1_E, layout:C1_LAYOUT },
   { id:'C2', name:'심층 구역 경계',  zone:'경계 구역', dangerDisplay:'★★★★★', npc:'은별',            rooms:C2_R, roomEdges:C2_E, layout:C2_LAYOUT },
   { id:'D1', name:'부정의 탑 인근',  zone:'심층 구역', dangerDisplay:'★★★★★+',npc:'하나, 심연',      rooms:D1_R, roomEdges:D1_E, layout:D1_LAYOUT },
+  { id:'TX', name:'테스트 공간',    zone:'생존 구역', dangerDisplay:'☆☆☆☆☆', npc:'[DEV]',           rooms:TX_R, roomEdges:TX_E, layout:TX_LAYOUT },
 ];

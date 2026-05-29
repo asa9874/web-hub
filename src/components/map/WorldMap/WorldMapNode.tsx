@@ -16,7 +16,7 @@ export default function WorldMapNode({ loc, pos }: Props) {
   const selectLoc   = useMapUiStore(s => s.selectLoc);
 
   const isCurrent = loc.id === playerLocId;
-  const canTravel = !isCurrent && currentRoom?.connectsTo === loc.id;
+  const canTravel = !isCurrent && (loc.id === 'TX' || currentRoom?.connectsTo === loc.id);
   const isActive  = loc.id === activeLocId;
 
   const statusCls = isCurrent ? 'mn-current' : canTravel ? 'mn-travel' : 'mn-locked';

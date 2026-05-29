@@ -16,7 +16,7 @@ export default function LocationInfoPanel({ loc }: Props) {
 
   const zc        = ZONE_CLS[loc.zone];
   const isCurrent = loc.id === playerLocId;
-  const canTravel = !isCurrent && currentRoom?.connectsTo === loc.id;
+  const canTravel = !isCurrent && (loc.id === 'TX' || currentRoom?.connectsTo === loc.id);
   const connLocs  = LOCATIONS.filter(l =>
     EDGES.some(([a, b]) => (a === loc.id && b === l.id) || (b === loc.id && a === l.id)));
 
