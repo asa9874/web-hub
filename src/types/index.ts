@@ -62,7 +62,8 @@ export interface PlayerState {
 }
 
 export type GameAction =
-  | { readonly type: 'CHOOSE'; readonly choiceId: string }
-  | { readonly type: 'RESET' };
+  | { readonly type: 'CHOOSE';       readonly choiceId: string }
+  | { readonly type: 'RESET' }
+  | { readonly type: 'DEBUG_PATCH';  readonly patch: Partial<PlayerState> };
 
 export type Subscriber = (state: PlayerState, narrativeText?: string) => void;
