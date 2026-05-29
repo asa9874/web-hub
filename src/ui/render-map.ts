@@ -1,4 +1,4 @@
-import { LOCATIONS, type LocationInfo, type Room, type RoomType } from '../data/map-data.ts';
+import { LOCATIONS, type LocationInfo, type Room, type RoomType, type LocationLayout } from '../data/map-data.ts';
 
 // ── Global map node positions ────────────────────────────────────────────────
 const NODE_POS: Record<string, { cx: number; cy: number }> = {
@@ -13,6 +13,30 @@ const EDGES: readonly [string, string][] = [
 ];
 const ZONE_CLS: Record<LocationInfo['zone'], string> = {
   '생존 구역':'z-safe','회색 구역':'z-grey','경계 구역':'z-border','심층 구역':'z-deep',
+};
+
+// ── World map geographic layout ──────────────────────────────────────────────
+//   D1(cy=6) 심층 │ C2(cy=16) 경계 │ C1(cy=28) 한강 │ B-zones(cy=41-55) 회색
+//   A1(cx=20,cy=67) 생존 ← 수직분리(x=38) → B2(cx=62,cy=67) 회색 │ A2(cy=91) 지하
+const WORLD_LAYOUT: LocationLayout = {
+  regions: [
+    { style:'zone-deep',   label:'심층 구역', x:0,  y:0,  w:100, h:12 },
+    { style:'zone-border', label:'경계 구역', x:0,  y:12, w:100, h:10 },
+    { style:'water',       label:'한  강',    x:0,  y:22, w:100, h:14 },
+    { style:'zone-grey',   label:'회색 구역', x:0,  y:36, w:100, h:26 },
+    { style:'zone-safe',   label:'생존 구역', x:0,  y:62, w:38,  h:38 },
+    { style:'zone-grey',   label:'',          x:38, y:62, w:62,  h:22 },
+    { style:'basement',    label:'지하 구역', x:44, y:84, w:26,  h:16 },
+  ],
+  seps: [
+    { x1:0,  y1:12, x2:100, y2:12, style:'bold'                         },
+    { x1:0,  y1:22, x2:100, y2:22, style:'bold'                         },
+    { x1:0,  y1:36, x2:100, y2:36, style:'bold'                         },
+    { x1:0,  y1:62, x2:38,  y2:62, style:'bold'                         },
+    { x1:38, y1:62, x2:100, y2:62                                        },
+    { x1:38, y1:62, x2:38,  y2:100, style:'dashed'                      },
+    { x1:44, y1:84, x2:70,  y2:84,  style:'dashed', label:'지하 진입'   },
+  ],
 };
 const ROOM_TYPE_LABEL: Record<RoomType, string> = {
   normal:'구역', npc:'NPC 조우', item:'아이템', danger:'위험 구역', locked:'접근 불가', exit:'출구',
@@ -143,6 +167,7 @@ function drawEdges(): void {
     <feGaussianBlur stdDeviation="3" result="b"/>
     <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
   </filter></defs>`;
+  drawLayoutBg(WORLD_LAYOUT, svg, width, height);
   const hotSet = activeLocId
     ? new Set(EDGES.flatMap(([a,b])=>(a===activeLocId||b===activeLocId)?[a,b]:[]))
     : new Set<string>();
@@ -218,6 +243,9 @@ function drawRoomEdges(loc: LocationInfo): void {
   if (!width || !height) return;
   svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
   svg.innerHTML = '';
+
+  if (loc.layout) drawLayoutBg(loc.layout, svg, width, height);
+
   const rmap = new Map(loc.rooms.map(r => [r.id, r]));
   const hotSet = activeRoomId
     ? new Set(loc.roomEdges.flatMap(([a,b])=>(a===activeRoomId||b===activeRoomId)?[a,b]:[]))
@@ -234,6 +262,63 @@ function drawRoomEdges(loc: LocationInfo): void {
     line.setAttribute('class',`re${hot?' re-hot':''}`);
     svg.appendChild(line);
   }
+}
+
+function drawLayoutBg(layout: LocationLayout, svg: SVGSVGElement, w: number, h: number): void {
+  const NS = 'http://www.w3.org/2000/svg';
+  const g = document.createElementNS(NS, 'g');
+
+  for (const r of layout.regions ?? []) {
+    const rect = document.createElementNS(NS, 'rect');
+    rect.setAttribute('x',      String(r.x / 100 * w));
+    rect.setAttribute('y',      String(r.y / 100 * h));
+    rect.setAttribute('width',  String(r.w / 100 * w));
+    rect.setAttribute('height', String(r.h / 100 * h));
+    rect.setAttribute('class',  `lr lr-${r.style}`);
+    g.appendChild(rect);
+    if (r.label) {
+      const tx = document.createElementNS(NS, 'text');
+      tx.setAttribute('x', String(r.x / 100 * w + 4));
+      tx.setAttribute('y', String(r.y / 100 * h + 11));
+      tx.setAttribute('class', 'lr-label');
+      tx.textContent = r.label;
+      g.appendChild(tx);
+    }
+  }
+
+  if (layout.outline) {
+    const o = layout.outline;
+    const rect = document.createElementNS(NS, 'rect');
+    rect.setAttribute('x',      String(o.x / 100 * w));
+    rect.setAttribute('y',      String(o.y / 100 * h));
+    rect.setAttribute('width',  String(o.w / 100 * w));
+    rect.setAttribute('height', String(o.h / 100 * h));
+    rect.setAttribute('class',  'layout-outline');
+    g.appendChild(rect);
+  }
+
+  for (const s of layout.seps ?? []) {
+    const line = document.createElementNS(NS, 'line');
+    line.setAttribute('x1', String(s.x1 / 100 * w));
+    line.setAttribute('y1', String(s.y1 / 100 * h));
+    line.setAttribute('x2', String(s.x2 / 100 * w));
+    line.setAttribute('y2', String(s.y2 / 100 * h));
+    const cls = s.style === 'bold' ? 'layout-sep ls-bold'
+              : s.style === 'dashed' ? 'layout-sep ls-dashed'
+              : 'layout-sep';
+    line.setAttribute('class', cls);
+    g.appendChild(line);
+    if (s.label) {
+      const tx = document.createElementNS(NS, 'text');
+      tx.setAttribute('x', String(s.x1 / 100 * w + 3));
+      tx.setAttribute('y', String(s.y1 / 100 * h - 3));
+      tx.setAttribute('class', 'ls-label');
+      tx.textContent = s.label;
+      g.appendChild(tx);
+    }
+  }
+
+  svg.appendChild(g);
 }
 
 function renderDefaultSidebar(loc: LocationInfo): void {

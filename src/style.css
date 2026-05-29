@@ -1143,3 +1143,46 @@ body::after {
   line-height: 1.7;
 }
 
+/* ── Interior layout background overlay ─────────────────────────── */
+.lr-floor       { fill: rgba(0,255,65,0.032); }
+.lr-basement    { fill: rgba(40,80,220,0.07);  }
+.lr-rooftop     { fill: rgba(0,255,65,0.055);  }
+.lr-outdoor     { fill: rgba(80,180,80,0.038); }
+.lr-road        { fill: rgba(160,160,160,0.07);}
+.lr-water       { fill: rgba(0,15,80,0.38);    }
+.lr-danger-zone { fill: rgba(255,30,30,0.07);  }
+
+/* ── World map zone band styles (matches z-safe/z-grey/z-border/z-deep) ── */
+.lr-zone-safe   { fill: rgba(0,255,65,0.055);    }
+.lr-zone-grey   { fill: rgba(184,239,196,0.04);  }
+.lr-zone-border { fill: rgba(255,176,0,0.06);    }
+.lr-zone-deep   { fill: rgba(255,51,51,0.09);    }
+
+.layout-outline {
+  fill: none;
+  stroke: rgba(0,255,65,0.22);
+  stroke-width: 1.5;
+}
+
+.layout-sep        { stroke: rgba(0,255,65,0.1);  stroke-width: 1;   }
+.ls-bold           { stroke: rgba(0,255,65,0.22); stroke-width: 1.5; }
+.ls-dashed         { stroke: rgba(0,255,65,0.1);  stroke-width: 1; stroke-dasharray: 4 3; }
+
+.lr-label {
+  fill: rgba(0,255,65,0.22);
+  font-size: 9px;
+  font-family: inherit;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+  user-select: none;
+}
+
+.ls-label {
+  fill: rgba(0,255,65,0.2);
+  font-size: 8px;
+  font-family: inherit;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+  user-select: none;
+}
+
