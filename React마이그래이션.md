@@ -18,7 +18,7 @@
 | Phase 7 — 중앙 패널 | ✅ 완료 | 2026-05-29 | LocationBar / SceneHeader / SceneAsciiArt / SceneText / ChoiceButton / ChoicesSection + useTypewriter |
 | Phase 8 — 우측 패널 | ✅ 완료 | 2026-05-29 | NavPanel — openMap onClick 연결, 레거시 store/render 완전 제거 |
 | Phase 9 — 맵 Hybrid 래핑 | ✅ 완료 | 2026-05-29 | MapOverlay.tsx + render-map.ts 이동 시 navigationStore 동기화 |
-| Phase 10 — 맵 완전 React 전환 | ⏳ 대기 | — | |
+| Phase 10 — 맵 완전 React 전환 | ✅ 완료 | 2026-05-29 | render-map.ts 삭제, WorldMap/InteriorMap 완전 React 전환 |
 | Phase 11 — 스타일 정리 | ⏳ 대기 | — | |
 | Phase 12 — 최적화 & 정리 | ⏳ 대기 | — | |
 

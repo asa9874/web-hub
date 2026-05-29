@@ -1,7 +1,9 @@
-import PanelTitle from '../ui/PanelTitle.tsx';
-import { openMap } from '../../ui/render-map.ts';
+import PanelTitle      from '../ui/PanelTitle.tsx';
+import { useMapUiStore } from '../../state/mapUiStore.ts';
 
 export default function NavPanel() {
+  const openMap = useMapUiStore(s => s.openMap);
+
   return (
     <aside id="right-panel">
       <PanelTitle>[ 메 뉴 ]</PanelTitle>
