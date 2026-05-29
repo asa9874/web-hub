@@ -14,9 +14,9 @@
 | Phase 3 — 게임 상태 (Context) | ✅ 완료 | 2026-05-29 | GameContext.tsx + useGameStore.ts, GameProvider로 App 감싸기 |
 | Phase 4 — 맵 위치 상태 (Zustand) | ✅ 완료 | 2026-05-29 | navigationStore.ts — playerLocId/playerRoomId + moveToRoom/travelToLoc |
 | Phase 5 — 레이아웃 셸 | ✅ 완료 | 2026-05-29 | LeftPanel / CenterPanel / RightPanel / PanelTitle 분리 |
-| Phase 6 — 좌측 패널 | ⏳ 대기 | — | |
-| Phase 7 — 중앙 패널 | ⏳ 대기 | — | |
-| Phase 8 — 우측 패널 | ⏳ 대기 | — | |
+| Phase 6 — 좌측 패널 | ✅ 완료 | 2026-05-29 | PlayerAvatar / StatRow / StatsSection / InventorySection |
+| Phase 7 — 중앙 패널 | ✅ 완료 | 2026-05-29 | LocationBar / SceneHeader / SceneAsciiArt / SceneText / ChoiceButton / ChoicesSection + useTypewriter |
+| Phase 8 — 우측 패널 | ✅ 완료 | 2026-05-29 | NavPanel — openMap onClick 연결, 레거시 store/render 완전 제거 |
 | Phase 9 — 맵 Hybrid 래핑 | ⏳ 대기 | — | |
 | Phase 10 — 맵 완전 React 전환 | ⏳ 대기 | — | |
 | Phase 11 — 스타일 정리 | ⏳ 대기 | — | |
