@@ -34,6 +34,11 @@ function reducer(state: GameState, action: GameAction): GameState {
     }
     case 'RESET':
       return INITIAL_STATE;
+    case 'ENTER_ROOM':
+      return {
+        player:        { ...state.player, currentSceneId: action.sceneId },
+        narrativeText: '',
+      };
     case 'DEBUG_PATCH': {
       const merged = { ...state.player, ...action.patch };
       return {
