@@ -9,7 +9,9 @@ export function useContainerSize<T extends HTMLElement = HTMLDivElement>() {
     if (!el) return;
     const { width, height } = el.getBoundingClientRect();
     if (width && height) setSize({ w: width, h: height });
-    const obs = new ResizeObserver(([entry]) => {
+    const obs = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (!entry) return;
       const { width: w, height: h } = entry.contentRect;
       setSize({ w, h });
     });

@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 interface Props {
   label:    string;
   barText:  string;
@@ -5,7 +7,7 @@ interface Props {
   numeric:  string;
 }
 
-export default function StatRow({ label, barText, barClass, numeric }: Props) {
+const StatRow = memo(function StatRow({ label, barText, barClass, numeric }: Props) {
   return (
     <div className="stat-row">
       <div className="stat-label-text">{label}</div>
@@ -13,4 +15,6 @@ export default function StatRow({ label, barText, barClass, numeric }: Props) {
       <div className="stat-numeric">{numeric}</div>
     </div>
   );
-}
+});
+
+export default StatRow;

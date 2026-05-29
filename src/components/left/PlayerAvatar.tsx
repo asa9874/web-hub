@@ -1,3 +1,5 @@
+import { memo } from 'react';
+
 const AVATAR = `   _________
   |  .   .  |
   |  |___|  |
@@ -5,11 +7,13 @@ const AVATAR = `   _________
   |  /   \\  |
   |_________|`;
 
-export default function PlayerAvatar() {
+const PlayerAvatar = memo(function PlayerAvatar() {
   return (
     <>
       <pre id="player-avatar">{AVATAR}</pre>
       <div id="player-name">[ 생 존 자 ]</div>
     </>
   );
-}
+});
+
+export default PlayerAvatar;
