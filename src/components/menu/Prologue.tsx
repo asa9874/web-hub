@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useGamePhaseStore } from '../../state/gamePhaseStore.ts';
 import { typewrite }         from '../../utils/typewriter.ts';
+import { sound }             from '../../utils/sound.ts';
 
 const PANELS: readonly string[] = [
   `2024년 6월.\n\n한강 북쪽, 마포대교와 양화대교 사이.\n도로가 갈라졌다.\n\n그 틈에서 탑이 솟아올랐다.`,
@@ -39,8 +40,10 @@ export default function Prologue() {
       return;
     }
     if (isLast) {
+      sound.click();
       toPlaying();
     } else {
+      sound.prologueNext();
       setPanelIdx(i => i + 1);
     }
   }, [typingDone, isLast, panelIdx, toPlaying]);

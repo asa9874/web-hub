@@ -1,4 +1,5 @@
 import type { Choice } from '../../types/index.ts';
+import { sound } from '../../utils/sound.ts';
 
 interface Props {
   choice:      Choice;
@@ -16,7 +17,8 @@ export default function ChoiceButton({ choice, onChoose, isLocked, lockReason }:
     <button
       className={`choice-btn${isLocked ? ' choice-btn--locked' : ''}`}
       data-type={choice.type}
-      onClick={isLocked ? undefined : onChoose}
+      onClick={isLocked ? undefined : () => { sound.click(); onChoose(); }}
+      onMouseEnter={isLocked ? undefined : () => sound.hover()}
       disabled={isLocked}
       aria-description={pct !== null ? `성공 확률 ${pct}퍼센트` : undefined}
     >

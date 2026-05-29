@@ -5,6 +5,7 @@ import { useLogStore }          from './state/logStore.ts';
 import { useGamePhaseStore }    from './state/gamePhaseStore.ts';
 import { useRoomSceneSync }     from './hooks/useRoomSceneSync.ts';
 import { useSceneNavSync }      from './hooks/useSceneNavSync.ts';
+import { useSoundEffects }      from './hooks/useSoundEffects.ts';
 import LeftPanel                from './components/layout/LeftPanel.tsx';
 import CenterPanel              from './components/layout/CenterPanel.tsx';
 import RightPanel               from './components/layout/RightPanel.tsx';
@@ -34,6 +35,7 @@ function LogNarrativeSync() {
 function GameUI() {
   useRoomSceneSync();
   useSceneNavSync();
+  useSoundEffects();
   return (
     <>
       <LogNarrativeSync />

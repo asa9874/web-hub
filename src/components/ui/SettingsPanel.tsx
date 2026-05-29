@@ -1,4 +1,5 @@
 import { useSettingsStore, type TypingSpeed, type TextScale } from '../../state/settingsStore.ts';
+import { sound } from '../../utils/sound.ts';
 
 const SPEED_OPTS: { value: TypingSpeed; label: string }[] = [
   { value: 'slow',   label: '느리게' },
@@ -13,9 +14,9 @@ const SCALE_OPTS: { value: TextScale; label: string; desc: string }[] = [
 ];
 
 export default function SettingsPanel() {
-  const { typingSpeed, textScale,
+  const { typingSpeed, textScale, soundEnabled,
           isPanelOpen, closePanel,
-          setTypingSpeed, setTextScale } = useSettingsStore();
+          setTypingSpeed, setTextScale, setSoundEnabled } = useSettingsStore();
 
   if (!isPanelOpen) return null;
 
@@ -68,6 +69,25 @@ export default function SettingsPanel() {
                   <span className="set-btn-sub">{o.desc}</span>
                 </button>
               ))}
+            </div>
+          </div>
+
+          {/* 사운드 */}
+          <div className="set-section">
+            <div className="set-label">사운드</div>
+            <div className="set-options">
+              <button
+                className={`set-btn${soundEnabled ? ' set-btn--active' : ''}`}
+                onClick={() => { setSoundEnabled(true);  sound.click(); }}
+              >
+                켜기
+              </button>
+              <button
+                className={`set-btn${!soundEnabled ? ' set-btn--active' : ''}`}
+                onClick={() => setSoundEnabled(false)}
+              >
+                끄기
+              </button>
             </div>
           </div>
 

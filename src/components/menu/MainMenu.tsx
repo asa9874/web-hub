@@ -1,5 +1,7 @@
+import { useEffect }          from 'react';
 import { useGamePhaseStore } from '../../state/gamePhaseStore.ts';
 import { useSaveLoad }        from '../../hooks/useSaveLoad.ts';
+import { sound }              from '../../utils/sound.ts';
 
 const LOGO = `
   ┌──────────────────────────────────────────────────────┐
@@ -16,7 +18,10 @@ export default function MainMenu() {
   const toPlaying  = useGamePhaseStore(s => s.toPlaying);
   const { load, hasSave } = useSaveLoad();
 
+  useEffect(() => { sound.menuStart(); }, []);
+
   const handleContinue = () => {
+    sound.click();
     load();
     toPlaying();
   };
@@ -28,11 +33,19 @@ export default function MainMenu() {
       <div id="mm-tagline">오염이 퍼지고 있다. 당신은 아직 살아있다.</div>
 
       <div id="mm-buttons">
-        <button className="mm-btn" onClick={toPrologue}>
+        <button
+          className="mm-btn"
+          onClick={() => { sound.click(); toPrologue(); }}
+          onMouseEnter={() => sound.hover()}
+        >
           [ 게  임  시  작 ]
         </button>
         {hasSave() && (
-          <button className="mm-btn mm-btn--continue" onClick={handleContinue}>
+          <button
+            className="mm-btn mm-btn--continue"
+            onClick={handleContinue}
+            onMouseEnter={() => sound.hover()}
+          >
             [ 이  어  하  기 ]
           </button>
         )}

@@ -1,3 +1,5 @@
+import { sound } from './sound.ts';
+
 /**
  * 터미널 타이핑 효과 — 텍스트를 한 글자씩 순서대로 출력한다.
  * 반환값: 호출하면 현재 애니메이션을 즉시 완료(전체 텍스트 표시)하는 cancel 함수.
@@ -24,6 +26,7 @@ export function typewrite(
 
     // 한 tick 에 한 글자 (한국어 글자는 모두 BMP 범위 — 안전)
     node.data += text[index];
+    sound.typeChar();
     index++;
 
     // 나레이션 영역이 보이도록 부모 스크롤 컨테이너를 아래로 유지
