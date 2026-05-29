@@ -1,4 +1,5 @@
 import { LOCATIONS, type LocationInfo, type Room, type RoomType, type LocationLayout } from '../data/map-data.ts';
+import { useNavigationStore } from '../state/navigationStore.ts';
 
 // ── Global map node positions ────────────────────────────────────────────────
 const NODE_POS: Record<string, { cx: number; cy: number }> = {
@@ -199,6 +200,7 @@ function travelToLoc(destLoc: LocationInfo): void {
     ?? destLoc.rooms[0];
   playerLocId  = destLoc.id;
   playerRoomId = arrival.id;
+  useNavigationStore.getState().travelToLoc(destLoc.id);
   updateLocationBar();
   refreshWorldNodes();
   selectLoc(destLoc);
@@ -456,6 +458,7 @@ function renderRoomDetail(room: Room, loc: LocationInfo): void {
 
   document.getElementById('rds-move')?.addEventListener('click', () => {
     playerRoomId = room.id;
+    useNavigationStore.getState().moveToRoom(room.id);
     activeRoomId = room.id;
     updateLocationBar();
     refreshInteriorNodes();
