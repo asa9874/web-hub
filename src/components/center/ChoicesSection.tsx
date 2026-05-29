@@ -1,8 +1,10 @@
-import PanelTitle   from '../ui/PanelTitle.tsx';
-import ChoiceButton from './ChoiceButton.tsx';
-import { useGameStore }  from '../../state/useGameStore.ts';
-import { resolveScene }  from '../../engine/scene-resolver.ts';
-import { scenes }        from '../../data/scenes/index.ts';
+import PanelTitle              from '../ui/PanelTitle.tsx';
+import ChoiceButton            from './ChoiceButton.tsx';
+import { useGameStore }        from '../../state/useGameStore.ts';
+import { resolveScene }        from '../../engine/scene-resolver.ts';
+import { meetsRequirement, getLockReason } from '../../engine/requirements.ts';
+import { scenes }              from '../../data/scenes/index.ts';
+import { items }               from '../../data/items/index.ts';
 
 export default function ChoicesSection() {
   const { state, dispatch } = useGameStore();
@@ -29,13 +31,21 @@ export default function ChoicesSection() {
     <div id="choices-section">
       <PanelTitle>[ 행 동 선 택 ]</PanelTitle>
       <section id="choices-panel" aria-label="행동 선택">
-        {scene.choices.map(choice => (
-          <ChoiceButton
-            key={choice.id}
-            choice={choice}
-            onChoose={() => dispatch({ type: 'CHOOSE', choiceId: choice.id })}
-          />
-        ))}
+        {scene.choices.map(choice => {
+          const locked = !meetsRequirement(state, choice.required);
+          const reason = locked && choice.required
+            ? getLockReason(state, choice.required, items)
+            : undefined;
+          return (
+            <ChoiceButton
+              key={choice.id}
+              choice={choice}
+              onChoose={() => dispatch({ type: 'CHOOSE', choiceId: choice.id })}
+              isLocked={locked}
+              lockReason={reason}
+            />
+          );
+        })}
       </section>
     </div>
   );

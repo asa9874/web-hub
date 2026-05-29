@@ -439,39 +439,47 @@ const D1_E: readonly [string,string][] = [
   ['d1-1f','d1-2f'],['d1-2f','d1-3f'],['d1-3f','d1-sub'],
 ];
 
-// ── TX 테스트 공간 ── 기능 구현 전 테스트용 개발 전용 공간 ──────────────────
+// ── TX 테스트 공간 ── 허브 중심 방사형 배치 ──────────────────────────────────
+//
+//          [gate]       ← A1 연결
+//            |
+//  [scene] [hub] [item]
+//  [danger]  |   [cond]
+//  [npc]         [save]
+//
 const TX_LAYOUT: LocationLayout = {
   regions: [
-    { style:'outdoor',  label:'[DEV] 진입구',       x:25, y: 0, w:50, h:15 },
-    { style:'floor',    label:'허브',                x:15, y:15, w:70, h:18 },
-    { style:'floor',    label:'씬 · 위험 · NPC',     x: 0, y:33, w:48, h:67 },
-    { style:'floor',    label:'아이템 · 조건 · 저장', x:52, y:33, w:48, h:67 },
+    { style:'outdoor', label:'[DEV] 진입구', x:30, y: 0, w:40, h: 8 },
+    { style:'floor',   label:'허브 구역',    x:20, y:40, w:60, h:20 },
+    { style:'floor',   label:'',             x: 0, y: 8, w:100, h:84 },
   ],
   seps: [
-    { x1:  0, y1:15, x2:100, y2:15 },
-    { x1:  0, y1:33, x2:100, y2:33 },
-    { x1: 50, y1:33, x2:  50, y2:100, style:'dashed' },
+    { x1:0, y1: 8, x2:100, y2: 8 },
+    { x1:0, y1:40, x2:100, y2:40, style:'dashed' },
+    { x1:0, y1:60, x2:100, y2:60, style:'dashed' },
   ],
 };
 
 const TX_R: readonly Room[] = [
-  { id:'tx-gate',   name:'[OUT] A1 연결구',     desc:'→ A1 폐허 아파트 지하 주차장',                cx:50, cy: 7, type:'exit',   connectsTo:'A1' },
-  { id:'tx-hub',    name:'허브',                 desc:'각 테스트 방으로 이어지는 중심 구역',          cx:50, cy:24, type:'normal' },
-  { id:'tx-scene',  name:'씬 연결 테스트',       desc:'맵 이동 → 씬 자동 전환 기능 테스트',          cx:25, cy:46, type:'npc'    },
-  { id:'tx-item',   name:'아이템 테스트',         desc:'아이템 획득·소지·사용·효과 기능 테스트',       cx:75, cy:46, type:'item'   },
-  { id:'tx-danger', name:'위험 패널티 테스트',    desc:'danger 방 진입 시 HP·오염도 패널티 기능 테스트',cx:25, cy:66, type:'danger' },
-  { id:'tx-cond',   name:'조건부 선택지 테스트',  desc:'아이템·스탯 조건부 선택지 잠금 기능 테스트',   cx:75, cy:66, type:'npc'    },
-  { id:'tx-npc',    name:'NPC 대화 테스트',      desc:'NPC 조우 시스템·대화 트리 기능 테스트',        cx:25, cy:86, type:'npc'    },
-  { id:'tx-save',   name:'저장/기록지 테스트',   desc:'저장·불러오기·기록지 패널 기능 테스트',        cx:75, cy:86, type:'normal' },
+  { id:'tx-gate',   name:'[OUT] A1 연결구',    desc:'→ A1 폐허 아파트 지하 주차장',               cx:50, cy: 4, type:'exit',   connectsTo:'A1' },
+  { id:'tx-hub',    name:'허브',                desc:'모든 테스트 방과 직접 연결된 중심 구역',       cx:50, cy:50, type:'normal' },
+  { id:'tx-scene',  name:'씬 연결 테스트',      desc:'맵 이동 → 씬 자동 전환 기능 테스트',         cx:18, cy:22, type:'npc'    },
+  { id:'tx-item',   name:'아이템 테스트',        desc:'아이템 획득·소지·사용·효과 기능 테스트',      cx:82, cy:22, type:'item'   },
+  { id:'tx-danger', name:'위험 패널티 테스트',   desc:'danger 방 진입 패널티 기능 테스트',          cx: 8, cy:50, type:'danger' },
+  { id:'tx-cond',   name:'조건부 선택지 테스트', desc:'아이템·스탯 조건부 선택지 잠금 기능 테스트',  cx:92, cy:50, type:'npc'    },
+  { id:'tx-npc',    name:'NPC 대화 테스트',     desc:'NPC 조우 시스템·대화 트리 기능 테스트',       cx:18, cy:78, type:'npc'    },
+  { id:'tx-save',   name:'저장/기록지 테스트',  desc:'저장·불러오기·기록지 패널 기능 테스트',       cx:82, cy:78, type:'normal' },
 ];
+
+// 모든 테스트방이 허브에 직접 연결 (별(star) 위상)
 const TX_E: readonly [string, string][] = [
   ['tx-gate',   'tx-hub'],
   ['tx-hub',    'tx-scene'],
   ['tx-hub',    'tx-item'],
-  ['tx-scene',  'tx-danger'],
-  ['tx-item',   'tx-cond'],
-  ['tx-danger', 'tx-npc'],
-  ['tx-cond',   'tx-save'],
+  ['tx-hub',    'tx-danger'],
+  ['tx-hub',    'tx-cond'],
+  ['tx-hub',    'tx-npc'],
+  ['tx-hub',    'tx-save'],
 ];
 
 // ── LOCATIONS ─────────────────────────────────────────────────────────────────

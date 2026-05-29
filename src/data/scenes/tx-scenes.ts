@@ -140,14 +140,51 @@ export const txCond: Scene = {
   id: 'tx_cond',
   title: '조건부 선택지 테스트  [ DEV ]',
   description:
-    `조건부 선택지·잠금 기능 테스트방.\n\n` +
-    `현재 미구현 — 모든 선택지가 항상 표시된다.\n\n` +
-    `구현 예정:\n` +
-    `  · required.items: 특정 아이템 보유 시에만 선택 가능\n` +
-    `  · required.minHp: HP 조건 충족 시에만 선택 가능\n` +
-    `  · required.maxCorruption: 오염도 이하일 때만 선택 가능\n` +
-    `  · 잠긴 선택지는 흐리게 표시 + 조건 힌트 출력`,
-  choices: [confirm('tx_cond_ok', 'tx_cond')],
+    `조건부 선택지 기능 테스트방.\n\n` +
+    `아래 선택지들은 각각 다른 조건을 가진다.\n` +
+    `DEV CONSOLE 또는 다른 씬을 통해 아이템·스탯을 조절해 테스트하라.\n\n` +
+    `필요 조건을 충족하지 못한 선택지는 흐리게 표시된다.`,
+  choices: [
+    {
+      id: 'tx_cond_lighter',
+      label: '라이터로 신호를 보낸다',
+      type: 'deterministic',
+      required: { items: ['lighter'] },
+      outcomes: { success: { nextSceneId: 'tx_cond', narrativeText: '라이터 불꽃이 깜박였다. 아이템 조건 선택지가 작동한다.' } },
+    },
+    {
+      id: 'tx_cond_hp',
+      label: '전력으로 달린다  (HP 60 이상 필요)',
+      type: 'rng',
+      successProbability: 0.7,
+      required: { minHp: 60 },
+      outcomes: {
+        success: { nextSceneId: 'tx_cond', narrativeText: '충분한 체력으로 달려나갔다. HP 조건 + RNG 선택지 복합 테스트 성공.' },
+        failure: { nextSceneId: 'tx_cond', narrativeText: '발을 헛디뎠다. HP 조건은 충족했지만 RNG에서 실패했다.' },
+      },
+    },
+    {
+      id: 'tx_cond_cor',
+      label: '맑은 정신으로 집중한다  (오염도 30 이하 필요)',
+      type: 'deterministic',
+      required: { maxCorruption: 30 },
+      outcomes: { success: { nextSceneId: 'tx_cond', narrativeText: '깨끗한 정신으로 집중했다. 오염도 조건이 작동한다.' } },
+    },
+    {
+      id: 'tx_cond_combo',
+      label: '진통제를 먹고 집중한다  (진통제 + HP 40 + 오염도 50 이하)',
+      type: 'deterministic',
+      required: { items: ['painkiller'], minHp: 40, maxCorruption: 50 },
+      outcomes: {
+        success: {
+          nextSceneId:   'tx_cond',
+          narrativeText: '세 가지 조건을 모두 충족했다. 복합 조건 선택지가 정상 작동한다.',
+          itemsLost:     ['painkiller'],
+        },
+      },
+    },
+    confirm('tx_cond_ok', 'tx_cond'),
+  ],
 };
 
 export const txNpc: Scene = {

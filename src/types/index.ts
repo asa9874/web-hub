@@ -22,11 +22,18 @@ export interface Outcome {
   readonly itemsLost?:       ItemId[];
 }
 
+export interface ChoiceRequirement {
+  readonly items?:         readonly string[];  // 인벤토리에 모두 있어야 함
+  readonly minHp?:         number;             // HP >= minHp
+  readonly maxCorruption?: number;             // corruption <= maxCorruption
+}
+
 export interface DeterministicChoice {
-  readonly id:       string;
-  readonly label:    string;
-  readonly type:     'deterministic';
-  readonly outcomes: { readonly success: Outcome };
+  readonly id:        string;
+  readonly label:     string;
+  readonly type:      'deterministic';
+  readonly required?: ChoiceRequirement;
+  readonly outcomes:  { readonly success: Outcome };
 }
 
 export interface RngChoice {
@@ -34,6 +41,7 @@ export interface RngChoice {
   readonly label:              string;
   readonly type:               'rng';
   readonly successProbability: number;
+  readonly required?:          ChoiceRequirement;
   readonly outcomes: {
     readonly success: Outcome;
     readonly failure: Outcome;
@@ -62,9 +70,12 @@ export interface PlayerState {
 }
 
 export type GameAction =
-  | { readonly type: 'CHOOSE';       readonly choiceId: string }
+  | { readonly type: 'CHOOSE';        readonly choiceId: string }
   | { readonly type: 'RESET' }
-  | { readonly type: 'ENTER_ROOM';   readonly sceneId: string }
-  | { readonly type: 'DEBUG_PATCH';  readonly patch: Partial<PlayerState> };
+  | { readonly type: 'ENTER_ROOM';    readonly sceneId:  string }
+  | { readonly type: 'USE_ITEM';      readonly itemId:   string }
+  | { readonly type: 'LOAD_SAVE';     readonly data:     PlayerState }
+  | { readonly type: 'SET_NARRATIVE'; readonly text:     string }
+  | { readonly type: 'DEBUG_PATCH';   readonly patch:    Partial<PlayerState> };
 
 export type Subscriber = (state: PlayerState, narrativeText?: string) => void;

@@ -193,10 +193,33 @@ body::after {
   font-size: 13px;
   color: var(--c-text);
   padding: 2px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+}
 
-  &::before {
-    content: '> ';
-    color: var(--c-green-dim);
+.inv-item-name::before {
+  content: '> ';
+  color: var(--c-green-dim);
+}
+
+.inv-use-btn {
+  font-family: inherit;
+  font-size: 9px;
+  padding: 1px 5px;
+  background: transparent;
+  color: rgba(0,255,65,0.45);
+  border: 1px solid rgba(0,255,65,0.15);
+  cursor: pointer;
+  flex-shrink: 0;
+  letter-spacing: 0.04em;
+  transition: color .1s, border-color .1s;
+
+  &:hover {
+    color: var(--c-green);
+    border-color: rgba(0,255,65,0.4);
+    background: rgba(0,255,65,0.05);
   }
 }
 
@@ -400,6 +423,27 @@ body::after {
   margin-top: 4px;
   padding-left: 2ch;
   letter-spacing: 0.04em;
+}
+
+.choice-btn--locked {
+  opacity: 0.38;
+  cursor: not-allowed;
+
+  &:hover {
+    background: transparent;
+    border-color: var(--c-border);
+    color: var(--c-green-md);
+    text-shadow: none;
+  }
+}
+
+.choice-lock-reason {
+  display: block;
+  font-size: 10px;
+  color: rgba(255,176,0,0.5);
+  margin-top: 3px;
+  padding-left: 2ch;
+  letter-spacing: 0.03em;
 }
 
 .choice-btn--restart {

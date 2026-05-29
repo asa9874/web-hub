@@ -3,7 +3,7 @@ import { useGameStore } from '../../state/useGameStore.ts';
 import { items }        from '../../data/items/index.ts';
 
 export default function InventorySection() {
-  const { state } = useGameStore();
+  const { state, dispatch } = useGameStore();
 
   return (
     <div id="inventory-section">
@@ -12,11 +12,24 @@ export default function InventorySection() {
         {state.inventory.length === 0 ? (
           <div className="inventory-empty">(없음)</div>
         ) : (
-          state.inventory.map(id => (
-            <div key={id} className="inventory-item">
-              {items[id]?.name ?? id}
-            </div>
-          ))
+          state.inventory.map(id => {
+            const item      = items[id];
+            const hasEffect = !!item?.effect;
+            return (
+              <div key={id} className="inventory-item">
+                <span className="inv-item-name">{item?.name ?? id}</span>
+                {hasEffect && (
+                  <button
+                    className="inv-use-btn"
+                    onClick={() => dispatch({ type: 'USE_ITEM', itemId: id })}
+                    title={item?.description}
+                  >
+                    사용
+                  </button>
+                )}
+              </div>
+            );
+          })
         )}
       </div>
     </div>
