@@ -19,7 +19,7 @@
 | Phase 8 — 우측 패널 | ✅ 완료 | 2026-05-29 | NavPanel — openMap onClick 연결, 레거시 store/render 완전 제거 |
 | Phase 9 — 맵 Hybrid 래핑 | ✅ 완료 | 2026-05-29 | MapOverlay.tsx + render-map.ts 이동 시 navigationStore 동기화 |
 | Phase 10 — 맵 완전 React 전환 | ✅ 완료 | 2026-05-29 | render-map.ts 삭제, WorldMap/InteriorMap 완전 React 전환 |
-| Phase 11 — 스타일 정리 | ⏳ 대기 | — | |
+| Phase 11 — 스타일 정리 | ✅ 완료 | 2026-05-29 | 미사용 3규칙 제거 (.map-hidden / .rds-adj-badge / @keyframes blink-cursor) |
 | Phase 12 — 최적화 & 정리 | ⏳ 대기 | — | |
 
 ---

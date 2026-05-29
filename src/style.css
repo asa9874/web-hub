@@ -487,12 +487,6 @@ body::after {
   }
 }
 
-/* ── 커서 깜빡임 ─────────────────────────────────────────────── */
-@keyframes blink-cursor {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
-}
-
 /* ── 터미널 스크롤바 ──────────────────────────────────────────── */
 ::-webkit-scrollbar         { width: 4px; }
 ::-webkit-scrollbar-track   { background: var(--c-bg); }
@@ -503,8 +497,6 @@ body::after {
 /* ══════════════════════════════════════════════════════════════
    MAP OVERLAY  — v2
    ══════════════════════════════════════════════════════════════ */
-
-.map-hidden { display: none !important; }
 
 #map-overlay {
   position: fixed;
@@ -1332,13 +1324,6 @@ body::after {
   color: var(--c-green);
   text-shadow: var(--glow-g);
   letter-spacing: 0.1em;
-  margin: 6px 0 2px;
-}
-
-.rds-adj-badge {
-  font-size: 10px;
-  color: rgba(0,255,65,0.55);
-  letter-spacing: 0.06em;
   margin: 6px 0 2px;
 }
 
