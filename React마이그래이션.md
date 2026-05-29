@@ -10,7 +10,7 @@
 | Phase | 상태 | 완료일 | 비고 |
 |-------|------|--------|------|
 | Phase 1 — 개발 환경 전환 | ✅ 완료 | 2026-05-29 | react 19.2, zustand 5.0, @vitejs/plugin-react 6.0 |
-| Phase 2 — 진입점 & 루트 뼈대 | ⏳ 대기 | — | |
+| Phase 2 — 진입점 & 루트 뼈대 | ✅ 완료 | 2026-05-29 | main.tsx + App.tsx (JSX 셸 + 레거시 useEffect) |
 | Phase 3 — 게임 상태 (Context) | ⏳ 대기 | — | |
 | Phase 4 — 맵 위치 상태 (Zustand) | ⏳ 대기 | — | |
 | Phase 5 — 레이아웃 셸 | ⏳ 대기 | — | |
@@ -96,7 +96,7 @@ export default defineConfig({
 
 ---
 
-## Phase 2 — 앱 진입점 & 루트 컴포넌트 뼈대
+## ✅ Phase 2 — 앱 진입점 & 루트 컴포넌트 뼈대 `[완료 · 2026-05-29]`
 
 ### 목표
 `index.html` → `main.tsx` → `App.tsx` 연결.  
@@ -152,6 +152,22 @@ export default function App() {
 ### 검증
 - 3단 그리드 빈 화면이 보이면 성공
 - CSS(`#game-container` 그리드)는 그대로 적용돼야 함
+
+### ✅ 실제 수행 결과
+
+| 항목 | 결과 |
+|------|------|
+| `index.html` — 진입점 `main.ts` → `main.tsx` | ✅ |
+| `src/main.tsx` 생성 — `createRoot` + `<App />` (StrictMode 제외) | ✅ |
+| `src/App.tsx` 생성 — `game-shell.ts` HTML 구조를 JSX로 1:1 전환 | ✅ |
+| `App.tsx` — `useEffect` + `useRef` 가드로 레거시 게임 엔진 초기화 | ✅ |
+| `npx tsc --noEmit` | ✅ 오류 없음 |
+| `npx vite build` | ✅ 236 kB (React 런타임 포함, 정상) |
+| 게임 전체 동작 확인 (씬 렌더링, 선택지, 위치바, 맵) | ✅ |
+| 콘솔 에러 | ✅ 없음 |
+
+> **note**: `main.ts`와 `game-shell.ts`는 이 시점에서 사용되지 않는 파일이 됨.  
+> Phase 8 완료 후 삭제 예정.
 
 ---
 
