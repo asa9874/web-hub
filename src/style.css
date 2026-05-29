@@ -627,6 +627,91 @@ body::after {
   -webkit-box-orient: vertical; overflow: hidden;
 }
 
+/* ══════════════════════════════════════════════════════════════
+   텍스트 크기 스케일
+   ══════════════════════════════════════════════════════════════ */
+.text-scale-small #scene-description,
+.text-scale-small #narrative-result { font-size: 13px; }
+
+.text-scale-medium #scene-description,
+.text-scale-medium #narrative-result { font-size: 15px; }
+
+.text-scale-large #scene-description,
+.text-scale-large #narrative-result  { font-size: 17px; line-height: 1.9; }
+
+/* ══════════════════════════════════════════════════════════════
+   설정 패널
+   ══════════════════════════════════════════════════════════════ */
+#settings-panel {
+  position: fixed;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 340px;
+  background: #080f09;
+  border: 1px solid rgba(0,255,65,0.22);
+  z-index: 131;
+  font-family: inherit;
+  box-shadow: 0 0 40px rgba(0,255,65,0.08);
+}
+
+#settings-header {
+  display: flex; align-items: center;
+  padding: 0 18px; height: 50px;
+  background: rgba(0,0,0,0.5);
+  border-bottom: 1px solid rgba(0,255,65,0.1);
+}
+
+#settings-title {
+  flex: 1; font-size: 13px; letter-spacing: 0.2em;
+  color: var(--c-green); text-shadow: var(--glow-g);
+}
+
+#settings-body { padding: 20px 20px 24px; }
+
+.set-section { margin-bottom: 22px; }
+
+.set-label {
+  font-size: 10px; letter-spacing: 0.14em;
+  color: rgba(0,255,65,0.4); text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.set-options { display: flex; gap: 6px; }
+
+.set-btn {
+  font-family: inherit; font-size: 12px;
+  padding: 8px 14px;
+  background: transparent;
+  color: var(--c-text-dim);
+  border: 1px solid var(--c-border);
+  cursor: pointer; flex: 1;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  transition: color .12s, border-color .12s, background .12s;
+
+  &:hover {
+    color: var(--c-green-md);
+    border-color: rgba(0,255,65,0.3);
+    background: rgba(0,255,65,0.04);
+  }
+}
+
+.set-btn--active {
+  color: var(--c-green) !important;
+  border-color: rgba(0,255,65,0.55) !important;
+  background: rgba(0,255,65,0.07) !important;
+  text-shadow: var(--glow-g);
+}
+
+.set-btn-sub {
+  font-size: 9px; color: rgba(0,255,65,0.3);
+  letter-spacing: 0.05em;
+}
+
+.set-note {
+  font-size: 10px; color: var(--c-text-dim);
+  letter-spacing: 0.04em; margin-top: 4px;
+}
+
 /* ── 터미널 스크롤바 ──────────────────────────────────────────── */
 ::-webkit-scrollbar         { width: 4px; }
 ::-webkit-scrollbar-track   { background: var(--c-bg); }

@@ -14,3 +14,7 @@ export const ROOM_SCENES: Readonly<Record<string, string>> = {
   'tx-npc':    'tx_npc',
   'tx-save':   'tx_save',
 };
+
+// 역매핑: 씬 ID → 방 ID (씬 전환 시 위치바 자동 이동에 사용)
+export const SCENE_ROOMS: Readonly<Record<string, string>> =
+  Object.fromEntries(Object.entries(ROOM_SCENES).map(([room, scene]) => [scene, room]));
