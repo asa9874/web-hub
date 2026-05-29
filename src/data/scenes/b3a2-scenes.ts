@@ -76,6 +76,78 @@ export const b3Hall: Scene = {
       type: 'deterministic',
       outcomes: { success: { nextSceneId: 'b3_escalator', narrativeText: '에스컬레이터를 걸어서 내려갔다.' } },
     },
+    {
+      id: 'b3h_iseah',
+      label: '저쪽 개찰구 근처에 누군가가 있다',
+      type: 'deterministic',
+      outcomes: { success: { nextSceneId: 'b3_iseah', narrativeText: '그쪽으로 조심스럽게 다가갔다.' } },
+    },
+  ],
+};
+
+// ── 이세아 B3 조우 (씬 전용 — 방 매핑 없음) ──────────────────────────────────
+
+export const b3Iseah: Scene = {
+  id: 'b3_iseah',
+  title: 'B3 대합실 — 이세아',
+  description:
+    `마법소녀복. 손상된 채로.\n\n` +
+    `그녀는 A2 방향 터널을 들여다보고 있었다.\n` +
+    `당신이 다가가자 고개를 돌렸다.\n\n` +
+    `"A2에서 왔어요?"`,
+  backgroundContext: `이세아는 B3를 생존자 이동 경로 체크포인트로 쓰고 있다. A2와 C1 사이를 오가며 상황을 파악한다.`,
+  choices: [
+    {
+      id: 'b3i_yes',
+      label: '"아니요, A1에서 왔어요."',
+      type: 'deterministic',
+      outcomes: {
+        success: {
+          nextSceneId: 'b3_iseah',
+          narrativeText:
+            `"A1에서 여기까지." 짧은 침묵.\n\n` +
+            `"오기범한테 갔다면 알겠지만, 시간이 없어요.\n` +
+            `경계선이 매일 5m씩 남하하고 있어요.\n` +
+            `스핑크스 문서를 찾으면 — 한강변 관측소에서 나를 찾아요."`,
+        },
+      },
+    },
+    {
+      id: 'b3i_sphinx',
+      label: '"스핑크스 문서는 어디서 구할 수 있어요?"',
+      type: 'deterministic',
+      outcomes: {
+        success: {
+          nextSceneId: 'b3_iseah',
+          narrativeText:
+            `"연세대 공학관 지하. 정도석 교수가 있어요.\n` +
+            `의심이 많지만 좋은 사람이에요.\n` +
+            `이주원 박사 메모를 가지고 가면 문을 열어줄 거예요."`,
+        },
+      },
+    },
+    {
+      id: 'b3i_has_sphinx',
+      label: '"스핑크스 문서를 가지고 있어요."',
+      type: 'deterministic',
+      required: { items: ['sphinx_doc'] },
+      outcomes: {
+        success: {
+          nextSceneId: 'b3_iseah',
+          narrativeText:
+            `이세아의 눈이 변했다.\n\n` +
+            `"가지고 있군요."\n\n` +
+            `"한강변 관측소로 와요. 거기서 이야기해요.\n` +
+            `혼자 D1에 들어가는 건 자살이에요."`,
+        },
+      },
+    },
+    {
+      id: 'b3i_back',
+      label: '먼저 간다',
+      type: 'deterministic',
+      outcomes: { success: { nextSceneId: 'b3_hall', narrativeText: '그녀에게 고개를 끄덕이고 돌아섰다.' } },
+    },
   ],
 };
 

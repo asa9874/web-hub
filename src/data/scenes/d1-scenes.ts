@@ -363,56 +363,27 @@ export const d1AbyssCore: Scene = {
       label: '역공명으로 탑을 정화한다',
       type: 'deterministic',
       required: { items: ['sphinx_doc', 'memo_iwon', 'iseah_pact'] },
-      outcomes: {
-        success: {
-          nextSceneId: 'ending_purify',
-          narrativeText:
-            `이세아가 앞으로 나섰다.\n\n` +
-            `신호장비가 이주원의 주파수를 증폭했다.\n` +
-            `정화력이 핵을 향해 쏟아졌다.`,
-        },
-      },
+      outcomes: { success: { nextSceneId: 'ending_purify', narrativeText: '' } },
     },
     {
       id: 'core_escape',
       label: '신호장비로 외부에 도움을 요청한다',
       type: 'deterministic',
       required: { items: ['signal_device'] },
-      outcomes: {
-        success: {
-          nextSceneId: 'ending_escape',
-          narrativeText:
-            `신호장비의 스위치를 올렸다.\n\n` +
-            `주파수가 하늘로 솟았다.`,
-        },
-      },
+      outcomes: { success: { nextSceneId: 'ending_escape', narrativeText: '' } },
     },
     {
       id: 'core_merge',
       label: '"나는 당신의 일부가 되겠습니다."',
       type: 'deterministic',
-      required: { minCorruption: 60 },
-      outcomes: {
-        success: {
-          nextSceneId: 'ending_merge',
-          narrativeText:
-            `목소리가 잠잠해졌다.\n\n` +
-            `그리고 따뜻해졌다.`,
-        },
-      },
+      required: { minCorruption: 80 },
+      outcomes: { success: { nextSceneId: 'ending_merge', narrativeText: '' } },
     },
     {
       id: 'core_silence',
       label: '아무것도 하지 않는다',
       type: 'deterministic',
-      outcomes: {
-        success: {
-          nextSceneId: 'ending_silence',
-          narrativeText:
-            `당신은 서 있었다.\n\n` +
-            `탑도 기다렸다.`,
-        },
-      },
+      outcomes: { success: { nextSceneId: 'ending_silence', narrativeText: '' } },
     },
   ],
 };
@@ -423,9 +394,22 @@ export const d1AbyssCore: Scene = {
 
 // ── 정화 엔딩 ─────────────────────────────────────────────────────────────────
 
+const ART_ENDING_PURIFY = `
+  ┌──────────────────────────────────────────────────────┐
+  │                                                      │
+  │    탑이 빛났다 — 그리고 잠잠해졌다.                  │
+  │                                                      │
+  │       ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░                 │
+  │                                                      │
+  │    서울의 하늘이 — 처음으로 — 보였다.                │
+  │                                                      │
+  └──────────────────────────────────────────────────────┘
+`.trimStart();
+
 export const endingPurify: Scene = {
   id: 'ending_purify',
-  title: '정화 엔딩',
+  title: '정화 — Purification',
+  asciiArt: ART_ENDING_PURIFY,
   description:
     `탑이 진동했다.\n\n` +
     `이세아의 정화력과 이주원의 주파수가 만났다.\n` +
@@ -444,9 +428,22 @@ export const endingPurify: Scene = {
 
 // ── 탈출 엔딩 ─────────────────────────────────────────────────────────────────
 
+const ART_ENDING_ESCAPE = `
+  ┌──────────────────────────────────────────────────────┐
+  │                                                      │
+  │    신호가 하늘을 가로질렀다.                          │
+  │                                                      │
+  │    ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─           │
+  │                                                      │
+  │    72시간 뒤, 헬기 소리가 들렸다.                    │
+  │                                                      │
+  └──────────────────────────────────────────────────────┘
+`.trimStart();
+
 export const endingEscape: Scene = {
   id: 'ending_escape',
-  title: '탈출 엔딩',
+  title: '탈출 — Escape',
+  asciiArt: ART_ENDING_ESCAPE,
   description:
     `신호가 하늘로 솟았다.\n\n` +
     `주파수가 대기를 가로질렀다.\n` +
@@ -463,9 +460,22 @@ export const endingEscape: Scene = {
 
 // ── 융합 엔딩 ─────────────────────────────────────────────────────────────────
 
+const ART_ENDING_MERGE = `
+  ┌──────────────────────────────────────────────────────┐
+  │                                                      │
+  │    경계가 사라졌다.                                  │
+  │                                                      │
+  │    당신과 탑 사이의 경계.                            │
+  │    오염과 정화 사이의 경계.                          │
+  │                                                      │
+  │    당신은 남았다. 다른 형태로.                        │
+  └──────────────────────────────────────────────────────┘
+`.trimStart();
+
 export const endingMerge: Scene = {
   id: 'ending_merge',
-  title: '융합 엔딩',
+  title: '융합 — Convergence',
+  asciiArt: ART_ENDING_MERGE,
   description:
     `목소리가 잠잠해졌다.\n\n` +
     `따뜻해졌다.\n\n` +
@@ -481,9 +491,22 @@ export const endingMerge: Scene = {
 
 // ── 침묵 엔딩 ─────────────────────────────────────────────────────────────────
 
+const ART_ENDING_SILENCE = `
+  ┌──────────────────────────────────────────────────────┐
+  │                                                      │
+  │    아무것도 변하지 않았다.                           │
+  │                                                      │
+  │    탑은 계속 자란다.                                 │
+  │    오염은 계속 퍼진다.                               │
+  │                                                      │
+  │    당신은 사라졌다. 아무도 모른다.                   │
+  └──────────────────────────────────────────────────────┘
+`.trimStart();
+
 export const endingSilence: Scene = {
   id: 'ending_silence',
-  title: '침묵 엔딩',
+  title: '침묵 — Silence',
+  asciiArt: ART_ENDING_SILENCE,
   description:
     `당신은 서 있었다.\n\n` +
     `탑도 기다렸다.\n\n` +
@@ -496,4 +519,36 @@ export const endingSilence: Scene = {
     `당신은 사라졌지만\n` +
     `아무도 모른다.`,
   choices: [],
+};
+
+// ══════════════════════════════════════════════════════════════════════════════
+// D1 심층 구역 (d1-deep, danger) — 탑 북쪽 최외곽
+// ══════════════════════════════════════════════════════════════════════════════
+
+const ART_D1_DEEP = `
+  ┌──────────────────────────────────────────────────────┐
+  │                                                      │
+  │  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░   │
+  │                                                      │
+  │  심층 구역. 모든 것이 오염되어 있다.                 │
+  │  탑이 바로 앞이다.                                   │
+  │                                                      │
+  │  여기선 살아있을 이유가 없다.                        │
+  └──────────────────────────────────────────────────────┘
+`.trimStart();
+
+export const d1Deep: Scene = {
+  id: 'd1_deep',
+  title: 'D1 심층 구역',
+  asciiArt: ART_D1_DEEP,
+  description:
+    `탑 북쪽 심층 구역.\n\n` +
+    `공기가 검다. 빛이 닿지 않는다.\n` +
+    `숨을 쉴 때마다 오염이 폐에 박힌다.\n\n` +
+    `타락자들도 이곳을 피한다.\n` +
+    `그것들에게도 감당이 안 되는 곳이다.`,
+  backgroundContext: `D1 심층 구역은 탑이 처음 솟아오른 지점 위에 있다. 오염 농도가 가장 높고 탑의 의식이 가장 강하게 느껴지는 곳.`,
+  choices: [
+    back('deep_back', 'd1_square', '탑 광장으로 물러난다'),
+  ],
 };

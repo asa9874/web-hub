@@ -14,7 +14,7 @@ import {
   b5Crossroads, b5Building, b5ShopB,
 } from './b1b2b5-scenes.ts';
 import {
-  b3Hall, b3Escalator, b3PlatformA, b3PlatformB, b3Tunnel,
+  b3Hall, b3Escalator, b3PlatformA, b3PlatformB, b3Tunnel, b3Iseah,
   a2Tunnel, a2Checkpoint, a2Corridor, a2Main, a2Office,
 } from './b3a2-scenes.ts';
 import {
@@ -33,7 +33,7 @@ import {
   c2Entrance, c2Eunbyeol, c2Observation, c2Boundary, c2Vent,
 } from './c2-scenes.ts';
 import {
-  d1Entrance, d1Square, d1Hana,
+  d1Entrance, d1Square, d1Hana, d1Deep,
   d1Floor1, d1Floor2, d1Floor3, d1Floor3Open,
   d1AbyssCore,
   endingPurify, endingEscape, endingMerge, endingSilence,
@@ -86,6 +86,7 @@ export const scenes: Record<string, Scene> = {
   [b3PlatformA.id]:         b3PlatformA,
   [b3PlatformB.id]:         b3PlatformB,
   [b3Tunnel.id]:            b3Tunnel,
+  [b3Iseah.id]:             b3Iseah,
 
   // ── A2 지하 3구역 ──
   [a2Tunnel.id]:            a2Tunnel,
@@ -131,6 +132,7 @@ export const scenes: Record<string, Scene> = {
   [d1Entrance.id]:          d1Entrance,
   [d1Square.id]:            d1Square,
   [d1Hana.id]:              d1Hana,
+  [d1Deep.id]:              d1Deep,
   [d1Floor1.id]:            d1Floor1,
   [d1Floor2.id]:            d1Floor2,
   [d1Floor3.id]:            d1Floor3,

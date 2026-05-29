@@ -82,6 +82,7 @@ export const ROOM_SCENES: Readonly<Record<string, string>> = {
 
   // ── D1 부정의 탑 ───────────────────────────────────────────────
   'c2-nd1':  'd1_entrance',   // C2 exit → D1 첫 씬
+  'd1-deep': 'd1_deep',
   'd1-sq':   'd1_square',
   'd1-hana': 'd1_hana',
   'd1-1f':   'd1_floor1',
