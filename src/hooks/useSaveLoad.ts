@@ -1,30 +1,46 @@
-import { useGameStore }             from '../state/useGameStore.ts';
-import { useNavigationStore }        from '../state/navigationStore.ts';
-import { suppressRoomSceneSync }     from './useRoomSceneSync.ts';
-import type { PlayerState }          from '../types/index.ts';
+import { useGameStore }           from '../state/useGameStore.ts';
+import { useNavigationStore }      from '../state/navigationStore.ts';
+import { useTimeStore }            from '../state/timeStore.ts';
+import { suppressRoomSceneSync }   from './useRoomSceneSync.ts';
+import type { PlayerState }        from '../types/index.ts';
 
-const SAVE_KEY = 'text_game_save_v1';
+const SAVE_KEY = 'text_game_save_v2';
+
+interface TimeSnapshot {
+  year:        number;
+  month:       number;
+  day:         number;
+  minuteOfDay: number;
+}
 
 interface SaveData {
-  version: 1;
+  version: 2;
   savedAt: string;
   player:  PlayerState;
   locId:   string;
   roomId:  string;
+  time:    TimeSnapshot;
 }
 
 export function useSaveLoad() {
-  const { state, dispatch }                         = useGameStore();
+  const { state, dispatch }          = useGameStore();
   const { playerLocId, playerRoomId,
-          travelToLoc, moveToRoom }                 = useNavigationStore();
+          travelToLoc, moveToRoom }  = useNavigationStore();
+  const timeStore                    = useTimeStore();
 
   const save = () => {
     const data: SaveData = {
-      version: 1,
+      version: 2,
       savedAt: new Date().toISOString(),
       player:  state,
       locId:   playerLocId,
       roomId:  playerRoomId,
+      time:    {
+        year:        timeStore.year,
+        month:       timeStore.month,
+        day:         timeStore.day,
+        minuteOfDay: timeStore.minuteOfDay,
+      },
     };
     localStorage.setItem(SAVE_KEY, JSON.stringify(data));
     dispatch({ type: 'SET_NARRATIVE', text: `[저장 완료]  ${new Date().toLocaleString('ko-KR')}` });
@@ -40,12 +56,12 @@ export function useSaveLoad() {
     try { data = JSON.parse(raw) as SaveData; }
     catch { dispatch({ type: 'SET_NARRATIVE', text: '[불러오기 실패]  저장 파일이 손상됐습니다.' }); return; }
 
-    // useRoomSceneSync가 이동 감지 시 씬을 덮어쓰지 않도록 한 번 억제
     suppressRoomSceneSync();
 
     if (data.locId !== playerLocId) travelToLoc(data.locId);
     moveToRoom(data.roomId);
     dispatch({ type: 'LOAD_SAVE', data: data.player });
+    if (data.time) useTimeStore.getState().setTime(data.time);
     dispatch({
       type: 'SET_NARRATIVE',
       text: `[불러오기 완료]  저장 시각: ${new Date(data.savedAt).toLocaleString('ko-KR')}`,

@@ -1,4 +1,5 @@
-import LocationBar from './LocationBar.tsx';
+import GameDateBar   from './GameDateBar.tsx';
+import LocationBar   from './LocationBar.tsx';
 import { useGameStore }  from '../../state/useGameStore.ts';
 import { resolveScene }  from '../../engine/scene-resolver.ts';
 import { scenes }        from '../../data/scenes/index.ts';
@@ -9,6 +10,7 @@ export default function SceneHeader() {
 
   return (
     <div id="scene-header">
+      <GameDateBar />
       <LocationBar />
       <div id="scene-title">{scene.title}</div>
     </div>

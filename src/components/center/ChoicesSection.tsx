@@ -5,9 +5,16 @@ import { resolveScene }        from '../../engine/scene-resolver.ts';
 import { meetsRequirement, getLockReason } from '../../engine/requirements.ts';
 import { scenes }              from '../../data/scenes/index.ts';
 import { items }               from '../../data/items/index.ts';
+import { useTimeStore, formatGameTime, formatGameDate } from '../../state/timeStore.ts';
+import { useLogStore }         from '../../state/logStore.ts';
+
+const MINUTES_PER_CHOICE = 5;
 
 export default function ChoicesSection() {
-  const { state, dispatch } = useGameStore();
+  const { state, dispatch }   = useGameStore();
+  const advanceTime           = useTimeStore(s => s.advanceTime);
+  const { year, month, day, minuteOfDay } = useTimeStore();
+  const addEntry              = useLogStore(s => s.addEntry);
 
   if (!state.isAlive) {
     return (
@@ -27,6 +34,21 @@ export default function ChoicesSection() {
 
   const scene = resolveScene(state.currentSceneId, scenes);
 
+  const handleChoose = (choiceLabel: string, choiceId: string) => {
+    const timeStr = formatGameTime(minuteOfDay);
+    const dateStr = formatGameDate(year, month, day);
+
+    dispatch({ type: 'CHOOSE', choiceId });
+    advanceTime(MINUTES_PER_CHOICE);
+    addEntry({
+      timeStr,
+      dateStr,
+      sceneTitle: scene.title,
+      choice:     choiceLabel,
+      narrative:  '',  // 내러티브는 App에서 watch 후 업데이트
+    });
+  };
+
   return (
     <div id="choices-section">
       <PanelTitle>[ 행 동 선 택 ]</PanelTitle>
@@ -40,7 +62,7 @@ export default function ChoicesSection() {
             <ChoiceButton
               key={choice.id}
               choice={choice}
-              onChoose={() => dispatch({ type: 'CHOOSE', choiceId: choice.id })}
+              onChoose={() => handleChoose(choice.label, choice.id)}
               isLocked={locked}
               lockReason={reason}
             />
