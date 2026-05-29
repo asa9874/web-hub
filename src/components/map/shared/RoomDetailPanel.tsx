@@ -13,7 +13,8 @@ export default function RoomDetailPanel({ room, loc }: Props) {
 
   const isMyLoc   = loc.id === playerLocId;
   const isCurrent = isMyLoc && room.id === playerRoomId;
-  const isAdj     = isMyLoc && !isCurrent &&
+  const isLocked  = room.type === 'locked';
+  const isAdj     = isMyLoc && !isCurrent && !isLocked &&
     loc.roomEdges.some(([a, b]) =>
       (a === playerRoomId && b === room.id) || (b === playerRoomId && a === room.id));
 
@@ -30,7 +31,10 @@ export default function RoomDetailPanel({ room, loc }: Props) {
       <div className="rds-name">{room.name}</div>
       <span className={`rds-type rdt-${room.type}`}>{ROOM_TYPE_LABEL[room.type]}</span>
       {isCurrent && <div className="rds-pos-badge">◎ 현재 위치</div>}
-      {!isCurrent && !isAdj && (
+      {!isCurrent && isLocked && (
+        <div className="rds-locked-note">⊘ 잠겨 있다. 진입할 수 없다.</div>
+      )}
+      {!isCurrent && !isLocked && !isAdj && (
         <div className="rds-locked-note">⊘ 직접 연결된 구역이 아닙니다</div>
       )}
       {isAdj && (

@@ -50,6 +50,17 @@ function reducer(state: GameState, action: GameAction): GameState {
         narrativeText: '',
       };
 
+    case 'ROOM_ENTER': {
+      const hp         = clamp(state.player.hp + action.hpDelta, 0, state.player.maxHp);
+      const corruption = clamp(state.player.corruption + action.corruptionDelta, 0, state.player.maxCorruption);
+      const sceneId    = action.sceneId ?? state.player.currentSceneId;
+      return {
+        player:        { ...state.player, hp, corruption, currentSceneId: sceneId,
+                         isAlive: hp > 0 && corruption < state.player.maxCorruption },
+        narrativeText: action.message,
+      };
+    }
+
     case 'USE_ITEM': {
       const item = items[action.itemId];
       if (!item || !state.player.inventory.includes(action.itemId)) return state;
@@ -64,14 +75,16 @@ function reducer(state: GameState, action: GameAction): GameState {
         : `${item.name}은(는) 사용할 수 없다.`;
 
       return {
-        player:        { ...state.player, hp, corruption, inventory, isAlive: hp > 0 },
+        player:        { ...state.player, hp, corruption, inventory,
+                         isAlive: hp > 0 && corruption < state.player.maxCorruption },
         narrativeText: narrative,
       };
     }
 
     case 'LOAD_SAVE':
       return {
-        player:        { ...action.data, isAlive: action.data.hp > 0 },
+        player:        { ...action.data,
+                         isAlive: action.data.hp > 0 && action.data.corruption < action.data.maxCorruption },
         narrativeText: '',
       };
 
@@ -81,7 +94,7 @@ function reducer(state: GameState, action: GameAction): GameState {
     case 'DEBUG_PATCH': {
       const merged = { ...state.player, ...action.patch };
       return {
-        player:        { ...merged, isAlive: merged.hp > 0 },
+        player:        { ...merged, isAlive: merged.hp > 0 && merged.corruption < merged.maxCorruption },
         narrativeText: '',
       };
     }

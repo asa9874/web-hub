@@ -17,6 +17,10 @@ export default function ChoicesSection() {
   const addEntry              = useLogStore(s => s.addEntry);
 
   if (!state.isAlive) {
+    const isCorruptionDeath = state.hp > 0 && state.corruption >= state.maxCorruption;
+    const deathMsg = isCorruptionDeath
+      ? '오염이 당신을 집어삼켰다. 당신은 더 이상 당신이 아니다.'
+      : '어둠이 당신을 삼켰다. 다시 시작하겠는가.';
     return (
       <div id="choices-section">
         <PanelTitle>[ 행 동 선 택 ]</PanelTitle>
@@ -25,7 +29,7 @@ export default function ChoicesSection() {
             className="choice-btn choice-btn--restart"
             onClick={() => dispatch({ type: 'RESET' })}
           >
-            <span className="choice-label">어둠이 당신을 삼켰다. 다시 시작하겠는가.</span>
+            <span className="choice-label">{deathMsg}</span>
           </button>
         </section>
       </div>

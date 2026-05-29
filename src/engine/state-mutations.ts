@@ -19,6 +19,6 @@ export function applyOutcome(state: PlayerState, outcome: Outcome): PlayerState 
     corruption,
     inventory,
     currentSceneId: outcome.nextSceneId,
-    isAlive: hp > 0,
+    isAlive: hp > 0 && corruption < state.maxCorruption,
   };
 }

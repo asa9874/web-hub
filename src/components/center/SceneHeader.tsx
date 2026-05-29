@@ -13,6 +13,9 @@ export default function SceneHeader() {
       <GameDateBar />
       <LocationBar />
       <div id="scene-title">{scene.title}</div>
+      {scene.backgroundContext && (
+        <div id="scene-bg-context">{scene.backgroundContext}</div>
+      )}
     </div>
   );
 }

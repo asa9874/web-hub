@@ -10,6 +10,7 @@ import RightPanel               from './components/layout/RightPanel.tsx';
 import MapOverlay               from './components/map/MapOverlay.tsx';
 import LogPanel                 from './components/log/LogPanel.tsx';
 import SettingsPanel            from './components/ui/SettingsPanel.tsx';
+import { ErrorBoundary }        from './components/ErrorBoundary.tsx';
 
 // ── 내러티브 → 마지막 로그 엔트리 동기화 ─────────────────────────
 function LogNarrativeSync() {
@@ -47,8 +48,10 @@ function AppInner() {
 
 export default function App() {
   return (
-    <GameProvider>
-      <AppInner />
-    </GameProvider>
+    <ErrorBoundary>
+      <GameProvider>
+        <AppInner />
+      </GameProvider>
+    </ErrorBoundary>
   );
 }

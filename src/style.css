@@ -321,6 +321,18 @@ body::after {
   }
 }
 
+#scene-bg-context {
+  font-size: 11px;
+  color: var(--c-green-dim);
+  opacity: 0.6;
+  font-style: italic;
+  line-height: 1.4;
+  margin-top: 4px;
+  padding: 4px 8px;
+  border-left: 2px solid var(--c-border);
+  white-space: pre-wrap;
+}
+
 /* ② 상단: 아스키 아트 */
 #scene-ascii-section {
   flex-shrink: 0;
@@ -1628,3 +1640,44 @@ body::after {
   user-select: none;
 }
 
+/* ── Error Boundary ─────────────────────────────────────────────── */
+#error-boundary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 16px;
+  background: var(--c-bg);
+  color: var(--c-red);
+  font-family: inherit;
+}
+
+.eb-title {
+  font-size: 22px;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 12px var(--c-red);
+}
+
+.eb-msg {
+  font-size: 13px;
+  color: var(--c-text-dim);
+  max-width: 480px;
+  text-align: center;
+}
+
+.eb-reset-btn {
+  margin-top: 8px;
+  padding: 8px 20px;
+  background: transparent;
+  border: 1px solid var(--c-red);
+  color: var(--c-red);
+  font-family: inherit;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover { background: rgba(255, 50, 50, 0.12); }
+}

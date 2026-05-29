@@ -70,12 +70,16 @@ export interface PlayerState {
 }
 
 export type GameAction =
-  | { readonly type: 'CHOOSE';        readonly choiceId: string }
+  | { readonly type: 'CHOOSE';        readonly choiceId:         string }
   | { readonly type: 'RESET' }
-  | { readonly type: 'ENTER_ROOM';    readonly sceneId:  string }
-  | { readonly type: 'USE_ITEM';      readonly itemId:   string }
-  | { readonly type: 'LOAD_SAVE';     readonly data:     PlayerState }
-  | { readonly type: 'SET_NARRATIVE'; readonly text:     string }
-  | { readonly type: 'DEBUG_PATCH';   readonly patch:    Partial<PlayerState> };
+  | { readonly type: 'ENTER_ROOM';    readonly sceneId:          string }
+  | { readonly type: 'USE_ITEM';      readonly itemId:           string }
+  | { readonly type: 'ROOM_ENTER';    readonly hpDelta:          number;
+                                      readonly corruptionDelta:  number;
+                                      readonly message:          string;
+                                      readonly sceneId?:         string }
+  | { readonly type: 'LOAD_SAVE';     readonly data:             PlayerState }
+  | { readonly type: 'SET_NARRATIVE'; readonly text:             string }
+  | { readonly type: 'DEBUG_PATCH';   readonly patch:            Partial<PlayerState> };
 
 export type Subscriber = (state: PlayerState, narrativeText?: string) => void;
