@@ -13,6 +13,7 @@ const INITIAL_PLAYER: PlayerState = {
   inventory: [],
   currentSceneId: 'apartment_start',
   isAlive: true,
+  chosenScenes: [],
 };
 
 interface GameState {
@@ -30,13 +31,16 @@ function reducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
 
     case 'CHOOSE': {
-      const scene  = resolveScene(state.player.currentSceneId, scenes);
+      const sceneId = state.player.currentSceneId;
+      if (state.player.chosenScenes.includes(sceneId)) return state;
+      const scene  = resolveScene(sceneId, scenes);
       const choice = scene.choices.find(c => c.id === action.choiceId);
       if (!choice) return state;
       if (!meetsRequirement(state.player, choice.required)) return state;
       const outcome = calculateOutcome(choice);
+      const next    = applyOutcome(state.player, outcome);
       return {
-        player:        applyOutcome(state.player, outcome),
+        player:        { ...next, chosenScenes: [...state.player.chosenScenes, sceneId] },
         narrativeText: outcome.narrativeText,
       };
     }
@@ -84,6 +88,7 @@ function reducer(state: GameState, action: GameAction): GameState {
     case 'LOAD_SAVE':
       return {
         player:        { ...action.data,
+                         chosenScenes: action.data.chosenScenes ?? [],
                          isAlive: action.data.hp > 0 && action.data.corruption < action.data.maxCorruption },
         narrativeText: '',
       };

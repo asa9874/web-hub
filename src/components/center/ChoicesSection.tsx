@@ -50,9 +50,11 @@ export default function ChoicesSection() {
     );
   }
 
-  const scene = resolveScene(state.currentSceneId, scenes);
+  const scene      = resolveScene(state.currentSceneId, scenes);
+  const alreadyChosen = state.chosenScenes.includes(state.currentSceneId);
 
   const handleChoose = (choiceLabel: string, choiceId: string) => {
+    if (alreadyChosen) return;
     const timeStr = formatGameTime(minuteOfDay);
     const dateStr = formatGameDate(year, month, day);
 
@@ -70,10 +72,14 @@ export default function ChoicesSection() {
   return (
     <div id="choices-section">
       <PanelTitle>[ 행 동 선 택 ]</PanelTitle>
+      {alreadyChosen && (
+        <div className="choices-already-done">이미 선택한 장면입니다.</div>
+      )}
       <section id="choices-panel" aria-label="행동 선택">
         {scene.choices.map(choice => {
-          const locked = !meetsRequirement(state, choice.required);
-          const reason = locked && choice.required
+          const reqLocked = !meetsRequirement(state, choice.required);
+          const locked    = alreadyChosen || reqLocked;
+          const reason    = reqLocked && choice.required
             ? getLockReason(state, choice.required, items)
             : undefined;
           return (

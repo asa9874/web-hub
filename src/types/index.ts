@@ -70,6 +70,7 @@ export interface PlayerState {
   readonly inventory:      readonly ItemId[];
   readonly currentSceneId: SceneId;
   readonly isAlive:        boolean;
+  readonly chosenScenes:   readonly SceneId[];
 }
 
 export type GameAction =
