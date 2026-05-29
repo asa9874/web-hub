@@ -1,6 +1,7 @@
 import PanelTitle              from '../ui/PanelTitle.tsx';
 import ChoiceButton            from './ChoiceButton.tsx';
 import { useGameStore }        from '../../state/useGameStore.ts';
+import { useGamePhaseStore }   from '../../state/gamePhaseStore.ts';
 import { resolveScene }        from '../../engine/scene-resolver.ts';
 import { meetsRequirement, getLockReason } from '../../engine/requirements.ts';
 import { scenes }              from '../../data/scenes/index.ts';
@@ -12,19 +13,19 @@ const MINUTES_PER_CHOICE = 5;
 
 export default function ChoicesSection() {
   const { state, dispatch }   = useGameStore();
+  const toMenu                = useGamePhaseStore(s => s.toMenu);
   const advanceTime           = useTimeStore(s => s.advanceTime);
   const { year, month, day, minuteOfDay } = useTimeStore();
   const addEntry              = useLogStore(s => s.addEntry);
+
+  const resetToMenu = () => { dispatch({ type: 'RESET' }); toMenu(); };
 
   if (state.currentSceneId.startsWith('ending_')) {
     return (
       <div id="choices-section">
         <PanelTitle>[ 엔 딩 ]</PanelTitle>
         <section id="choices-panel" aria-label="행동 선택">
-          <button
-            className="choice-btn choice-btn--restart"
-            onClick={() => dispatch({ type: 'RESET' })}
-          >
+          <button className="choice-btn choice-btn--restart" onClick={resetToMenu}>
             <span className="choice-label">처음부터 시작하겠는가.</span>
           </button>
         </section>
@@ -41,10 +42,7 @@ export default function ChoicesSection() {
       <div id="choices-section">
         <PanelTitle>[ 행 동 선 택 ]</PanelTitle>
         <section id="choices-panel" aria-label="행동 선택">
-          <button
-            className="choice-btn choice-btn--restart"
-            onClick={() => dispatch({ type: 'RESET' })}
-          >
+          <button className="choice-btn choice-btn--restart" onClick={resetToMenu}>
             <span className="choice-label">{deathMsg}</span>
           </button>
         </section>

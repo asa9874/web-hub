@@ -6,6 +6,7 @@ export function typewrite(
   element: HTMLElement,
   text: string,
   speedMs: number,
+  onDone?: () => void,
 ): () => void {
   element.textContent = '';
 
@@ -19,7 +20,7 @@ export function typewrite(
 
   function tick(): void {
     if (done) return;
-    if (index >= text.length) { done = true; return; }
+    if (index >= text.length) { done = true; onDone?.(); return; }
 
     // 한 tick 에 한 글자 (한국어 글자는 모두 BMP 범위 — 안전)
     node.data += text[index];
