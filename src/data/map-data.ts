@@ -7,6 +7,7 @@ export interface Room {
   readonly cx: number;
   readonly cy: number;
   readonly type: RoomType;
+  readonly connectsTo?: string; // world location ID this exit leads to
 }
 
 export interface LocationInfo {
@@ -78,7 +79,7 @@ const A1_R: readonly Room[] = [
   { id:'a1-203',   name:'203호 ※',    desc:'열린 문 · 벽에 생존 기록 메모',          cx:16, cy:38, type:'item'   },
   { id:'a1-1f',    name:'1층 로비',    desc:'우편함·엘리베이터(고장)·계단실',         cx:50, cy:50, type:'normal' },
   { id:'a1-mgmt',  name:'관리실',      desc:'마스터키 · 건물 도면 보관',              cx:16, cy:50, type:'item'   },
-  { id:'a1-exit',  name:'출입구',      desc:'→ B1 망가진 골목',                      cx:84, cy:50, type:'exit'   },
+  { id:'a1-exit',  name:'출입구',      desc:'→ B1 망가진 골목',                      cx:84, cy:50, type:'exit',   connectsTo:'B1' },
   { id:'a1-b1f',   name:'지하 주차장', desc:'전기실·창고 · 깊은 쪽에서 이상한 소리', cx:50, cy:64, type:'danger' },
   { id:'a1-elec',  name:'전기실',      desc:'배전반 · 건물 전원 제어 가능',           cx:22, cy:64, type:'item'   },
   { id:'a1-stor',  name:'창고',        desc:'물자 보관 · 일부 잔류',                  cx:78, cy:64, type:'item'   },
@@ -107,7 +108,7 @@ const A2_LAYOUT: LocationLayout = {
 };
 
 const A2_R: readonly Room[] = [
-  { id:'a2-tun',   name:'B3 터널',       desc:'→ B3 지하철역 (허가 필요)',               cx: 5, cy:15, type:'exit'   },
+  { id:'a2-tun',   name:'B3 터널',       desc:'→ B3 지하철역 (허가 필요)',               cx: 5, cy:15, type:'exit',   connectsTo:'B3' },
   { id:'a2-gate',  name:'검문소 A2-01',  desc:'철문·창구 · 오기범 허가 필요',            cx:20, cy:15, type:'locked' },
   { id:'a2-hall',  name:'입구 복도',     desc:'벽에 생존자 이름·그림 빼곡히',            cx:37, cy:15, type:'normal' },
   { id:'a2-main',  name:'메인 홀',       desc:'배급카운터·공지게시판 · 오후 비공식 시장', cx:55, cy:15, type:'npc'    },
@@ -140,15 +141,15 @@ const B1_LAYOUT: LocationLayout = {
 };
 
 const B1_R: readonly Room[] = [
-  { id:'b1-nb5',  name:'→ B5 회색거리', desc:'북쪽 — B5 회색 거리 방향',               cx:50, cy: 4, type:'exit'   },
+  { id:'b1-nb5',  name:'→ B5 회색거리', desc:'북쪽 — B5 회색 거리 방향',               cx:50, cy: 4, type:'exit',   connectsTo:'B5' },
   { id:'b1-n',    name:'북쪽 도로',     desc:'B1-03 · 개방 구역 · 은신처 없음',         cx:50, cy:20, type:'normal' },
-  { id:'b1-na1',  name:'→ A1 아파트',  desc:'서쪽 — A1 폐허 아파트 방향',              cx: 5, cy:40, type:'exit'   },
+  { id:'b1-na1',  name:'→ A1 아파트',  desc:'서쪽 — A1 폐허 아파트 방향',              cx: 5, cy:40, type:'exit',   connectsTo:'A1' },
   { id:'b1-rub',  name:'잔해 더미',     desc:'B1-05 · 숨겨진 지하통로 입구',            cx:24, cy:40, type:'item'   },
   { id:'b1-crs',  name:'중앙 교차점',   desc:'B1-02 · 경고판 뒷면 메모 — 지하통로 위치',cx:50, cy:40, type:'item'   },
   { id:'b1-e',    name:'동쪽 골목',     desc:'B1-04 · 야간 타락자 2인조 출몰',          cx:76, cy:40, type:'danger' },
-  { id:'b1-nb2',  name:'→ B2 편의점',  desc:'동쪽 — B2 폐편의점 방향',                cx:94, cy:40, type:'exit'   },
+  { id:'b1-nb2',  name:'→ B2 편의점',  desc:'동쪽 — B2 폐편의점 방향',                cx:94, cy:40, type:'exit',   connectsTo:'B2' },
   { id:'b1-alley',name:'뒷골목',        desc:'B1-06 · 류민 조우 · 폭 1m · 탈출 불가', cx:24, cy:62, type:'npc'    },
-  { id:'b1-nb3',  name:'→ B3 지하철',  desc:'지하 — B3 지하철역 (숨겨진 경로)',        cx:24, cy:84, type:'exit'   },
+  { id:'b1-nb3',  name:'→ B3 지하철',  desc:'지하 — B3 지하철역 (숨겨진 경로)',        cx:24, cy:84, type:'exit',   connectsTo:'B3' },
 ];
 const B1_E: readonly [string,string][] = [
   ['b1-nb5','b1-n'],
@@ -175,14 +176,14 @@ const B2_LAYOUT: LocationLayout = {
 };
 
 const B2_R: readonly Room[] = [
-  { id:'b2-nb1',  name:'→ B1 골목',  desc:'북쪽 — B1 망가진 골목 방향',      cx:50, cy: 5, type:'exit'   },
+  { id:'b2-nb1',  name:'→ B1 골목',  desc:'북쪽 — B1 망가진 골목 방향',      cx:50, cy: 5, type:'exit',   connectsTo:'B1' },
   { id:'b2-ent',  name:'입구',       desc:'자동문 반파 · 야간 타락자 출몰 가능',cx:50, cy:22, type:'normal' },
   { id:'b2-shf',  name:'진열대',     desc:'대부분 비어있음 · 일부 물자 잔류',  cx:25, cy:42, type:'item'   },
   { id:'b2-ctr',  name:'계산대',     desc:'빈 카운터 · 정보 단서 가능',        cx:68, cy:35, type:'normal' },
   { id:'b2-stor', name:'창고',       desc:'추가 물자 · 잠긴 캐비닛',           cx:25, cy:62, type:'item'   },
   { id:'b2-stf',  name:'직원 공간',  desc:'뒷문으로 연결',                    cx:68, cy:58, type:'normal' },
   { id:'b2-back', name:'뒷문',       desc:'골목 방향 탈출로',                 cx:50, cy:78, type:'exit'   },
-  { id:'b2-nb3',  name:'→ B3 지하철',desc:'남쪽 — B3 지하철역 방향',          cx:50, cy:94, type:'exit'   },
+  { id:'b2-nb3',  name:'→ B3 지하철',desc:'남쪽 — B3 지하철역 방향',          cx:50, cy:94, type:'exit',   connectsTo:'B3' },
 ];
 const B2_E: readonly [string,string][] = [
   ['b2-nb1','b2-ent'],
@@ -212,14 +213,14 @@ const B3_LAYOUT: LocationLayout = {
 };
 
 const B3_R: readonly Room[] = [
-  { id:'b3-gin',  name:'지상 남쪽 입구',   desc:'지상 접근 가능 유일 입구',                    cx:40, cy: 5, type:'exit'   },
+  { id:'b3-gin',  name:'지상 남쪽 입구',   desc:'지상 접근 가능 유일 입구',                    cx:40, cy: 5, type:'exit',   connectsTo:'B2' },
   { id:'b3-hall', name:'대합실 B3-02',     desc:'바닥 "3구역 →" 메모 · 자판기 1대 열려있음',  cx:50, cy:22, type:'item'   },
   { id:'b3-esc',  name:'에스컬레이터',     desc:'B3-03 · 정지 · 도보 가능 · 메모 끼워짐',    cx:50, cy:40, type:'normal' },
   { id:'b3-plA',  name:'플랫폼 A',         desc:'B3-04 · A2 터널 램프 신호 · 측면 유지보수문', cx:28, cy:60, type:'normal' },
   { id:'b3-stg',  name:'자재 창고',        desc:'B3-07 · 철근·공구·안전모',                   cx: 8, cy:60, type:'item'   },
   { id:'b3-tun',  name:'유지보수 터널',    desc:'B3-06 · 벽면 좌표 메모 · 비상 외부출구(잠김)', cx: 8, cy:83, type:'item'   },
   { id:'b3-plB',  name:'플랫폼 B ⚠',      desc:'B3-05 · 조명 전무 · 부정 농도 ★★★★ · 봉인 너머 소리', cx:72, cy:60, type:'danger' },
-  { id:'b3-a2t',  name:'→ A2 지하 3구역', desc:'지하 터널 · 허가 필요',                       cx:28, cy:88, type:'exit'   },
+  { id:'b3-a2t',  name:'→ A2 지하 3구역', desc:'지하 터널 · 허가 필요',                       cx:28, cy:88, type:'exit',   connectsTo:'A2' },
 ];
 const B3_E: readonly [string,string][] = [
   ['b3-gin','b3-hall'],
@@ -258,6 +259,7 @@ const B4_R: readonly Room[] = [
   { id:'b4-2f',   name:'2층 내과',      desc:'타락자 다수 배회 · 진입 비권장',            cx:50, cy:38, type:'danger' },
   { id:'b4-er',   name:'1층 응급실',    desc:'마지막 업무 일지 (5시47분) · 자동문 반열림', cx:40, cy:51, type:'item'   },
   { id:'b4-tr',   name:'처치실',        desc:'B4-02 · 생리식염수·붕대 잔류 · 커튼 뒤 ?', cx:14, cy:51, type:'item'   },
+  { id:'b4-exit', name:'병원 출입구',   desc:'→ B5 회색 거리 방향',                      cx:80, cy:51, type:'exit',   connectsTo:'B5' },
   { id:'b4-cor',  name:'복도 ⚠',        desc:'B4-03 · 타락자 2개체 · 손톱 자국',         cx:55, cy:64, type:'danger' },
   { id:'b4-med',  name:'약품보관실',    desc:'B4-04 · 잠금 해제 필요 · 항생제·소독약',   cx:80, cy:64, type:'locked' },
   { id:'b4-fac',  name:'지하 시설실',   desc:'배전반 · 1층 전자잠금 해제 가능',           cx:28, cy:80, type:'item'   },
@@ -267,7 +269,7 @@ const B4_E: readonly [string,string][] = [
   ['b4-roof','b4-4f'],['b4-4f','b4-3f'],
   ['b4-3f','b4-303'],['b4-3f','b4-2f'],
   ['b4-2f','b4-er'],
-  ['b4-er','b4-tr'],['b4-er','b4-cor'],['b4-er','b4-fac'],
+  ['b4-er','b4-tr'],['b4-er','b4-exit'],['b4-er','b4-cor'],['b4-er','b4-fac'],
   ['b4-cor','b4-med'],
   ['b4-fac','b4-mor'],
 ];
@@ -285,15 +287,15 @@ const B5_LAYOUT: LocationLayout = {
 };
 
 const B5_R: readonly Room[] = [
-  { id:'b5-nc1',  name:'→ C1 한강변',  desc:'북쪽 — C1 한강변 방향',                cx:50, cy: 4, type:'exit'   },
-  { id:'b5-nb6',  name:'→ B6 연세대',  desc:'서쪽 — B6 연세대 폐허 방향',           cx: 8, cy:26, type:'exit'   },
+  { id:'b5-nc1',  name:'→ C1 한강변',  desc:'북쪽 — C1 한강변 방향',                cx:50, cy: 4, type:'exit',   connectsTo:'C1' },
+  { id:'b5-nb6',  name:'→ B6 연세대',  desc:'서쪽 — B6 연세대 폐허 방향',           cx: 8, cy:26, type:'exit',   connectsTo:'B6' },
   { id:'b5-crs',  name:'교차로',        desc:'완전 노출 구역 · 야간 타락자 다수',     cx:50, cy:26, type:'danger' },
-  { id:'b5-nb4',  name:'→ B4 병원',    desc:'동쪽 — B4 붕괴된 병원 방향',           cx:92, cy:26, type:'exit'   },
+  { id:'b5-nb4',  name:'→ B4 병원',    desc:'동쪽 — B4 붕괴된 병원 방향',           cx:92, cy:26, type:'exit',   connectsTo:'B4' },
   { id:'b5-shpA', name:'상가 잔해 A',   desc:'서쪽 상가 · 은신 가능',                cx:22, cy:50, type:'normal' },
   { id:'b5-shpB', name:'상가 잔해 B',   desc:'중앙 상가 · 폐건물 통로',              cx:50, cy:50, type:'normal' },
   { id:'b5-shpC', name:'상가 잔해 C',   desc:'동쪽 상가 · 붕괴 심함',               cx:78, cy:50, type:'normal' },
   { id:'b5-bld',  name:'폐건물',        desc:'내부 은신 가능 · 2층 원거리 조망',     cx:50, cy:70, type:'normal' },
-  { id:'b5-nb1',  name:'→ B1 골목',    desc:'남쪽 — B1 망가진 골목 방향',           cx:50, cy:90, type:'exit'   },
+  { id:'b5-nb1',  name:'→ B1 골목',    desc:'남쪽 — B1 망가진 골목 방향',           cx:50, cy:90, type:'exit',   connectsTo:'B1' },
 ];
 const B5_E: readonly [string,string][] = [
   ['b5-nc1','b5-crs'],['b5-nb6','b5-crs'],['b5-crs','b5-nb4'],
@@ -321,7 +323,7 @@ const B6_LAYOUT: LocationLayout = {
 };
 
 const B6_R: readonly Room[] = [
-  { id:'b6-ng',   name:'북문 → C1',    desc:'북쪽 한강변 방향',                      cx:50, cy: 5, type:'exit'   },
+  { id:'b6-ng',   name:'북문 → C1',    desc:'북쪽 한강변 방향',                      cx:50, cy: 5, type:'exit',   connectsTo:'C1' },
   { id:'b6-eng',  name:'공학관 B6-05',  desc:'이공계 건물 · 지하 계단 진입점',        cx:25, cy:26, type:'item'   },
   { id:'b6-med',  name:'의과대학관',    desc:'잠김 · 접근 불가',                      cx:75, cy:26, type:'locked' },
   { id:'b6-lab',  name:'지하 연구실 ★', desc:'B6-06 · 정도석 거주 · 차폐 구조 · 스핑크스 문서', cx:25, cy:40, type:'npc' },
@@ -329,7 +331,7 @@ const B6_R: readonly Room[] = [
   { id:'b6-lib',  name:'도서관 B6-04',  desc:'지하 서고 보존 良 · 의학교재·논문 사본', cx:50, cy:60, type:'item'   },
   { id:'b6-sq',   name:'중앙 광장',     desc:'B6-02 · 조각상·게시판',                cx:78, cy:60, type:'normal' },
   { id:'b6-main', name:'본관 B6-03',    desc:'1F행정실 2F강의실 3F연구실',            cx:50, cy:82, type:'normal' },
-  { id:'b6-gate', name:'정문 → B5',     desc:'남쪽 회색거리 방향',                   cx:50, cy:94, type:'exit'   },
+  { id:'b6-gate', name:'정문 → B5',     desc:'남쪽 회색거리 방향',                   cx:50, cy:94, type:'exit',   connectsTo:'B5' },
 ];
 const B6_E: readonly [string,string][] = [
   ['b6-ng','b6-eng'],['b6-ng','b6-med'],['b6-ng','b6-sq'],
@@ -355,7 +357,7 @@ const C1_LAYOUT: LocationLayout = {
 };
 
 const C1_R: readonly Room[] = [
-  { id:'c1-nc2',  name:'→ C2 심층 경계', desc:'북쪽 — C2 심층 구역 경계 방향',                 cx:50, cy: 4, type:'exit'   },
+  { id:'c1-nc2',  name:'→ C2 심층 경계', desc:'북쪽 — C2 심층 구역 경계 방향',                 cx:50, cy: 4, type:'exit',   connectsTo:'C2' },
   { id:'c1-obs',  name:'관측 지점 C1-06',desc:'이세아 조우 가능 · 고가도로 위 8m · 은별 방향 조망', cx:50, cy:16, type:'npc'  },
   { id:'c1-rd',   name:'강변북로 C1-01', desc:'4차선 도로 · 방호벽 따라 부분 은신',             cx:50, cy:28, type:'normal' },
   { id:'c1-walk', name:'강변산책로 C1-02',desc:'검게 변한 강물 바로 인접 · 접촉 절대 금지',      cx:22, cy:46, type:'danger' },
@@ -363,8 +365,8 @@ const C1_R: readonly Room[] = [
   { id:'c1-riv',  name:'한강 (검은 강)',  desc:'수면 접촉 즉시 오염 · 강 건너편에 무언가 보임',  cx:50, cy:62, type:'danger' },
   { id:'c1-br1',  name:'한강대교 C1-03', desc:'30% 구간 통과 가능 · 접근할수록 부정 농도 상승', cx:22, cy:78, type:'normal' },
   { id:'c1-br2',  name:'잠수교 C1-04',   desc:'수면 근접형 · 50% 이후 생존 불가 · 진입 금지',  cx:78, cy:78, type:'locked' },
-  { id:'c1-nb5',  name:'→ B5 회색거리',  desc:'남쪽 — B5 회색 거리 방향',                      cx:28, cy:93, type:'exit'   },
-  { id:'c1-nb6',  name:'→ B6 연세대',    desc:'남서쪽 — B6 연세대 폐허 방향',                  cx:72, cy:93, type:'exit'   },
+  { id:'c1-nb5',  name:'→ B5 회색거리',  desc:'남쪽 — B5 회색 거리 방향',                      cx:28, cy:93, type:'exit',   connectsTo:'B5' },
+  { id:'c1-nb6',  name:'→ B6 연세대',    desc:'남서쪽 — B6 연세대 폐허 방향',                  cx:72, cy:93, type:'exit',   connectsTo:'B6' },
 ];
 const C1_E: readonly [string,string][] = [
   ['c1-nc2','c1-obs'],['c1-obs','c1-rd'],
@@ -387,12 +389,12 @@ const C2_LAYOUT: LocationLayout = {
 };
 
 const C2_R: readonly Room[] = [
-  { id:'c2-nd1',  name:'→ D1 부정의 탑', desc:'북쪽 심층 — 마법소녀 동반 필수',              cx:50, cy: 5, type:'exit'   },
+  { id:'c2-nd1',  name:'→ D1 부정의 탑', desc:'북쪽 심층 — 마법소녀 동반 필수',              cx:50, cy: 5, type:'exit',   connectsTo:'D1' },
   { id:'c2-line', name:'경계선 ☠',       desc:'붉은 천 표식 · 이 선 넘으면 타락 가속 즉시',   cx:50, cy:22, type:'danger' },
   { id:'c2-vent', name:'분출구 C2-03 ☠', desc:'절대 접근 금지 · 반경 10m 즉각 타락 · 주기 짧아짐', cx:82, cy:38, type:'danger' },
   { id:'c2-obs',  name:'경계선 관측 C2-01',desc:'어제보다 5m 더 남쪽에 있음 (경계가 밀리는 중)', cx:50, cy:38, type:'item'   },
   { id:'c2-base', name:'은별 거점 C2-02', desc:'폐건물 1층 · 침구·성냥·식량 · 날짜별 후퇴 기록', cx:25, cy:62, type:'npc'  },
-  { id:'c2-nc1',  name:'→ C1 한강변',    desc:'남쪽 — C1 한강변 방향',                       cx:50, cy:88, type:'exit'   },
+  { id:'c2-nc1',  name:'→ C1 한강변',    desc:'남쪽 — C1 한강변 방향',                       cx:50, cy:88, type:'exit',   connectsTo:'C1' },
 ];
 const C2_E: readonly [string,string][] = [
   ['c2-nd1','c2-line'],
@@ -429,7 +431,7 @@ const D1_R: readonly Room[] = [
   { id:'d1-2f',  name:'탑 2층 전망대',   desc:'심연 목소리 가장 또렷 · 부정적 감정 증폭',     cx:50, cy:63, type:'danger' },
   { id:'d1-3f',  name:'탑 3층 특수구역', desc:'스핑크스 마지막 기록 · 특수 열쇠 필요',        cx:50, cy:76, type:'locked' },
   { id:'d1-sub', name:'지하 심연의 핵',   desc:'D1-03 · 최종 스토리 분기점 · 특수 조건 필수', cx:50, cy:89, type:'danger' },
-  { id:'d1-nc2', name:'→ C2 심층 경계',  desc:'남쪽 — C2 심층 구역 경계 방향',               cx:50, cy:97, type:'exit'   },
+  { id:'d1-nc2', name:'→ C2 심층 경계',  desc:'남쪽 — C2 심층 구역 경계 방향',               cx:50, cy:97, type:'exit',   connectsTo:'C2' },
 ];
 const D1_E: readonly [string,string][] = [
   ['d1-deep','d1-sq'],['d1-sq','d1-hana'],['d1-sq','d1-1f'],['d1-sq','d1-nc2'],

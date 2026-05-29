@@ -14,10 +14,11 @@ const EDGES: readonly [string, string][] = [
 const ZONE_CLS: Record<LocationInfo['zone'], string> = {
   '생존 구역':'z-safe','회색 구역':'z-grey','경계 구역':'z-border','심층 구역':'z-deep',
 };
+const ROOM_TYPE_LABEL: Record<RoomType, string> = {
+  normal:'구역', npc:'NPC 조우', item:'아이템', danger:'위험 구역', locked:'접근 불가', exit:'출구',
+};
 
 // ── World map geographic layout ──────────────────────────────────────────────
-//   D1(cy=6) 심층 │ C2(cy=16) 경계 │ C1(cy=28) 한강 │ B-zones(cy=41-55) 회색
-//   A1(cx=20,cy=67) 생존 ← 수직분리(x=38) → B2(cx=62,cy=67) 회색 │ A2(cy=91) 지하
 const WORLD_LAYOUT: LocationLayout = {
   regions: [
     { style:'zone-deep',   label:'심층 구역', x:0,  y:0,  w:100, h:12 },
@@ -29,24 +30,25 @@ const WORLD_LAYOUT: LocationLayout = {
     { style:'basement',    label:'지하 구역', x:44, y:84, w:26,  h:16 },
   ],
   seps: [
-    { x1:0,  y1:12, x2:100, y2:12, style:'bold'                         },
-    { x1:0,  y1:22, x2:100, y2:22, style:'bold'                         },
-    { x1:0,  y1:36, x2:100, y2:36, style:'bold'                         },
-    { x1:0,  y1:62, x2:38,  y2:62, style:'bold'                         },
-    { x1:38, y1:62, x2:100, y2:62                                        },
-    { x1:38, y1:62, x2:38,  y2:100, style:'dashed'                      },
-    { x1:44, y1:84, x2:70,  y2:84,  style:'dashed', label:'지하 진입'   },
+    { x1:0,  y1:12, x2:100, y2:12, style:'bold'                        },
+    { x1:0,  y1:22, x2:100, y2:22, style:'bold'                        },
+    { x1:0,  y1:36, x2:100, y2:36, style:'bold'                        },
+    { x1:0,  y1:62, x2:38,  y2:62, style:'bold'                        },
+    { x1:38, y1:62, x2:100, y2:62                                       },
+    { x1:38, y1:62, x2:38,  y2:100, style:'dashed'                     },
+    { x1:44, y1:84, x2:70,  y2:84,  style:'dashed', label:'지하 진입'  },
   ],
-};
-const ROOM_TYPE_LABEL: Record<RoomType, string> = {
-  normal:'구역', npc:'NPC 조우', item:'아이템', danger:'위험 구역', locked:'접근 불가', exit:'출구',
 };
 
 // ── State ────────────────────────────────────────────────────────────────────
-let activeLocId: string | null = null;
-let activeRoomId: string | null = null;
+let activeLocId:    string | null = null;
+let activeRoomId:   string | null = null;
 let curInteriorLoc: LocationInfo | null = null;
-let roomResizeObs: ResizeObserver | null = null;
+let roomResizeObs:  ResizeObserver | null = null;
+
+// Player navigation state — starts in A1, room 302호
+let playerLocId:  string = 'A1';
+let playerRoomId: string = 'a1-302';
 
 // ── Public API ───────────────────────────────────────────────────────────────
 export function initMap(): void {
@@ -70,11 +72,43 @@ export function closeMap(): void {
   document.getElementById('map-overlay')!.classList.add('map-hidden');
 }
 
+export function setPlayerPosition(locId: string, roomId: string): void {
+  playerLocId  = locId;
+  playerRoomId = roomId;
+  refreshWorldNodes();
+  if (curInteriorLoc) refreshInteriorNodes();
+}
+
+// ── Helpers ──────────────────────────────────────────────────────────────────
+function isAdjacent(loc: LocationInfo, fromId: string, toId: string): boolean {
+  return loc.roomEdges.some(([a,b]) => (a===fromId&&b===toId)||(b===fromId&&a===toId));
+}
+
+function canTravelTo(destLocId: string): boolean {
+  const curLoc  = LOCATIONS.find(l => l.id === playerLocId);
+  if (!curLoc) return false;
+  const curRoom = curLoc.rooms.find(r => r.id === playerRoomId);
+  return curRoom?.connectsTo === destLocId;
+}
+
 // ── Global map view ──────────────────────────────────────────────────────────
 function showGlobal(): void {
   document.getElementById('map-global-view')!.classList.remove('map-hidden');
   document.getElementById('map-interior-view')!.classList.add('map-hidden');
+  refreshWorldNodes();
   requestAnimationFrame(() => requestAnimationFrame(drawEdges));
+}
+
+function refreshWorldNodes(): void {
+  document.querySelectorAll<HTMLElement>('.map-node').forEach(node => {
+    const id = node.dataset.id!;
+    const isCurrent = id === playerLocId;
+    const isTravel  = !isCurrent && canTravelTo(id);
+    const isLocked  = !isCurrent && !isTravel;
+    node.classList.toggle('mn-current', isCurrent);
+    node.classList.toggle('mn-travel',  isTravel);
+    node.classList.toggle('mn-locked',  isLocked);
+  });
 }
 
 function selectLoc(loc: LocationInfo): void {
@@ -92,6 +126,8 @@ function renderLocInfo(loc: LocationInfo): void {
   const zc = ZONE_CLS[loc.zone];
   const connLocs = LOCATIONS.filter(l => EDGES.some(([a,b]) =>
     (a===loc.id && b===l.id) || (b===loc.id && a===l.id)));
+  const isCurrent = loc.id === playerLocId;
+  const canTravel = canTravelTo(loc.id);
 
   panel.innerHTML = `
     <div class="ip-head">
@@ -99,6 +135,7 @@ function renderLocInfo(loc: LocationInfo): void {
       <div class="ip-code ${zc}">[${loc.id}]</div>
     </div>
     <span class="ip-badge ${zc}">${loc.zone}</span>
+    ${isCurrent ? '<div class="ip-cur-badge">◎ 현재 위치</div>' : ''}
     <div class="ip-sep"></div>
     <div class="ip-field">
       <div class="ip-lbl">위험도</div>
@@ -123,6 +160,12 @@ function renderLocInfo(loc: LocationInfo): void {
       <button class="ip-enter" id="map-enter-int">
         <span>내부 지도 보기</span><span class="ip-arrow">→</span>
       </button>
+      ${canTravel ? `
+      <button class="ip-travel" id="map-travel-btn">
+        <span>이 구역으로 이동</span><span class="ip-arrow">▶</span>
+      </button>` : ''}
+      ${!isCurrent && !canTravel ? `
+      <div class="ip-locked-note">출구 노드에서만 이동 가능합니다</div>` : ''}
     </div>`;
 
   panel.querySelectorAll<HTMLElement>('.ip-conn').forEach(btn => {
@@ -132,6 +175,21 @@ function renderLocInfo(loc: LocationInfo): void {
     });
   });
   document.getElementById('map-enter-int')!.addEventListener('click', () => showInterior(loc));
+  if (canTravel) {
+    document.getElementById('map-travel-btn')!.addEventListener('click', () => travelToLoc(loc));
+  }
+}
+
+function travelToLoc(destLoc: LocationInfo): void {
+  // Arrive at the exit room in destination that connects back to current location
+  const arrival = destLoc.rooms.find(r => r.connectsTo === playerLocId)
+    ?? destLoc.rooms.find(r => r.type !== 'danger' && r.type !== 'locked')
+    ?? destLoc.rooms[0];
+  playerLocId  = destLoc.id;
+  playerRoomId = arrival.id;
+  refreshWorldNodes();
+  selectLoc(destLoc);
+  drawEdges();
 }
 
 function dangerHTML(d: string): string {
@@ -154,6 +212,7 @@ function buildNodes(): void {
     btn.addEventListener('click', () => selectLoc(loc));
     container.appendChild(btn);
   }
+  refreshWorldNodes();
 }
 
 function drawEdges(): void {
@@ -189,7 +248,7 @@ function drawEdges(): void {
 // ── Interior map view ─────────────────────────────────────────────────────────
 function showInterior(loc: LocationInfo): void {
   curInteriorLoc = loc;
-  activeRoomId = null;
+  activeRoomId   = null;
 
   document.getElementById('map-global-view')!.classList.add('map-hidden');
   document.getElementById('map-interior-view')!.classList.remove('map-hidden');
@@ -199,40 +258,103 @@ function showInterior(loc: LocationInfo): void {
   zoneEl.className = `mit-zone ${ZONE_CLS[loc.zone]}`;
   zoneEl.textContent = loc.zone;
 
-  // Clear old room nodes
+  // Current-location indicator in header
+  const curEl = document.getElementById('map-int-cur-badge')!;
+  curEl.textContent = loc.id === playerLocId ? '◎ 현재 위치' : '';
+
+  // Build room nodes
   const gc = document.getElementById('map-int-graph-container')!;
   gc.querySelectorAll('.room-node').forEach(n => n.remove());
   const rsvg = document.getElementById('map-int-svg') as unknown as SVGSVGElement;
   rsvg.innerHTML = '';
 
-  // Build room nodes
   for (const room of loc.rooms) {
     const btn = document.createElement('button');
-    btn.className = `room-node rt-${room.type}`;
     btn.dataset.rid = room.id;
-    btn.style.left = `${room.cx}%`;
-    btn.style.top  = `${room.cy}%`;
-    btn.innerHTML = `<div class="rn-name">${room.name}</div>`;
-    btn.addEventListener('click', () => selectRoom(room));
+    btn.style.left  = `${room.cx}%`;
+    btn.style.top   = `${room.cy}%`;
+
+    const isWorldExit = !!room.connectsTo;
+    let classes = `room-node rt-${room.type}`;
+    if (isWorldExit) classes += ' rn-world-exit';
+
+    btn.className = classes;
+
+    // Room name + destination badge for world exits
+    const destBadge = isWorldExit
+      ? `<div class="rn-dest">↗ ${room.connectsTo}</div>`
+      : '';
+    btn.innerHTML = `<div class="rn-name">${room.name}</div>${destBadge}`;
+
+    btn.addEventListener('click', () => handleRoomClick(room, loc));
     gc.appendChild(btn);
   }
 
-  // ResizeObserver for room edges
   if (roomResizeObs) roomResizeObs.disconnect();
   roomResizeObs = new ResizeObserver(() => drawRoomEdges(loc));
   roomResizeObs.observe(document.getElementById('map-int-graph-section')!);
 
   requestAnimationFrame(() => requestAnimationFrame(() => drawRoomEdges(loc)));
 
+  refreshInteriorNodes();
   renderDefaultSidebar(loc);
+
+  // Auto-select current room if viewing current location
+  if (loc.id === playerLocId) {
+    const curRoom = loc.rooms.find(r => r.id === playerRoomId);
+    if (curRoom) {
+      activeRoomId = curRoom.id;
+      renderRoomDetail(curRoom, loc);
+    }
+  }
 }
 
-function selectRoom(room: Room): void {
-  activeRoomId = room.id;
+function refreshInteriorNodes(): void {
+  const loc = curInteriorLoc;
+  if (!loc) return;
+
+  const isMyLoc = loc.id === playerLocId;
+
+  document.querySelectorAll<HTMLElement>('.room-node').forEach(node => {
+    const rid = node.dataset.rid!;
+    node.classList.remove('rn-current', 'rn-adjacent', 'rn-locked');
+
+    if (!isMyLoc) {
+      // Viewing a different location: all rooms locked (view only)
+      node.classList.add('rn-locked');
+      return;
+    }
+
+    if (rid === playerRoomId) {
+      node.classList.add('rn-current');
+    } else if (isAdjacent(loc, playerRoomId, rid)) {
+      node.classList.add('rn-adjacent');
+    } else {
+      node.classList.add('rn-locked');
+    }
+  });
+}
+
+function handleRoomClick(room: Room, loc: LocationInfo): void {
+  const isMyLoc = loc.id === playerLocId;
+
+  if (isMyLoc && room.id !== playerRoomId && isAdjacent(loc, playerRoomId, room.id)) {
+    // Move player to adjacent room
+    playerRoomId = room.id;
+    activeRoomId = room.id;
+    refreshInteriorNodes();
+    refreshWorldNodes(); // exit-room status may have changed
+    drawRoomEdges(loc);
+  } else {
+    // Just select for info (no movement)
+    activeRoomId = room.id;
+    drawRoomEdges(loc);
+  }
+
   document.querySelectorAll<HTMLElement>('.room-node').forEach(n =>
-    n.classList.toggle('active', n.dataset.rid === room.id));
-  if (curInteriorLoc) drawRoomEdges(curInteriorLoc);
-  renderRoomDetail(room);
+    n.classList.toggle('active', n.dataset.rid === activeRoomId));
+
+  renderRoomDetail(room, loc);
 }
 
 function drawRoomEdges(loc: LocationInfo): void {
@@ -250,23 +372,91 @@ function drawRoomEdges(loc: LocationInfo): void {
   const hotSet = activeRoomId
     ? new Set(loc.roomEdges.flatMap(([a,b])=>(a===activeRoomId||b===activeRoomId)?[a,b]:[]))
     : new Set<string>();
+  // Highlight edges reachable from player position
+  const adjSet = new Set(
+    loc.roomEdges.flatMap(([a,b])=>(a===playerRoomId||b===playerRoomId)?[a,b]:[])
+  );
+
   for (const [aid, bid] of loc.roomEdges) {
     const ra = rmap.get(aid), rb = rmap.get(bid);
     if (!ra||!rb) continue;
-    const hot = activeRoomId!==null && hotSet.has(aid) && hotSet.has(bid);
+    const hot  = activeRoomId!==null && hotSet.has(aid) && hotSet.has(bid);
+    const reachable = loc.id === playerLocId && adjSet.has(aid) && adjSet.has(bid);
     const line = document.createElementNS('http://www.w3.org/2000/svg','line');
     line.setAttribute('x1',String((ra.cx/100)*width));
     line.setAttribute('y1',String((ra.cy/100)*height));
     line.setAttribute('x2',String((rb.cx/100)*width));
     line.setAttribute('y2',String((rb.cy/100)*height));
-    line.setAttribute('class',`re${hot?' re-hot':''}`);
+    line.setAttribute('class', hot ? 're re-hot' : reachable ? 're re-reach' : 're');
     svg.appendChild(line);
   }
 }
 
+function renderDefaultSidebar(loc: LocationInfo): void {
+  const npcRooms    = loc.rooms.filter(r => r.type==='npc');
+  const itemRooms   = loc.rooms.filter(r => r.type==='item');
+  const dangerRooms = loc.rooms.filter(r => r.type==='danger'||r.type==='locked');
+
+  const sec = (title: string, rooms: Room[], cls: string) => {
+    if (!rooms.length) return '';
+    return `<div class="ints-sec">
+      <div class="ints-title">${title}</div>
+      <ul class="ints-list">
+        ${rooms.map(r => `<li class="ints-item ${cls}">
+          <strong>${r.name}</strong><br><span class="ints-desc">${r.desc}</span>
+        </li>`).join('')}
+      </ul>
+    </div>`;
+  };
+
+  document.getElementById('map-int-sidebar')!.innerHTML = [
+    sec('NPC 조우', npcRooms, 'ints-npc'),
+    sec('주요 아이템', itemRooms, 'ints-item-item'),
+    sec('위험 구역', dangerRooms, 'ints-item-danger'),
+  ].join('') || '<div class="ints-empty">구역을 클릭하면<br>상세 정보가 표시됩니다</div>';
+}
+
+function renderRoomDetail(room: Room, loc: LocationInfo): void {
+  const isMyLoc   = loc.id === playerLocId;
+  const isCurrent = isMyLoc && room.id === playerRoomId;
+  const isAdj     = isMyLoc && !isCurrent && isAdjacent(loc, playerRoomId, room.id);
+  const isLocked  = !isMyLoc || (!isCurrent && !isAdj);
+
+  let moveBadge = '';
+  if (isCurrent) {
+    moveBadge = '<div class="rds-pos-badge">◎ 현재 위치</div>';
+  } else if (isAdj) {
+    moveBadge = '<div class="rds-adj-badge">↩ 클릭하면 이동</div>';
+  } else if (isLocked) {
+    moveBadge = '<div class="rds-locked-note">⊘ 직접 연결된 구역이 아닙니다</div>';
+  }
+
+  const worldExitBadge = room.connectsTo
+    ? `<div class="rds-world-exit">↗ 세계 이동 : <strong>${room.connectsTo}</strong></div>`
+    : '';
+
+  document.getElementById('map-int-sidebar')!.innerHTML = `
+    <div class="rds-back">
+      <button class="rds-back-btn" id="rds-back">← 목록으로</button>
+    </div>
+    <div class="rds-name">${room.name}</div>
+    <span class="rds-type rdt-${room.type}">${ROOM_TYPE_LABEL[room.type]}</span>
+    ${moveBadge}
+    ${worldExitBadge}
+    <div class="rds-sep"></div>
+    <div class="rds-desc">${room.desc}</div>`;
+
+  document.getElementById('rds-back')!.addEventListener('click', () => {
+    activeRoomId = null;
+    document.querySelectorAll<HTMLElement>('.room-node').forEach(n => n.classList.remove('active'));
+    if (curInteriorLoc) { drawRoomEdges(curInteriorLoc); renderDefaultSidebar(curInteriorLoc); }
+  });
+}
+
+// ── Layout background ─────────────────────────────────────────────────────────
 function drawLayoutBg(layout: LocationLayout, svg: SVGSVGElement, w: number, h: number): void {
   const NS = 'http://www.w3.org/2000/svg';
-  const g = document.createElementNS(NS, 'g');
+  const g  = document.createElementNS(NS, 'g');
 
   for (const r of layout.regions ?? []) {
     const rect = document.createElementNS(NS, 'rect');
@@ -287,7 +477,7 @@ function drawLayoutBg(layout: LocationLayout, svg: SVGSVGElement, w: number, h: 
   }
 
   if (layout.outline) {
-    const o = layout.outline;
+    const o    = layout.outline;
     const rect = document.createElementNS(NS, 'rect');
     rect.setAttribute('x',      String(o.x / 100 * w));
     rect.setAttribute('y',      String(o.y / 100 * h));
@@ -321,46 +511,6 @@ function drawLayoutBg(layout: LocationLayout, svg: SVGSVGElement, w: number, h: 
   svg.appendChild(g);
 }
 
-function renderDefaultSidebar(loc: LocationInfo): void {
-  const npcRooms    = loc.rooms.filter(r => r.type==='npc');
-  const itemRooms   = loc.rooms.filter(r => r.type==='item');
-  const dangerRooms = loc.rooms.filter(r => r.type==='danger'||r.type==='locked');
-
-  const sec = (title: string, rooms: Room[], cls: string) => {
-    if (!rooms.length) return '';
-    return `<div class="ints-sec">
-      <div class="ints-title">${title}</div>
-      <ul class="ints-list">
-        ${rooms.map(r => `<li class="ints-item ${cls}">
-          <strong>${r.name}</strong><br><span class="ints-desc">${r.desc}</span>
-        </li>`).join('')}
-      </ul>
-    </div>`;
-  };
-
-  document.getElementById('map-int-sidebar')!.innerHTML = [
-    sec('NPC 조우', npcRooms, 'ints-npc'),
-    sec('주요 아이템', itemRooms, 'ints-item-item'),
-    sec('위험 구역', dangerRooms, 'ints-item-danger'),
-  ].join('') || '<div class="ints-empty">구역을 클릭하면<br>상세 정보가 표시됩니다</div>';
-}
-
-function renderRoomDetail(room: Room): void {
-  document.getElementById('map-int-sidebar')!.innerHTML = `
-    <div class="rds-back">
-      <button class="rds-back-btn" id="rds-back">← 목록으로</button>
-    </div>
-    <div class="rds-name">${room.name}</div>
-    <span class="rds-type rdt-${room.type}">${ROOM_TYPE_LABEL[room.type]}</span>
-    <div class="rds-sep"></div>
-    <div class="rds-desc">${room.desc}</div>`;
-  document.getElementById('rds-back')!.addEventListener('click', () => {
-    activeRoomId = null;
-    document.querySelectorAll<HTMLElement>('.room-node').forEach(n => n.classList.remove('active'));
-    if (curInteriorLoc) { drawRoomEdges(curInteriorLoc); renderDefaultSidebar(curInteriorLoc); }
-  });
-}
-
 // ── Overlay HTML ──────────────────────────────────────────────────────────────
 function isOpen(): boolean {
   return !document.getElementById('map-overlay')?.classList.contains('map-hidden');
@@ -368,7 +518,7 @@ function isOpen(): boolean {
 
 function buildOverlay(): HTMLElement {
   const el = document.createElement('div');
-  el.id = 'map-overlay';
+  el.id        = 'map-overlay';
   el.className = 'map-hidden';
   el.innerHTML = `
     <!-- ══ GLOBAL MAP ══ -->
@@ -416,6 +566,7 @@ function buildOverlay(): HTMLElement {
           <span class="mit-label">내 부 지 도</span>
           <span id="map-int-title"></span>
         </div>
+        <span id="map-int-cur-badge" class="mit-cur-badge"></span>
         <span id="map-int-zone" class="mit-zone"></span>
       </div>
       <div id="map-int-body">
