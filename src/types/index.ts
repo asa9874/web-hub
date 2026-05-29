@@ -10,6 +10,8 @@ export interface Item {
   readonly id:          ItemId;
   readonly name:        string;
   readonly description: string;
+  readonly lore?:       string;
+  readonly loreAuthor?: string;
   readonly effect?:     ItemEffect;
 }
 

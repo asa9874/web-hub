@@ -1,9 +1,13 @@
+import { useState } from 'react';
 import PanelTitle from '../ui/PanelTitle.tsx';
 import { useGameStore } from '../../state/useGameStore.ts';
 import { items }        from '../../data/items/index.ts';
+import type { Item }    from '../../types/index.ts';
+import ItemPopup        from './ItemPopup.tsx';
 
 export default function InventorySection() {
   const { state, dispatch } = useGameStore();
+  const [selected, setSelected] = useState<Item | null>(null);
 
   return (
     <div id="inventory-section">
@@ -17,12 +21,17 @@ export default function InventorySection() {
             const hasEffect = !!item?.effect;
             return (
               <div key={id} className="inventory-item">
-                <span className="inv-item-name">{item?.name ?? id}</span>
+                <button
+                  className="inv-item-name inv-item-btn"
+                  onClick={() => item && setSelected(item)}
+                  title="클릭하여 상세 확인"
+                >
+                  {item?.name ?? id}
+                </button>
                 {hasEffect && (
                   <button
                     className="inv-use-btn"
                     onClick={() => dispatch({ type: 'USE_ITEM', itemId: id })}
-                    title={item?.description}
                   >
                     사용
                   </button>
@@ -32,6 +41,10 @@ export default function InventorySection() {
           })
         )}
       </div>
+
+      {selected && (
+        <ItemPopup item={selected} onClose={() => setSelected(null)} />
+      )}
     </div>
   );
 }
