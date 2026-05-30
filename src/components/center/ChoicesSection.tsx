@@ -12,8 +12,13 @@ import { useLogStore }         from '../../state/logStore.ts';
 
 const MINUTES_PER_CHOICE = 5;
 
-/** 모든 결과가 현재 씬에 머무는 선택지 (탐색·정보·아이템) → 사용 후 숨김 */
-function isSameSceneChoice(choice: Choice, sceneId: string): boolean {
+/** 아이템을 주는 선택지만 소모성 — 이 기준으로만 숨김/잠금 처리 */
+function isConsumable(choice: Choice): boolean {
+  return (choice.outcomes.success.itemsGained?.length ?? 0) > 0;
+}
+
+/** 모든 결과가 현재 씬에 머무는 선택지 */
+function isSameScene(choice: Choice, sceneId: string): boolean {
   if (choice.type === 'deterministic') {
     return choice.outcomes.success.nextSceneId === sceneId;
   }
@@ -21,11 +26,6 @@ function isSameSceneChoice(choice: Choice, sceneId: string): boolean {
     choice.outcomes.success.nextSceneId === sceneId &&
     choice.outcomes.failure.nextSceneId === sceneId
   );
-}
-
-/** 순수 이동 선택지: back() 헬퍼처럼 성공 내러티브가 빈 문자열 → 항상 자유롭게 사용 가능 */
-function isPureNav(choice: Choice): boolean {
-  return (choice.outcomes.success.narrativeText ?? '') === '';
 }
 
 export default function ChoicesSection() {
@@ -89,17 +89,17 @@ export default function ChoicesSection() {
       <PanelTitle>[ 행 동 선 택 ]</PanelTitle>
       <section id="choices-panel" aria-label="행동 선택">
         {scene.choices.map(choice => {
-          const isUsed    = state.usedChoices.includes(choice.id);
-          const sameScene = isSameSceneChoice(choice, state.currentSceneId);
-          const pureNav   = isPureNav(choice);
+          const used       = state.usedChoices.includes(choice.id);
+          const consumable = isConsumable(choice);
 
-          // 같은 씬 선택지: 사용 후 버튼 완전 숨김 (아이템·탐색·정보)
-          if (isUsed && sameScene) return null;
+          // 아이템 주는 선택지만 소모성 처리
+          if (used && consumable) {
+            // 같은 씬이면 완전 숨김, 다른 씬으로 이동하는 경우엔 잠금
+            if (isSameScene(choice, state.currentSceneId)) return null;
+          }
 
-          // 스토리/행동 선택지: 사용 후 비활성화 (씬을 이동시키는 의미있는 선택)
-          const usedLock  = isUsed && !sameScene && !pureNav;
           const reqLocked = !meetsRequirement(state, choice.required);
-          const locked    = reqLocked || usedLock;
+          const locked    = reqLocked || (used && consumable);
           const reason    = reqLocked && choice.required
             ? getLockReason(state, choice.required, items)
             : undefined;

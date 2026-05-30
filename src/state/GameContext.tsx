@@ -32,15 +32,21 @@ function reducer(state: GameState, action: GameAction): GameState {
   switch (action.type) {
 
     case 'CHOOSE': {
-      const sceneId = state.player.currentSceneId;
-      if (state.player.usedChoices.includes(action.choiceId)) return state;
-      const scene  = resolveScene(sceneId, scenes);
-      const choice = scene.choices.find(c => c.id === action.choiceId);
+      const sceneId    = state.player.currentSceneId;
+      const scene      = resolveScene(sceneId, scenes);
+      const choice     = scene.choices.find(c => c.id === action.choiceId);
       if (!choice) return state;
       if (!meetsRequirement(state.player, choice.required)) return state;
+
+      // 아이템을 주는 선택지만 소모성 처리 (중복 사용 차단)
+      const consumable = (choice.outcomes.success.itemsGained?.length ?? 0) > 0;
+      if (consumable && state.player.usedChoices.includes(action.choiceId)) return state;
+
       const outcome      = calculateOutcome(choice);
       const next         = applyOutcome(state.player, outcome);
-      const usedChoices  = [...state.player.usedChoices, action.choiceId];
+      const usedChoices  = consumable
+        ? [...state.player.usedChoices, action.choiceId]
+        : state.player.usedChoices;
       const chosenScenes = state.player.chosenScenes.includes(sceneId)
         ? state.player.chosenScenes
         : [...state.player.chosenScenes, sceneId];
