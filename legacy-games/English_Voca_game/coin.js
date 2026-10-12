@@ -66,7 +66,6 @@ export function addFruit(a){
     World.add(world, body);  // 원을 월드에 추가
     disableAction=true;
     setTimeout(()=>{
-        addFruit(); 
         disableAction=false;  
     },1000);
 }
@@ -92,5 +91,13 @@ Events.on(engine,"collisionStart",(event) =>{
 export function playSound(name,vol) {
     const audio = new Audio('./'+name+'.mp3');
     audio.volume = vol;
-    audio.play();
+    audio.play().catch(error => {
+        if (error.name === 'NotAllowedError') {
+            document.addEventListener('pointerdown', () => {
+                audio.play().catch(() => {});
+            }, { once: true });
+        } else {
+            console.warn('Audio playback failed:', error);
+        }
+    });
 }

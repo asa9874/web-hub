@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { projects, projectUrl } from './projects/registry';
 import { ExternalLink, X, Sparkles, BookOpen, Wand2, Skull, Zap, Clock, Shield } from 'lucide-react';
 
 // --- Types ---
@@ -18,130 +19,103 @@ interface NodeData {
 
 // --- Data Generation ---
 const generateNodes = (): NodeData[] => {
-  const baseNodes: NodeData[] = [
+  const baseNodes: Pick<NodeData, 'id' | 'subtitle' | 'icon' | 'x' | 'y' | 'size'>[] = [
     {
       id: 'networkquiz',
-      title: 'NETWORK QUIZ',
       subtitle: 'Learning Game',
-      description: '109개의 필수 네트워크 약어를 게임 형식으로 학습할 수 있습니다. 퀴즈 모드와 무한 단어장 모드로 효과적으로 암기하세요.',
       icon: BookOpen,
       x: 300,
       y: 100,
       size: 'md',
-      link: '/network-quiz',
-      image: 'https://images.unsplash.com/photo-1562883676-8c6fbf064050?auto=format&fit=crop&q=80&w=800', // Education/Learning
     },
     {
       id: 'neonspace',
-      title: 'NEON SPACE',
       subtitle: 'Interactive Art',
-      description: '네온 글로우 효과와 상호작용 애니메이션을 통한 시각적 예술 공간입니다. 창의적인 UI/UX 표현의 경계를 탐험합니다.',
       icon: Sparkles,
       x: -200,
       y: 200,
       size: 'md',
-      link: '/neonspace',
-      image: 'https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?auto=format&fit=crop&q=80&w=800', // Neon/Tech
     },
     {
       id: 'pixelsort',
-      title: 'PIXEL SORT',
       subtitle: 'Audio Visualizer',
-      description: '이미지를 정렬 알고리즘으로 정렬하면서 시각화합니다. 오디오를 업로드하면 정렬 과정에 맞춰 사운드가 재생되어 독특한 경험을 만듭니다.',
       icon: Wand2,
       x: 200,
       y: -200,
       size: 'md',
-      link: '/pixel-sort',
-      image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800&q=80', // Pixel/Art
     },
     {
       id: 'cthulhu',
-      title: 'FORBIDDEN LOG',
       subtitle: 'Ancient Knowledge',
-      description: '광기의 일지... 옛 지배자의 각성을 기록하는 신성 모독적 문서. 당신의 이성을 잃어버릴 준비가 되었나요? 읽으면 돌이킬 수 없습니다.',
       icon: Skull,
       x: -300,
       y: -100,
       size: 'md',
-      link: '/cthulhu',
-      image: 'https://images.unsplash.com/photo-1580695287070-40c6b3b83b65?auto=format&fit=crop&q=80&w=800', // Dark/Horror
     },
     {
       id: 'speedclicker',
-      title: 'SPEED CLICKER',
       subtitle: 'Reaction Game',
-      description: 'AI와의 반사신경 대결! 떨어지는 타겟을 클릭하여 AI를 이기세요. 난이도를 조절하여 도전할 수 있으며, 당신의 반응속도를 테스트하는 재미있는 게임입니다.',
       icon: Zap,
       x: 100,
       y: 250,
       size: 'md',
-      link: '/speed-clicker',
-      image: 'https://images.unsplash.com/photo-1538481143235-a1a1f0eb3e99?auto=format&fit=crop&q=80&w=800', // Gaming/Action
     },
     {
       id: 'schedule',
-      title: 'MY SCHEDULE',
       subtitle: 'Time Management',
-      description: '일주일의 일정을 한눈에 보고 현재 진행중인 활동을 확인하세요. 실시간 시간표와 진행률을 통해 효율적인 시간 관리를 할 수 있습니다.',
       icon: Clock,
       x: -100,
       y: -300,
       size: 'md',
-      link: '/schedule',
-      image: 'https://images.unsplash.com/photo-1456365174547-68f85bca6905?auto=format&fit=crop&q=80&w=800', // Time/Schedule
     },
     {
       id: 'visualnovel',
-      title: 'VISUAL NOVEL',
       subtitle: 'Storytelling Game',
-      description: '매력적인 스토리와 선택지로 진행되는 인터랙티브 비주얼 노벨입니다. 다양한 캐릭터와 배경, 그리고 감동적인 이야기를 경험하세요.',
       icon: BookOpen,
       x: 0,
       y: 0,
       size: 'lg',
-      link: '/visual-novel',
-      image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=800', // Story/Art
     },
     {
       id: 'japan',
-      title: 'JAPAN GUIDE',
       subtitle: 'Travel Companion',
-      description: '일본 여행을 위한 종합 가이드입니다. 관광지, 음식, 문화 등 다양한 정보를 제공하여 완벽한 여행 계획을 세울 수 있도록 도와줍니다.',
       icon: BookOpen,
       x: 0,
       y: -150,
       size: 'md',
-      link: '/japan',
-      image: 'https://images.unsplash.com/photo-1505678261036-a3fcc5e884ee?auto=format&fit=crop&q=80&w=800', // Travel/Culture
     },
     {
       id: 'english',
-      title: 'ENGLISH VOCABULARY',
       subtitle: 'Learning System',
-      description: '체계적인 영단어 학습 시스템입니다. Day별로 단어를 선택하여 효율적으로 학습할 수 있으며, 한글 뜻을 숨기고 단어를 맞춰보는 방식으로 학습할 수 있습니다.',
       icon: BookOpen,
       x: 250,
       y: -200,
       size: 'md',
-      link: '/english',
-      image: 'https://images.unsplash.com/photo-1546410531-bb4caa6b0e3b?auto=format&fit=crop&q=80&w=800', // Education/Language
     },
     {
       id: 'mga',
-      title: 'MGA PORTAL',
       subtitle: 'Glass Command Site',
-      description: '가상의 마법소녀협회(MGA) 공식 포털입니다. 대변동 연대기, 부정 도감, 마법소녀 랭킹, 실시간 경보센터, 시민 대피 가이드, 팬클럽 굿즈를 한곳에서 확인하세요.',
       icon: Shield,
       x: 360,
       y: -40,
       size: 'md',
-      link: '/mga',
-      image: '/web-hub/VisualNovel/Background/bg_mga_server_room.png',
     }
   ];
 
-  return baseNodes;
+  return [
+    ...baseNodes.map(node => {
+      const project = projects.find(project => project.id === node.id)!;
+      return { ...node, title: project.title, description: project.description,
+        link: project.path, image: project.thumbnail };
+    }),
+    ...projects.filter(project => project.type === 'static' && !project.hidden).map((project, index) => {
+      const angle = index * Math.PI * 2 / projects.filter(project => project.type === 'static' && !project.hidden).length;
+      return { id: project.id, title: project.title, subtitle: project.category.toUpperCase(),
+        description: project.description, icon: Sparkles, x: Math.cos(angle) * 650,
+        y: Math.sin(angle) * 650, size: 'md' as const,
+        link: projectUrl(project.path), image: project.thumbnail };
+    }),
+  ];
 };
 
 const NODES = generateNodes();
@@ -391,7 +365,7 @@ const InfoPanel: React.FC<InfoPanelProps> = ({ data, onClose, onNavigate }) => {
             </div>
 
             <a 
-              href={data.link}
+              href={data.link.startsWith(import.meta.env.BASE_URL) ? data.link : data.link.startsWith('/') ? projectUrl(data.link) : data.link}
               onClick={handleLinkClick}
               target={data.link.startsWith('/') ? undefined : "_blank"}
               rel={data.link.startsWith('/') ? undefined : "noopener noreferrer"}
@@ -550,7 +524,13 @@ const App: React.FC = () => {
       <InfoPanel 
         data={selectedNode} 
         onClose={() => setSelectedNode(null)}
-        onNavigate={navigate}
+        onNavigate={(link) => {
+          if (projects.some(project => project.type === 'static' && projectUrl(project.path) === link)) {
+            window.location.assign(link);
+          } else {
+            navigate(link);
+          }
+        }}
       />
 
       <div className={`absolute bottom-6 right-8 z-30 text-right font-mono text-[10px] text-white/30 transition-opacity ${selectedNode ? 'opacity-0' : 'opacity-100'}`}>
