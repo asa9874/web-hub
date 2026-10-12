@@ -79,6 +79,52 @@ try {
       const titles = await page.locator('body').innerText();
       for (const p of projects) assert(titles.includes(p.title), 'Missing hub card ' + p.id);
       assert.equal(await page.locator('main a').count(), projects.length);
+      assert.equal(await page.locator('.hub-section').count(), 3);
+      const filters = page.getByRole('group', { name:'프로젝트 카테고리' });
+      const search = page.getByRole('searchbox', { name:'프로젝트 검색' });
+      const expectCards = count => page.waitForFunction(expected => document.querySelectorAll('.hub-card').length === expected, count);
+      for (const [category, label] of [['game','게임'], ['tool','도구'], ['experiment','실험']]) {
+        await filters.getByRole('button', { name:new RegExp('^' + label) }).click();
+        await expectCards(projects.filter(p => p.category === category).length);
+        assert.equal(await page.locator('.hub-section').count(), 1);
+        assert.equal(await page.locator('.hub-section').getAttribute('data-category'), category);
+      }
+      await filters.getByRole('button', { name:/^전체/ }).click();
+      await search.fill('  tExT-GaMe  ');
+      await expectCards(1);
+      assert((await page.locator('.hub-card').getAttribute('href')).endsWith('/games/text-game/'));
+      await search.fill('VOID 모놀리스');
+      await expectCards(1);
+      assert((await page.locator('.hub-card').getAttribute('href')).endsWith('/games/void-game/'));
+      await filters.getByRole('button', { name:/^도구/ }).click();
+      await expectCards(0);
+      await page.getByRole('heading', { name:'아직 찾는 프로젝트가 없어요' }).waitFor();
+      await page.getByRole('button', { name:'검색어 지우기' }).click();
+      await expectCards(projects.filter(p => p.category === 'tool').length);
+      await search.fill('no-such-project-12345');
+      await expectCards(0);
+      await page.getByRole('button', { name:'전체 프로젝트 보기' }).click();
+      await expectCards(projects.length);
+      await filters.getByRole('button', { name:/^게임/ }).click();
+      await search.fill('deck-game');
+      await expectCards(1);
+      await page.waitForFunction(() => new URL(location.href).searchParams.get('category') === 'game' && new URL(location.href).searchParams.get('q') === 'deck-game');
+      await page.reload({ waitUntil:'load' });
+      await expectCards(1);
+      assert.equal(await search.inputValue(), 'deck-game');
+      assert.equal(await filters.getByRole('button', { name:/^게임/ }).getAttribute('aria-pressed'), 'true');
+      await page.locator('.hub-card').click();
+      await page.locator('canvas').waitFor({ state:'visible' });
+      await page.goBack({ waitUntil:'load' });
+      await expectCards(1);
+      assert.equal(await search.inputValue(), 'deck-game');
+      await page.goto(origin + '/web-hub/', { waitUntil:'load' });
+      await expectCards(projects.length);
+      await search.fill('all');
+      assert.equal(await search.inputValue(), 'all');
+      assert.equal(new URL(page.url()).searchParams.get('q'), 'all');
+      await page.goto(origin + '/web-hub/', { waitUntil:'load' });
+      await expectCards(projects.length);
       for (const id of ['networkquiz', 'memory-flip', 'void-game', 'text-game', 'deck-game']) {
         const project = projects.find(p => p.id === id);
         const target = '/web-hub' + project.path;
@@ -91,6 +137,13 @@ try {
       await page.setViewportSize({ width:390, height:844 });
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), 'Mobile grid overflow');
       await page.screenshot({ path:path.join(root, '.build-projects/hub-mobile.png'), fullPage:true });
+      await page.screenshot({ path:path.join(root, '.build-projects/hub-mobile-top.png') });
+      await filters.getByRole('button', { name:/^게임/ }).click();
+      await search.fill('덱');
+      await expectCards(1);
+      assert((await page.locator('.hub-card').getAttribute('href')).endsWith('/games/deck-game/'));
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), 'Mobile search overflow');
+      await page.screenshot({ path:path.join(root, '.build-projects/hub-mobile-search.png') });
     }
     const canvas = await page.locator('canvas').count();
     const broken = await page.evaluate(() => [...document.images].filter(img => img.getAttribute('src') && img.complete && img.naturalWidth === 0 && !/^https?:/.test(img.getAttribute('src'))).map(img => img.getAttribute('src')));
