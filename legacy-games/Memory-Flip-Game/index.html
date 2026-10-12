@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>카드 뒤집기</title>
+  </head>
+  <body>
+    <div class="backgroundimg"></div>
+    <div class="startbox">
+      <div class="GameTitle">카드 뒤집기</div>
+      <div class="funny">즐겁다!</div>
+      <div class="GameStartButton EasyStart">EASY</div>
+      <div class="GameStartButton NORMALStart">NORMAL</div>
+      <div class="GameStartButton HARDStart">HARD</div>
+      <div class="GameStartButton LUNATICStart">LUNATIC</div>
+    </div>
+    <div class="startimg">
+      <img class="gamestartimg gamestartimg1">
+      <img class="gamestartimg gamestartimg2">
+      <img class="gamestartimg gamestartimg3">
+      <img class="gamestartimg gamestartimg4">
+    </div>
+
+    <div class="GameOverBox">
+      <div class="WinLoseText">너 패배!</div>
+      <table >
+        <tr>
+          <td class="scoreplayer">플레이어</td>
+          <td class="score playerscore"></td>
+        </tr>
+        <tr>
+          <td class="scoreplayer">컴퓨터</td>
+          <td class="score computerscore"></td>
+        </tr>
+      </table>
+      
+      <button onclick="history.go(0)">시작화면으로</button>
+    </div>
+
+
+    <div class="gamebox">
+      <div class="cardbox"></div>
+      <div class="playerbox characterbox">
+        <div class="score playerscore"></div>
+        <img class="character playercharacter"></img>
+      </div>
+
+      <div class="computerbox characterbox">
+        <div class="score computerscore"></div>
+        <img class="character computercharacter"></img>
+      </div>
+          
+      </div>
+    <script type="module" src="./src/main.js"></script>
+    <script type="module" src="./src/start.js"></script>
+  </body>
+</html>

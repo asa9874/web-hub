@@ -1,0 +1,128 @@
+
+@keyframes moved1{
+    20%{transform: translateX(0px);}
+    70%{transform: translateX(400px);}
+    100%{transform: translateX(0px);}
+}
+  
+@keyframes moved2{
+    20%{transform: translateX(0px);}
+    70%{transform: translateX(-400px);}
+    100%{transform: translateX(0px);}
+}
+
+
+@keyframes hidden1{
+20%{opacity:1;}
+80%{opacity:0;}
+100%{opacity:1;}
+}
+
+
+
+.animatemove1 {
+animation: moved1 5s forwards;
+}
+
+.animatemove2 {
+animation: moved2 5s forwards;
+}
+
+.animatehidden {
+animation: hidden1 5s forwards;
+}
+
+
+
+
+
+
+
+@keyframes startgamebox{
+    0%{transform:translateY(200%);}
+    50%{transform:translateY(100%);}
+    100%{transform:translateY(0%);}
+}
+
+
+.animatestartgamebox{
+    animation: startgamebox 2s ease-in;
+}
+
+
+@keyframes startgametitle{
+    0%{transform:translateY(-200%);}
+    100%{transform:translateY(0%);}
+}
+
+.animatestartgametitle{
+    animation: startgametitle 1s ease;
+}
+
+@keyframes removeintroducebox{
+    0%{transform:translateY(0%);}
+    100%{transform:translateY(-300%);}
+}
+
+.animateremoveintroducebox{
+    animation: removeintroducebox 1.1s ease;
+}
+
+@keyframes comeintroducebox{
+    0%{transform:translateY(-300%);}
+    100%{transform:translateY(0%);}
+}
+
+.animaterecomeintroducebox{
+    animation: comeintroducebox 1.1s ease;
+}
+
+
+
+
+
+
+
+
+
+@keyframes bounce {
+    0% { transform: translateY(-20%) rotate(-9deg) translateX(-20%); }
+    3% { transform: translateY(-18.5%) rotate(-8.7deg) translateX(-18.67%); }
+    6% { transform: translateY(-17%) rotate(-8.4deg) translateX(-17.33%); }
+    9% { transform: translateY(-15.5%) rotate(-8.1deg) translateX(-16%); }
+    12% { transform: translateY(-14%) rotate(-7.8deg) translateX(-14.67%); }
+    15% { transform: translateY(-10%) rotate(-7deg) translateX(-13.33%); }
+    18% { transform: translateY(-9%) rotate(-6.7deg) translateX(-12%); }
+    21% { transform: translateY(-8%) rotate(-6.4deg) translateX(-10.67%); }
+    24% { transform: translateY(-7%) rotate(-6.1deg) translateX(-9.33%); }
+    27% { transform: translateY(-6%) rotate(-5.8deg) translateX(-8%); }
+    30% { transform: translateY(-5%) rotate(-5deg) translateX(-6.67%); }
+    33% { transform: translateY(-4%) rotate(-4.5deg) translateX(-5.33%); }
+    36% { transform: translateY(-3%) rotate(-4deg) translateX(-4%); }
+    39% { transform: translateY(-2%) rotate(-3.5deg) translateX(-2.67%); }
+    42% { transform: translateY(-1%) rotate(-2.5deg) translateX(-1.33%); }
+    45% { transform: translateY(0%) rotate(0deg) translateX(0%); }
+    48% { transform: translateY(1%) rotate(1.5deg) translateX(1.33%); }
+    51% { transform: translateY(2%) rotate(2.5deg) translateX(2.67%); }
+    54% { transform: translateY(3%) rotate(3.5deg) translateX(4%); }
+    57% { transform: translateY(4%) rotate(4.5deg) translateX(5.33%); }
+    60% { transform: translateY(5%) rotate(5deg) translateX(6.67%); }
+    63% { transform: translateY(3%) rotate(5.2deg) translateX(8%); }
+    66% { transform: translateY(1%) rotate(5.4deg) translateX(9.33%); }
+    69% { transform: translateY(0%) rotate(5.6deg) translateX(10.67%); }
+    72% { transform: translateY(-2%) rotate(5.8deg) translateX(12%); }
+    75% { transform: translateY(-10%) rotate(7deg) translateX(13.33%); }
+    78% { transform: translateY(-11%) rotate(7.6deg) translateX(14.67%); }
+    81% { transform: translateY(-12%) rotate(8.2deg) translateX(16%); }
+    84% { transform: translateY(-13%) rotate(8.4deg) translateX(17.33%); }
+    87% { transform: translateY(-14%) rotate(8.6deg) translateX(18.67%); }
+    90% { transform: translateY(-15%) rotate(8.8deg) translateX(18%); }
+    93% { transform: translateY(-16%) rotate(8.9deg) translateX(19.33%); }
+    96% { transform: translateY(-18%) rotate(9deg) translateX(20.67%); }
+    100% { transform: translateY(-20%) rotate(9deg) translateX(20%); }
+}
+.animatebounce {
+    animation: bounce 0.3s ease infinite;
+    animation-direction: alternate;
+}
+

@@ -1,0 +1,15 @@
+/* global.css */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: hidden; /* 기본 스크롤 설정 */
+    min-width: 1800px;
+    min-height: 850px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    font-family: 'EF_hyunydororong';
+    background-color: rgb(255, 255, 255);
+  }

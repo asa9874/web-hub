@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { HashRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
 import NetworkQuiz from './NetworkQuiz/NetworkQuiz.tsx'
@@ -15,9 +15,14 @@ import Japan from './Japan/Japan.tsx'
 import English from './English/English.tsx'
 import SuperHotDesign from './SuperHotDesign/SuperHotDesign.tsx'
 
+// Preserve bookmarked HashRouter URLs while giving every page a shareable pathname.
+if (window.location.hash.startsWith('#/')) {
+  window.history.replaceState(null, '', import.meta.env.BASE_URL + window.location.hash.slice(2));
+}
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <HashRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/network-quiz" element={<NetworkQuiz />} />
@@ -32,6 +37,6 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/english" element={<English />} />
         <Route path="/mga/*" element={<SuperHotDesign />} />
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   </StrictMode>,
 )

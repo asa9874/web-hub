@@ -1,0 +1,10 @@
+@import url('./reset.css');
+@import url('./header.css');
+@import url('./maincontent.css');
+
+
+html,body{
+    background-color: rgb(32, 31, 31);
+}
+
+

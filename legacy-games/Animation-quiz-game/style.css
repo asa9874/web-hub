@@ -1,0 +1,184 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction:column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+html {
+  background-color: #74323a;
+  min-width: 1200px;
+  
+}
+
+.backgroundimg{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 1;
+  transition: opacity 0.5s;
+  z-index: -1; 
+}
+
+.titletext{
+  font-family: cursive;
+  color: rgb(250, 153, 186);
+  text-shadow: 1px 1px 20px rgb(35, 38, 41);
+  font-size: 60px;
+  margin-bottom: 70px;
+  font-weight: 1000;
+}
+
+
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 1500px;
+  gap: 150px; /* 박스 사이의 간격 조절 */
+}
+
+
+
+.box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction:column;
+  width: 450px;
+  height: 700px;
+  background-color: #fd909d;
+  border-radius: 40px;
+  transform: scale(1);
+  transition: transform 0.5s, box-shadow 0.5s;
+}
+
+
+
+.box:hover{
+  box-shadow: 5px 5px 30px 2px rgb(68, 56, 56);
+  transform: scale(1.01);
+  transition-duration: 0.5s;
+}
+
+
+.anime-name{
+  margin: 20px; 
+  font-size: 23px;
+  font-weight: 1000;
+  font-family: "GmarketSans";
+  color: #000000;
+  text-shadow: 0px 0px 3px rgb(255, 255, 255);
+}
+
+.anime-year{
+  margin: 10px;
+  font-size: 25px;
+  font-weight: 1000;
+  visibility: hidden;
+}
+
+.anime-year.visible{
+  visibility: visible;
+}
+
+.anime-year.invisible{
+  visibility: none;
+}
+
+.anime-img{
+  height: 700px;
+  width: 350px;
+  box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+}
+
+
+
+.lifezone{
+  margin: 30px;
+  font-size: 100px;
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+
+.score{
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: 20px;
+  font-size: 50px;
+  color: #fd909d;
+  font-weight: 1000;
+  text-shadow: 1px 1px 10px black;
+}
+
+.life{
+  height: 60px;
+  width: 60px;
+  margin: 10px;
+}
+
+
+.introduce{
+  display: flex;
+  justify-content: center;
+  align-items:center;
+  flex-direction:column;
+  height: 600px;
+  width: 1000px;
+  background-color:#fd909d;
+  opacity: 0.97;
+  border-radius: 50px;
+}
+
+.introducetitle{
+  margin-top: 50px;
+  font-size: 60px;
+  text-align: center;
+  font-weight: 1000;
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 1px 6px rgb(255, 255, 255) ;
+}
+
+.introducecontent{
+  margin: 50px;
+  font-size: 25px;
+  height: 500px;
+  font-weight: 1000;
+  text-align: center;
+}
+
+.introduceimage{
+  margin: 20px;
+  height: 200px;
+  width: 200px;
+}
+
+.startbutton{
+  margin: 20px;
+  height: 200px;
+  width: 300px;
+  font-size: 40px;
+  background-color:rgb(233, 105, 135);
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 1px 10px rgb(184, 100, 146);
+  border-radius: 20px;
+  border: #74323a;
+  transition: transform 0.5s;
+}
+
+.startbutton:hover{
+  transform: scale(1.05);
+}
+
+

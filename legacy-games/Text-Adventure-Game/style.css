@@ -1,0 +1,294 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: auto; /* 기본 스크롤 설정 */
+    min-width: 1800px;
+    min-height: 850px;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'ONE-Mobile-POP'
+}
+@font-face {
+    font-family: 'MangoDdobak-B';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2405-3@1.1/MangoDdobak-B.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Danjo-bold-Regular';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2307-1@1.1/Danjo-bold-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'ONE-Mobile-POP';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/ONE-Mobile-POP.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.backgroundimg{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgb(252, 255, 207);
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 1;
+    z-index: -1; 
+}
+
+.gamebackgroundimg{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity: 1;
+}
+
+.startbox{
+    position: absolute; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.GameTitle{
+    letter-spacing:6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Danjo-bold-Regular';
+    font-size: 80px;
+    color: rgb(255, 255, 255);
+    font-weight: 1000;
+    text-shadow: 3px 3px 50px rgb(0, 0, 0);
+    margin-bottom: 20px;
+}
+.GameSubTitle{
+    letter-spacing:6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Danjo-bold-Regular';
+    font-size: 60px;
+    margin-bottom: 170px;
+    color: rgb(36, 255, 84);
+    font-weight: 1000;
+    text-shadow: 3px 3px 50px rgb(0, 0, 0);
+}
+
+.gamebox{
+    position: relative;
+    width: 1800px;
+    height: 850px;
+    background-color: rgb(0, 0, 0);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.mainbox{
+    width: 100%;
+    height: 650px;
+}
+
+.textbox{
+    filter: brightness(120%);
+    opacity: 0.99;
+    position: absolute;
+    width: 99%;
+    margin-left: 8px;
+    height: 200px;
+    z-index: 2; 
+    border-radius: 20px;
+    text-shadow: 1px 1px 5px black;
+}
+
+.healtheffect{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(230, 47, 47);
+    opacity: 0.3;
+    z-index: 2;
+}
+
+.skipbox{
+    position: absolute;
+    width: 99%;
+    margin-left: 8px;
+    height: 200px;
+    z-index: 2; 
+    border-radius: 20px;
+}
+
+.namebox{
+    width: 150px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(46, 46, 46);
+    font-size: 30px;
+    border-radius: 20px;
+    font-family: 'MangoDdobak-B';
+    color: white;
+}
+
+.conversation{
+    margin: 20px;
+    margin-left: 80px;
+    margin-right: 100px;
+    font-size: 34px;
+    word-wrap: break-word;
+    font-family: 'MangoDdobak-B';
+    overflow: hidden;
+    white-space: pre-wrap;;
+    color: white;
+}
+
+.character{
+    float:left;
+    position: absolute; 
+    left: 40%; 
+    top: 6%;
+    z-index: 1; 
+    height: 800px;
+    width: 600px;
+}
+
+.choicebox{
+    position: absolute; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.4);
+    width: 1800px;
+    height: 850px;
+    z-index: 3; 
+}
+
+.object{
+    top:30%;
+}
+
+.choice{
+    letter-spacing:9px;
+    background-size: cover;
+    font-family: 'ONE-Mobile-POP';
+    margin: 50px;
+    height: 100px;
+    width: 800px;
+    border-radius: 30px;
+    background-color: rgba(245, 247, 224, 0.9);
+    transition: transform 0.5s;
+    color: white;
+    font-size: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-shadow: 1px 1px 10px rgb(0, 0, 0);
+}
+
+.choice:hover{
+    transform: scale(1.03);
+    background-color: rgb(196, 197, 189,0.9);
+}
+
+.choiceboxelement{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.choiceimg{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    float: left;
+    left: 67%;
+    right: 0;
+    width: 70px;
+    height: 70px;
+    color: yellow;
+    font-size: 40px;
+    text-shadow: 1px 1px 1px black;
+}
+
+
+.SelectBox{
+    height: 90px;
+    width: 600px;
+    border-radius: 10px;
+    background-color: rgba(180, 172, 197, 0.99);
+    transition: transform 0.5s,background-color 0.5s,box-shadow 0.5s;
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-shadow: 1px 1px 1px white;
+    box-shadow: 3px 3px 10px black;
+    margin: 30px;
+}
+
+
+.SelectBox:hover{
+    transform: scale(1.09);
+    background-color: rgba(107, 103, 106, 1);
+    box-shadow: 3px 3px 30px rgb(78, 49, 49);
+}
+
+
+.test{
+    position: absolute;
+    left: 0%;
+    top: 0%;
+    display: flex;
+    color: red;
+}
+
+
+.infobox{
+    margin: 20px;
+    position: absolute; 
+    left: 0%;
+    top: 0%;
+    z-index: 4; 
+    display: flex;
+    
+}
+
+.info{
+    position: relative;
+    text-align: center;
+    margin-left: 30px;
+    font-size: 50px;
+    width: 80px;
+    height: 80px;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    font-weight: 1000;
+    text-shadow: 4px 4px 3px rgb(0, 0, 0);
+}
+
+
+.health{
+    color: red;
+}
+.money{
+    color: yellow;
+}

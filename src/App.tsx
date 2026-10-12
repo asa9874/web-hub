@@ -1,565 +1,63 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ExternalLink, X, Sparkles, BookOpen, Wand2, Skull, Zap, Clock, Shield } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { projects, projectUrl } from './projects/registry';
 
-// --- Types ---
-interface NodeData {
-  id: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  icon: React.ElementType;
-  x: number; // Pixels relative to center
-  y: number; // Pixels relative to center
-  size: 'sm' | 'md' | 'lg';
-  link: string;
-  image: string; // Background Image URL
-}
+const categories = { game: '게임', tool: '도구', experiment: '실험' };
 
-// --- Data Generation ---
-const generateNodes = (): NodeData[] => {
-  const baseNodes: NodeData[] = [
-    {
-      id: 'networkquiz',
-      title: 'NETWORK QUIZ',
-      subtitle: 'Learning Game',
-      description: '109개의 필수 네트워크 약어를 게임 형식으로 학습할 수 있습니다. 퀴즈 모드와 무한 단어장 모드로 효과적으로 암기하세요.',
-      icon: BookOpen,
-      x: 300,
-      y: 100,
-      size: 'md',
-      link: '/network-quiz',
-      image: 'https://images.unsplash.com/photo-1562883676-8c6fbf064050?auto=format&fit=crop&q=80&w=800', // Education/Learning
-    },
-    {
-      id: 'neonspace',
-      title: 'NEON SPACE',
-      subtitle: 'Interactive Art',
-      description: '네온 글로우 효과와 상호작용 애니메이션을 통한 시각적 예술 공간입니다. 창의적인 UI/UX 표현의 경계를 탐험합니다.',
-      icon: Sparkles,
-      x: -200,
-      y: 200,
-      size: 'md',
-      link: '/neonspace',
-      image: 'https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?auto=format&fit=crop&q=80&w=800', // Neon/Tech
-    },
-    {
-      id: 'pixelsort',
-      title: 'PIXEL SORT',
-      subtitle: 'Audio Visualizer',
-      description: '이미지를 정렬 알고리즘으로 정렬하면서 시각화합니다. 오디오를 업로드하면 정렬 과정에 맞춰 사운드가 재생되어 독특한 경험을 만듭니다.',
-      icon: Wand2,
-      x: 200,
-      y: -200,
-      size: 'md',
-      link: '/pixel-sort',
-      image: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=800&q=80', // Pixel/Art
-    },
-    {
-      id: 'cthulhu',
-      title: 'FORBIDDEN LOG',
-      subtitle: 'Ancient Knowledge',
-      description: '광기의 일지... 옛 지배자의 각성을 기록하는 신성 모독적 문서. 당신의 이성을 잃어버릴 준비가 되었나요? 읽으면 돌이킬 수 없습니다.',
-      icon: Skull,
-      x: -300,
-      y: -100,
-      size: 'md',
-      link: '/cthulhu',
-      image: 'https://images.unsplash.com/photo-1580695287070-40c6b3b83b65?auto=format&fit=crop&q=80&w=800', // Dark/Horror
-    },
-    {
-      id: 'speedclicker',
-      title: 'SPEED CLICKER',
-      subtitle: 'Reaction Game',
-      description: 'AI와의 반사신경 대결! 떨어지는 타겟을 클릭하여 AI를 이기세요. 난이도를 조절하여 도전할 수 있으며, 당신의 반응속도를 테스트하는 재미있는 게임입니다.',
-      icon: Zap,
-      x: 100,
-      y: 250,
-      size: 'md',
-      link: '/speed-clicker',
-      image: 'https://images.unsplash.com/photo-1538481143235-a1a1f0eb3e99?auto=format&fit=crop&q=80&w=800', // Gaming/Action
-    },
-    {
-      id: 'schedule',
-      title: 'MY SCHEDULE',
-      subtitle: 'Time Management',
-      description: '일주일의 일정을 한눈에 보고 현재 진행중인 활동을 확인하세요. 실시간 시간표와 진행률을 통해 효율적인 시간 관리를 할 수 있습니다.',
-      icon: Clock,
-      x: -100,
-      y: -300,
-      size: 'md',
-      link: '/schedule',
-      image: 'https://images.unsplash.com/photo-1456365174547-68f85bca6905?auto=format&fit=crop&q=80&w=800', // Time/Schedule
-    },
-    {
-      id: 'visualnovel',
-      title: 'VISUAL NOVEL',
-      subtitle: 'Storytelling Game',
-      description: '매력적인 스토리와 선택지로 진행되는 인터랙티브 비주얼 노벨입니다. 다양한 캐릭터와 배경, 그리고 감동적인 이야기를 경험하세요.',
-      icon: BookOpen,
-      x: 0,
-      y: 0,
-      size: 'lg',
-      link: '/visual-novel',
-      image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&q=80&w=800', // Story/Art
-    },
-    {
-      id: 'japan',
-      title: 'JAPAN GUIDE',
-      subtitle: 'Travel Companion',
-      description: '일본 여행을 위한 종합 가이드입니다. 관광지, 음식, 문화 등 다양한 정보를 제공하여 완벽한 여행 계획을 세울 수 있도록 도와줍니다.',
-      icon: BookOpen,
-      x: 0,
-      y: -150,
-      size: 'md',
-      link: '/japan',
-      image: 'https://images.unsplash.com/photo-1505678261036-a3fcc5e884ee?auto=format&fit=crop&q=80&w=800', // Travel/Culture
-    },
-    {
-      id: 'english',
-      title: 'ENGLISH VOCABULARY',
-      subtitle: 'Learning System',
-      description: '체계적인 영단어 학습 시스템입니다. Day별로 단어를 선택하여 효율적으로 학습할 수 있으며, 한글 뜻을 숨기고 단어를 맞춰보는 방식으로 학습할 수 있습니다.',
-      icon: BookOpen,
-      x: 250,
-      y: -200,
-      size: 'md',
-      link: '/english',
-      image: 'https://images.unsplash.com/photo-1546410531-bb4caa6b0e3b?auto=format&fit=crop&q=80&w=800', // Education/Language
-    },
-    {
-      id: 'mga',
-      title: 'MGA PORTAL',
-      subtitle: 'Glass Command Site',
-      description: '가상의 마법소녀협회(MGA) 공식 포털입니다. 대변동 연대기, 부정 도감, 마법소녀 랭킹, 실시간 경보센터, 시민 대피 가이드, 팬클럽 굿즈를 한곳에서 확인하세요.',
-      icon: Shield,
-      x: 360,
-      y: -40,
-      size: 'md',
-      link: '/mga',
-      image: '/web-hub/VisualNovel/Background/bg_mga_server_room.png',
-    }
-  ];
-
-  return baseNodes;
-};
-
-const NODES = generateNodes();
-
-// --- Components ---
-
-/**
- * StarField: Optimized background using refs to avoid re-renders on drag
- */
-interface StarFieldProps {
-  panX: number;
-  panY: number;
-  scale: number;
-}
-
-const StarField: React.FC<StarFieldProps> = ({ panX, panY, scale }) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const viewStateRef = useRef({ panX, panY, scale });
-
-  useEffect(() => {
-    viewStateRef.current = { panX, panY, scale };
-  }, [panX, panY, scale]);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-    canvas.width = width;
-    canvas.height = height;
-
-    const stars = Array.from({ length: 500 }, () => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      z: Math.random() * 2 + 0.5,
-      radius: Math.random() * 1.5,
-      alpha: Math.random(),
-    }));
-
-    let animationFrameId: number;
-
-    const animate = () => {
-      ctx.clearRect(0, 0, width, height);
-      
-      const gradient = ctx.createLinearGradient(0, 0, 0, height);
-      gradient.addColorStop(0, '#02020a');
-      gradient.addColorStop(1, '#000000');
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, width, height);
-
-      const { panX, panY, scale } = viewStateRef.current;
-
-      stars.forEach((star) => {
-        const parallaxX = panX * 0.05 * star.z;
-        const parallaxY = panY * 0.05 * star.z;
-        
-        let x = (star.x + parallaxX) % width;
-        let y = (star.y + parallaxY) % height;
-
-        if (x < 0) x += width;
-        if (y < 0) y += height;
-
-        ctx.beginPath();
-        ctx.arc(x, y, star.radius * (scale * 0.5 + 0.5), 0, Math.PI * 2);
-        
-        const twinkle = Math.sin(Date.now() * 0.003 * star.z + star.x);
-        const alpha = Math.max(0.1, Math.min(1, star.alpha + twinkle * 0.2));
-        
-        ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-        ctx.fill();
-      });
-
-      animationFrameId = requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    const handleResize = () => {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = width;
-      canvas.height = height;
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      cancelAnimationFrame(animationFrameId);
-    };
-  }, []);
-
-  return <canvas ref={canvasRef} className="absolute inset-0 z-0 pointer-events-none" />;
-};
-
-/**
- * NodeItem
- */
-interface NodeItemProps {
-  data: NodeData;
-  isSelected: boolean;
-  onClick: (data: NodeData) => void;
-}
-
-const NodeItem: React.FC<NodeItemProps> = React.memo(({ data, isSelected, onClick }) => {
-  const sizeClasses = {
-    sm: 'w-24 h-24 text-xs',
-    md: 'w-32 h-32 text-sm',
-    lg: 'w-48 h-48 text-base',
-  };
-
-  const iconSizes = { sm: 24, md: 32, lg: 48 };
-
+function App() {
   return (
-    <div
-      className={`absolute transition-all duration-700 ease-[cubic-bezier(0.25,0.1,0.25,1)] cursor-pointer
-        ${isSelected ? 'z-30' : 'z-10 hover:z-20'}
-      `}
-      style={{
-        transform: `translate(${data.x}px, ${data.y}px) translate(-50%, -50%)`, 
-      }}
-      onClick={(e) => {
-        e.stopPropagation();
-        onClick(data);
-      }}
-    >
-      <div className={`transition-transform duration-500 ${isSelected ? 'scale-150' : 'hover:scale-110 animate-float-slow'}`}>
-        {/* Glow */}
-        <div className={`absolute inset-0 rounded-full blur-xl transition-all duration-500
-          ${isSelected ? 'bg-white/50 scale-125' : 'bg-white/10 opacity-0 group-hover:opacity-40 group-hover:scale-110'}
-        `} />
+    <div className="min-h-screen bg-slate-950 text-slate-100">
+      <main className="mx-auto max-w-7xl px-5 py-12 sm:px-8 sm:py-16">
+        <header className="mb-10 border-b border-slate-800 pb-8">
+          <p className="mb-3 text-sm font-medium tracking-widest text-sky-400">PROJECT COLLECTION</p>
+          <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">Web Hub</h1>
+          <p className="mt-4 text-base leading-7 text-slate-400">
+            게임, 도구, 웹 실험을 둘러보고 원하는 프로젝트를 바로 열어보세요.
+          </p>
+          <p className="mt-4 text-sm text-slate-500">총 {projects.length}개 페이지</p>
+        </header>
 
-        {/* Node Circle Container */}
-        <div className={`
-          relative flex flex-col items-center justify-center rounded-full border overflow-hidden
-          backdrop-blur-md shadow-2xl transition-all duration-500
-          ${sizeClasses[data.size]}
-          ${isSelected 
-            ? 'bg-black/80 border-white text-white shadow-[0_0_50px_rgba(255,255,255,0.6)]' 
-            : 'bg-black/30 border-white/30 text-gray-300 hover:border-white/70 hover:text-white hover:bg-black/50 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)]'}
-        `}>
-          {/* Background Image Layer */}
-          <div 
-            className={`absolute inset-0 bg-cover bg-center transition-opacity duration-500 
-              ${isSelected ? 'opacity-40' : 'opacity-30 group-hover:opacity-50'}`}
-            style={{ backgroundImage: `url(${data.image})` }}
-          />
-          
-          {/* Dark overlay to ensure text/icon visibility */}
-          <div className={`absolute inset-0 bg-black/60 transition-opacity duration-500 ${isSelected ? 'bg-black/70' : ''}`} />
-
-          {/* Content Layer (z-10 to sit above image) */}
-          <div className="relative z-10 flex flex-col items-center">
-            <data.icon size={iconSizes[data.size]} strokeWidth={1.5} className="mb-2 drop-shadow-lg" />
-            <span className="font-mono tracking-wider font-bold text-center px-2 opacity-90 select-none drop-shadow-md">
-              {data.title}
-            </span>
-          </div>
-          
-          {isSelected && (
-            <div className="absolute inset-0 rounded-full border border-dashed border-white/40 animate-spin-slow pointer-events-none z-20" />
-          )}
-        </div>
-      </div>
-    </div>
-  );
-});
-
-/**
- * InfoPanel: Enhanced with Image Background Header
- */
-interface InfoPanelProps {
-  data: NodeData | null;
-  onClose: () => void;
-  onNavigate?: (path: string) => void;
-}
-
-const InfoPanel: React.FC<InfoPanelProps> = ({ data, onClose, onNavigate }) => {
-  const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const link = data?.link || '';
-    if (link.startsWith('/')) {
-      e.preventDefault();
-      onNavigate?.(link);
-    }
-  };
-  return (
-    <div className={`
-      fixed inset-y-0 left-0 z-40 h-full flex flex-col justify-center
-      transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] pointer-events-none
-      ${data ? 'w-full md:w-[55%] opacity-100 translate-x-0' : 'w-0 opacity-0 -translate-x-20'}
-    `}>
-      {data && (
-        <div 
-          className="pointer-events-auto h-full w-full bg-black/80 backdrop-blur-2xl border-r border-white/20 flex flex-col justify-center relative overflow-hidden"
-          style={{ boxShadow: '20px 0 50px rgba(0,0,0,0.5)' }}
-        >
-          {/* --- Image Background Header Section --- */}
-          <div className="absolute top-0 left-0 w-full h-1/2 z-0 overflow-hidden">
-            {/* The Image */}
-            <div 
-              className="absolute inset-0 bg-cover bg-center opacity-30 scale-105 transition-transform duration-[20s] ease-linear"
-              style={{ 
-                backgroundImage: `url(${data.image})`,
-                // Subtle zoom effect could be added here if desired
-              }} 
-            />
-            {/* Gradient Mask: Fades image into black at the bottom */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-black/60 to-[#050505]" />
-          </div>
-
-          {/* Decorative Elements */}
-          <button 
-            onClick={onClose}
-            className="absolute top-8 left-8 z-50 text-white/60 hover:text-white transition-colors flex items-center gap-2 group"
-          >
-            <div className="p-2 bg-black/40 border border-white/10 rounded-full group-hover:bg-white/20 transition-colors backdrop-blur-sm">
-              <X size={24} />
-            </div>
-            <span className="text-sm font-mono tracking-widest opacity-0 group-hover:opacity-100 transition-opacity bg-black/50 px-2 py-1 rounded">CLOSE</span>
-          </button>
-
-          <div className="relative z-10 px-8 md:px-16 animate-slide-in-up mt-20">
-            {/* Header Content with Image Backdrop */}
-            <div className="flex items-center gap-6 mb-8">
-              <div className="p-4 bg-white/10 rounded-2xl border border-white/20 shadow-[0_0_30px_rgba(255,255,255,0.1)] backdrop-blur-sm">
-                <data.icon size={48} className="text-white" />
-              </div>
-              <div>
-                <div className="text-xs font-mono text-white/70 mb-1 border-b border-white/20 inline-block pb-1">
-                  ID: {data.id.toUpperCase()}
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {projects.map(project => {
+            const content = (
+              <>
+                <div className="aspect-video overflow-hidden bg-slate-800">
+                  <img
+                    src={project.thumbnail}
+                    alt=""
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105"
+                    onError={event => {
+                      const fallback = projectUrl('/og/default.png');
+                      if (!event.currentTarget.src.endsWith(fallback)) event.currentTarget.src = fallback;
+                    }}
+                  />
                 </div>
-                <h2 className="text-5xl md:text-6xl font-black tracking-tighter text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">
-                  {data.title}
-                </h2>
-              </div>
-            </div>
-
-            <p className="text-xl md:text-2xl text-white/80 font-mono tracking-widest uppercase mb-8 pl-1 border-l-2 border-white/50 drop-shadow-md">
-              {data.subtitle}
-            </p>
-
-            {/* Content Body */}
-            <div className="text-lg md:text-xl text-gray-300 leading-relaxed font-light mb-12 max-w-2xl bg-black/20 p-4 rounded-lg border border-white/5 backdrop-blur-sm">
-              {data.description}
-            </div>
-
-            <a 
-              href={data.link}
-              onClick={handleLinkClick}
-              target={data.link.startsWith('/') ? undefined : "_blank"}
-              rel={data.link.startsWith('/') ? undefined : "noopener noreferrer"}
-              className="group relative inline-flex items-center justify-center px-10 py-5 bg-white text-black font-bold tracking-[0.2em] hover:bg-gray-200 transition-all overflow-hidden rounded-sm"
-            >
-              <span className="relative z-10 mr-4">INITIATE CONNECTION</span>
-              <ExternalLink size={20} className="relative z-10 group-hover:translate-x-1 transition-transform" />
-              <div className="absolute inset-0 bg-white/50 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out" />
-            </a>
-          </div>
+                <div className="flex flex-1 flex-col p-5">
+                  <span className="mb-3 text-xs font-medium text-sky-400">{categories[project.category]}</span>
+                  <h2 className="text-lg font-semibold leading-6">{project.title}</h2>
+                  <p className="mt-3 flex-1 text-sm leading-6 text-slate-400">{project.description}</p>
+                  <span className="mt-5 flex items-center gap-2 text-sm font-medium text-slate-200">
+                    열어보기 <ArrowUpRight size={16} aria-hidden="true" />
+                  </span>
+                </div>
+              </>
+            );
+            const className = 'group flex h-full flex-col overflow-hidden rounded-xl border border-slate-800 bg-slate-900 transition-colors hover:border-sky-500/60 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-sky-400';
+            return project.type === 'static' ? (
+              <a key={project.id} href={projectUrl(project.path)} className={className}>
+                {content}
+              </a>
+            ) : (
+              <Link key={project.id} to={project.path} className={className}>
+                {content}
+              </Link>
+            );
+          })}
         </div>
-      )}
+      </main>
     </div>
   );
-};
-
-// --- Main App Component ---
-
-const App: React.FC = () => {
-  const navigate = useNavigate();
-  const [selectedNode, setSelectedNode] = useState<NodeData | null>(null);
-  const [pan, setPan] = useState({ x: 0, y: 0 });
-  const [scale, setScale] = useState(1);
-  const [isDragging, setIsDragging] = useState(false);
-  
-  const dragStartRef = useRef({ x: 0, y: 0 });
-  const panStartRef = useRef({ x: 0, y: 0 });
-
-  const handleWheel = useCallback((e: React.WheelEvent) => {
-    const zoomSensitivity = 0.001;
-    const delta = -e.deltaY * zoomSensitivity;
-    setScale((prevScale) => {
-      const newScale = prevScale + delta;
-      return Math.min(Math.max(newScale, 0.3), 3);
-    });
-  }, []);
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (selectedNode) return;
-    setIsDragging(true);
-    dragStartRef.current = { x: e.clientX, y: e.clientY };
-    panStartRef.current = { ...pan };
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || selectedNode) return;
-    const dx = e.clientX - dragStartRef.current.x;
-    const dy = e.clientY - dragStartRef.current.y;
-    setPan({
-      x: panStartRef.current.x + dx,
-      y: panStartRef.current.y + dy,
-    });
-  };
-
-  const handleMouseUp = () => setIsDragging(false);
-
-  useEffect(() => {
-    if (selectedNode) {
-      const targetScreenX = window.innerWidth * 0.75;
-      const targetScreenY = window.innerHeight * 0.5;
-      const centerOffsetX = window.innerWidth / 2;
-      const centerOffsetY = window.innerHeight / 2;
-
-      const targetPanX = (targetScreenX - centerOffsetX) / scale - selectedNode.x;
-      const targetPanY = (targetScreenY - centerOffsetY) / scale - selectedNode.y;
-
-      setPan({ x: targetPanX, y: targetPanY });
-    }
-  }, [selectedNode, scale]);
-
-  return (
-    <div 
-      className={`relative w-full h-screen bg-black overflow-hidden font-sans select-none 
-        ${isDragging ? 'cursor-grabbing' : selectedNode ? 'cursor-default' : 'cursor-grab'}
-      `}
-      onMouseDown={handleMouseDown}
-      onMouseMove={handleMouseMove}
-      onMouseUp={handleMouseUp}
-      onMouseLeave={handleMouseUp}
-      onWheel={handleWheel}
-    >
-      <style>{`
-        @keyframes float-slow {
-          0% { transform: translateY(0px); }
-          100% { transform: translateY(-10px); }
-        }
-        .animate-float-slow {
-          animation: float-slow 4s ease-in-out infinite alternate;
-        }
-        @keyframes slide-in-up {
-          0% { transform: translateY(30px); opacity: 0; }
-          100% { transform: translateY(0); opacity: 1; }
-        }
-        .animate-slide-in-up {
-          animation: slide-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        @keyframes spin-slow {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
-
-      <StarField panX={pan.x} panY={pan.y} scale={scale} />
-      
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.6)_100%)] z-0" />
-      <div className="absolute inset-0 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay z-[1]" />
-
-      <div 
-        className="absolute top-1/2 left-1/2 will-change-transform transition-transform duration-700 ease-[cubic-bezier(0.25,1,0.5,1)]"
-        style={{
-          transform: `translate(-50%, -50%) scale(${scale}) translate(${pan.x}px, ${pan.y}px)`,
-        }}
-      >
-        <div className="absolute -top-[500px] left-0 -translate-x-1/2 w-[1500px] text-center pointer-events-none z-0 opacity-10 select-none">
-             <h1 className="text-[200px] font-black text-white tracking-[0.2em] blur-[4px]">UNIVERSE</h1>
-        </div>
-
-        {NODES.map((node) => (
-          <NodeItem 
-            key={node.id} 
-            data={node} 
-            isSelected={selectedNode?.id === node.id}
-            onClick={setSelectedNode} 
-          />
-        ))}
-
-        <svg className="absolute top-0 left-0 overflow-visible pointer-events-none z-0 opacity-10">
-           {NODES.map((node, i) => (
-             i < 5 && (
-               <line 
-                  key={`line-${i}`}
-                  x1={0} y1={0} 
-                  x2={node.x} y2={node.y} 
-                  stroke="white" 
-                  strokeWidth="2" 
-                  strokeDasharray="10,10" 
-                />
-             )
-           ))}
-        </svg>
-
-        <div className="absolute top-0 left-0 w-32 h-32 -translate-x-1/2 -translate-y-1/2 border border-white/5 rounded-full" />
-        <div className="absolute top-0 left-0 w-2 h-2 -translate-x-1/2 -translate-y-1/2 bg-white/20 rounded-full" />
-      </div>
-
-      <header className={`absolute top-8 left-0 w-full text-center pointer-events-none z-30 transition-opacity duration-500 ${selectedNode ? 'opacity-0' : 'opacity-100'}`}>
-        <h1 className="text-5xl md:text-7xl font-black text-white tracking-[0.2em]" style={{ textShadow: '0 0 30px rgba(255,255,255,0.2)' }}>
-          NEXUS
-        </h1>
-        <div className="mt-4 flex justify-center gap-4">
-          <span className="text-xs font-mono text-white/50 border border-white/20 px-3 py-1 rounded-full bg-black/40 backdrop-blur-sm">SCROLL TO ZOOM</span>
-          <span className="text-xs font-mono text-white/50 border border-white/20 px-3 py-1 rounded-full bg-black/40 backdrop-blur-sm">DRAG TO MOVE</span>
-        </div>
-      </header>
-
-      <InfoPanel 
-        data={selectedNode} 
-        onClose={() => setSelectedNode(null)}
-        onNavigate={navigate}
-      />
-
-      <div className={`absolute bottom-6 right-8 z-30 text-right font-mono text-[10px] text-white/30 transition-opacity ${selectedNode ? 'opacity-0' : 'opacity-100'}`}>
-        <div className="mb-1">POS X: {Math.round(-pan.x)}</div>
-        <div className="mb-1">POS Y: {Math.round(-pan.y)}</div>
-        <div>ZOOM: {Math.round(scale * 100)}%</div>
-      </div>
-    </div>
-  );
-};
+}
 
 export default App;

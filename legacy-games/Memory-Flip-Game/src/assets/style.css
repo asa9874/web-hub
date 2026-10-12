@@ -1,0 +1,289 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: auto; /* 기본 스크롤 설정 */
+  min-width: 1800px;
+  min-height: 850px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  font-family: 'HSSaemaul-Regular';
+  transition: 1s;
+  
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: rgb(0, 0, 0);
+}
+
+body{
+  background-color: antiquewhite;
+}
+
+@font-face {
+  font-family: 'HSSaemaul-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/HSSaemaul-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.backgroundimg{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+  opacity: 1;
+  z-index: -1; 
+}
+.gamebox{
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1800px;
+  height: 850px;
+  background-color: rgb(128, 100, 100);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+.card{
+  width: 110px;
+  height: 150px;
+  transition: 1s;
+  transform-style: preserve-3d ;
+  margin: 10px;
+  
+}
+
+.card:hover{
+  transform: scale(1.05);
+  cursor: pointer;
+}
+
+
+.card-side {
+  position: absolute;
+  display: flex;
+  border-radius: 0.5em;
+  font-size: 1.5rem;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+}
+
+.card-side-front {
+  z-index: 1;
+  background: rgb(221, 20, 20);
+  background-size: 100% 100%;
+  color: red;
+  font-size: 40px;
+  box-shadow: 1px 1px 10px black;
+}
+
+.card-side-back {
+  transform: rotateY(180deg);
+  background-size: 100% 100%;
+  font-size: 40px;
+  color: rgb(255, 255, 255);
+  text-shadow: 1px 1px 10px rgb(0, 0, 0);
+}
+
+
+
+.cardrow{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scorebox{
+  margin: 30px;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.score{
+  padding: 10px;
+}
+
+.GameStartButton{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 25px;
+  width: 700px;
+  height: 110px;
+  background-color: rgb(255, 255, 255);
+  font-family: 'EF_jejudoldam';
+  font-size: 50px;
+  border-radius: 20px;
+  color: rgb(0, 0, 0);
+  letter-spacing:10px;
+  text-shadow: 1px 1px 1px rgb(0, 0, 0);
+  transition: 0.1s;
+  border: medium solid 
+}
+
+.GameStartButton:hover{
+  transform: scale(1.04);
+  cursor: pointer;
+}
+.startimg{
+  position: relative;
+  width: 50%;
+  height: 100%;
+  transition: 1s;
+  background-size: 100% 100%;
+}
+
+.startbox{
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 50%;
+  height: 100%;
+  background-color: palevioletred;
+}
+
+.gamestartimg{
+  position: absolute;
+  bottom: 0;
+  width: 400px;
+  height: 600px;
+  opacity: 0.4;
+  transition: 1s;
+}
+.gamestartimg1{
+  left: 0%;
+}
+.gamestartimg2{
+  left: 15%;
+}
+.gamestartimg3{
+  left: 35%;
+}
+.gamestartimg4{
+  left: 55%;
+}
+
+@font-face {
+  font-family: 'EF_jejudoldam';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-EF@1.0/EF_jejudoldam.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.GameTitle{
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: rgb(0, 0, 0);
+  letter-spacing:6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'EF_jejudoldam';
+  font-size: 80px;
+  color: rgb(255, 255, 255);
+  font-weight: 1000;
+  text-shadow: 3px 3px 50px rgb(0, 0, 0);
+  margin-bottom: 20px;
+}
+
+.funny{
+  float: left;
+  font-family: 'EF_jejudoldam';
+  position: absolute;
+  left: 5%;
+  top: 5%;
+  font-size: 50px;
+  color: red;
+  transform: rotate(-30deg);
+}
+
+.GameOverBox{
+  position: absolute; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.WinLoseText{
+  font-family: 'EF_jejudoldam';
+  color: palevioletred;
+  font-size: 140px;
+  margin: 40px;
+}
+table{
+  width: 400px;
+  height: 300px;
+  border-collapse: collapse;
+  border: 10px solid black;
+  background-color: palevioletred;
+}
+.scoreplayer{
+  align-content: center;
+  text-align: center;
+  font-family: 'EF_jejudoldam';
+  font-size: 50px;
+  color: aliceblue;
+}
+button{
+  height: 100px;
+  width: 500px;
+  font-family: 'EF_jejudoldam';
+  color: white;
+  font-size: 40px;
+  margin: 40px;
+  border-radius: 40px;
+  background-color: aquamarine;
+  transition: 1s;
+}
+button:hover{
+  transform: scale(1.04);
+}
+.characterbox{
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  bottom: 0;
+}
+
+.playerbox{
+  left: 30px;
+}
+
+.computerbox{
+  right: 30px;
+}
+
+.character{
+  height: 750px;
+  width: 450px;
+  background-color: rgb(32, 19, 1);
+  transition: 1s;
+}
+
+.score{
+  text-align: center;
+  align-content: center;
+  font-size: 50px;
+  width: 100px;
+  background-color: rgb(250, 250, 250);
+  margin: 10px;
+}
+
+.playercharacter{
+  background-color: red;
+}

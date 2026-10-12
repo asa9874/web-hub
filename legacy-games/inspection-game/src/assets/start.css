@@ -1,0 +1,41 @@
+.startimg{
+    width: 100%;
+    height: 80%;
+    background-color: aqua;
+    background-size: 100% 100%;
+}
+
+
+.startbuttonbox{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 20%;
+    background-color: rgb(0, 0, 0);
+}
+
+.starttitle{
+    position: absolute;
+    top: 0;
+}
+
+.startsubtitle{
+    position: absolute;
+    top:130px
+}
+
+.GameStartButton{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 90%;
+    width: 200px;
+    background-color: rgb(255, 192, 211);
+    font-size: 50px;
+    border-radius: 30px;
+}
+
+.GameStartButton:hover{
+    cursor: pointer;
+}

@@ -1,0 +1,42 @@
+/* global.css */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden; /* 기본 스크롤 설정 */
+  min-width: 1800px;
+  min-height: 850px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  font-family: 'EF_hyunydororong';
+  background-color: antiquewhite;
+}
+
+@font-face {
+  font-family: 'EF_hyunydororong';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2206-01@1.0/EF_hyunydororong.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+  /* tables.css */
+table, th, td {
+  font-size: 24px;
+  padding: 10px;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  width: 100%;
+  text-align: center;
+}
+
+th, td {
+  min-width: 70px;
+  height: 40px;
+}
+
+tr td:first-child {
+  border-right: 1px solid black;
+  width: 140px;
+}
