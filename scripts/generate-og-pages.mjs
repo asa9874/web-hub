@@ -27,7 +27,8 @@ for (const project of [hub, ...projects]) {
   const output = path.join(dist, project.ogImage);
   await mkdir(path.dirname(output), { recursive: true });
   // Existing screenshots/art are preferred. Projects without one get their own titled card.
-  const source = project.ogSource ? path.join(root, 'legacy-games', project.source, project.ogSource)
+  const source = project.ogPublicSource ? path.join(root, 'public', project.ogPublicSource)
+    : project.ogSource ? path.join(root, 'legacy-games', project.source, project.ogSource)
     : project.type === 'react' && project.id !== 'web-hub' ? path.join(root, 'public/VisualNovel/Background', project.id.startsWith('mga') ? 'bg_mga_server_room.png' : 'title.png') : null;
   const hue = [...project.id].reduce((value, c) => value + c.charCodeAt(0) * 17, 0) % 360;
   const overlay = Buffer.from('<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg"><rect y="400" width="1200" height="230" fill="#070b22" opacity="0.9"/><text x="60" y="475" fill="#89d9ff" font-size="26" font-family="sans-serif">WEB HUB · ' + escape(project.id.toUpperCase()) + '</text><text x="60" y="555" fill="white" font-size="48" font-family="sans-serif">' + escape(project.title) + '</text></svg>');

@@ -75,10 +75,14 @@ try {
     }
     if (project.id === 'rhythm-game') { await page.keyboard.press('ArrowUp'); }
     if (project.id === 'hub') {
+      assert(await page.evaluate(async () => {
+        await document.fonts.ready;
+        return document.fonts.check('16px "Hub Kirang"') && document.fonts.check('16px "Hub Gowun"');
+      }), 'Local Korean fonts failed to load');
       await page.screenshot({ path:path.join(root, '.build-projects/hub.png') });
       const titles = await page.locator('body').innerText();
       for (const p of projects) assert(titles.includes(p.title), 'Missing hub card ' + p.id);
-      assert.equal(await page.locator('main a').count(), projects.length);
+      assert.equal(await page.locator('.hub-card').count(), projects.length);
       assert.equal(await page.locator('.hub-section').count(), 3);
       const filters = page.getByRole('group', { name:'프로젝트 카테고리' });
       const search = page.getByRole('searchbox', { name:'프로젝트 검색' });
@@ -98,7 +102,7 @@ try {
       assert((await page.locator('.hub-card').getAttribute('href')).endsWith('/games/void-game/'));
       await filters.getByRole('button', { name:/^도구/ }).click();
       await expectCards(0);
-      await page.getByRole('heading', { name:'아직 찾는 프로젝트가 없어요' }).waitFor();
+        await page.getByRole('heading', { name:'검색 결과가 없습니다' }).waitFor();
       await page.getByRole('button', { name:'검색어 지우기' }).click();
       await expectCards(projects.filter(p => p.category === 'tool').length);
       await search.fill('no-such-project-12345');
@@ -144,6 +148,93 @@ try {
       assert((await page.locator('.hub-card').getAttribute('href')).endsWith('/games/deck-game/'));
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), 'Mobile search overflow');
       await page.screenshot({ path:path.join(root, '.build-projects/hub-mobile-search.png') });
+    }
+    if (project.id === 'ai-prompts') {
+      const artworks = JSON.parse(await readFile(path.join(root, 'src/AIPrompts/artworks.json'), 'utf8'));
+      assert.equal(await page.locator('.pg-category-card').count(), 2);
+      await page.screenshot({ path:path.join(root, '.build-projects/ai-prompts-categories.png') });
+      await page.getByRole('link', { name:/초현실주의/ }).click();
+      await page.getByRole('heading', { name:'초현실주의', exact:true }).waitFor();
+      await page.locator('.pg-artwork').first().waitFor();
+      await page.context().grantPermissions(['clipboard-read','clipboard-write'], { origin });
+      const surrealWorks = artworks.filter(work => work.category === 'surrealism');
+      const animationWorks = artworks.filter(work => work.category === 'animation');
+      const scenes = animationWorks.map(work => work.prompt.match(/Scene: ([\s\S]*?)(?=\n(?:Composition|Style):|$)/)?.[1]);
+      assert(scenes.every(Boolean), 'Each style must record its actual scene prompt');
+      assert.equal(new Set(scenes).size, animationWorks.length, 'Each animation style needs its own scene');
+      assert.equal(await page.locator('.pg-artwork').count(), surrealWorks.length);
+      const verifyArtwork = async artwork => {
+        const article = page.getByRole('article', { name:artwork.title, exact:true });
+        assert.equal(await article.locator('.pg-prompt').textContent(), artwork.prompt);
+        await article.locator('.pg-image-button img').evaluate(img => img.decode());
+        await article.getByRole('button', { name:'프롬프트 복사' }).click();
+        await article.getByRole('button', { name:'복사 완료' }).waitFor();
+        const copied = await page.evaluate(() => navigator.clipboard.readText());
+        assert.equal(copied.replace(/\r\n/g, '\n'), artwork.prompt);
+        await article.getByRole('button', { name:artwork.title + ' 크게 보기' }).click();
+        await article.locator('dialog[open]').waitFor();
+        await page.keyboard.press('Escape');
+        assert.equal(await article.locator('dialog[open]').count(), 0);
+        const download = page.waitForEvent('download');
+        await article.getByRole('link', { name:'이미지 저장' }).click();
+        assert.equal((await download).suggestedFilename(), artwork.id + (artwork.originalImage ? '.png' : '.webp'));
+        if (artwork.stylePrompt) {
+          assert(artwork.prompt.includes(artwork.stylePrompt), 'Style snippet must match the actual generation prompt');
+          await article.getByRole('button', { name:'그림체만 복사' }).click();
+          await article.getByRole('button', { name:'그림체 복사 완료' }).waitFor();
+          if (artwork.qualityPrompt) assert(artwork.prompt.includes(artwork.qualityPrompt), 'Quality conditions must match the submitted prompt');
+          const expectedStyle = [artwork.stylePrompt, artwork.qualityPrompt && 'Clean rendering: ' + artwork.qualityPrompt].filter(Boolean).join('\n\n');
+          assert.equal((await page.evaluate(() => navigator.clipboard.readText())).replace(/\r\n/g, '\n'), expectedStyle);
+        }
+      };
+      for (const artwork of surrealWorks) await verifyArtwork(artwork);
+      await page.screenshot({ path:path.join(root, '.build-projects/ai-prompts-desktop.png'), fullPage:true });
+      const navigator = page.getByRole('navigation', { name:'작품 바로가기', includeHidden:true });
+      await page.evaluate(() => window.scrollTo(0, 200));
+      await navigator.waitFor({ state:'visible' });
+      await navigator.getByRole('button', { name:'유리 동백' }).click();
+      await page.waitForFunction(() => {
+        const top = document.getElementById('artwork-camellia').getBoundingClientRect().top;
+        return top >= 0 && top < innerHeight * .45;
+      });
+      assert.equal(await navigator.getByRole('button', { name:'유리 동백' }).getAttribute('aria-current'), 'location');
+      await page.mouse.move(5, 5);
+      await navigator.getByRole('button', { name:'유리 동백' }).evaluate(button => button.blur());
+      await navigator.waitFor({ state:'hidden' });
+      await page.evaluate(() => window.scrollBy(0, -80));
+      await navigator.waitFor({ state:'visible' });
+      await navigator.getByRole('button', { name:'잔향', exact:true }).click();
+      await page.waitForFunction(() => Math.abs(document.getElementById('artwork-ribbon').getBoundingClientRect().top - 24) < 3);
+      await page.getByRole('link', { name:/애니메이션/ }).click();
+      await page.getByRole('heading', { name:'애니메이션', exact:true }).waitFor();
+      await page.locator('.pg-artwork').first().waitFor();
+      assert.equal(await page.locator('.pg-artwork').count(), animationWorks.length);
+      assert.equal(await page.locator('.pg-scroll-nav button').count(), animationWorks.length);
+      for (const artwork of animationWorks) await verifyArtwork(artwork);
+      await page.screenshot({ path:path.join(root, '.build-projects/ai-prompts-animation.png'), fullPage:true });
+      await page.reload({ waitUntil:'load' });
+      await page.getByRole('heading', { name:'애니메이션', exact:true }).waitFor();
+      assert.equal(new URL(page.url()).searchParams.get('category'), 'animation');
+      for (const width of [768,390,320]) {
+        await page.setViewportSize({ width, height:900 });
+        assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Animation overflow at ' + width);
+      }
+      await page.setViewportSize({ width:390, height:844 });
+      await page.screenshot({ path:path.join(root, '.build-projects/ai-prompts-animation-mobile.png'), fullPage:true });
+      await page.setViewportSize({ width:1440, height:1000 });
+      await page.getByRole('link', { name:/초현실주의/ }).click();
+      await page.reload({ waitUntil:'load' });
+      await page.getByRole('heading', { name:'초현실주의', exact:true }).waitFor();
+      assert.equal(new URL(page.url()).searchParams.get('category'), 'surrealism');
+      for (const width of [768,390,320]) {
+        await page.setViewportSize({ width, height:900 });
+        assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Gallery overflow at ' + width);
+      }
+      await page.setViewportSize({ width:390, height:844 });
+      await page.screenshot({ path:path.join(root, '.build-projects/ai-prompts-mobile.png'), fullPage:true });
+      await page.getByRole('link', { name:'web hub' }).click();
+      await page.locator('a.hub-card[href="/web-hub/ai-prompts/"]').click();
+      await page.getByRole('heading', { name:'AI그림 프롬프트', exact:true }).waitFor();
     }
     const canvas = await page.locator('canvas').count();
     const broken = await page.evaluate(() => [...document.images].filter(img => img.getAttribute('src') && img.complete && img.naturalWidth === 0 && !/^https?:/.test(img.getAttribute('src'))).map(img => img.getAttribute('src')));

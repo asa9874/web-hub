@@ -13,6 +13,7 @@ export interface Project {
   typecheck?: boolean;
   dependencyAliases?: Record<string, string>;
   ogSource?: string;
+  ogPublicSource?: string;
 }
 export const projects = data as Project[];
 export const projectUrl = (path: string) => import.meta.env.BASE_URL + path.replace(/^\//, '');
