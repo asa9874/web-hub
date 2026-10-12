@@ -45,19 +45,47 @@ try {
     if (project.id === 'memory-flip') assert(await page.locator('.cardbox').evaluate(el => el.children.length > 0));
     if (project.id === 'rhythm-game') await page.locator('.gamebox').waitFor({ state:'visible' });
     if (project.id === 'avoid-game') { await page.keyboard.press('d'); }
+    if (['void-game', 'deck-game'].includes(project.id)) {
+      const canvas = page.locator('canvas');
+      await canvas.waitFor({ state:'visible' });
+      await page.waitForTimeout(800);
+      const size = await canvas.evaluate(el => ({ width:el.width, height:el.height }));
+      const isVoid = project.id === 'void-game';
+      assert.equal(size.width, isVoid ? 480 : 1280);
+      assert.equal(size.height, isVoid ? 640 : 720);
+      const box = await canvas.boundingBox();
+      await page.mouse.click(box.x + box.width * (isVoid ? 182/480 : 1040/1280), box.y + box.height * (isVoid ? 487/640 : 380/720));
+      await page.waitForTimeout(1000);
+      if (isVoid) { await page.keyboard.down('ArrowLeft'); await page.waitForTimeout(150); await page.keyboard.up('ArrowLeft'); }
+      await page.screenshot({ path:path.join(root, '.build-projects/' + project.id + '.png') });
+    }
+    if (project.id === 'text-game') {
+      await page.locator('.choice-btn').first().waitFor({ state:'visible' });
+      const before = await page.locator('#scene-description').innerText();
+      await page.locator('.choice-btn').first().click();
+      await page.waitForFunction(previous => document.getElementById('scene-description').innerText !== previous, before);
+      await page.locator('#btn-map').click();
+      await page.locator('#map-overlay').waitFor({ state:'visible' });
+      await page.locator('.map-node').first().click();
+      await page.locator('#map-enter-int').click();
+      await page.locator('#map-interior-view').waitFor({ state:'visible' });
+      await page.locator('#map-back-btn').click();
+      await page.locator('#map-close-btn').click();
+      await page.screenshot({ path:path.join(root, '.build-projects/text-game.png') });
+    }
     if (project.id === 'rhythm-game') { await page.keyboard.press('ArrowUp'); }
     if (project.id === 'hub') {
       await page.screenshot({ path:path.join(root, '.build-projects/hub.png') });
       const titles = await page.locator('body').innerText();
       for (const p of projects) assert(titles.includes(p.title), 'Missing hub card ' + p.id);
       assert.equal(await page.locator('main a').count(), projects.length);
-      for (const id of ['networkquiz', 'memory-flip']) {
+      for (const id of ['networkquiz', 'memory-flip', 'void-game', 'text-game', 'deck-game']) {
         const project = projects.find(p => p.id === id);
         const target = '/web-hub' + project.path;
         await page.locator('a[href="' + target + '"]').click();
         await page.waitForURL(origin + target);
         if (project.type === 'react') await page.waitForFunction(() => document.getElementById('root')?.children.length > 0);
-        else await page.locator('.startbox').waitFor({ state:'visible' });
+        else await page.locator(id === 'text-game' ? '#game-container' : ['void-game','deck-game'].includes(id) ? 'canvas' : '.startbox').waitFor({ state:'visible' });
         await page.goto(origin + '/web-hub/', { waitUntil:'load' });
       }
       await page.setViewportSize({ width:390, height:844 });

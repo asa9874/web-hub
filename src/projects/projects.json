@@ -331,5 +331,47 @@
     "thumbnail": "/web-hub/VisualNovel/Background/bg_mga_server_room.png",
     "ogImage": "og/mga-goods.png",
     "type": "react"
+  },
+  {
+    "id": "void-game",
+    "title": "VOID · 탄막 슈팅",
+    "description": "모놀리스 보스의 탄막 패턴을 피하며 생존에 도전하는 슈팅 게임입니다.",
+    "category": "game",
+    "path": "/games/void-game/",
+    "thumbnail": "/web-hub/og/void-game.png",
+    "ogImage": "og/void-game.png",
+    "type": "static",
+    "source": "void-game",
+    "typecheck": true,
+    "dependencyAliases": {
+      "phaser": "phaser3"
+    }
+  },
+  {
+    "id": "text-game",
+    "title": "심연 · 텍스트 생존 게임",
+    "description": "생존 상태와 오염도를 관리하며 선택으로 진행하는 텍스트 어드벤처입니다.",
+    "category": "game",
+    "path": "/games/text-game/",
+    "thumbnail": "/web-hub/og/text-game.png",
+    "ogImage": "og/text-game.png",
+    "type": "static",
+    "source": "text-game",
+    "typecheck": true
+  },
+  {
+    "id": "deck-game",
+    "title": "덱 빌딩 게임",
+    "description": "카드를 활용한 전투와 캐릭터 대화를 즐기는 덱 빌딩 게임입니다.",
+    "category": "game",
+    "path": "/games/deck-game/",
+    "thumbnail": "/web-hub/og/deck-game.png",
+    "ogImage": "og/deck-game.png",
+    "type": "static",
+    "source": "deck-game",
+    "typecheck": true,
+    "dependencyAliases": {
+      "phaser": "phaser4"
+    }
   }
 ]
