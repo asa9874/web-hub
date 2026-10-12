@@ -1,0 +1,24 @@
+@charset "utf-8";
+
+.studytable{
+    width: 100%; 
+    margin-top: 30px;
+}
+
+tr{
+    font-size: 20px; 
+    color: rgb(255, 255, 255); 
+    text-align: center;
+}
+
+th{
+    padding: 10px;
+    text-align: center;
+    border-top: 1px dotted #444444;
+    border-bottom: 1px dotted #444444;
+}   
+
+tr th:first-child{
+    width: 20%;
+    border-right: 1px dotted #444444;
+}

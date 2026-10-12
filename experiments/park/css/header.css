@@ -1,0 +1,38 @@
+@charset "utf-8";
+
+
+header{
+    background-color: rgb(29, 29, 29);
+    height: 70px;
+    width: 100%;
+    position: fixed;
+    
+}
+nav{float: right;}
+.nav-items > li{
+    display: inline-block;
+    line-height: 50px;
+    padding: 5px 40px;
+    color: rgb(255, 255, 255);
+    text-shadow: 0.1px 0.1px rgb(0, 0, 0);
+    font-size: large;
+    
+}
+
+li a{
+    text-decoration: none; /* 밑줄 제거 */
+    color: inherit; /* 부모 요소의 색상을 상속 */
+}
+
+.nav-items > li:hover{
+    transform: scale(1.05);
+    transition: all 0.3s;
+}
+
+
+.logo{
+    display: inline-block;
+    padding: 20px;
+    color: white;
+    font-size: larger;
+}

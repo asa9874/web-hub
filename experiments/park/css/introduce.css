@@ -1,0 +1,25 @@
+@charset "utf-8";
+
+
+.introduce{
+    padding-top: 70px;
+    height: 500px;
+    background-color: rgb(0, 0, 0);
+    color: aliceblue;
+    text-align: center;
+    align-items: center;
+    flex-direction: column;
+    align-content:center;
+}
+
+.introduce p:nth-child(1){
+    font-size: 80px;
+    font-weight:900;
+    margin: 30px;
+    margin-top: 150px;
+
+}
+.introduce p:nth-child(2){
+    font-size: 40px;
+    color: rgb(143, 143, 143);
+}
