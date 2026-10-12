@@ -1,10 +1,25 @@
 {
   "webHub": {
     "main": "790c7cd94e61a86a426cfb30a566fad5621c43ec",
-    "ghPages": "519db2944a8f40fa5e04e99f1aec229bb74f830b"
+    "ghPages": "519db2944a8f40fa5e04e99f1aec229bb74f830b",
+    "integratedMain": "ba67ac6876fd4f4a4a3896547491333db64f950b",
+    "integratedGhPages": "82bc9fb67ec84105d5323a9e5ffb07005a387f3a"
   },
   "legacy": {
     "main": "1825db04e07208c1b6e0d6c5cdb56160c3071971",
     "ghPages": "f64995149c28d3594d7675ecc7d12beab67404bb"
+  },
+  "void-game": {
+    "main": "a83190eca6f562e38c5090927a9959e2ce833f9f"
+  },
+  "text-game": {
+    "main": "5783cd0da8be98a08e1e12d7c5f30c617887958c",
+    "feature": "c02493f765bcf0c79bbf3911015d13d304ba470b",
+    "gh-pages": "798bd9c213c791065565f6f121682e18ddb5302c"
+  },
+  "deck-game": {
+    "main": "e391a938259ac8f30fc4077856b048805d0656c9",
+    "feature": "a5d850ef98fd65df82d4c0bdf30caa84683b2253",
+    "gh-pages": "e717e92a768bea7f922cb2c492c7cb733ff35232"
   }
 }

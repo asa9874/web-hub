@@ -2,6 +2,7 @@ import { build } from 'vite';
 import { cp, mkdir, readFile, readdir, writeFile, rm, access } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { execFileSync } from 'node:child_process';
 
 export const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const projects = JSON.parse(await readFile(path.join(root, 'src/projects/projects.json'), 'utf8'));
@@ -32,6 +33,16 @@ for (const project of projects.filter(p => p.type === 'static')) {
   const workspace = path.join(staging, project.source);
   await cp(source, workspace, { recursive: true, filter: file => !['node_modules', 'dist', '.git'].includes(path.basename(file)) });
   if (await exists(path.join(source, 'package.json'))) {
+    const alias = {};
+    for (const [name, dependency] of Object.entries(project.dependencyAliases ?? {})) {
+      if (!/^[\w-]+$/.test(name) || !/^[\w-]+$/.test(dependency)) throw new Error('Unsafe dependency alias');
+      alias[name] = path.join(root, 'node_modules', dependency);
+    }
+    if (project.typecheck) {
+      const config = path.join(workspace, 'tsconfig.integration.json');
+      await writeFile(config, JSON.stringify({ extends:'./tsconfig.json', compilerOptions:{ paths:Object.fromEntries(Object.entries(alias).map(([name, target]) => [name, [target]])) } }, null, 2));
+      execFileSync(process.execPath, [path.join(root, 'node_modules/typescript6/bin/tsc'), '--project', config], { stdio:'inherit' });
+    }
     // HTML fragments in advertise use root-relative document resources at runtime.
     for (const file of await files(workspace)) {
       if (!file.endsWith('.html')) continue;
@@ -46,6 +57,7 @@ for (const project of projects.filter(p => p.type === 'static')) {
     const input = (await files(workspace)).filter(file => file.endsWith('.html'));
     await build({
       configFile: false, root: workspace, base: '/web-hub' + project.path,
+      resolve: { alias },
       build: { outDir: destination, emptyOutDir: true, rollupOptions: { input } },
     });
   } else {

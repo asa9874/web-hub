@@ -10,6 +10,8 @@ export interface Project {
   ogImage: string;
   type: 'react' | 'static';
   source?: string;
+  typecheck?: boolean;
+  dependencyAliases?: Record<string, string>;
   ogSource?: string;
 }
 export const projects = data as Project[];

@@ -260,6 +260,30 @@
     "external": []
   },
   {
+    "id": "void-game",
+    "canvas": 1,
+    "errors": [],
+    "missing": [],
+    "broken": [],
+    "external": []
+  },
+  {
+    "id": "text-game",
+    "canvas": 0,
+    "errors": [],
+    "missing": [],
+    "broken": [],
+    "external": []
+  },
+  {
+    "id": "deck-game",
+    "canvas": 1,
+    "errors": [],
+    "missing": [],
+    "broken": [],
+    "external": []
+  },
+  {
     "id": "advertise-bettery",
     "canvas": 0,
     "errors": [],

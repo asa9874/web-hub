@@ -24,7 +24,9 @@
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.10.1",
     "tailwindcss": "^4.1.17",
-    "three": "^0.181.2"
+    "three": "^0.181.2",
+    "phaser3": "npm:phaser@3.88.2",
+    "phaser4": "npm:phaser@4.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
@@ -41,7 +43,8 @@
     "sharp": "^0.35.5",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
-    "vite": "^7.2.4"
+    "vite": "^7.2.4",
+    "typescript6": "npm:typescript@~6.0.2"
   },
   "homepage": "https://asa9874.github.io/web-hub/"
 }
