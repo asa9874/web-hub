@@ -1,0 +1,325 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden; /* 기본 스크롤 설정 */
+  min-width: 1800px;
+  min-height: 850px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  font-family: 'DungGeunMo';
+ 
+}
+
+@font-face {
+  
+  font-family: 'DungGeunMo';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body{
+  background-color: antiquewhite;
+}
+
+.basebox{
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction:column;
+  width: 1800px;
+  height: 850px;
+  background-color: rgb(128, 100, 100);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+.startimgbox{
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 80%;
+  background-color: #253b67;
+}
+
+.startbuttonbox{
+  width: 100%;
+  height: 20%;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flexbox{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction:column;
+}
+
+.GameImgBox{
+  width: 100%;
+  height: 55%;
+  background-color: rgb(163, 142, 114);
+  background-size: 100% 100%;
+}
+
+
+.QuestionBox{
+  position: absolute;
+  bottom: 3%;
+  width: 96%;
+  height: 30%;
+  background-color: rgb(0, 0, 0);
+  border-radius: 20px;
+  opacity: 0.95;
+  color: white;
+  font-size: 24px;
+}
+
+
+
+.AnswerBox{
+  width: 100%;
+  height: 45%;
+  background-color: rgb(0, 0, 0);
+  background-size: 50%
+}
+
+.InnerAnswerBox{
+  width: 80%;
+  height: 95%;
+  background-color: rgb(0, 0, 0);
+}
+
+.Answer{
+  display: flex;
+  align-items: center;
+  margin: 8px;
+  width: 94%;
+  height: 12%;
+  background-color: rgb(139, 114, 29); 
+  font-size: 50px;
+  color: rgb(255, 255, 255);
+  transition: 0.3s;
+  padding: 30px;
+}
+
+.Answer:hover{
+  transform: scale(1.005);
+  color:rgb(173, 142, 37);
+  cursor: pointer;
+}
+
+p{
+  margin: 20px;
+}
+
+.character{
+  position: absolute;
+  bottom: 0;
+  height: 465px;
+  width: 300px;
+  object-fit:cover;
+}
+
+.heart{
+  width: 80px;
+}
+
+.heartbox{
+  position: absolute;
+  top:0;
+  left: 0;
+  z-index: 1;
+}
+
+.QuestionText{
+  word-wrap: break-word;
+  overflow: hidden;
+  white-space: pre-wrap;
+}
+
+.OXEffect{
+  position: absolute;
+  z-index: 4;
+  height: 500px;
+  top: 40px;
+  opacity: 0.5;
+}
+
+
+.startbutton{
+  width: 600px;
+  height: 100px;
+  background-color: rgb(255, 255, 255);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+  margin: 30px;
+}
+
+.startbutton:hover{
+  cursor: pointer;
+  color: blueviolet;
+  background-color: aqua;
+}
+
+.Point{
+  position: absolute;
+  right: 50px;
+  top: 0;
+  font-size: 80px;
+  z-index: 1;
+  color: red;
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: rgb(207, 207, 207);
+}
+.Difficulty{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 70px;
+  width: 100%;
+  height: 20%;
+  color:red;
+  background-color: #0f1838;
+}
+.MyPoint{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 100px;
+  width: 100%;
+  height: 70%;
+  color: yellowgreen;
+}
+.gostart{
+  width: 80%;
+  height: 10%;
+  margin-bottom: 10%;
+  font-size: 40px;
+  font-family: 'DungGeunMo';
+  background-color: salmon;
+}
+
+.loadingbox{
+
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction:column;
+  width: 1800px;
+  height: 850px;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+.Decorateimg{
+  position: absolute;
+  z-index: 3;
+  bottom: 0px;
+  left: 30px;
+  width: 100px;
+  height: 100px;
+}
+
+.EndPointBox{
+  position: absolute;
+  opacity: 0.97;
+  background-color: #253b67;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction:column;
+  height: 800px;
+  width: 500px;
+  border-radius: 10px;
+}
+
+button:hover{
+  background-color:red;
+  cursor: pointer;
+}
+
+.loading{
+  position: absolute;
+  background-color: #253b67;
+  width: 0px;
+  height: 0px;
+  border-radius: 200px;
+  z-index: 5;
+  transition: 1s ease-in-out;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.loadingimg{
+  height: 300px;
+  width: 300px;
+}
+
+
+
+@keyframes loading {
+  0% {
+    bottom: -100px; 
+    width: 110px;  
+    height: 110px; 
+    border-radius: 50%; 
+  }
+  20% {
+    bottom: 425px;
+    width: 110px; 
+    height: 110px;
+    border-radius: 50%; 
+  }
+  80% {
+    bottom: 0px; 
+    width: 1800px; 
+    height: 850px; 
+    border-radius: 0px;
+  }
+  100% {
+    overflow: hidden;
+    bottom: 425px;
+    width: 0px; 
+    height: 0px; 
+    border-radius: 50%; 
+  }
+}
+
+
+.loadingAnimation {
+  animation-name: loading;
+  animation-duration: 3s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards; /* 애니메이션이 끝난 후에도 최종 상태를 유지 */
+}
+
+
+@keyframes endbox {
+  0%{top:-100%}
+  100%{top:3%}
+}
+
+
+.endboxAnimation {
+  animation-name: endbox;
+  animation-duration: 3s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: forwards; /* 애니메이션이 끝난 후에도 최종 상태를 유지 */
+}
+
+

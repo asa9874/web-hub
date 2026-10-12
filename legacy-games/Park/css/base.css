@@ -1,0 +1,49 @@
+@charset "utf-8";
+
+.flex-container{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+body{
+    background-color: rgb(22, 22, 22);
+    min-width: 1500px;
+}
+
+.sectiontitle{
+    padding: 30px;
+    padding-bottom: 0;
+    color: aliceblue;
+    font-size:40px;
+    font-weight: 1000;
+}
+
+.setction{
+    width: 1500px;
+}
+
+.sectionbackground{
+    margin: 15px;
+    height: 3400px;
+    background-color: rgb(61, 60, 60);
+    box-shadow: 10px 10px 10px rgb(0, 0, 0);
+    border-radius: 40px;
+}
+
+.sectionsubtitle{
+    color: aliceblue;
+    font-weight: 1000;
+    padding: 20px;
+    font-size: 30px;
+}
+
+.techimg{
+    height: 100px;
+    width: 100px;
+    margin: 10px;
+    
+    border-radius: 50px;
+}
+
+.techsection{height: 1000px;}
+

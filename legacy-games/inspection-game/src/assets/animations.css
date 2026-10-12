@@ -1,0 +1,47 @@
+/* animations.css */
+.studentcard.hide {
+  transform: translate(0, -1000px);
+}
+
+.studentcard.show {
+  transform: translate(0, 0);
+}
+
+
+.character.pass {
+  left: 1500px;
+}
+
+.character.come {
+  left: 350px;
+}
+
+.character.unpass {
+  left: -700px;
+}
+
+.btn.click {
+  margin-top: 15px;
+  margin-bottom: 5px;
+  box-shadow: 0px 0px 0px 0px;
+}
+
+.selectbutton.click {
+  background-color: #850c56;
+}
+
+.yesbutton.click {
+  background-color: rgb(13, 102, 25);
+}
+
+.nobutton.click {
+  background-color: rgb(129, 20, 20);
+}
+
+.angryNotification.show{
+  left: 700px;
+}
+
+.angryNotification.hide{
+  left: 1500px;
+}

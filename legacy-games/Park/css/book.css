@@ -1,0 +1,19 @@
+@charset "utf-8";
+
+
+.book{
+    height: 300px;
+    width: 200px;
+    margin: 20px;
+    box-shadow: 4px 4px 15px rgb(0, 0, 0);
+}
+
+
+.book:hover{
+    transform: scale(1.05);
+    
+    box-shadow: 10px 10px 15px rgb(0, 0, 0);
+    transition: all 0.3s;
+}
+
+

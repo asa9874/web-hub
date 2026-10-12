@@ -1,0 +1,23 @@
+{
+  "name": "avoid-game",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "devDependencies": {
+    "vite": "^5.4.1"
+  },
+  "dependencies": {
+    "avoid-game": "file:",
+    "gh-pages": "^6.1.1",
+    "jquery": "^3.7.1",
+    "matter-js": "^0.20.0"
+  },
+  "homepage": "https://asa9874.github.io/avoid-game/"
+}

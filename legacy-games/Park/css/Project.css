@@ -1,0 +1,35 @@
+@charset "utf-8";
+
+.projectsection{
+    flex-direction: column;
+    flex-wrap:nowrap
+}
+
+.projectlogo{
+    margin: 20px;
+    margin-top: 60px;
+    height: 300px;
+    width: 300px;
+    background-color: rgb(26, 34, 41);
+    float: left;
+    border-radius: 40px;
+}
+
+.projecttitle{
+    color: aliceblue;
+    padding: 30px;
+    font-size: 50px;
+    font-weight: 800;
+}
+
+.projectDescription{
+    display: inline-block;
+    padding: 20px;
+    height: 210px;
+    width: 74%;
+    font-size: 20px;
+    color: rgb(181, 186, 201);
+    background-color: rgb(34, 34, 34);
+    border-radius: 10px;
+}
+

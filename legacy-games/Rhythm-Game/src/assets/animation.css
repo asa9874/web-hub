@@ -1,0 +1,20 @@
+@keyframes KeyScale {
+    0% { 
+        transform: scale(1);
+        
+    }
+    50% { 
+        transform: scale(1.05);
+        background-color: rgb(7, 116, 79);
+    }
+    100% { 
+        transform: scale(1);
+    }
+}
+
+.KeyScale{
+    animation-name: KeyScale;
+    animation-duration: 0.3s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: forwards; 
+}

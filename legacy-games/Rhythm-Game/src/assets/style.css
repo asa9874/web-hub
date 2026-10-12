@@ -1,0 +1,86 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: auto; /* 기본 스크롤 설정 */
+  min-width: 1800px;
+  min-height: 850px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  font-family: 'HSSaemaul-Regular';
+  transition: 1s;
+  
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: rgb(0, 0, 0);
+}
+
+body{
+  background-color: antiquewhite;
+}
+
+.basebox{
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1800px;
+  height: 850px;
+  background-color: rgb(128, 100, 100);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+.bu{
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+@font-face {
+  font-family: 'EF_jejudoldam';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2210-EF@1.0/EF_jejudoldam.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+.keybox{
+  font-family: 'EF_jejudoldam';
+  position: absolute;
+  display: flex;
+  width: 200px;
+  height: 200px;
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: rgb(0, 0, 0);
+  color: aliceblue;
+  background-color: rgb(0, 255, 170);
+  justify-content: center;
+  align-items: center;
+  font-size: 100px;
+  border-radius: 10px;
+  font-weight: 1000;
+  border: solid #22883b 3px;
+}
+
+.upbox {
+  top: calc(50% - 200px);
+}
+
+.downbox {
+  top: calc(50% + 200px); 
+}
+
+.leftbox {
+  left: calc(50% - 200px); 
+}
+
+.rightbox {
+  left: calc(50% + 200px);
+}
+
+
+.keygamebox{
+  position: absolute;
+  left: calc(50% - 100px);
+  top: calc(50% - 100px);
+}
