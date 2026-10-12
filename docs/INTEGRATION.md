@@ -16,7 +16,7 @@ web-hub/
 ├── src/
 │   ├── projects/projects.json # 프로젝트 콘텐츠·경로·OG 중앙 데이터
 │   ├── projects/registry.ts   # React 타입과 URL helper
-│   ├── App.tsx               # 기존 별자리 디자인 + 13개 추가 노드
+│   ├── App.tsx               # 전체 페이지 반응형 카드 그리드
 │   └── main.tsx              # BrowserRouter + 기존 #/ 링크 호환
 ├── scripts/
 │   ├── build-projects.mjs
@@ -65,7 +65,7 @@ advertise/htmls/bettery.html과 captcha.html도 해당 프로젝트 URL 아래�
 
 ## React 변경
 
-App.tsx의 기존 위치·아이콘·확대·이동·선택 패널을 유지했다. 제목·설명·경로·썸네일은 중앙 레지스트리로 옮겼고 Vanilla 프로젝트 노드 13개를 바깥 원에 추가했다. 기존 프로젝트 카드 접근과 새 프로젝트의 독립 문서 이동을 지원한다.
+App.tsx는 단순한 반응형 카드 그리드로 모든 31개 페이지를 표시한다. 제목·설명·경로·썸네일은 중앙 레지스트리에서 가져온다. 기존 React 프로젝트, Vanilla 프로젝트 13개, 히로인 정보 및 MGA 하위 페이지까지 메인에서 바로 이동할 수 있다. 모바일은 1열, 큰 화면은 최대 4열로 표시한다. React 카드는 Router Link, Vanilla 카드는 독립 문서로 이동하는 일반 링크를 사용한다.
 
 main.tsx는 basename=/web-hub/인 BrowserRouter를 사용한다. 기존 /web-hub/#/network-quiz 같은 북마크는 시작 시 동일한 일반 경로로 변환한다. 기존 12개 루트 경로와 MGA의 7개 하위 경로에 각각 index.html을 생성하므로 직접 접근과 새로고침이 가능하다. 기존 페이지 구현은 유지했다.
 
@@ -95,18 +95,18 @@ squash 없는 subtree add를 사용했다. 두 저장소의 gh-pages 배포 브�
 Node 22 권장. npm ci 후 npm run build 한 번으로 React 빌드, 13개 프로젝트 빌드/복사, OG HTML·PNG 생성, 로컬 에셋 참조 검증을 실행한다.
 
 - TypeScript 및 전체 통합 빌드 통과.
-- npm run lint는 기존 코드의 18개 오류·9개 경고로 실패한다. 수정한 App의 오류는 원본과 같은 기존 set-state-in-effect이며 main.tsx·registry.ts에는 lint 오류가 없다. 기존 lint 규칙을 끄거나 문제를 숨기지 않았다.
+- 통합 초기 전체 lint는 기존 코드의 18개 오류·9개 경고로 실패했다. 그리드 전환 후 변경한 App.tsx·main.tsx·registry.ts의 lint는 통과한다. 다른 기존 페이지의 lint 문제는 별도 유지보수 대상이다.
 - 31개 레지스트리 진입점의 고유 OG 제목·설명·이미지, 절대 URL 및 PNG 크기 검증 통과.
 - 원본 static public 에셋 파일 크기 및 진입 HTML의 class 마크업 보존 검증 통과.
 - HTML/CSS 로컬 참조 143개 검증 통과.
-- Chromium에서 홈 + 31개 진입점 + 2개 보조 HTML, 직접 접근·새로고침·기존 해시 북마크 검증 통과.
+- Chromium에서 홈 + 31개 진입점 + 2개 보조 HTML, 직접 접근·새로고침·기존 해시 북마크 검증 통과. 메인 카드 31개 표시, React·HTML 카드 실제 클릭 이동 및 모바일 가로 넘침 없음도 확인했다.
 - 게임 시작·카드 생성·리듬 화면 전환·키보드 입력·영단어 답변·미술관 모달 실행 확인.
 - Canvas가 있는 페이지의 Canvas 로딩 및 모든 원본 MP3의 브라우저 디코딩 검증 통과. 실제 스피커 음질·모바일 터치·모든 게임 분기는 수동 확인 대상이다.
 - 브라우저 보고서와 화면 캡처는 .build-projects 안에 생성한다.
 
 원본 코드의 재생 제한 오류와 undefined.mp3 요청을 수정했다. 영단어 게임에서 addFruit()를 인자 없이 재호출해 1초 후 발생하는 오류도 제거했다. 유효한 사용자 입력과 게임 동작은 보존했다.
 
-기존 React 외부 의존성 중 noise.svg는 HTTP 402, Cthulhu의 Giphy 링크는 HTTP 404를 반환했다. 로컬 파일 누락과 별도로 브라우저 보고서에 기록하며, 외부 URL의 가용성은 독립적으로 확인해야 한다. 기존 Japan CSS의 .animate-* 문법 경고와 큰 번들 경고도 남아 있다.
+기존 일정 화면의 외부 noise.svg는 HTTP 402, Cthulhu의 Giphy 링크는 HTTP 404를 반환했다. 메인의 외부 noise.svg 의존성은 그리드 전환으로 제거됐다. 로컬 파일 누락과 별도로 브라우저 보고서에 기록하며, 외부 URL의 가용성은 독립적으로 확인해야 한다. 기존 Japan CSS의 .animate-* 문법 경고와 큰 번들 경고도 남아 있다.
 
 의존성은 호환 버전 범위 내에서 보안 수정했고 새 sharp는 0.35.5 이상을 사용한다. npm audit에는 기존 gh-pages → globby → fast-glob → micromatch → braces 체인의 high 항목 5개가 남는다. 이는 배포 CLI의 glob 처리이며 자동 major 변경이나 force fix는 수행하지 않았다.
 
@@ -134,7 +134,7 @@ curl -L https://asa9874.github.io/web-hub/games/memory-flip/
 3. 경로는 /games/<slug>/, /tools/<slug>/, /experiments/<slug>/ 중 하나를 사용한다. public 에셋은 원본 프로젝트 public에 두고 문서 기준 상대경로로 참조한다.
 4. 기존 이미지가 있으면 ogSource에 원본 프로젝트 기준 상대경로를 지정한다. 없으면 고유 제목 카드가 자동 생성된다. thumbnail은 /web-hub/og/<id>.png를 쓸 수 있다.
 5. 추가 npm import가 있다면 루트 package.json에 실제 런타임 의존성만 추가한다.
-6. npm run build, npm run test:browser로 검증한다. 허브 노드는 레지스트리에서 자동으로 추가된다.
-7. 새 React 페이지는 기존 방식대로 main.tsx에 Route를 추가하고 같은 경로를 레지스트리에 등록한다. hidden=true는 허브 노드 없이 공유 페이지를 생성하는 보조 페이지에 사용한다.
+6. npm run build, npm run test:browser로 검증한다. 허브 카드는 레지스트리에서 자동으로 추가된다.
+7. 새 React 페이지는 기존 방식대로 main.tsx에 Route를 추가하고 같은 경로를 레지스트리에 등록한다. 모든 레지스트리 페이지는 메인 그리드에 표시된다.
 
 정적 프로젝트까지 로컬 확인하려면 npm run build 후 npm run preview를 사용한다. npm run dev는 기존 React 개발 서버이며 generated OG와 Vanilla 배포 결과는 preview로 확인한다.

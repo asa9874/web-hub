@@ -260,8 +260,7 @@
     "path": "/heroin-info/",
     "thumbnail": "/web-hub/VisualNovel/Background/title.png",
     "ogImage": "og/heroin-info.png",
-    "type": "react",
-    "hidden": true
+    "type": "react"
   },
   {
     "id": "mga-chronicle",
@@ -271,8 +270,7 @@
     "path": "/mga/chronicle/",
     "thumbnail": "/web-hub/VisualNovel/Background/bg_mga_server_room.png",
     "ogImage": "og/mga-chronicle.png",
-    "type": "react",
-    "hidden": true
+    "type": "react"
   },
   {
     "id": "mga-impurity",
@@ -282,8 +280,7 @@
     "path": "/mga/impurity/",
     "thumbnail": "/web-hub/VisualNovel/Background/bg_mga_server_room.png",
     "ogImage": "og/mga-impurity.png",
-    "type": "react",
-    "hidden": true
+    "type": "react"
   },
   {
     "id": "mga-magical-girls",
@@ -293,8 +290,7 @@
     "path": "/mga/magical-girls/",
     "thumbnail": "/web-hub/VisualNovel/Background/bg_mga_server_room.png",
     "ogImage": "og/mga-magical-girls.png",
-    "type": "react",
-    "hidden": true
+    "type": "react"
   },
   {
     "id": "mga-alerts",
@@ -304,8 +300,7 @@
     "path": "/mga/alerts/",
     "thumbnail": "/web-hub/VisualNovel/Background/bg_mga_server_room.png",
     "ogImage": "og/mga-alerts.png",
-    "type": "react",
-    "hidden": true
+    "type": "react"
   },
   {
     "id": "mga-shelter",
@@ -315,8 +310,7 @@
     "path": "/mga/shelter/",
     "thumbnail": "/web-hub/VisualNovel/Background/bg_mga_server_room.png",
     "ogImage": "og/mga-shelter.png",
-    "type": "react",
-    "hidden": true
+    "type": "react"
   },
   {
     "id": "mga-shop",
@@ -326,8 +320,7 @@
     "path": "/mga/shop/",
     "thumbnail": "/web-hub/VisualNovel/Background/bg_mga_server_room.png",
     "ogImage": "og/mga-shop.png",
-    "type": "react",
-    "hidden": true
+    "type": "react"
   },
   {
     "id": "mga-goods",
@@ -337,7 +330,6 @@
     "path": "/mga/goods/",
     "thumbnail": "/web-hub/VisualNovel/Background/bg_mga_server_room.png",
     "ogImage": "og/mga-goods.png",
-    "type": "react",
-    "hidden": true
+    "type": "react"
   }
 ]

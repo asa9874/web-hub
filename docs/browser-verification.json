@@ -1,13 +1,11 @@
 [
   {
     "id": "hub",
-    "canvas": 1,
+    "canvas": 0,
     "errors": [],
     "missing": [],
     "broken": [],
-    "external": [
-      "402 https://grainy-gradients.vercel.app/noise.svg"
-    ]
+    "external": []
   },
   {
     "id": "networkquiz",

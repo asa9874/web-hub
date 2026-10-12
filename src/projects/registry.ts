@@ -11,7 +11,6 @@ export interface Project {
   type: 'react' | 'static';
   source?: string;
   ogSource?: string;
-  hidden?: boolean;
 }
 export const projects = data as Project[];
 export const projectUrl = (path: string) => import.meta.env.BASE_URL + path.replace(/^\//, '');

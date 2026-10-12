@@ -49,7 +49,20 @@ try {
     if (project.id === 'hub') {
       await page.screenshot({ path:path.join(root, '.build-projects/hub.png') });
       const titles = await page.locator('body').innerText();
-      for (const p of projects.filter(p => !p.hidden)) assert(titles.includes(p.title), 'Missing hub node ' + p.id);
+      for (const p of projects) assert(titles.includes(p.title), 'Missing hub card ' + p.id);
+      assert.equal(await page.locator('main a').count(), projects.length);
+      for (const id of ['networkquiz', 'memory-flip']) {
+        const project = projects.find(p => p.id === id);
+        const target = '/web-hub' + project.path;
+        await page.locator('a[href="' + target + '"]').click();
+        await page.waitForURL(origin + target);
+        if (project.type === 'react') await page.waitForFunction(() => document.getElementById('root')?.children.length > 0);
+        else await page.locator('.startbox').waitFor({ state:'visible' });
+        await page.goto(origin + '/web-hub/', { waitUntil:'load' });
+      }
+      await page.setViewportSize({ width:390, height:844 });
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), 'Mobile grid overflow');
+      await page.screenshot({ path:path.join(root, '.build-projects/hub-mobile.png'), fullPage:true });
     }
     const canvas = await page.locator('canvas').count();
     const broken = await page.evaluate(() => [...document.images].filter(img => img.getAttribute('src') && img.complete && img.naturalWidth === 0 && !/^https?:/.test(img.getAttribute('src'))).map(img => img.getAttribute('src')));
