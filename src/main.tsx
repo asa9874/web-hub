@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './index.css'
 import App from './App.tsx'
+import AIPrompts from './AIPrompts/AIPrompts.tsx'
 import NetworkQuiz from './NetworkQuiz/NetworkQuiz.tsx'
 import NeonSpace from './NeonSpace/NeonSpace.tsx'
 import PixelSortVisualizer from './PixelSortVisualizer/PixelSortVisualizer.tsx'
@@ -25,6 +26,7 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Routes>
         <Route path="/" element={<App />} />
+        <Route path="/ai-prompts" element={<AIPrompts />} />
         <Route path="/network-quiz" element={<NetworkQuiz />} />
         <Route path="/neonspace" element={<NeonSpace />} />
         <Route path="/pixel-sort" element={<PixelSortVisualizer />} />
