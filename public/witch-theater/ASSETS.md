@@ -120,3 +120,7 @@ Primary request: one tall whimsical paper forest tree viewed flat from the front
 Constraints: one isolated tree only on a genuinely transparent background, NO scene or floor, no character, no backdrop, no external cast shadow, NO halo/glow/vignette, no letters or labels, no pixel art, no smooth vector-icon look.
 ```
 
+# 컷씬 후보 20점 추가 (2026-10-13)
+
+`cutscenes/*.png`는 built-in `image_gen`으로 각 장면마다 별도 호출하여 생성한 고해상도 원본입니다. 스타일/인물 기준은 `witch-portrait.png`이며, 이 파일을 모든 호출의 referenced_image_paths에 사용했습니다. 출력은 불투명 풍경 일러스트입니다. 실제 제출 프롬프트 전부는 [illustrations.json](../../src/ForgottenWitch/illustrations.json)에 그대로 저장되어 있고 게임 갤러리 상세보기에서도 볼 수 있습니다. 17점은 일반 애니메이션 일러스트, 3점은 chibi 컷씬입니다. 스토리와 사용 여부는 미정이며 현재 플레이의 확정 사건이 아닙니다. 생성 결과 PNG는 변형 없이 저장소로 복사했습니다.
+

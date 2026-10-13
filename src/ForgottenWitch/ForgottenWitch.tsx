@@ -9,6 +9,7 @@ import dialogueData from './dialogue.json';
 import './ForgottenWitch.css';
 import DomPaperRods from './DomPaperRods';
 import TitleScreen from './TitleScreen';
+import Illustrations from './Illustrations';
 
 const initialView:TheaterView={mode:'intro',area:'숲의 입구',prompt:'',message:'',bridgeSolved:false,lightsSolved:false,talked:false,dialogue:'first'};
 function useModalFocus(ref:RefObject<HTMLDivElement|null>) {
@@ -71,7 +72,10 @@ function LightPuzzle({onClose,onCheck,onRetry,onSolve}:{onClose:()=>void;onCheck
   const move=(event:ReactPointerEvent<HTMLButtonElement>)=>{
     const current=drag.current;if(!current||current.pointer!==event.pointerId)return;
     if(Math.hypot(event.clientX-current.x,event.clientY-current.y)>5)current.moved=true;
-    if(current.moved)setGhost({id:current.id,x:event.clientX,y:event.clientY});
+    if(current.moved){
+      const bounds=modal.current?.closest('.wt-overlay')?.getBoundingClientRect();
+      if(bounds)setGhost({id:current.id,x:(event.clientX-bounds.left)*1280/bounds.width,y:(event.clientY-bounds.top)*720/bounds.height});
+    }
   };
   const up=(event:ReactPointerEvent<HTMLButtonElement>)=>{
     const current=drag.current;if(!current)return;
@@ -108,6 +112,14 @@ export default function ForgottenWitch() {
   const advanceRef=useRef<(()=>void)|null>(null);
   const [view,setView]=useState(initialView),[ready,setReady]=useState(false),[error,setError]=useState('');
   const [muted,setMuted]=useState(false),[restart,setRestart]=useState(0);
+  const [gallery,setGallery]=useState(false),[uiScale,setUiScale]=useState(1);
+  const shell=useRef<HTMLDivElement>(null);
+  useEffect(()=>{
+    const element=shell.current;if(!element)return;
+    const resize=()=>setUiScale(element.clientWidth/TUNING.width);
+    const observer=new ResizeObserver(resize);observer.observe(element);resize();
+    return ()=>observer.disconnect();
+  },[]);
   useEffect(()=>{
     let active=true;let dispose:(()=>void)|undefined;
     const overflow=document.body.style.overflow;document.body.style.overflow='hidden';
@@ -122,10 +134,11 @@ export default function ForgottenWitch() {
   const replay=()=>{setReady(false);setError('');setView(initialView);setMuted(false);setRestart(n=>n+1);};
   return <main className="wt-page">
     <header className="wt-topbar"><Link to="/">← web hub</Link><span>잊혀진 마녀의 극장 <small>v0.1</small></span><button onClick={()=>{if(scene.current)setMuted(scene.current.toggleSound());}} aria-label={muted?'소리 켜기':'소리 끄기'}>{muted?'소리 꺼짐':'소리 켜짐'}</button></header>
-    <div className="wt-stage-shell">
+    <div className="wt-stage-shell" ref={shell}>
       <div className="wt-game" ref={host} role="application" aria-label="잊혀진 마녀의 극장 게임. A D 이동, Space 점프, E 상호작용" />
-      <div className="wt-overlay" data-game-mode={view.mode}>
-        {error?<div className="wt-modal-backdrop"><div className="wt-intro-paper"><h2>무대를 준비하지 못했습니다.</h2><p role="alert">{error}</p><button onClick={replay}>다시 불러오기</button><Link to="/">허브로 돌아가기</Link></div></div>:view.mode==='intro'?<TitleScreen ready={ready} muted={muted} onStart={()=>scene.current?.start()} onSound={()=>{if(scene.current)setMuted(scene.current.toggleSound());}} />:null}
+      <div className="wt-overlay" data-game-mode={view.mode} style={{transform:`scale(${uiScale})`}}>
+        {error?<div className="wt-modal-backdrop"><div className="wt-intro-paper"><h2>무대를 준비하지 못했습니다.</h2><p role="alert">{error}</p><button onClick={replay}>다시 불러오기</button><Link to="/">허브로 돌아가기</Link></div></div>:view.mode==='intro'?<TitleScreen ready={ready} muted={muted} onStart={()=>scene.current?.start()} onIllustrations={()=>setGallery(true)} onSound={()=>{if(scene.current)setMuted(scene.current.toggleSound());}} />:null}
+        {gallery&&<Illustrations onClose={()=>setGallery(false)} />}
         {!['intro','complete'].includes(view.mode)&&<div className="wt-hud"><div><small>첫 번째 막</small><strong>{view.area}</strong></div><ol aria-label="공연 준비 진행"><li className={view.bridgeSolved?'done':''}>다리</li><li className={view.talked?'done':''}>플로라</li><li className={view.lightsSolved?'done':''}>조명</li></ol><button aria-label="일시정지" disabled={view.mode!=='explore'} onClick={()=>scene.current?.pause()}>Ⅱ</button></div>}
         {view.message&&view.mode==='explore'&&<div className="wt-toast" role="status">{view.message}</div>}
         {view.mode==='bridge'&&<div className="wt-bridge-help"><div><small>무대 조작 모드</small><h2>다리를 제자리로</h2><p>떠 있는 종이 다리를 오른쪽 점선으로 끌어 놓으세요.</p></div><button onClick={()=>scene.current?.closePuzzle()}>닫기 · Esc</button></div>}

@@ -40,7 +40,8 @@ React + TypeScript + Vite 구조를 유지하고, 이미 설치된 `phaser3` npm
 | `input.ts` | 연속 이동과 한 번 누른 입력을 분리, 짧은 탭 보존, 반복 keydown 차단 |
 | `dialogue.json` | 화자/감정/문장 및 최초/재방문/조명 해결 후 분기 |
 | `paper.ts` | 종이/골판지 소품의 독립 Canvas bitmap 텍스처, 고정 seed 섬유/크레용 |
-| `rig.ts` | 실제 변환/패럴랙스를 적용한 화면 끝 연결 막대와 바닥 앞 지지대 |
+| `rig.ts` | 실제 변환/패럴랙스를 적용한 화면 끝 연결 막대; 소품과 지형 뒤에 가려짐 |
+| `Illustrations.tsx` / `illustrations.json` | 메인 메뉴의 컷씬 후보 20점, 설명과 실제 생성 프롬프트 |
 | `poses.ts` | 서기/걷기/점프 이미지, 크기, 좌우 반전 기준 및 몸체 연결점 |
 | `DomPaperRods.tsx` | 조명 판넬/드래그 판넬의 화면 끝 연결 막대 |
 | `TitleScreen.tsx` | 극장 프레임, 큰 타이틀/주인공, 실제 시작·소리·허브 메뉴 |
@@ -69,6 +70,10 @@ React + TypeScript + Vite 구조를 유지하고, 이미 설치된 `phaser3` npm
 타이틀은 실제 인디 게임 UI를 조사해 큰 이름/짧은 세로 메뉴/큰 주인공과 종이 극장 프레임으로 구성한다. 실제 시작·소리·허브 이동만 제공한다. 참고한 화면 및 출처는 [codex/UI-REFERENCES.md](codex/UI-REFERENCES.md)에 있다. 폰트는 저장소에 포함한 고운바탕 서브셋을 사용한다. 표현 전용 `StageLife`는 먼지, 별 흔들림, 발걸음/착지 반응, 조명 해결 후 시계꽃 바늘을 보강하며 물리/퍼즐 규칙은 그대로 유지한다.
 
 ## 검증
+
+메인 메뉴의 `일러스트레이션`에서 컷씬 후보 20점(일반 17점, chibi 3점)을 볼 수 있다. 각 작품의 상세보기에는 원본 그림과 제목/짧은 설명/실제 image_gen 생성 프롬프트가 있다. 이 장면들의 이야기는 제안이며 현재 플레이의 확정된 사건이 아니다. 새 작품은 `illustrations.json`에 등록하고 `public/witch-theater/cutscenes/`에 이미지를 넣는다.
+
+UI는 Phaser와 동일한 1280×720 논리 좌표계에서 함께 스케일한다. 타이틀/대화/HUD/퍼즐은 viewport breakpoint로 별도로 재배치하지 않는다. ResizeObserver는 레이아웃 폭(clientWidth)을 사용하고, 드래그는 실제 화면 좌표를 논리 좌표로 환산한다. 막대는 계속 경계까지 이어지지만 소품 및 지형 뒤 깊이에만 그려진다. 배경 종이/먼 나무/중간 나무의 명도와 대비를 낮추고 이동 가능한 지형과 인물의 원래 밝은 윤곽을 살린다.
 
 ```sh
 npm run build

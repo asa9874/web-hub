@@ -55,7 +55,7 @@ export class TheaterScene extends Phaser.Scene {
     createPaperTextures(this);
     this.cameras.main.setBackgroundColor('#F3E5CE');
     this.cameras.main.setBounds(0,0,TUNING.worldWidth,TUNING.height);
-    this.add.tileSprite(0,0,1280,720,'paper').setOrigin(0).setScrollFactor(0).setTint(0xf2e6d6);
+    this.add.tileSprite(0,0,1280,720,'paper').setOrigin(0).setScrollFactor(0).setTint(0x777187);
     this.rig=new StageRig(this);
     this.stageLife=new StageLife(this);
     this.drawSet();
@@ -113,11 +113,11 @@ export class TheaterScene extends Phaser.Scene {
   private drawSet() {
     // Rear flats, middle cutouts and foreground wings each have their own scroll factor.
     for(let i=0;i<15;i++){
-      const tree=this.add.image(90+i*380,575,'tree-plum').setOrigin(.5,1).setDisplaySize(290,390+(i%3)*40).setAlpha(.38).setScrollFactor(.32).setDepth(1);
+      const tree=this.add.image(90+i*380,575,'tree-plum').setOrigin(.5,1).setDisplaySize(290,390+(i%3)*40).setTint(0x756a83).setAlpha(.48).setScrollFactor(.32).setDepth(1);
       this.rearFlats.push(tree);this.rig.attach(tree,`rear-tree-${i}`,'bottom',.51,.88,4);
     }
     for(let i=0;i<19;i++){
-      const tree=this.add.image(30+i*260,575,'paper-tree').setOrigin(.5,1).setDisplaySize(225+(i%2)*45,350+(i%3)*55).setFlipX(i%2===0).setAlpha(.83).setScrollFactor(.72).setDepth(2);
+      const tree=this.add.image(30+i*260,575,'paper-tree').setOrigin(.5,1).setDisplaySize(225+(i%2)*45,350+(i%3)*55).setFlipX(i%2===0).setTint(0xaaa5b3).setAlpha(.72).setScrollFactor(.72).setDepth(2);
       this.rig.attach(tree,`middle-tree-${i}`,'bottom',.5,.87,6);
     }
     this.rig.attach(this.add.image(300,165,'moon').setDisplaySize(110,110).setScrollFactor(.18).setDepth(2),'hanging-moon','top',.25,.5,5);
@@ -130,6 +130,8 @@ export class TheaterScene extends Phaser.Scene {
     for(let x=1435;x<1900;x+=34)gap.lineBetween(x,633,x+70,720);
     const floors=[{x:0,width:1420},{x:1900,width:2700}];
     for(const [index,floor] of floors.entries()){
+      // Opaque scenery backing also occludes supports through texture alpha/NPOT tiling.
+      this.add.rectangle(floor.x,582,floor.width,138,0xc8a581).setOrigin(0).setDepth(5.9);
       const panel=this.add.tileSprite(floor.x,570,floor.width,150,'floor').setOrigin(0).setDepth(6);
       for(let x=160;x<floor.width;x+=400)this.rig.attach(panel,`floor-${index}-${x}`,'bottom',x/floor.width,.2,10);
     }

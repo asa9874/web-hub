@@ -38,6 +38,8 @@ npm run dev -- --host 127.0.0.1 --port 5173
 
 게임 주소: http://127.0.0.1:5173/web-hub/games/forgotten-witch/
 
+게임 메인 메뉴의 `일러스트레이션`에 미확정 컷씬 후보 20점과 제목/설명/실제 생성 프롬프트를 모았습니다. [작품 데이터](src/ForgottenWitch/illustrations.json)와 이미지 원본도 Git에 포함됩니다.
+
 이미 저장소가 있는 PC의 브랜치 전환/업데이트 및 테스트 방법은 [이어받기 문서](src/ForgottenWitch/codex/README.md)를 참고하세요. GitHub Pages의 공개 버전은 main/gh-pages 기준이고, 위 작업 브랜치의 최신 게임은 로컬에서 실행해 확인합니다.
 
 ## BGM

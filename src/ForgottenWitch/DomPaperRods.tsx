@@ -9,13 +9,13 @@ export default function DomPaperRods() {
       const root=svg.current?.parentElement,stage=root?.closest('.wt-overlay');
       if(root&&stage&&svg.current&&path.current){
         const bounds=stage.getBoundingClientRect();
-        svg.current.setAttribute('viewBox',`0 0 ${bounds.width} ${bounds.height}`);
+        svg.current.setAttribute('viewBox','0 0 1280 720');
         const targets=root.querySelectorAll<HTMLElement>('[data-paper-rod]');
         let d='';
         for(const target of targets){
-          const box=target.getBoundingClientRect(),x=(box.left+box.right)/2-bounds.left;
-          const y=box.top+box.height*.75-bounds.top;
-          d+=`M ${x} ${y} L ${x} ${bounds.height+16} `;
+          const box=target.getBoundingClientRect(),x=((box.left+box.right)/2-bounds.left)*1280/bounds.width;
+          const y=(box.top+box.height*.75-bounds.top)*720/bounds.height;
+          d+=`M ${x} ${y} L ${x} 736 `;
         }
         path.current.setAttribute('d',d);
         svg.current.dataset.rodCount=String(targets.length);

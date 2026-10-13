@@ -42,13 +42,36 @@ try {
  await menu.getByRole('button',{name:'소리 끄기'}).click();await menu.getByRole('button',{name:'소리 켜기'}).click();
  assert.equal(await page.locator('.wt-title-screen').evaluate(element=>element.scrollTop),0,'Menu focus must not scroll/crop the title frame');
  await page.screenshot({path:fileURLToPath(new URL('witch-title.png',output))});
+ const layout=()=>page.evaluate(()=>{
+   const stage=document.querySelector('.wt-stage-shell').getBoundingClientRect(),canvas=document.querySelector('.wt-game canvas').getBoundingClientRect(),overlay=document.querySelector('.wt-overlay').getBoundingClientRect(),title=document.querySelector('.wt-title-content').getBoundingClientRect();
+   return {left:(title.left-stage.left)/stage.width,top:(title.top-stage.top)/stage.height,width:title.width/stage.width,align:Math.max(Math.abs(canvas.left-overlay.left),Math.abs(canvas.top-overlay.top),Math.abs(canvas.width-overlay.width),Math.abs(canvas.height-overlay.height))};
+ });
+ const originalLayout=await layout();
+ for(const viewport of [{width:900,height:600},{width:640,height:480},{width:1920,height:1080}]){
+   await page.setViewportSize(viewport);await page.waitForTimeout(200);const current=await layout();
+   assert(current.align<2,'Canvas and all UI share the same scaled viewport');
+   for(const key of ['left','top','width'])assert(Math.abs(current[key]-originalLayout[key])<.005,'Uniform UI layout: '+key);
+ }
+ await page.setViewportSize({width:1440,height:940});
+ await page.evaluate(()=>document.body.style.zoom='1.5');await page.waitForTimeout(250);assert((await layout()).align<2,'UI stays aligned under browser-style CSS zoom');
+ await page.evaluate(()=>document.body.style.zoom='');await page.waitForTimeout(200);
+ await menu.getByRole('button',{name:'일러스트레이션'}).click();
+ assert.equal(await page.locator('.wt-art-card').count(),20);
+ await page.locator('.wt-art-card img').evaluateAll(images=>images.forEach(image=>image.loading='eager'));
+ await page.waitForFunction(()=>Array.from(document.querySelectorAll('.wt-art-card img')).every(image=>image.complete&&image.naturalWidth>0));
+ await page.screenshot({path:fileURLToPath(new URL('witch-illustrations.png',output))});
+ await page.getByRole('button',{name:'마지막 표 한 장 상세보기'}).click();
+ await page.getByRole('dialog',{name:'마지막 표 한 장 상세보기'}).waitFor();
+ assert((await page.locator('.wt-art-prompt pre').innerText()).includes('rain-soaked abandoned theater'));
+ await page.screenshot({path:fileURLToPath(new URL('witch-art-detail.png',output))});
+ await page.keyboard.press('Escape');await page.getByRole('button',{name:'← 메인 화면'}).click();
  await page.getByRole('button',{name:'극장에 들어가기'}).click();
  const canvas=page.locator('.wt-game canvas');assert.equal(await canvas.count(),1,'StrictMode must create one engine');
  const state=()=>canvas.evaluate(c=>JSON.parse(c.dataset.theater));
  const checkRig=async()=>{
    const {rods,s}=await canvas.evaluate(c=>({rods:JSON.parse(c.dataset.theaterRig),s:JSON.parse(c.dataset.theater)}));
    assert(rods.length>=80,'Every stage cutout/support must be registered');
-   for(const rod of rods){assert(Number.isFinite(rod.start.x)&&Number.isFinite(rod.start.y));assert.equal(rod.end.y,rod.edge==='top'?-16:736,'Support reaches outside viewport boundary: '+rod.name);}
+   for(const rod of rods){assert(Number.isFinite(rod.start.x)&&Number.isFinite(rod.start.y));assert(rod.depth<6,'Every rod is behind terrain');assert.equal(rod.end.y,rod.edge==='top'?-16:736,'Support reaches outside viewport boundary: '+rod.name);}
    for(const prefix of ['rear-tree-','middle-tree-','foreground-tree-','hanging-star-','platform-','clock-flower-','final-curtain-'])assert(rods.some(r=>r.name.startsWith(prefix)),prefix+' has supports');
    assert(rods.some(r=>r.name==='hanging-moon'&&r.edge==='top'));
    const pole=rods.find(r=>r.name==='player');assert(pole.visible);assert(Math.abs(pole.start.x-(s.x-s.camera))<25,'Rod follows puppet transform/flip');
@@ -66,7 +89,7 @@ try {
  await checkRig();
  await page.keyboard.down('d');await waitState('s.pose === "witch-walk"');await page.waitForTimeout(100);await checkRig();await page.screenshot({path:fileURLToPath(new URL('witch-walk.png',output))});await page.keyboard.up('d');await waitState('s.pose === "witch-puppet"');
  await page.keyboard.down('a');await waitState('s.pose === "witch-walk"');await checkRig();await page.keyboard.up('a');await waitState('s.pose === "witch-puppet"');
- await page.keyboard.press('Space');await page.waitForTimeout(160);assert((await state()).y<540,'Space jumps');assert.equal((await state()).pose,'witch-jump');
+ await runTo(250);await page.keyboard.press('Space');await waitState('s.pose === "witch-jump" && s.y < 540');
  const jumpRod=await checkRig();assert(jumpRod.start.y<jumpRod.actorY-25,'Jump support extends from the body, not a detached fixed-length bar');await page.screenshot({path:fileURLToPath(new URL('witch-jump.png',output))});
  await waitState('s.grounded');
  await runTo(470);await page.keyboard.press('Space');await waitState('!s.grounded');await waitState('s.grounded && s.y === 515');

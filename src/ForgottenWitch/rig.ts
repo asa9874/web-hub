@@ -1,5 +1,4 @@
 import type Phaser from 'phaser3';
-import { TUNING } from './config';
 
 type Owner=Phaser.GameObjects.Image|Phaser.GameObjects.TileSprite|Phaser.GameObjects.Rectangle;
 export type RodEdge='top'|'bottom';
@@ -12,26 +11,23 @@ interface RodBinding {
   owner:Owner;name:string;edge:RodEdge;u:number;v:number;width:number;graphics:Phaser.GameObjects.Graphics;
 }
 export interface RodSnapshot {
-  name:string;edge:RodEdge;visible:boolean;start:RodPoint;end:RodPoint;
+  name:string;edge:RodEdge;visible:boolean;start:RodPoint;end:RodPoint;depth:number;
 }
 export class StageRig {
   private bindings:RodBinding[]=[];
-  private floorFront:Phaser.GameObjects.Graphics;
   private records:RodSnapshot[]=[];
   private scene:Phaser.Scene;
   constructor(scene:Phaser.Scene) {
     this.scene=scene;
-    // The front of the cardboard floor would otherwise hide every scenery support.
-    // Only the section below its top edge is redrawn here, below devices/characters.
-    this.floorFront=scene.add.graphics().setScrollFactor(0).setDepth(6.4);
   }
   attach(owner:Owner,name:string,edge:RodEdge='bottom',u=.5,v=.88,width=6) {
-    const graphics=this.scene.add.graphics().setScrollFactor(0).setDepth(owner.depth-.1);
+    // All supports sit behind BOTH their cutout and the solid terrain (depth 6).
+    const graphics=this.scene.add.graphics().setScrollFactor(0).setDepth(Math.min(owner.depth-.1,5.8));
     this.bindings.push({owner,name,edge,u,v,width,graphics});return owner;
   }
   update() {
     const camera=this.scene.cameras.main;
-    this.floorFront.clear();this.records=[];
+    this.records=[];
     for(const binding of this.bindings) {
       const {owner,edge,u,v,width,graphics,name}=binding;
       const joint=owner.getData('rodJoint') as {u:number;v:number}|undefined;
@@ -47,16 +43,8 @@ export class StageRig {
       graphics.clear().setVisible(visible);
       if(visible){
         this.stroke(graphics,rod.start,rod.end,width,owner.alpha);
-        if(edge==='bottom'&&owner.depth<6.4){
-          // Preserve occlusion by the cutout itself; reveal the remaining support on the floor.
-          const y=Math.max(TUNING.floor,bounds.bottom-sy);
-          if(y<rod.end.y&&rod.start.y<rod.end.y){
-            const t=Math.max(0,(y-rod.start.y)/(rod.end.y-rod.start.y));
-            this.stroke(this.floorFront,{x:rod.start.x+(rod.end.x-rod.start.x)*t,y:Math.max(y,rod.start.y)},rod.end,width,owner.alpha);
-          }
-        }
       }
-      this.records.push({name,edge,visible,start:rod.start,end:rod.end});
+      this.records.push({name,edge,visible,start:rod.start,end:rod.end,depth:graphics.depth});
     }
   }
   private stroke(g:Phaser.GameObjects.Graphics,start:RodPoint,end:RodPoint,width:number,alpha:number) {

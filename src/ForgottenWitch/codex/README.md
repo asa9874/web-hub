@@ -73,6 +73,8 @@ npm run dev -- --host 127.0.0.1 --port 5173
 | 로컬 합성 효과음 | `sound.ts` |
 | 허브 카드/URL/OG 등록 | `src/projects/projects.json`, `src/main.tsx` |
 | 실제 게임 플레이 회귀 테스트 | `scripts/test-witch.mjs` |
+| 일러스트 목록/이름/설명/생성 프롬프트 | `illustrations.json`, `Illustrations.tsx` |
+| 컷씬 후보 실제 이미지 | `public/witch-theater/cutscenes/` |
 
 ## 변경을 확인하는 순서
 
@@ -115,6 +117,9 @@ WITCH_TEST_URL=http://127.0.0.1:4173/web-hub npm run test:witch
 - 전투/체크포인트는 다음 버전에서 별도 설계한다. 이번 버전에 적/HP/인벤토리/서버/복잡한 저장을 추가하지 않는다.
 - 실제 연결된 다리만 충돌해야 하며, 닫힌 커튼은 진입을 막아야 한다. 성공 문구만 바꾸는 퍼즐로 대체하지 않는다.
 - 모든 조종 가능한 무대 소품에는 `rig.attach()`를 호출한다. 막대 연결점은 실제 이미지 변환/반전/패럴랙스를 따라가고 화면 끝을 넘어야 한다. 배경 종이/조명 효과/텍스트는 무대 소품에 포함하지 않는다.
+- 막대 깊이는 지형(depth 6)보다 낮게 유지한다. 바닥 앞에 막대를 다시 그리는 레이어는 사용하지 않는다.
+- 게임 내부 UI는 1280×720 논리 좌표를 ResizeObserver로 함께 스케일한다. 확대 시 별도로 reflow하는 viewport 기반 크기나 media query를 내부에 넣지 않는다. UI 리사이즈/zoom 회귀 검증을 유지한다.
+- 갤러리의 20점은 미확정 컷씬 후보이다. 실제 플레이의 스토리로 자동 반영하지 않는다. 상세 프롬프트는 실제 image_gen 제출 문자열을 저장한다.
 - `poses.ts`의 몸체 연결점을 기준으로 반전 시 피벗도 함께 바꾼다. 이미지 전체 중심을 몸체 중심으로 간주하면 포즈 전환 때 몸과 막대가 어긋난다.
 - 기존 허브/레거시 게임과 커밋 이력은 유지한다. `src/ForgottenWitch/AGENTS.md`의 작업 지침도 따른다.
 
