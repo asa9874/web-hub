@@ -131,6 +131,7 @@ try {
       await page.goto(origin + '/web-hub/', { waitUntil:'load' });
       await expectCards(projects.length);
       await search.fill('all');
+      await page.waitForFunction(() => new URL(location.href).searchParams.get('q') === 'all' && document.getElementById('hub-search')?.value === 'all');
       assert.equal(await search.inputValue(), 'all');
       assert.equal(new URL(page.url()).searchParams.get('q'), 'all');
       await page.goto(origin + '/web-hub/', { waitUntil:'load' });
