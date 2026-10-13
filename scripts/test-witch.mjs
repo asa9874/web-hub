@@ -69,7 +69,7 @@ try {
  await page.keyboard.press('Space');await page.waitForTimeout(160);assert((await state()).y<540,'Space jumps');assert.equal((await state()).pose,'witch-jump');
  const jumpRod=await checkRig();assert(jumpRod.start.y<jumpRod.actorY-25,'Jump support extends from the body, not a detached fixed-length bar');await page.screenshot({path:fileURLToPath(new URL('witch-jump.png',output))});
  await waitState('s.grounded');
- await runTo(470);await page.keyboard.press('Space');await page.waitForTimeout(700);assert((await state()).y===515,'Land on a practice board');
+ await runTo(470);await page.keyboard.press('Space');await waitState('!s.grounded');await waitState('s.grounded && s.y === 515');
  await runTo(890);await page.keyboard.down('d');await page.keyboard.press('Space');await waitState('s.x > 1120');await page.keyboard.up('d');await page.waitForTimeout(300);
  await runTo(1220);assert((await state()).camera>600,'Camera follows');
  await checkRig();

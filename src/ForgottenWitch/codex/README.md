@@ -120,6 +120,7 @@ WITCH_TEST_URL=http://127.0.0.1:4173/web-hub npm run test:witch
 
 ## 흔한 확인 사항
 
+- Windows PowerShell에서 `npm.ps1` 실행 정책 오류가 나면 같은 명령의 `npm`을 `npm.cmd`로 바꾼다. 시스템 실행 정책을 변경할 필요는 없다.
 - 새 이미지는 `public/witch-theater/`에 넣고 `assetUrl()` 및 preload에 등록한다. Codex PC의 절대 경로를 런타임에서 사용하지 않는다.
 - 화면 입력/오디오 정리는 Phaser SHUTDOWN과 DESTROY 모두에서 처리한다. React StrictMode의 두 번 실행, 재시작, 다른 페이지 이동을 확인한다.
 - `npm run build`는 `.build-projects/`를 다시 만든다. 이 폴더에만 있는 파일을 제품 소스로 사용하지 않는다.
