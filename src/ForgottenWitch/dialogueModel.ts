@@ -1,4 +1,6 @@
-export type Speaker='witch'|'flora';
+import {NPCS} from './castData';
+import type {NpcId} from './castData';
+export type Speaker='witch'|NpcId;
 export type Emotion='neutral'|'joy'|'worry'|'angry'|'flustered';
 export interface DialogueSegment {text:string;cps?:number;pauseAfterMs?:number;color?:string;size?:number;weight?:number}
 export interface DialogueLine {speaker:Speaker;emotion:Emotion;segments:DialogueSegment[]}
@@ -9,8 +11,9 @@ export const EMOTIONS:Record<Emotion,{label:string;cps:number;pitch:number;gain:
   angry:{label:'분노',cps:21,pitch:1.04,gain:1.25,duration:.06},
   flustered:{label:'당황',cps:55,pitch:1.17,gain:.8,duration:.025},
 };
-export const SPEAKERS={witch:{name:'견습 마녀',frequency:183,wave:'triangle' as const},flora:{name:'플로라',frequency:312,wave:'sine' as const}};
-export function portrait(speaker:Speaker,emotion:Emotion){return emotion==='neutral'?`${speaker}-knee.png`:`expressions/${speaker}-${emotion}.png`;}
+export const SPEAKERS:Record<Speaker,{name:string;frequency:number;wave:'triangle'|'sine'}>={witch:{name:'견습 마녀',frequency:183,wave:'triangle'},flora:{name:'플로라',frequency:312,wave:'sine'},...Object.fromEntries(NPCS.map(n=>[n.id,{name:n.name,frequency:n.frequency,wave:n.wave}]))} as Record<Speaker,{name:string;frequency:number;wave:'triangle'|'sine'}>;
+export function portrait(speaker:Speaker,emotion:Emotion){if(speaker!=='witch'&&speaker!=='flora')return `npcs/${speaker}-${emotion}.png`;return emotion==='neutral'?`${speaker}-knee.png`:`expressions/${speaker}-${emotion}.png`;}
+export function conversationLabel(speaker:Speaker){const name=SPEAKERS[speaker].name,last=name.charCodeAt(name.length-1);return name+(last>=0xac00&&last<=0xd7a3&&(last-0xac00)%28?'과':'와')+' 대화';}
 export function lineText(line:DialogueLine){return line.segments.map(segment=>segment.text).join('');}
 export function buildTimeline(line:DialogueLine){
   return line.segments.flatMap((segment,segmentIndex)=>{

@@ -8,6 +8,7 @@
 - 작업 브랜치: `feat/forgotten-witch-theater`.
 - 시작 → 이동/점프 → 다리 드래그/실제 통과 → 플로라 대화/분기 → 조명 퍼즐 → 커튼/완료까지 연결되어 있다.
 - 최근 변경: 감정별 초상화/말소리와 대사 출력 리듬, 읽기 쉬운 종이 UI, 로컬 CC0 효과음, 기능별 테스트 이동, 3라이프 전투와 전체 커튼 재등장, 임시 설정집과 마녀의 노트. 기존 화면 끝 지지대/포즈/조명/갤러리도 유지한다.
+- 추가 확장: 일반 몬스터 20종과 보스 후보, 몬스터/NPC 선택 리허설, 새 NPC 6명의 감정 그림/고유 음색, 구르기 무적, 사물 22항목 및 음악 6항목의 Suno 프롬프트. 모든 설정과 음악은 후보 단계다.
 - 공개 Pages는 main/gh-pages 기준이다. 작업 브랜치 최신 상태는 아래 명령으로 로컬 실행한다. 최신 커밋은 `git log -5 --oneline`으로 확인한다.
 - 원래 v0.1 구현 커밋: `8db7334`. 상세 변경 이유는 [WORKLOG.md](WORKLOG.md).
 
@@ -56,6 +57,8 @@ npm run dev -- --host 127.0.0.1 --port 5173
 5. `src/ForgottenWitch/config.ts` → `model.ts` → `TheaterScene.ts`: 설정, 로직, 렌더링 순서.
 
 ## 어디를 수정할지
+
+몬스터/NPC 수치와 디자인: `castData.ts`; 패턴/보스/구르기 판정: `combatModel.ts`; 소환 UI: `TestPanel.tsx`; 새 대사: `npc-dialogue.json`; 사물 목록: `objectData.ts`; 음악 프롬프트: `musicData.ts`. 사물 이미지 재추출은 `npm run witch:export-props`, 확장 검증은 `npm run test:witch-expansion`이다.
 
 | 작업 | 파일 |
 | --- | --- |

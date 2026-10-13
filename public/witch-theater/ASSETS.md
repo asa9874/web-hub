@@ -1,5 +1,15 @@
 # Witch Theater asset provenance
 
+## 몬스터 / NPC / 구르기 확장 — 2026-10-14
+
+- `monsters/*.png`: 새 일반 몬스터 19종과 보스 후보 1종. 기존 박수꾼을 포함해 일반 20종이다. `clapper-idle.png`를 재질/그림체 참고로 사용하고 캐릭터 정체성은 각각 다르게 설계했다. 움직임/공격은 `CombatStage.ts`의 변환과 `combatModel.ts`의 실제 패턴으로 표현하며 고정 프레임 시트가 아니다.
+- `npcs/*.png`: 루미/세린/노엘/미라/이리스/포피 × neutral/joy/worry/angry/flustered/puppet, 총 36점. 기본 초상화는 기존 `witch-portrait.png`의 그림체를 참고했고 표정 변형은 각 기본 그림을 편집 대상으로 사용했다. puppet은 같은 NPC 정체성과 `witch-puppet.png`의 골판지 재질을 참고했다.
+- `witch-roll.png`: 새 구르기 포즈 생성 원본. `witch-roll-clean.png`는 배경 정리 편집 결과이며 실제 게임/설정집은 clean 버전을 사용한다. 기존 witch-puppet.png의 정체성/복장을 유지했다. 회전과 빠른 이동/무적/화면 끝 막대는 코드에서 수행한다.
+- 모든 생성은 built-in image_gen으로 개별 요청했다. 생성된 PNG의 알파를 그대로 보존해 복사했다. 외부 기본 저장 경로에 런타임 의존하지 않는다. 실제 제출 프롬프트는 `src/ForgottenWitch/codex/monster-image-prompts.json`(20), `npc-image-prompts.json`(36), `roll-image-prompts.json`(2)에 기록한다. 이 그림/이야기들은 아직 채택 여부가 미정이다.
+- `objects/*.png`: 이미지 생성 도구를 사용한 새 그림이 아니라, 실제 `paper.ts`(14), `StageLighting.ts`(4), `rig.ts`(막대 미리보기 1)의 렌더링 코드에서 Playwright Canvas로 추출한 PNG 19개다. `npm run witch:export-props`로 재생성한다. 가져온 나무/입구 프레임/공용 UI 재질을 함께 표시해 설정집 사물은 총 22항목이다.
+- BGM은 생성하지 않았다. `musicData.ts`의 6개 항목에 제목/설명/Suno용 영문 프롬프트만 준비했으며 그림은 기존 컷씬을 분위기 참고로 재사용한다. 무료 효과음은 기존 `audio/`의 CC0 파일을 계속 사용한다.
+- 최종 아트 검수에서 이리스 인형 초안에 주인공 모자/지팡이가 섞인 것을 발견했다. `iris-puppet-v2.png`에서 이리스의 소리굽쇠/민트 리본 정체성으로 수정하고 `iris-puppet-v3.png`에서 두꺼운 골판지 외곽선과 SD 비율을 맞췄다. 게임과 설정집의 사용 버전은 v3이며 초안 2개는 제작 이력으로 남긴다. 실제 두 편집 프롬프트는 `codex/iris-puppet-correction.json`에 있다. 실사용 NPC 그림은 36개이며 제작 초안 포함 디렉터리는 38개다.
+
 Generated with the built-in image_gen tool on 2026-10-13. No API key or remote service is used at game runtime. User-provided root ref.png is a design/material reference, not a game background. The reference remains untouched.
 
 

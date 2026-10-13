@@ -1,6 +1,6 @@
 import { LIGHT_ORDER, STAGE, TUNING } from './config';
 import type { SymbolId } from './config';
-export type GameMode = 'intro' | 'explore' | 'bridge' | 'dialogue' | 'lights' | 'pause' | 'complete' | 'gameover';
+export type GameMode = 'intro' | 'explore' | 'bridge' | 'dialogue' | 'lights' | 'pause' | 'complete' | 'gameover' | 'testing';
 export type BridgeState = 'IDLE' | 'ACTIVE' | 'DRAGGING' | 'SOLVED';
 export type LightState = 'CLOSED' | 'OPEN' | 'CHECKING' | 'SOLVED';
 export interface WorldState {
@@ -12,14 +12,14 @@ export interface Actor {
 }
 export const createActor = (): Actor => ({ x: 200, y: TUNING.floor, vx: 0, vy: 0, grounded: true, facing: 1, coyote: 100, buffer: 0, landing: 0 });
 export const createWorld = (): WorldState => ({ bridge: 'IDLE', lights: 'CLOSED', talked: false, visits: 0, checkpoint: 200 });
-export function moveActor(actor: Actor, world: WorldState, dt: number, direction: number, jump: boolean) {
+export function moveActor(actor: Actor, world: WorldState, dt: number, direction: number, jump: boolean, rolling=false) {
   const ms = dt * 1000;
   actor.buffer = jump ? TUNING.bufferMs : Math.max(0, actor.buffer - ms);
   actor.coyote = actor.grounded ? TUNING.coyoteMs : Math.max(0, actor.coyote - ms);
   actor.landing = Math.max(0, actor.landing - dt * 5);
-  const target = direction * TUNING.speed;
+  const target = direction * (rolling?TUNING.rollSpeed:TUNING.speed);
   const amount = (direction ? TUNING.acceleration : TUNING.friction) * dt;
-  actor.vx += Math.sign(target - actor.vx) * Math.min(Math.abs(target - actor.vx), amount);
+  actor.vx = rolling?target:actor.vx+Math.sign(target-actor.vx)*Math.min(Math.abs(target-actor.vx),amount);
   if (direction) actor.facing = direction;
   if (actor.buffer > 0 && actor.coyote > 0) {
     actor.vy = -TUNING.jumpSpeed; actor.buffer = 0; actor.coyote = 0; actor.grounded = false;

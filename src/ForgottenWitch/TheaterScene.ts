@@ -11,13 +11,17 @@ import { puppetPose } from './poses';
 import { StageLife } from './StageLife';
 import { StageLighting } from './StageLighting';
 import type { Emotion, Speaker } from './dialogueModel';
+import {conversationLabel} from './dialogueModel';
 import { CombatStage } from './CombatStage';
-import { updateCombat } from './combatModel';
+import { updateCombat,beginRoll,COMBAT } from './combatModel';
+import {monsterDefinitions,monsterFile,NPCS,monsterById,npcPuppetFile} from './castData';
+import type {NpcId} from './castData';
 
 export interface TheaterView {
   mode:GameMode; area:string; prompt:string; message:string;
   bridgeSolved:boolean; lightsSolved:boolean; talked:boolean; dialogue:'first'|'repeat'|'lit';
   lives:number;
+  npc:NpcId;monster:string;boss:{name:string;hp:number;maxHp:number;act:number}|null;
 }
 export interface TheaterCallbacks {
   view:(view:TheaterView)=>void; ready:(scene:TheaterScene)=>void;
@@ -39,6 +43,7 @@ export class TheaterScene extends Phaser.Scene {
   private lighting!:StageLighting;
   private combat!:CombatStage;
   private respawnPoint=200;
+  private npc:NpcId='flora';
   private lightAmount=0;
   private hint!:Phaser.GameObjects.Text;
   private dragging=false;
@@ -57,6 +62,9 @@ export class TheaterScene extends Phaser.Scene {
     for(const name of ['witch-puppet','witch-walk','witch-jump','flora-puppet','witch-portrait','flora-portrait','paper-tree']) this.load.image(name,assetUrl(name+(name.startsWith('flora')?'-clean':'')+'.png'));
     for(const name of ['witch-knee','flora-knee','title-arch'])this.load.image(name,assetUrl(name+'.png'));
     for(const name of ['witch-attack','clapper-idle','clapper-walk','clapper-attack','game-over'])this.load.image(name,assetUrl(name+'.png'));
+    this.load.image('witch-roll',assetUrl('witch-roll-clean.png'));
+    for(const m of monsterDefinitions)if(m.id!=='clapper')this.load.image(`monster-${m.id}`,assetUrl(monsterFile(m.id)));
+    for(const n of NPCS)this.load.image(`npc-${n.id}`,assetUrl(npcPuppetFile(n.id)));
   }
   create() {
     if(this.loadErrors.length){this.callbacks.error('에셋을 불러오지 못했습니다: '+this.loadErrors.join(', '));return;}
@@ -135,6 +143,7 @@ export class TheaterScene extends Phaser.Scene {
       this.stageLife.sway(tree,.22);this.lighting.shadow(tree,.12);
     }
     const moon=this.add.image(300,165,'moon').setDisplaySize(110,110).setScrollFactor(.18).setDepth(2);
+    for(let i=0;i<7;i++){const cloud=this.add.image(580+i*700,125+i%2*65,'cloud').setDisplaySize(210+i%3*35,95).setScrollFactor(.16).setDepth(.9).setTint(0xb6abbc).setAlpha(.6);this.rig.attach(cloud,`hanging-cloud-${i}`,'top',.5,.25,5);this.stageLife.sway(cloud,.22);}
     this.rig.attach(moon,'hanging-moon','top',.25,.5,5);this.stageLife.sway(moon,.65);this.lighting.glow(moon,.65);
     for(let i=0;i<12;i++){
       const x=410+i*300,y=108+(i%3)*45;
@@ -166,7 +175,7 @@ export class TheaterScene extends Phaser.Scene {
       this.rig.attach(flower,`clock-flower-${i}`,'bottom',.5,.91,4);this.stageLife.plant(flower);
       this.stageLife.sway(flower,.35);this.lighting.shadow(flower,.13);
     }
-    this.rig.attach(this.add.rectangle(4320,380,295,380,0x4a3c53).setDepth(3).setStrokeStyle(16,0xceab88),'door-flat','bottom',.5,.88,10);
+    this.rig.attach(this.add.image(4320,380,'door-flat').setDepth(3),'door-flat','bottom',.5,.88,10);
     this.rig.attach(this.add.image(4320,260,'moon').setDisplaySize(65,65).setDepth(4),'door-moon','top',.25,.5,4);
     for(const [index,[x,flip]] of ([[4205,false],[4435,true]] as const).entries()){
       const curtain=this.add.image(x,570,'curtain').setDisplaySize(230,480).setOrigin(.5,1).setFlipX(flip).setDepth(12);
@@ -182,18 +191,20 @@ export class TheaterScene extends Phaser.Scene {
       this.rig.attach(wing,`edge-wing-${i}`,'bottom',.5,.87,7);this.stageLife.sway(wing,.1);
     }
     this.rig.attach(this.add.image(-25,570,'curtain').setDisplaySize(165,610).setOrigin(.5,1).setDepth(15),'entrance-curtain','top',.75,.14,8);
-    const frame=this.add.graphics().setScrollFactor(0).setDepth(16);
-    frame.fillStyle(0x634d64,.9);frame.fillRect(0,0,1280,35);frame.fillStyle(0xd6b38c,1);frame.fillRect(0,35,1280,9);
-    frame.lineStyle(2,0xf3e5ce,.55);frame.lineBetween(0,24,1280,24);
+    this.add.image(0,0,'stage-frame').setOrigin(0).setScrollFactor(0).setDepth(16);
     this.add.text(640,17,'THE FORGOTTEN WITCH’S THEATER',{fontFamily:'Georgia',fontSize:'13px',letterSpacing:5,color:'#eddbc1'}).setOrigin(.5).setScrollFactor(0).setDepth(17);
   }
   start() {this.theaterSound.unlock();this.mode='explore';this.controls.clear();this.publish();}
   teleport(target:TestArea){
-    if(this.mode!=='explore')return;
+    if(this.mode!=='explore'&&this.mode!=='testing')return;
+    this.mode='explore';
     const area=TEST_AREAS.find(item=>item.id===target)!;
     Object.assign(this.actor,createActor(),{x:area.x});this.respawnPoint=area.x;this.world.checkpoint=area.x;this.combat.reset();
     this.cameras.main.scrollX=Phaser.Math.Clamp(area.x-440,0,TUNING.worldWidth-1280);this.controls.clear();this.theaterSound.cue('ui');this.publish();
   }
+  testMenu(open:boolean){if(open&&this.mode==='explore')this.mode='testing';else if(!open&&this.mode==='testing')this.mode='explore';this.controls.clear();this.publish();}
+  testMonster(id:string){if(this.mode!=='testing')return;this.teleport('combat');this.combat.reset(id);this.publish();}
+  testNpc(id:NpcId){if(this.mode!=='testing')return;this.npc=id;this.flora.setTexture(id==='flora'?'flora-puppet':`npc-${id}`).setScale(190/this.flora.height);this.teleport('dialogue');this.actor.x=STAGE.floraX-100;this.actor.facing=1;this.publish();}
   async prepareRespawn(){
     if(this.mode!=='gameover')return;
     Object.assign(this.actor,createActor(),{x:this.respawnPoint});this.combat.reset();this.cameras.main.scrollX=Phaser.Math.Clamp(this.actor.x-440,0,TUNING.worldWidth-1280);this.controls.clear();this.publish();
@@ -209,7 +220,7 @@ export class TheaterScene extends Phaser.Scene {
     else return;
     this.mode='explore';this.controls.clear();this.publish();
   }
-  finishDialogue() {if(this.mode!=='dialogue')return;this.world.talked=true;this.world.visits++;this.mode='explore';this.controls.clear();this.publish();}
+  finishDialogue() {if(this.mode!=='dialogue')return;if(this.npc==='flora'){this.world.talked=true;this.world.visits++;}this.mode='explore';this.controls.clear();this.publish();}
   checkingLights() { if(this.mode==='lights')this.world.lights='CHECKING'; }
   retryLights() { if(this.mode==='lights')this.world.lights='OPEN'; }
   solveLights() {
@@ -242,13 +253,15 @@ export class TheaterScene extends Phaser.Scene {
     if(!this.controls)return;
     const input=this.controls.read(),dt=Math.min(delta/1000,.033);
     if(input.escape){
-      if(this.mode==='bridge'||this.mode==='lights')this.closePuzzle();else if(this.mode==='pause')this.resume();else if(this.mode==='explore')this.pause();
+      if(this.mode==='bridge'||this.mode==='lights')this.closePuzzle();else if(this.mode==='testing')this.testMenu(false);else if(this.mode==='pause')this.resume();else if(this.mode==='explore')this.pause();
     }else if(this.mode==='dialogue') {if(input.jump||input.next)this.callbacks.advance();}
     else if(this.mode==='explore') {
       if(input.interact&&this.actor.grounded)this.interact();
       if(this.mode==='explore') {
         const wasGrounded=this.actor.grounded;
-        if(moveActor(this.actor,this.world,dt,input.direction,input.jump)==='rescued')this.toast('무대 아래는 아직 준비 중입니다. 안전한 자리로 돌아왔어요.');
+        if(input.roll&&beginRoll(this.combat.state,this.actor))this.theaterSound.cue('paper');
+        const rolling=this.combat.state.rolling>0;
+        if(moveActor(this.actor,this.world,dt,rolling?this.combat.state.rollFacing:input.direction,!rolling&&input.jump,rolling)==='rescued')this.toast('무대 아래는 아직 준비 중입니다. 안전한 자리로 돌아왔어요.');
         if(!wasGrounded&&this.actor.grounded){this.stageLife.impact(this.actor.x,this.actor.y);this.theaterSound.cue('footstep');}
         const events=updateCombat(this.combat.state,this.actor,dt,input.attack);
         for(const event of events){
@@ -272,10 +285,11 @@ export class TheaterScene extends Phaser.Scene {
     const bounce=walk?Math.abs(Math.sin(t*14))*4:0;
     if(walk&&Math.abs(this.actor.x-this.footstepX)>80){this.footstepX=this.actor.x;this.stageLife.impact(this.actor.x,this.actor.y,2);this.theaterSound.cue('footstep');}
     if(!walk)this.footstepX=this.actor.x;
-    const pose=this.mode==='explore'&&this.combat.state.casting>0?{texture:'witch-attack',height:198,joint:{u:.48,v:.79}}:puppetPose(this.actor.grounded,this.actor.vx,this.mode);
+    const rolling=this.mode==='explore'&&this.combat.state.rolling>0;
+    const pose=rolling?{texture:'witch-roll',height:120,joint:{u:.5,v:.5}}:this.mode==='explore'&&this.combat.state.casting>0?{texture:'witch-attack',height:198,joint:{u:.48,v:.79}}:puppetPose(this.actor.grounded,this.actor.vx,this.mode);
     if(this.puppet.texture.key!==pose.texture)this.puppet.setTexture(pose.texture);
-    this.puppet.setOrigin(this.actor.facing<0?1-pose.joint.u:pose.joint.u,1).setData('rodJoint',pose.joint);
-    this.puppet.setPosition(this.actor.x,this.actor.y-bounce).setFlipX(this.actor.facing<0).setRotation(tilt+(this.mode==='dialogue'?this.actor.facing*.055:0));
+    this.puppet.setOrigin(this.actor.facing<0?1-pose.joint.u:pose.joint.u,rolling?.5:1).setData('rodJoint',pose.joint);
+    this.puppet.setPosition(this.actor.x,this.actor.y-(rolling?88:bounce)).setFlipX(this.actor.facing<0).setRotation(rolling?this.actor.facing*(1-this.combat.state.rolling/COMBAT.rollDuration)*Math.PI*2:tilt+(this.mode==='dialogue'?this.actor.facing*.055:0));
     const squash=this.actor.landing*.09;
     this.puppet.setScale(pose.height/this.puppet.height*(1+squash),pose.height/this.puppet.height*(1-squash));
     this.puppet.setAlpha(this.combat.state.invulnerable>0?.65+Math.sin(this.combat.state.clock*24)*.2:1);
@@ -287,7 +301,7 @@ export class TheaterScene extends Phaser.Scene {
     if(this.world.lights==='SOLVED'&&this.mode==='explore')this.lightAmount=Math.min(1,this.lightAmount+dt*.32);
     this.lighting.update(this.actor.x,this.actor.y,this.actor.grounded,this.world.bridge==='SOLVED',this.lightAmount);
     const near=this.nearby();
-    this.hint.setVisible(Boolean(near)&&this.mode==='explore').setPosition(this.actor.x,this.actor.y-212).setText(near==='flora'?'E  플로라와 대화':near==='bridge'?'E  무대 조작':'E  조명 조사');
+    this.hint.setVisible(Boolean(near)&&this.mode==='explore').setPosition(this.actor.x,this.actor.y-212).setText(near==='flora'?`E  ${conversationLabel(this.npc)}`:near==='bridge'?'E  무대 조작':'E  조명 조사');
     if(this.message&&this.time.now>this.nextMessageUntil)this.message='';
     // Read-only telemetry for browser regression tests; no debug controls or bypasses.
     this.game.canvas.dataset.theater=JSON.stringify({x:this.actor.x,y:this.actor.y,grounded:this.actor.grounded,camera:this.cameras.main.scrollX,mode:this.mode,bridge:this.world.bridge,lights:this.world.lights,visits:this.world.visits,bridgeX:this.bridge.x,bridgeY:this.bridge.y,pose:this.puppet.texture.key,lightAmount:this.lightAmount,lighting:this.lighting.snapshot(),environment:this.stageLife.snapshot(),combat:this.combat.state,audio:this.theaterSound.snapshot()});
@@ -296,7 +310,8 @@ export class TheaterScene extends Phaser.Scene {
   }
   private publish() {
     const area=this.actor.x>4600?'소품실 · 전투':this.actor.x<1100?'숲의 입구':this.actor.x<2110?'부서진 종이 다리':this.actor.x<3280?'시계꽃 정원':'마지막 커튼';
-    const view:TheaterView={mode:this.mode,area,prompt:this.nearby(),message:this.message,bridgeSolved:this.world.bridge==='SOLVED',lightsSolved:this.world.lights==='SOLVED',talked:this.world.talked,dialogue:this.dialogue,lives:this.combat.state.lives};
+    const boss=this.actor.x>4600?this.combat.state.monsters.find(m=>monsterById(m.kind).pattern==='boss'):undefined;
+    const view:TheaterView={mode:this.mode,area,prompt:this.nearby(),message:this.message,bridgeSolved:this.world.bridge==='SOLVED',lightsSolved:this.world.lights==='SOLVED',talked:this.world.talked,dialogue:this.dialogue,lives:this.combat.state.lives,npc:this.npc,monster:this.combat.state.selection,boss:boss?{name:monsterById(boss.kind).name,hp:boss.hp,maxHp:boss.maxHp,act:boss.hp<boss.maxHp/2?2:1}:null};
     const key=JSON.stringify(view);if(key!==this.lastView){this.lastView=key;this.callbacks.view(view);}
   }
 }

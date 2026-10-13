@@ -23,6 +23,9 @@ export function createPaperTextures(scene:Phaser.Scene) {
     draw(c);grain(c,w,h,seed);t.refresh();
   }
   texture('paper',512,512,c=>{c.fillStyle='#F3E5CE';c.fillRect(0,0,512,512);},1);
+  texture('door-flat',311,396,c=>{c.fillStyle='#4a3c53';c.fillRect(8,8,295,380);c.strokeStyle='#ceab88';c.lineWidth=16;c.strokeRect(8,8,295,380);},10);
+  texture('stage-frame',1280,44,c=>{c.fillStyle='#634d64';c.fillRect(0,0,1280,35);c.fillStyle='#d6b38c';c.fillRect(0,35,1280,9);c.strokeStyle='rgba(243,229,206,.55)';c.lineWidth=2;c.beginPath();c.moveTo(0,24);c.lineTo(1280,24);c.stroke();},11);
+  texture('cloud',320,160,c=>{cutout(c,[[12,102],[20,75],[52,66],[68,33],[107,24],[138,45],[158,22],[197,18],[220,52],[256,49],[279,74],[301,86],[308,117],[282,139],[228,132],[178,143],[129,132],[75,140],[35,129]],'#eee3d2');c.strokeStyle='#cab8cc';c.lineWidth=3;c.beginPath();c.moveTo(55,104);c.quadraticCurveTo(145,120,262,102);c.stroke();},9);
   texture('floor',512,155,c=>{
     cutout(c,[[4,13],[55,8],[103,15],[163,6],[245,10],[306,5],[380,15],[435,8],[508,12],[511,154],[1,154]],'#D6B38C');
     c.strokeStyle='#b38d6d';c.lineWidth=3;

@@ -2,13 +2,15 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { RefObject } from 'react';
 import { assetUrl } from './config';
 import scripts from './dialogue.json';
-import { buildTimeline, EMOTIONS, lineText, portrait, SPEAKERS } from './dialogueModel';
+import npcScripts from './npc-dialogue.json';
+import type {NpcId} from './castData';
+import { buildTimeline, EMOTIONS, lineText, portrait, SPEAKERS,conversationLabel } from './dialogueModel';
 import type { DialogueLine, Emotion, Speaker } from './dialogueModel';
 
-export default function Dialogue({script,advanceRef,onEnd,onBlip}:{script:keyof typeof scripts;advanceRef:RefObject<(()=>void)|null>;onEnd:()=>void;onBlip:(speaker:Speaker,emotion:Emotion,pace:number)=>void}){
-  const lines=scripts[script] as DialogueLine[];
+export default function Dialogue({script,npc='flora',advanceRef,onEnd,onBlip}:{script:keyof typeof scripts;npc?:NpcId;advanceRef:RefObject<(()=>void)|null>;onEnd:()=>void;onBlip:(speaker:Speaker,emotion:Emotion,pace:number)=>void}){
+  const lines=useMemo<DialogueLine[]>(()=>npc==='flora'?scripts[script] as DialogueLine[]:npcScripts[npc].flatMap((entry,i)=>[{speaker:npc,emotion:entry.emotion as Emotion,segments:[{text:entry.text,cps:entry.emotion==='flustered'?56:entry.emotion==='angry'?17:undefined,color:entry.emotion==='angry'?'#8b2838':undefined,size:entry.emotion==='angry'?1.1:undefined}]},...(i===0?[{speaker:'witch' as const,emotion:'neutral' as const,segments:[{text:'……듣고 있어. 천천히 말해도 돼.'}]}]:[])]),[npc,script]);
   const [index,setIndex]=useState(0),[visible,setVisible]=useState(0),[pace,setPace]=useState(1);
-  const [faces,setFaces]=useState<Record<Speaker,Emotion>>({witch:'neutral',flora:'neutral'});
+  const [faces,setFaces]=useState<Partial<Record<Speaker,Emotion>>>({witch:'neutral',[npc]:'neutral'});
   const line=lines[index],timeline=useMemo(()=>buildTimeline(line),[line]),text=lineText(line);
   const done=visible>=timeline.length;
   const live=useRef({pace,onBlip});useEffect(()=>{live.current={pace,onBlip};},[pace,onBlip]);
@@ -36,8 +38,8 @@ export default function Dialogue({script,advanceRef,onEnd,onBlip}:{script:keyof 
     else {setFaces(current=>({...current,[line.speaker]:line.emotion}));setIndex(index+1);setVisible(0);}
   };
   useEffect(()=>{advanceRef.current=next;return ()=>{advanceRef.current=null;};});
-  const expression=(speaker:Speaker)=>line.speaker===speaker?line.emotion:faces[speaker];
-  return <div className="wt-dialogue" ref={root} role="dialog" aria-modal="true" aria-label="플로라와 대화" data-dialogue-index={index} data-typing={done?'complete':'typing'} data-emotion={line.emotion} data-speaker={line.speaker} onKeyDown={event=>{
+  const expression=(speaker:Speaker)=>line.speaker===speaker?line.emotion:faces[speaker]??'neutral';
+  return <div className="wt-dialogue" ref={root} role="dialog" aria-modal="true" aria-label={conversationLabel(npc)} data-dialogue-index={index} data-typing={done?'complete':'typing'} data-emotion={line.emotion} data-speaker={line.speaker} onKeyDown={event=>{
     if((event.target as HTMLInputElement).type==='range'&&event.key.startsWith('Arrow'))event.stopPropagation();
     if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();if(!event.repeat)next();}
     if(event.key==='Tab'){
@@ -45,7 +47,7 @@ export default function Dialogue({script,advanceRef,onEnd,onBlip}:{script:keyof 
       const current=items.indexOf(document.activeElement as HTMLElement);event.preventDefault();items[(current+(event.shiftKey?-1:1)+items.length)%items.length]?.focus({preventScroll:true});
     }
   }}>
-    {(['witch','flora'] as const).map((speaker,i)=><img key={speaker} className={`wt-portrait wt-portrait-${i?'right':'left'} ${line.speaker===speaker?'speaking':''}`} data-expression={expression(speaker)} src={assetUrl(portrait(speaker,expression(speaker)))} alt={`${SPEAKERS[speaker].name} · ${EMOTIONS[expression(speaker)].label}`} />)}
+    {(['witch',npc] as const).map((speaker,i)=><img key={speaker} className={`wt-portrait wt-portrait-${i?'right':'left'} ${line.speaker===speaker?'speaking':''}`} data-expression={expression(speaker)} src={assetUrl(portrait(speaker,expression(speaker)))} alt={`${SPEAKERS[speaker].name} · ${EMOTIONS[expression(speaker)].label}`} />)}
     <div className="wt-dialogue-paper">
       <div className={`wt-nameplate wt-nameplate-${line.speaker}`}><strong className="wt-speaker">{SPEAKERS[line.speaker].name}</strong><span>{EMOTIONS[line.emotion].label}</span></div>
       <p className="wt-dialogue-text" aria-label={text}>

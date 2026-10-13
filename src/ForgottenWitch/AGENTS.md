@@ -10,5 +10,8 @@
 - 인물 일러스트의 그림체는 원래 `witch-portrait.png`가 기준이다. 무릎 위까지 보이는 인물을 대화창 뒤 좌우 독립 레이어로 배치한다. 타이틀 변경은 `codex/UI-REFERENCES.md`의 실제 UI 조사도 참고한다.
 - 대화는 출력 완료 후에만 진행한다. 출력 중 즉시 펼치기/입력 큐를 넣지 않는다. 감정은 neutral/joy/worry/angry/flustered로 표정·출력 속도·말소리를 연결한다. 구간별 cps/휴지/색/크기를 JSON 데이터로 유지한다.
 - 게임 수정은 `npm run test:witch`로 실제 입력 플레이를 확인한다. 배포 경로/등록/공유 변경은 빌드 및 산출물 검증도 확인한다. 생명주기 변경은 재시작/언마운트/오디오 정리 검증을 유지한다.
+- 몬스터/NPC/구르기 확장은 `npm run test:witch-expansion`도 검증한다. 리허설 선택 중에는 `testing` 상태로 물리/전투를 멈춘다. 캐릭터 표정/음색은 화자 ID로 연결하고 새 NPC 대사는 npc-dialogue.json에 둔다.
+- 몬스터/보스는 castData.ts의 레지스트리와 공격 준비/실행/회복 상태를 사용한다. BOSSES의 bossPatterns로 공격 순환을 확장할 수 있다. 구르기도 moveActor 충돌을 통과하며 지속 시간 동안 피격을 막는다.
+- 사물 목록은 objectData.ts에서 관리한다. 재료가 바뀌면 `npm run witch:export-props`로 실제 코드 기반 이미지를 추출한다. 음악 후보는 음원 미제작/설정 미확정 표기와 Suno 프롬프트를 유지한다.
 - 완료 후 실제 변경 및 검증 결과를 `codex/WORKLOG.md`에 갱신하고 현재 구조/진행점이 바뀌면 README도 갱신한다.
 - Git 작업은 현재 사용자의 지시 범위를 따른다. 원본 커밋 기록을 재작성하거나 force push하지 않는다. main 반영은 PR merge commit으로 진행한다.

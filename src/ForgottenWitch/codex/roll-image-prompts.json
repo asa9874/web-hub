@@ -1,0 +1,10 @@
+[
+  {
+    "file": "witch-roll.png",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target witch-puppet.png. Create ONE new transparent game pose of this EXACT same SD cardboard apprentice witch: curled forward dodge ROLL, head tucked, knees bent tight, body tilted almost horizontal towards right, hat held securely, hair sweeping behind, wand tucked close to body. Same face, hair, costume, proportions, hand-cut cardboard edge and crayon material. Whole character and hat inside canvas, modest balanced transparent margins. No floor, control rod, trail, glow, writing or scene. This is a single flat 2D hand-painted cutout for code-based tumble animation, not a sheet. Genuine transparency."
+  },
+  {
+    "file": "witch-roll-clean.png",
+    "prompt": "Use case: background-extraction. Image 1 is edit target witch-roll.png. Remove ALL warm brown glow, fuzzy surrounding halo, background, shadow and vignette. Preserve the EXACT actual witch cardboard artwork, pose and tan hand-cut backing inside its silhouette. ONLY the solid cardboard character silhouette may remain; immediately outside the hand-cut cardboard perimeter must be alpha 0, including all gaps. Crisp clean cutout perimeter, no soft feathering, no haze, no added rod or text. Truly transparent background. Do not redraw or redesign the witch."
+  }
+]

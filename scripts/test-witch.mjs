@@ -80,7 +80,7 @@ try {
  await page.screenshot({path:fileURLToPath(new URL('witch-art-detail.png',output))});
  await page.keyboard.press('Escape');await page.getByRole('button',{name:'← 메인 화면'}).click();
  assert(await menu.getByRole('button',{name:/극장에 들어가기/}).isDisabled(),'Story entry remains disabled');
- await menu.getByRole('button',{name:'설정집',exact:true}).click();assert.equal(await page.locator('.wt-codex-tabs button').count(),4);
+ await menu.getByRole('button',{name:'설정집',exact:true}).click();assert.equal(await page.locator('.wt-codex-tabs button').count(),6);
  await page.getByRole('button',{name:/^견습 마녀/}).click();await page.getByRole('dialog',{name:'견습 마녀 설정'}).waitFor();await page.getByRole('button',{name:'다음 이미지'}).click();assert((await page.locator('.wt-codex-standing img').getAttribute('src')).includes('witch-joy'));assert((await page.locator('.wt-codex-writing aside').innerText()).includes('마녀의 노트'));
  await page.getByRole('button',{name:'닫기 · Esc',exact:true}).click();await page.getByRole('button',{name:'← 메인 화면'}).click();
  await page.getByRole('button',{name:'테스트',exact:true}).click();
