@@ -8,6 +8,7 @@ import { TheaterSound } from './sound';
 import { StageRig } from './rig';
 import { puppetPose } from './poses';
 import { StageLife } from './StageLife';
+import { StageLighting } from './StageLighting';
 
 export interface TheaterView {
   mode:GameMode; area:string; prompt:string; message:string;
@@ -30,7 +31,7 @@ export class TheaterScene extends Phaser.Scene {
   private bridge!:Phaser.GameObjects.Image;
   private guide!:Phaser.GameObjects.Graphics;
   private curtains:Phaser.GameObjects.Image[]=[];
-  private lightBeams!:Phaser.GameObjects.Graphics;
+  private lighting!:StageLighting;
   private lightAmount=0;
   private hint!:Phaser.GameObjects.Text;
   private dragging=false;
@@ -40,7 +41,6 @@ export class TheaterScene extends Phaser.Scene {
   private lastView='';
   private dialogue:'first'|'repeat'|'lit'='first';
   private loadErrors:string[]=[];
-  private rearFlats:Phaser.GameObjects.Image[]=[];
   private distantApplausePlayed=false;
   private theaterSound=new TheaterSound();
   private callbacks:TheaterCallbacks;
@@ -58,10 +58,12 @@ export class TheaterScene extends Phaser.Scene {
     this.add.tileSprite(0,0,1280,720,'paper').setOrigin(0).setScrollFactor(0).setTint(0x777187);
     this.rig=new StageRig(this);
     this.stageLife=new StageLife(this);
+    this.lighting=new StageLighting(this);
     this.drawSet();
     this.bridge=this.add.image(STAGE.bridge.startX,STAGE.bridge.startY,'bridge').setDisplaySize(STAGE.bridge.width,58).setOrigin(.5,0).setDepth(6);
     this.bridge.setInteractive({useHandCursor:true});
     this.rig.attach(this.bridge,'movable-bridge','bottom',.5,.55,10);
+    this.lighting.shadow(this.bridge,.14);
     this.guide=this.add.graphics().setDepth(5).setVisible(false);
     this.guide.lineStyle(3,0x736477,.7);this.guide.strokeRect(STAGE.gap.left,570,480,55);
     for(let x=STAGE.gap.left+12;x<STAGE.gap.right;x+=32){this.guide.lineStyle(2,0xfff2d5,.9);this.guide.lineBetween(x,581,x+14,581);}
@@ -69,9 +71,11 @@ export class TheaterScene extends Phaser.Scene {
     this.puppet=this.add.image(this.actor.x,this.actor.y,'witch-puppet').setOrigin(.5,1).setDepth(10);
     this.puppet.setScale(198/this.puppet.height);
     this.rig.attach(this.puppet,'player','bottom',.5,.79,10);
+    this.lighting.shadow(this.puppet,.16);
     this.flora=this.add.image(STAGE.floraX,570,'flora-puppet').setOrigin(.5,1).setDepth(9);
     this.flora.setScale(190/this.flora.height);
     this.rig.attach(this.flora,'flora','bottom',.5,.84,9);
+    this.lighting.shadow(this.flora,.14);
     this.hint=this.add.text(0,0,'',{fontFamily:'Gowun Dodum, sans-serif',fontSize:'19px',color:'#483d50',backgroundColor:'#f3e5cee8',padding:{x:14,y:8}}).setOrigin(.5,1).setDepth(14);
     this.controls=new TheaterInput(this);
     const down=(pointer:Phaser.Input.Pointer)=>{
@@ -113,18 +117,21 @@ export class TheaterScene extends Phaser.Scene {
   private drawSet() {
     // Rear flats, middle cutouts and foreground wings each have their own scroll factor.
     for(let i=0;i<15;i++){
-      const tree=this.add.image(90+i*380,575,'tree-plum').setOrigin(.5,1).setDisplaySize(290,390+(i%3)*40).setTint(0x756a83).setAlpha(.48).setScrollFactor(.32).setDepth(1);
-      this.rearFlats.push(tree);this.rig.attach(tree,`rear-tree-${i}`,'bottom',.51,.88,4);
+      const tree=this.add.image(90+i*380,555,'tree-plum').setOrigin(.5,1).setDisplaySize(290,390+(i%3)*40).setTint(0x756a83).setAlpha(.48).setScrollFactor(.22).setDepth(1);
+      this.stageLife.sway(tree,.18);this.rig.attach(tree,`rear-tree-${i}`,'bottom',.51,.88,4);
     }
     for(let i=0;i<19;i++){
-      const tree=this.add.image(30+i*260,575,'paper-tree').setOrigin(.5,1).setDisplaySize(225+(i%2)*45,350+(i%3)*55).setFlipX(i%2===0).setTint(0xaaa5b3).setAlpha(.72).setScrollFactor(.72).setDepth(2);
+      const tree=this.add.image(30+i*260,565,'paper-tree').setOrigin(.5,1).setDisplaySize(225+(i%2)*45,350+(i%3)*55).setFlipX(i%2===0).setTint(0xaaa5b3).setAlpha(.72).setScrollFactor(.62).setDepth(2);
       this.rig.attach(tree,`middle-tree-${i}`,'bottom',.5,.87,6);
+      this.stageLife.sway(tree,.22);this.lighting.shadow(tree,.12);
     }
-    this.rig.attach(this.add.image(300,165,'moon').setDisplaySize(110,110).setScrollFactor(.18).setDepth(2),'hanging-moon','top',.25,.5,5);
+    const moon=this.add.image(300,165,'moon').setDisplaySize(110,110).setScrollFactor(.18).setDepth(2);
+    this.rig.attach(moon,'hanging-moon','top',.25,.5,5);this.stageLife.sway(moon,.65);this.lighting.glow(moon,.65);
     for(let i=0;i<12;i++){
       const x=410+i*300,y=108+(i%3)*45;
       const star=this.add.image(x,y,'star').setDisplaySize(37,37).setScrollFactor(.38).setDepth(3);
       this.rig.attach(star,`hanging-star-${i}`,'top',.5,.5,3);this.stageLife.hang(star);
+      this.lighting.glow(star,.48);
     }
     const gap=this.add.graphics().setDepth(3);gap.fillStyle(0x5c485e,.7);gap.fillRect(1420,610,480,110);gap.lineStyle(2,0x9b7e8f,.6);
     for(let x=1435;x<1900;x+=34)gap.lineBetween(x,633,x+70,720);
@@ -135,14 +142,20 @@ export class TheaterScene extends Phaser.Scene {
       const panel=this.add.tileSprite(floor.x,570,floor.width,150,'floor').setOrigin(0).setDepth(6);
       for(let x=160;x<floor.width;x+=400)this.rig.attach(panel,`floor-${index}-${x}`,'bottom',x/floor.width,.2,10);
     }
-    STAGE.platforms.forEach((p,i)=>this.rig.attach(this.add.image(p.x+p.width/2,p.y,'bridge').setDisplaySize(p.width,42).setOrigin(.5,0).setDepth(6),`platform-${i}`,'bottom',.5,.5,9));
-    this.rig.attach(this.add.image(STAGE.consoleX,570,'device').setDisplaySize(120,112).setOrigin(.5,1).setDepth(7),'bridge-device','bottom',.5,.85,8);
-    this.rig.attach(this.add.image(STAGE.lightX,570,'device').setDisplaySize(146,138).setOrigin(.5,1).setDepth(7),'light-device','bottom',.5,.85,8);
+    STAGE.platforms.forEach((p,i)=>{
+      const platform=this.add.image(p.x+p.width/2,p.y,'bridge').setDisplaySize(p.width,42).setOrigin(.5,0).setDepth(6);
+      this.rig.attach(platform,`platform-${i}`,'bottom',.5,.5,9);this.lighting.shadow(platform,.16);
+    });
+    const bridgeDevice=this.add.image(STAGE.consoleX,570,'device').setDisplaySize(120,112).setOrigin(.5,1).setDepth(7);
+    const lightDevice=this.add.image(STAGE.lightX,570,'device').setDisplaySize(146,138).setOrigin(.5,1).setDepth(7);
+    this.rig.attach(bridgeDevice,'bridge-device','bottom',.5,.85,8);this.lighting.shadow(bridgeDevice,.17);
+    this.rig.attach(lightDevice,'light-device','bottom',.5,.85,8);this.lighting.shadow(lightDevice,.17);
     this.add.text(STAGE.consoleX,585,'무대 조작',{fontFamily:'Gowun Dodum',fontSize:'18px',color:'#514455'}).setOrigin(.5).setDepth(8);
     this.add.text(STAGE.lightX,585,'조명 제어',{fontFamily:'Gowun Dodum',fontSize:'18px',color:'#514455'}).setOrigin(.5).setDepth(8);
     for(let i=0;i<10;i++){
       const flower=this.add.image(2220+i*100,570,'flower').setDisplaySize(55+(i%2)*17,90+(i%3)*16).setOrigin(.5,1).setDepth(6).setAngle((i%3-1)*5);
       this.rig.attach(flower,`clock-flower-${i}`,'bottom',.5,.91,4);this.stageLife.plant(flower);
+      this.stageLife.sway(flower,.35);this.lighting.shadow(flower,.13);
     }
     this.rig.attach(this.add.rectangle(4320,380,295,380,0x4a3c53).setDepth(3).setStrokeStyle(16,0xceab88),'door-flat','bottom',.5,.88,10);
     this.rig.attach(this.add.image(4320,260,'moon').setDisplaySize(65,65).setDepth(4),'door-moon','top',.25,.5,4);
@@ -150,11 +163,15 @@ export class TheaterScene extends Phaser.Scene {
       const curtain=this.add.image(x,570,'curtain').setDisplaySize(230,480).setOrigin(.5,1).setFlipX(flip).setDepth(12);
       this.curtains.push(curtain);this.rig.attach(curtain,`final-curtain-${index}`,'top',.5,.12,8);
     }
-    this.lightBeams=this.add.graphics().setDepth(11).setAlpha(0);
-    this.lightBeams.fillStyle(0xffe7b0,.14);
-    for(const x of [600,2300,3600,4300])this.lightBeams.fillTriangle(x,60,x-340,570,x+340,570);
     const beam=this.add.graphics().setDepth(1);beam.fillStyle(0xffffff,.07);beam.fillTriangle(440,0,0,570,950,570);
-    for(const [i,x] of [0,1120,3230,4920].entries())this.rig.attach(this.add.image(x,680,'tree-plum').setOrigin(.5,1).setDisplaySize(310,450).setScrollFactor(1.08).setAlpha(.75).setDepth(15),`foreground-tree-${i}`,'bottom',.51,.9,8);
+    for(const [i,x] of [0,1120,3230,4920].entries()){
+      const tree=this.add.image(x,680,'tree-plum').setOrigin(.5,1).setDisplaySize(310,450).setScrollFactor(1.18).setTint(0x625168).setAlpha(.9).setDepth(15);
+      this.rig.attach(tree,`foreground-tree-${i}`,'bottom',.51,.9,8);this.stageLife.sway(tree,.12);
+    }
+    for(const [i,x] of [-90,1370].entries()){
+      const wing=this.add.image(x,740,'paper-tree').setOrigin(.5,1).setDisplaySize(270,320).setScrollFactor(0).setFlipX(i===1).setTint(0x594653).setDepth(15);
+      this.rig.attach(wing,`edge-wing-${i}`,'bottom',.5,.87,7);this.stageLife.sway(wing,.1);
+    }
     this.rig.attach(this.add.image(-25,570,'curtain').setDisplaySize(165,610).setOrigin(.5,1).setDepth(15),'entrance-curtain','top',.75,.14,8);
     const frame=this.add.graphics().setScrollFactor(0).setDepth(16);
     frame.fillStyle(0x634d64,.9);frame.fillRect(0,0,1280,35);frame.fillStyle(0xd6b38c,1);frame.fillRect(0,35,1280,9);
@@ -219,7 +236,6 @@ export class TheaterScene extends Phaser.Scene {
     }
     const t=this.time.now/1000;
     if(this.mode==='explore'){
-      this.rearFlats.forEach((flat,i)=>flat.setRotation(Math.sin(t*.5+i)*.004));
       if(!this.distantApplausePlayed&&this.actor.x>2400){this.distantApplausePlayed=true;this.theaterSound.cue('applause');}
     }
     const walk=this.mode==='explore'&&Math.abs(this.actor.vx)>20&&this.actor.grounded;
@@ -237,13 +253,13 @@ export class TheaterScene extends Phaser.Scene {
     this.flora.setRotation(Math.sin(t*1.3)*.016+greeting);
     this.stageLife.update(dt,this.mode==='explore'||this.mode==='intro',this.lightAmount);
     this.rig.update();
-    if(this.world.lights==='SOLVED')this.lightAmount=Math.min(1,this.lightAmount+dt*.7);
-    this.lightBeams.setAlpha(this.lightAmount);
+    if(this.world.lights==='SOLVED'&&this.mode==='explore')this.lightAmount=Math.min(1,this.lightAmount+dt*.32);
+    this.lighting.update(this.actor.x,this.actor.y,this.actor.grounded,this.world.bridge==='SOLVED',this.lightAmount);
     const near=this.nearby();
     this.hint.setVisible(Boolean(near)&&this.mode==='explore').setPosition(this.actor.x,this.actor.y-212).setText(near==='flora'?'E  플로라와 대화':near==='bridge'?'E  무대 조작':'E  조명 조사');
     if(this.message&&this.time.now>this.nextMessageUntil)this.message='';
     // Read-only telemetry for browser regression tests; no debug controls or bypasses.
-    this.game.canvas.dataset.theater=JSON.stringify({x:this.actor.x,y:this.actor.y,grounded:this.actor.grounded,camera:this.cameras.main.scrollX,mode:this.mode,bridge:this.world.bridge,lights:this.world.lights,visits:this.world.visits,bridgeX:this.bridge.x,bridgeY:this.bridge.y,pose:this.puppet.texture.key});
+    this.game.canvas.dataset.theater=JSON.stringify({x:this.actor.x,y:this.actor.y,grounded:this.actor.grounded,camera:this.cameras.main.scrollX,mode:this.mode,bridge:this.world.bridge,lights:this.world.lights,visits:this.world.visits,bridgeX:this.bridge.x,bridgeY:this.bridge.y,pose:this.puppet.texture.key,lightAmount:this.lightAmount,lighting:this.lighting.snapshot(),environment:this.stageLife.snapshot()});
     this.game.canvas.dataset.theaterRig=JSON.stringify(this.rig.snapshot());
     this.publish();
   }

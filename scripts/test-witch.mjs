@@ -87,6 +87,7 @@ try {
    await page.waitForTimeout(220);
  };
  await checkRig();
+ const initialLighting=await state();assert.equal(initialLighting.lighting.glows,13);assert(initialLighting.lighting.shadows>=30);assert(initialLighting.lighting.lamps.every(alpha=>alpha===0));
  await page.keyboard.down('d');await waitState('s.pose === "witch-walk"');await page.waitForTimeout(100);await checkRig();await page.screenshot({path:fileURLToPath(new URL('witch-walk.png',output))});await page.keyboard.up('d');await waitState('s.pose === "witch-puppet"');
  await page.keyboard.down('a');await waitState('s.pose === "witch-walk"');await checkRig();await page.keyboard.up('a');await waitState('s.pose === "witch-puppet"');
  await runTo(250);await page.keyboard.press('Space');await waitState('s.pose === "witch-jump" && s.y < 540');
@@ -95,6 +96,7 @@ try {
  await runTo(470);await page.keyboard.press('Space');await waitState('!s.grounded');await waitState('s.grounded && s.y === 515');
  await runTo(890);await page.keyboard.down('d');await page.keyboard.press('Space');await waitState('s.x > 1120');await page.keyboard.up('d');await page.waitForTimeout(300);
  await runTo(1220);assert((await state()).camera>600,'Camera follows');
+ assert(Math.abs((await state()).lighting.spotlightX-(await state()).x)<2,'Soft spotlight follows the player in world space');
  await checkRig();
  await page.keyboard.press('e');await waitState('s.mode === "bridge"');
  const frozen=await state();await page.keyboard.down('d');await page.keyboard.press('Space');await page.waitForTimeout(200);await page.keyboard.up('d');assert.equal((await state()).x,frozen.x,'Bridge mode freezes actor');
@@ -137,9 +139,13 @@ try {
  await dragTile('moon',0); // Swap with flower in slot 0; the existing star remains.
  await page.screenshot({path:fileURLToPath(new URL('witch-light-puzzle.png',output))});
  await page.getByRole('button',{name:'조명 켜기'}).click();await waitState('s.lights === "SOLVED" && s.mode === "explore"');
- await page.keyboard.press('Escape');await waitState('s.mode === "pause"');const paused=(await state()).x;await page.keyboard.down('d');await page.waitForTimeout(150);await page.keyboard.up('d');assert.equal((await state()).x,paused);await page.keyboard.press('Escape');await waitState('s.mode === "explore"');
+ await waitState('s.lightAmount > .25 && s.lightAmount < 1');
+ const transition=await state();assert(transition.lighting.lamps[0]>transition.lighting.lamps[3],'Stage lighting comes on in sequence');
+ await page.screenshot({path:fileURLToPath(new URL('witch-stage-lighting.png',output))});
+ await page.keyboard.press('Escape');await waitState('s.mode === "pause"');const paused=await state();await page.keyboard.down('d');await page.waitForTimeout(150);await page.keyboard.up('d');assert.equal((await state()).x,paused.x);assert.equal((await state()).environment.clock,paused.environment.clock,'Paused environment animations keep their phase');await page.keyboard.press('Escape');await waitState('s.mode === "explore"');
  await page.keyboard.down('d');await waitState('s.mode === "complete"');await page.keyboard.up('d');await page.getByRole('dialog',{name:'프로토타입 완료'}).waitFor();
  await page.screenshot({path:fileURLToPath(new URL('witch-complete.png',output))});
+ assert((await state()).lighting.lamps.every(alpha=>alpha>.98),'All stage lamps finish fading in');
  assert.equal((await state()).bridge,'SOLVED');assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);
  await page.getByRole('button',{name:'한 번 더 공연하기'}).click();await page.getByRole('button',{name:'극장에 들어가기'}).waitFor();assert.equal(await canvas.count(),1,'Restart cleans engine');
  await page.waitForFunction(()=>window.__theaterAudioContexts.length>0&&window.__theaterAudioContexts.every(context=>context.state==='closed'));
@@ -156,5 +162,7 @@ try {
  await page.getByRole('alert').waitFor();assert((await page.getByRole('alert').innerText()).includes('에셋'));
  await page.unroute('**/witch-theater/witch-puppet.png');await page.getByRole('button',{name:'다시 불러오기'}).click();
  await page.getByRole('button',{name:'극장에 들어가기'}).waitFor();assert.equal(await canvas.count(),1,'Asset retry cleans broken engine');
+ await page.emulateMedia({reducedMotion:'reduce'});await page.reload({waitUntil:'networkidle'});await waitState('s.environment.reducedMotion');
+ await page.waitForTimeout(200);assert.equal((await state()).environment.clock,0,'Reduced motion disables ambient sway and mystery movements');
  console.log('Real input playthrough passed: movement, jumping, camera, bridge drag/collision, dialogue/branch/input lock, wrong/right light drag, pause, curtain, completion, replay, reload, resize, unmount, asset-error recovery.');
 } finally { await browser.close(); }

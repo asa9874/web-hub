@@ -67,6 +67,7 @@ npm run dev -- --host 127.0.0.1 --port 5173
 | 팝업 판넬의 막대 | `DomPaperRods.tsx` |
 | 타이틀 레이아웃/실제 메뉴/극장 프레임 | `TitleScreen.tsx`, `ForgottenWitch.css` |
 | 먼지/착지/별/시계꽃 반응 | `StageLife.ts`, `TheaterScene.ts` |
+| 주인공 빛/그림자/달·별 발광/순차 점등 | `StageLighting.ts` |
 | 대사/화자/감정/최초·재방문·조명 이후 분기 | `dialogue.json` |
 | 대화창/팝업 드래그/엔진 생명주기 | `ForgottenWitch.tsx`, `ForgottenWitch.css` |
 | 종이 소품 재질 | `paper.ts` |
@@ -120,6 +121,7 @@ WITCH_TEST_URL=http://127.0.0.1:4173/web-hub npm run test:witch
 - 막대 깊이는 지형(depth 6)보다 낮게 유지한다. 바닥 앞에 막대를 다시 그리는 레이어는 사용하지 않는다.
 - 게임 내부 UI는 1280×720 논리 좌표를 ResizeObserver로 함께 스케일한다. 확대 시 별도로 reflow하는 viewport 기반 크기나 media query를 내부에 넣지 않는다. UI 리사이즈/zoom 회귀 검증을 유지한다.
 - 갤러리의 20점은 미확정 컷씬 후보이다. 실제 플레이의 스토리로 자동 반영하지 않는다. 상세 프롬프트는 실제 image_gen 제출 문자열을 저장한다.
+- 조명은 약한 로컬 그라데이션과 원본의 얇은 그림자로 유지한다. bloom/네온/지형 충돌에 영향을 주는 환경 애니메이션을 추가하지 않는다. StageLife의 저속 sway/드문 3초 미스터리 동작은 탐험 시간 기준이며 reduced-motion을 따른다.
 - `poses.ts`의 몸체 연결점을 기준으로 반전 시 피벗도 함께 바꾼다. 이미지 전체 중심을 몸체 중심으로 간주하면 포즈 전환 때 몸과 막대가 어긋난다.
 - 기존 허브/레거시 게임과 커밋 이력은 유지한다. `src/ForgottenWitch/AGENTS.md`의 작업 지침도 따른다.
 
