@@ -34,3 +34,11 @@
 ## 명도 / 가독성 보강
 
 [Riot Games: VALORANT Shaders and Gameplay Clarity](https://www.riotgames.com/en/news/valorant-shaders-and-gameplay-clarity)는 배경과 캐릭터를 별도로 다루고, 명암 범위와 윤곽 강조를 제어해 가독성을 확보한다. 이 게임에는 3D 셰이더를 옮기지 않고 그 원칙을 2D 레이어에 적용했다: 먼 배경은 낮은 대비의 회보라색, 중간 나무는 낮은 밝기/채도, 실제 이동 지형은 밝은 크림 가장자리, 인형은 기존 밝은 종이 외곽선을 유지한다. 배경만 더 어둡게 두어 인물과 장치의 시선 우선순위를 만든다. 조명 퍼즐 해결 후의 따뜻한 광선은 별도 전경 연출로 유지한다.
+
+## 비주얼노벨 대화 가독성 / 리듬
+
+- DDLC 공식 사이트의 실제 대화 스크린샷 https://ddlc.moe/images/screen3.png 및 https://ddlc.moe/images/screen4.png 를 다운로드해 확인했다. 본문과 이름표/하단 조작 영역 분리, 텍스트의 명확한 대비, 화면 아래 고정된 읽기 영역을 참고했다. 외부 게임 이미지/글꼴/대사/UI 소재는 제품에 복사하지 않았다.
+- Ren’Py 대화 문서 https://www.renpy.org/doc/html/dialogue.html : 캐릭터 이름/그림 연결 및 출력 완료 이후 진행 표시 구조.
+- Ren’Py 텍스트 문서 https://www.renpy.org/doc/html/text.html : cps, pauses, color, size 등 구간별 표현 설계 참고. 이번 구현은 React/TypeScript 데이터 기반이며 Ren’Py를 설치하지 않는다.
+- 이 게임에는 종이 가장자리/골판지 테두리를 유지하고 읽기 면의 거친 질감을 제거했다. 25px 본문과 1.75 행간, 독립 이름표, 고정 진행/속도 조절을 사용한다. 화면/인물/UI 좌표계는 기존 1280×720 스케일을 유지한다.
+- 사용자 요구에 따라 출력 중 입력은 즉시 펼치기/다음 문장 모두 하지 않는다. 완료 후 버튼만 활성화되고 입력을 미리 큐에 넣지 않는다. 기본 캐릭터/감정 cps, 구간별 cps와 pauseAfterMs, 사용자 속도 배율을 함께 적용한다.

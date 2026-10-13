@@ -37,7 +37,7 @@ try {
     if (project.id === 'forgotten-witch') {
       await page.waitForFunction(() => document.querySelector('.wt-game canvas')?.dataset.theater);
       assert.equal(await page.locator('.wt-game canvas').count(), 1);
-      await page.getByRole('button', { name:'극장에 들어가기' }).click();
+      await page.getByRole('button', { name:'테스트',exact:true }).click();
       await page.waitForFunction(() => JSON.parse(document.querySelector('.wt-game canvas').dataset.theater).mode === 'explore');
     }
     const starts = { 'memory-flip':'.EasyStart', 'rhythm-game':'.startbutton', 'computer-quiz':'.startbutton.easy', 'animation-quiz':'.startbutton', 'text-adventure':'.OpeningSkipBox', 'inspection-game':'.GameStartButton' };

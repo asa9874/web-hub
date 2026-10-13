@@ -122,5 +122,13 @@ Constraints: one isolated tree only on a genuinely transparent background, NO sc
 
 # 컷씬 후보 20점 추가 (2026-10-13)
 
+## 테스트 전투 이미지 추가 (2026-10-14)
+
+`witch-attack.png`, `game-over.png`, `clapper-idle.png`, `clapper-walk.png`, `clapper-attack.png`는 built-in image_gen의 개별 생성/편집 결과 원본이다. 마녀는 기존 witch-puppet.png, 몬스터 동작은 새 clapper-idle.png를 기준으로 몸/재질/정체성을 유지했다. 실제 프롬프트는 `src/ForgottenWitch/codex/combat-image-prompts.json`. 미사일은 기존 코드 기반 종이 별 텍스처와 절차적 막대를 사용한다. 효과음은 audio/README.md 및 원본 CC0 라이선스에 별도로 기록한다.
+
+## 대화 감정 일러스트 추가
+
+`expressions/`의 witch/flora × joy/worry/angry/flustered 8점은 built-in image_gen으로 개별 편집 생성했다. 각 캐릭터의 기존 `*-knee.png`가 편집 대상, `witch-portrait.png`가 그림체 참고이다. 몸/의상/손/무릎 구도는 유지하고 얼굴만 바꾼 요청이다. 기본 neutral은 기존 knee 그림을 재사용한다. 요청 시 transparent_background=true를 사용하고 결과의 alpha를 그대로 보존했다. 실제 제출 프롬프트 8개는 [expression-prompts.json](../../src/ForgottenWitch/codex/expression-prompts.json)에 저장한다. 원본 결과 PNG를 변형 없이 Git에 포함하며, 이번 대화의 표정·리듬·합성 말소리는 같은 감정 키를 사용한다.
+
 `cutscenes/*.png`는 built-in `image_gen`으로 각 장면마다 별도 호출하여 생성한 고해상도 원본입니다. 스타일/인물 기준은 `witch-portrait.png`이며, 이 파일을 모든 호출의 referenced_image_paths에 사용했습니다. 출력은 불투명 풍경 일러스트입니다. 실제 제출 프롬프트 전부는 [illustrations.json](../../src/ForgottenWitch/illustrations.json)에 그대로 저장되어 있고 게임 갤러리 상세보기에서도 볼 수 있습니다. 17점은 일반 애니메이션 일러스트, 3점은 chibi 컷씬입니다. 스토리와 사용 여부는 미정이며 현재 플레이의 확정 사건이 아닙니다. 생성 결과 PNG는 변형 없이 저장소로 복사했습니다.
 

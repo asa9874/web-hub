@@ -25,6 +25,7 @@ export class StageRig {
     const graphics=this.scene.add.graphics().setScrollFactor(0).setDepth(Math.min(owner.depth-.1,5.8));
     this.bindings.push({owner,name,edge,u,v,width,graphics});return owner;
   }
+  detach(owner:Owner){this.bindings=this.bindings.filter(binding=>{if(binding.owner!==owner)return true;binding.graphics.destroy();return false;});}
   update() {
     const camera=this.scene.cameras.main;
     this.records=[];

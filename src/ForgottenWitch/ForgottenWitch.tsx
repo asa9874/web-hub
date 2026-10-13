@@ -1,17 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
 import type { PointerEvent as ReactPointerEvent, RefObject } from 'react';
 import { Link } from 'react-router-dom';
-import { assetUrl, SYMBOLS, TUNING } from './config';
+import { SYMBOLS, TUNING, TEST_AREAS } from './config';
 import type { SymbolId } from './config';
 import { checkLights } from './model';
 import type { TheaterScene, TheaterView } from './TheaterScene';
-import dialogueData from './dialogue.json';
+import Dialogue from './Dialogue';
 import './ForgottenWitch.css';
 import DomPaperRods from './DomPaperRods';
 import TitleScreen from './TitleScreen';
 import Illustrations from './Illustrations';
+import CodexBook from './CodexBook';
+import Lives from './Lives';
+import GameOver from './GameOver';
 
-const initialView:TheaterView={mode:'intro',area:'숲의 입구',prompt:'',message:'',bridgeSolved:false,lightsSolved:false,talked:false,dialogue:'first'};
+const initialView:TheaterView={mode:'intro',area:'숲의 입구',prompt:'',message:'',bridgeSolved:false,lightsSolved:false,talked:false,dialogue:'first',lives:3};
 function useModalFocus(ref:RefObject<HTMLDivElement|null>) {
   useEffect(()=>{
     const previous=document.activeElement as HTMLElement|null;
@@ -26,29 +29,6 @@ function useModalFocus(ref:RefObject<HTMLDivElement|null>) {
     document.addEventListener('keydown',trap);
     return ()=>{document.removeEventListener('keydown',trap);previous?.focus({preventScroll:true});};
   },[ref]);
-}
-function Dialogue({script,advanceRef,onEnd}:{script:keyof typeof dialogueData;advanceRef:RefObject<(()=>void)|null>;onEnd:()=>void}) {
-  const [index,setIndex]=useState(0),[visible,setVisible]=useState(0);
-  const line=dialogueData[script][index];
-  const modal=useRef<HTMLDivElement>(null);useModalFocus(modal);
-  useEffect(()=>{
-    const timer=window.setInterval(()=>setVisible(n=>Math.min(line.text.length,n+1)),29);
-    return ()=>window.clearInterval(timer);
-  },[line]);
-  const next=()=>{
-    if(visible<line.text.length)setVisible(line.text.length);
-    else if(index<dialogueData[script].length-1){setIndex(index+1);setVisible(0);}else onEnd();
-  };
-  useEffect(()=>{advanceRef.current=next;return ()=>{advanceRef.current=null;};});
-  return <div className="wt-dialogue" ref={modal} role="dialog" aria-modal="true" aria-label="플로라와 대화">
-    <img className={`wt-portrait wt-portrait-left ${line.speaker==='witch'?'speaking':''}`} src={assetUrl('witch-knee.png')} alt="견습 마녀의 무릎 위까지 보이는 일러스트" />
-    <img className={`wt-portrait wt-portrait-right ${line.speaker==='flora'?'speaking':''}`} src={assetUrl('flora-knee.png')} alt="플로라의 무릎 위까지 보이는 일러스트" />
-    <div className="wt-dialogue-paper">
-      <div className="wt-speaker">{line.speaker==='witch'?'견습 마녀':'플로라'}<span>{line.emotion}</span></div>
-      <p aria-live="polite" aria-label={line.text}>{line.text.slice(0,visible)}<span className="wt-type-cursor">▏</span></p>
-      <div className="wt-dialogue-actions"><span>Enter / Space</span><button onKeyDown={event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();if(!event.repeat)next();}}} onClick={next}>{visible<line.text.length?'문장 펼치기':index===dialogueData[script].length-1?'대화 마치기':'다음 문장'} <span>→</span></button></div>
-    </div>
-  </div>;
 }
 function LightPuzzle({onClose,onCheck,onRetry,onSolve}:{onClose:()=>void;onCheck:()=>void;onRetry:()=>void;onSolve:()=>void}) {
   const [slots,setSlots]=useState<(SymbolId|null)[]>([null,null,null]);
@@ -113,6 +93,7 @@ export default function ForgottenWitch() {
   const [view,setView]=useState(initialView),[ready,setReady]=useState(false),[error,setError]=useState('');
   const [muted,setMuted]=useState(false),[restart,setRestart]=useState(0);
   const [gallery,setGallery]=useState(false),[uiScale,setUiScale]=useState(1);
+  const [codex,setCodex]=useState(false),[debug,setDebug]=useState(false);
   const shell=useRef<HTMLDivElement>(null);
   useEffect(()=>{
     const element=shell.current;if(!element)return;
@@ -123,7 +104,7 @@ export default function ForgottenWitch() {
   useEffect(()=>{
     let active=true;let dispose:(()=>void)|undefined;
     const overflow=document.body.style.overflow;document.body.style.overflow='hidden';
-    void Promise.all([import('phaser3'),import('./TheaterScene')]).then(([{default:Phaser},{TheaterScene}])=>{
+    void Promise.all([import('phaser3'),import('./TheaterScene'),document.fonts.load('500 22px "WT Readable"')]).then(([{default:Phaser},{TheaterScene}])=>{
       if(!active||!host.current)return;
       const instance=new TheaterScene({view:value=>{if(active)setView(value);},ready:value=>{if(active){scene.current=value;setReady(true);}},advance:()=>advanceRef.current?.(),error:value=>{if(active)setError(value);}});
       const game=new Phaser.Game({type:Phaser.AUTO,parent:host.current,width:TUNING.width,height:TUNING.height,backgroundColor:'#F3E5CE',scene:[instance],render:{antialias:true},scale:{mode:Phaser.Scale.FIT,autoCenter:Phaser.Scale.CENTER_BOTH},audio:{noAudio:true}});
@@ -131,23 +112,26 @@ export default function ForgottenWitch() {
     }).catch(cause=>{if(active)setError('게임 엔진을 불러오지 못했습니다. '+String(cause));});
     return ()=>{active=false;scene.current=null;dispose?.();document.body.style.overflow=overflow;};
   },[restart]);
-  const replay=()=>{setReady(false);setError('');setView(initialView);setMuted(false);setRestart(n=>n+1);};
+  const replay=()=>{setReady(false);setError('');setView(initialView);setMuted(false);setGallery(false);setCodex(false);setDebug(false);setRestart(n=>n+1);};
   return <main className="wt-page">
-    <header className="wt-topbar"><Link to="/">← web hub</Link><span>잊혀진 마녀의 극장 <small>v0.1</small></span><button onClick={()=>{if(scene.current)setMuted(scene.current.toggleSound());}} aria-label={muted?'소리 켜기':'소리 끄기'}>{muted?'소리 꺼짐':'소리 켜짐'}</button></header>
+    <header className="wt-topbar"><Link to="/">← web hub</Link><span>잊혀진 마녀의 극장 <small>v0.1</small></span><button onKeyDown={event=>{if(view.mode==='dialogue'&&(event.key==='Enter'||event.key===' '))event.preventDefault();}} onClick={()=>{if(scene.current)setMuted(scene.current.toggleSound());}} aria-label={muted?'소리 켜기':'소리 끄기'}>{muted?'소리 꺼짐':'소리 켜짐'}</button></header>
     <div className="wt-stage-shell" ref={shell}>
       <div className="wt-game" ref={host} role="application" aria-label="잊혀진 마녀의 극장 게임. A D 이동, Space 점프, E 상호작용" />
       <div className="wt-overlay" data-game-mode={view.mode} style={{transform:`scale(${uiScale})`}}>
-        {error?<div className="wt-modal-backdrop"><div className="wt-intro-paper"><h2>무대를 준비하지 못했습니다.</h2><p role="alert">{error}</p><button onClick={replay}>다시 불러오기</button><Link to="/">허브로 돌아가기</Link></div></div>:view.mode==='intro'?<TitleScreen ready={ready} muted={muted} onStart={()=>scene.current?.start()} onIllustrations={()=>setGallery(true)} onSound={()=>{if(scene.current)setMuted(scene.current.toggleSound());}} />:null}
+        {error?<div className="wt-modal-backdrop"><div className="wt-intro-paper"><h2>무대를 준비하지 못했습니다.</h2><p role="alert">{error}</p><button onClick={replay}>다시 불러오기</button><Link to="/">허브로 돌아가기</Link></div></div>:view.mode==='intro'?<TitleScreen ready={ready} muted={muted} onStart={()=>scene.current?.start()} onIllustrations={()=>setGallery(true)} onCodex={()=>setCodex(true)} onSound={()=>{if(scene.current)setMuted(scene.current.toggleSound());}} />:null}
         {gallery&&<Illustrations onClose={()=>setGallery(false)} />}
-        {!['intro','complete'].includes(view.mode)&&<div className="wt-hud"><div><small>첫 번째 막</small><strong>{view.area}</strong></div><ol aria-label="공연 준비 진행"><li className={view.bridgeSolved?'done':''}>다리</li><li className={view.talked?'done':''}>플로라</li><li className={view.lightsSolved?'done':''}>조명</li></ol><button aria-label="일시정지" disabled={view.mode!=='explore'} onClick={()=>scene.current?.pause()}>Ⅱ</button></div>}
+        {codex&&<CodexBook onClose={()=>setCodex(false)} />}
+        {!['intro','complete'].includes(view.mode)&&<div className="wt-hud"><div className="wt-stage-ticket"><small>첫 번째 막 · TEST</small><strong>{view.area}</strong></div><ol aria-label="공연 준비 진행"><li className={view.bridgeSolved?'done':''}>다리</li><li className={view.talked?'done':''}>플로라</li><li className={view.lightsSolved?'done':''}>조명</li></ol><Lives count={view.lives}/><button disabled={view.mode!=='explore'} aria-expanded={debug} onClick={()=>setDebug(!debug)}>테스트 위치</button><button aria-label="일시정지" disabled={view.mode!=='explore'} onClick={()=>scene.current?.pause()}>Ⅱ</button></div>}
+        {debug&&view.mode==='explore'&&<nav className="wt-test-panel" aria-label="기능별 테스트 이동"><small>바로 가기 · 이동한 곳이 재등장 시작점이 됩니다.</small><div>{TEST_AREAS.map(area=><button key={area.id} onClick={()=>{scene.current?.teleport(area.id);setDebug(false);}}>{area.label}</button>)}</div></nav>}
         {view.message&&view.mode==='explore'&&<div className="wt-toast" role="status">{view.message}</div>}
         {view.mode==='bridge'&&<div className="wt-bridge-help"><div><small>무대 조작 모드</small><h2>다리를 제자리로</h2><p>떠 있는 종이 다리를 오른쪽 점선으로 끌어 놓으세요.</p></div><button onClick={()=>scene.current?.closePuzzle()}>닫기 · Esc</button></div>}
-        {view.mode==='dialogue'&&<Dialogue key={view.dialogue} script={view.dialogue} advanceRef={advanceRef} onEnd={()=>scene.current?.finishDialogue()} />}
+        {view.mode==='dialogue'&&<Dialogue key={view.dialogue} script={view.dialogue} advanceRef={advanceRef} onEnd={()=>scene.current?.finishDialogue()} onBlip={(speaker,emotion,pace)=>scene.current?.speak(speaker,emotion,pace)} />}
         {view.mode==='lights'&&<LightPuzzle onClose={()=>scene.current?.closePuzzle()} onCheck={()=>scene.current?.checkingLights()} onRetry={()=>scene.current?.retryLights()} onSolve={()=>scene.current?.solveLights()} />}
-        {view.mode==='pause'&&<div className="wt-modal-backdrop"><div className="wt-intro-paper wt-pause" role="dialog" aria-modal="true" aria-label="일시정지"><div className="wt-eyebrow">INTERMISSION</div><h2>잠시 쉬어가는 막간</h2><p>무대는 그 자리에서 기다립니다.</p><button className="wt-primary" onClick={()=>scene.current?.resume()}>계속하기</button><button className="wt-secondary" onClick={replay}>처음부터 다시</button><Link to="/">허브로 나가기</Link></div></div>}
+        {view.mode==='gameover'&&<GameOver onPrepare={()=>scene.current?.prepareRespawn()??Promise.resolve()} onFinish={()=>scene.current?.finishRespawn()} onCurtain={()=>scene.current?.curtainSound()} />}
+        {view.mode==='pause'&&<div className="wt-modal-backdrop"><div className="wt-intro-paper wt-pause" role="dialog" aria-modal="true" aria-label="일시정지"><div className="wt-eyebrow">INTERMISSION / 막간</div><h2>잠깐, 숨을 고르고.</h2><p>모자를 고쳐 쓰면 다시 시작.</p><button className="wt-primary" onClick={()=>scene.current?.resume()}>공연 계속하기</button><button className="wt-secondary" onClick={replay}>테스트 처음부터</button><Link to="/">허브로 나가기</Link></div></div>}
         {view.mode==='complete'&&<div className="wt-modal-backdrop wt-completion"><div className="wt-intro-paper" role="dialog" aria-modal="true" aria-label="프로토타입 완료"><div className="wt-ticket">CURTAIN CALL</div><div className="wt-eyebrow">달 · 별 · 꽃</div><h2>첫 번째 막의 준비가<br/>끝났습니다.</h2><p>Prototype v0.1 Complete</p><button className="wt-primary" onClick={replay}>한 번 더 공연하기</button><Link to="/">프로젝트 목록으로</Link></div></div>}
       </div>
     </div>
-    <footer className="wt-control-strip"><span><kbd>A</kbd><kbd>D</kbd> / ← → 이동</span><span><kbd>Space</kbd> 점프</span><span><kbd>E</kbd> 상호작용</span><span>마우스 · 판넬 드래그</span><span><kbd>Esc</kbd> 닫기 / 일시정지</span>{view.talked&&<strong>기억한 순서 · 달 → 별 → 꽃</strong>}</footer>
+    <footer className="wt-control-strip"><span><kbd>A</kbd><kbd>D</kbd> / ← → 이동</span><span><kbd>Space</kbd> 점프</span><span><kbd>E</kbd> 상호작용</span><span><kbd>F</kbd> / <kbd>J</kbd> 마법</span><span>마우스 · 판넬 드래그</span><span><kbd>Esc</kbd> 닫기 / 일시정지</span>{view.talked&&<strong>기억한 순서 · 달 → 별 → 꽃</strong>}</footer>
   </main>;
 }

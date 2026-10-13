@@ -1,23 +1,270 @@
 {
   "first": [
-    {"speaker":"flora","emotion":"미소","text":"안녕하세요, 작은 마녀님. 오늘도 숲은 아주 평화로워요."},
-    {"speaker":"witch","emotion":"무표정","text":"……오늘도?"},
-    {"speaker":"flora","emotion":"미소","text":"네. 언제나 그랬으니까요."},
-    {"speaker":"witch","emotion":"의심","text":"그런데 왜 조명이 전부 꺼져 있지?"},
-    {"speaker":"flora","emotion":"침묵","text":"……."},
-    {"speaker":"flora","emotion":"미소","text":"공연이 시작되어야 하거든요. 먼저 달을 깨우고, 별을 부르고, 마지막에 꽃을 피워 주세요."},
-    {"speaker":"witch","emotion":"무표정","text":"달, 별, 꽃. ……고장 난 걸 고치는 것뿐이야."},
-    {"speaker":"flora","emotion":"미소","text":"그럼 저는 여기서 기다릴게요. 관객들이 아직 자리를 비우지 않았거든요."}
+    {
+      "speaker": "flora",
+      "emotion": "neutral",
+      "segments": [
+        {
+          "text": "안녕하세요, 작은 마녀님. 오늘도 숲은 아주 평화로워요."
+        }
+      ]
+    },
+    {
+      "speaker": "witch",
+      "emotion": "neutral",
+      "segments": [
+        {
+          "text": "……",
+          "pauseAfterMs": 450
+        },
+        {
+          "text": "오늘도?"
+        }
+      ]
+    },
+    {
+      "speaker": "flora",
+      "emotion": "joy",
+      "segments": [
+        {
+          "text": "네. 언제나 그랬으니까요. 마녀님이 오셔서 더 반가운걸요."
+        }
+      ]
+    },
+    {
+      "speaker": "witch",
+      "emotion": "worry",
+      "segments": [
+        {
+          "text": "그런데 왜 조명이 전부 꺼져 있지? 저 객석도… 아무도 없잖아."
+        }
+      ]
+    },
+    {
+      "speaker": "flora",
+      "emotion": "worry",
+      "segments": [
+        {
+          "text": "…….",
+          "cps": 8,
+          "pauseAfterMs": 550
+        },
+        {
+          "text": "그건, 아직 공연이 시작되지 않아서예요."
+        }
+      ]
+    },
+    {
+      "speaker": "witch",
+      "emotion": "angry",
+      "segments": [
+        {
+          "text": "하. 지. 마. 세. 요.",
+          "cps": 9,
+          "color": "#8b2838",
+          "size": 1.18,
+          "weight": 700,
+          "pauseAfterMs": 400
+        },
+        {
+          "text": " 같은 대본만 읽는 것. 네 말을 해."
+        }
+      ]
+    },
+    {
+      "speaker": "flora",
+      "emotion": "flustered",
+      "segments": [
+        {
+          "text": "아니에요죄송해요제가말실수를했네요",
+          "cps": 66,
+          "color": "#754674",
+          "pauseAfterMs": 250
+        },
+        {
+          "text": "! 그냥… 누가 제 이야기를 물어본 건 처음이라서요."
+        }
+      ]
+    },
+    {
+      "speaker": "witch",
+      "emotion": "flustered",
+      "segments": [
+        {
+          "text": "……그렇게 보지 마. 따지려던 건 아니니까."
+        }
+      ]
+    },
+    {
+      "speaker": "flora",
+      "emotion": "angry",
+      "segments": [
+        {
+          "text": "그 끈은 만지지 마세요.",
+          "cps": 15,
+          "color": "#8b2838",
+          "size": 1.12,
+          "weight": 700,
+          "pauseAfterMs": 400
+        },
+        {
+          "text": " 저한테도, 돌아가고 싶은 곳이 있어요."
+        }
+      ]
+    },
+    {
+      "speaker": "witch",
+      "emotion": "worry",
+      "segments": [
+        {
+          "text": "…너도 여기서 나갈 수 없는 거야?"
+        }
+      ]
+    },
+    {
+      "speaker": "flora",
+      "emotion": "worry",
+      "segments": [
+        {
+          "text": "다음 막이 열리면",
+          "cps": 15,
+          "pauseAfterMs": 350
+        },
+        {
+          "text": "… 달라질 수도 있대요."
+        }
+      ]
+    },
+    {
+      "speaker": "witch",
+      "emotion": "joy",
+      "segments": [
+        {
+          "text": "알았어. 도와줄게. ……이번 한 번만."
+        }
+      ]
+    },
+    {
+      "speaker": "flora",
+      "emotion": "joy",
+      "segments": [
+        {
+          "text": "고마워요. 먼저 "
+        },
+        {
+          "text": "달",
+          "color": "#775019",
+          "size": 1.15,
+          "weight": 700
+        },
+        {
+          "text": "을 깨우고, "
+        },
+        {
+          "text": "별",
+          "color": "#775019",
+          "size": 1.15,
+          "weight": 700
+        },
+        {
+          "text": "을 부르고, 마지막에 "
+        },
+        {
+          "text": "꽃",
+          "color": "#80516a",
+          "size": 1.15,
+          "weight": 700
+        },
+        {
+          "text": "을 피워 주세요."
+        }
+      ]
+    },
+    {
+      "speaker": "witch",
+      "emotion": "neutral",
+      "segments": [
+        {
+          "text": "달, 별, 꽃. ……친절해서 하는 건 아니야."
+        }
+      ]
+    }
   ],
   "repeat": [
-    {"speaker":"flora","emotion":"미소","text":"다시 오셨네요. 달, 별, 꽃. 그 순서로 숲에 빛을 돌려주세요."},
-    {"speaker":"witch","emotion":"의심","text":"누굴 기다리는 거야?"},
-    {"speaker":"flora","emotion":"미소","text":"늘 같은 분들이요."},
-    {"speaker":"witch","emotion":"무표정","text":"……그래. 금방 다녀올게."}
+    {
+      "speaker": "flora",
+      "emotion": "joy",
+      "segments": [
+        {
+          "text": "다시 오셨네요. 달, 별, 꽃. 그 순서로 숲에 빛을 돌려주세요."
+        }
+      ]
+    },
+    {
+      "speaker": "witch",
+      "emotion": "worry",
+      "segments": [
+        {
+          "text": "누굴 기다리는 거야?"
+        }
+      ]
+    },
+    {
+      "speaker": "flora",
+      "emotion": "worry",
+      "segments": [
+        {
+          "text": "늘 같은 분들이요.",
+          "cps": 16,
+          "pauseAfterMs": 350
+        },
+        {
+          "text": " 얼굴은… 이제 잘 기억나지 않지만."
+        }
+      ]
+    },
+    {
+      "speaker": "witch",
+      "emotion": "neutral",
+      "segments": [
+        {
+          "text": "……그래. 금방 다녀올게."
+        }
+      ]
+    }
   ],
   "lit": [
-    {"speaker":"flora","emotion":"미소","text":"꽃들이 시간을 되찾았어요. 저기, 마지막 커튼이 열렸네요."},
-    {"speaker":"witch","emotion":"희미한 미소","text":"너도 이제 쉬어. ……내가 걱정해서 하는 말은 아니고."},
-    {"speaker":"flora","emotion":"미소","text":"네. 다음 공연까지 기다릴게요."}
+    {
+      "speaker": "flora",
+      "emotion": "joy",
+      "segments": [
+        {
+          "text": "꽃들이 시간을 되찾았어요! 저기, 마지막 커튼이 열렸네요."
+        }
+      ]
+    },
+    {
+      "speaker": "witch",
+      "emotion": "flustered",
+      "segments": [
+        {
+          "text": "너도 이제 쉬어. ……내가 걱정해서 하는 말은 아니고."
+        }
+      ]
+    },
+    {
+      "speaker": "flora",
+      "emotion": "joy",
+      "segments": [
+        {
+          "text": "네. 정말 고마워요.",
+          "color": "#526f54",
+          "weight": 700
+        },
+        {
+          "text": " 다음 공연에는, 저도 함께 걸을 수 있으면 좋겠어요."
+        }
+      ]
+    }
   ]
 }

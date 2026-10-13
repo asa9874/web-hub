@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { assetUrl } from './config';
-export default function TitleScreen({ready,muted,onStart,onSound,onIllustrations}:{ready:boolean;muted:boolean;onStart:()=>void;onSound:()=>void;onIllustrations:()=>void}) {
+export default function TitleScreen({ready,muted,onStart,onSound,onIllustrations,onCodex}:{ready:boolean;muted:boolean;onStart:()=>void;onSound:()=>void;onIllustrations:()=>void;onCodex:()=>void}) {
   return <section className="wt-title-screen" aria-label="게임 타이틀 화면" onKeyDown={event=>{
     const button=event.target as HTMLElement;
     if((event.key==='Enter'||event.key===' ')&&button.tagName==='BUTTON'){
@@ -19,9 +19,11 @@ export default function TitleScreen({ready,muted,onStart,onSound,onIllustrations
       <h1><span>잊혀진</span><strong>마녀의 극장</strong></h1>
       <div className="wt-title-chapter"><span>ACT I</span>막이 오르지 않는 숲</div>
       <nav className="wt-title-menu" aria-label="극장 메인 메뉴">
-        <button disabled={!ready} onClick={onStart} className="wt-title-start"><span className="wt-menu-mark" aria-hidden="true">✦</span>{ready?'극장에 들어가기':'무대 준비 중…'}<span className="wt-menu-arrow" aria-hidden="true">→</span></button>
+        <button disabled className="wt-title-start"><span className="wt-menu-mark" aria-hidden="true">✦</span>극장에 들어가기 <small>준비 중</small></button>
+        <button disabled={!ready} onClick={onStart}><span className="wt-menu-mark" aria-hidden="true">◇</span>{ready?'테스트':'무대 준비 중…'}<span className="wt-menu-arrow" aria-hidden="true">→</span></button>
         <button onClick={onSound}><span className="wt-menu-mark" aria-hidden="true">◇</span>{muted?'소리 켜기':'소리 끄기'}</button>
         <button onClick={onIllustrations}><span className="wt-menu-mark" aria-hidden="true">◇</span>일러스트레이션</button>
+        <button onClick={onCodex}><span className="wt-menu-mark" aria-hidden="true">◇</span>설정집</button>
         <Link to="/"><span className="wt-menu-mark" aria-hidden="true">◇</span>허브로 돌아가기</Link>
       </nav>
     </div>

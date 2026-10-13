@@ -1,5 +1,6 @@
 import Phaser from 'phaser3';
-import { assetUrl, STAGE, TUNING } from './config';
+import { assetUrl, STAGE, TUNING, TEST_AREAS } from './config';
+import type { TestArea } from './config';
 import { bridgeCanSnap, createActor, createWorld, moveActor } from './model';
 import type { GameMode, WorldState } from './model';
 import { TheaterInput } from './input';
@@ -9,10 +10,14 @@ import { StageRig } from './rig';
 import { puppetPose } from './poses';
 import { StageLife } from './StageLife';
 import { StageLighting } from './StageLighting';
+import type { Emotion, Speaker } from './dialogueModel';
+import { CombatStage } from './CombatStage';
+import { updateCombat } from './combatModel';
 
 export interface TheaterView {
   mode:GameMode; area:string; prompt:string; message:string;
   bridgeSolved:boolean; lightsSolved:boolean; talked:boolean; dialogue:'first'|'repeat'|'lit';
+  lives:number;
 }
 export interface TheaterCallbacks {
   view:(view:TheaterView)=>void; ready:(scene:TheaterScene)=>void;
@@ -32,6 +37,8 @@ export class TheaterScene extends Phaser.Scene {
   private guide!:Phaser.GameObjects.Graphics;
   private curtains:Phaser.GameObjects.Image[]=[];
   private lighting!:StageLighting;
+  private combat!:CombatStage;
+  private respawnPoint=200;
   private lightAmount=0;
   private hint!:Phaser.GameObjects.Text;
   private dragging=false;
@@ -49,6 +56,7 @@ export class TheaterScene extends Phaser.Scene {
     this.load.on('loaderror',(file:Phaser.Loader.File)=>this.loadErrors.push(file.key));
     for(const name of ['witch-puppet','witch-walk','witch-jump','flora-puppet','witch-portrait','flora-portrait','paper-tree']) this.load.image(name,assetUrl(name+(name.startsWith('flora')?'-clean':'')+'.png'));
     for(const name of ['witch-knee','flora-knee','title-arch'])this.load.image(name,assetUrl(name+'.png'));
+    for(const name of ['witch-attack','clapper-idle','clapper-walk','clapper-attack','game-over'])this.load.image(name,assetUrl(name+'.png'));
   }
   create() {
     if(this.loadErrors.length){this.callbacks.error('에셋을 불러오지 못했습니다: '+this.loadErrors.join(', '));return;}
@@ -60,6 +68,7 @@ export class TheaterScene extends Phaser.Scene {
     this.stageLife=new StageLife(this);
     this.lighting=new StageLighting(this);
     this.drawSet();
+    this.combat=new CombatStage(this,this.rig);
     this.bridge=this.add.image(STAGE.bridge.startX,STAGE.bridge.startY,'bridge').setDisplaySize(STAGE.bridge.width,58).setOrigin(.5,0).setDepth(6);
     this.bridge.setInteractive({useHandCursor:true});
     this.rig.attach(this.bridge,'movable-bridge','bottom',.5,.55,10);
@@ -76,7 +85,7 @@ export class TheaterScene extends Phaser.Scene {
     this.flora.setScale(190/this.flora.height);
     this.rig.attach(this.flora,'flora','bottom',.5,.84,9);
     this.lighting.shadow(this.flora,.14);
-    this.hint=this.add.text(0,0,'',{fontFamily:'Gowun Dodum, sans-serif',fontSize:'19px',color:'#483d50',backgroundColor:'#f3e5cee8',padding:{x:14,y:8}}).setOrigin(.5,1).setDepth(14);
+    this.hint=this.add.text(0,0,'',{fontFamily:'WT Readable, sans-serif',fontSize:'21px',color:'#302836',backgroundColor:'#f5ead7',padding:{x:14,y:8}}).setOrigin(.5,1).setDepth(14);
     this.controls=new TheaterInput(this);
     const down=(pointer:Phaser.Input.Pointer)=>{
       if(this.mode!=='bridge')return;
@@ -135,7 +144,7 @@ export class TheaterScene extends Phaser.Scene {
     }
     const gap=this.add.graphics().setDepth(3);gap.fillStyle(0x5c485e,.7);gap.fillRect(1420,610,480,110);gap.lineStyle(2,0x9b7e8f,.6);
     for(let x=1435;x<1900;x+=34)gap.lineBetween(x,633,x+70,720);
-    const floors=[{x:0,width:1420},{x:1900,width:2700}];
+    const floors=[{x:0,width:1420},{x:1900,width:TUNING.worldWidth-1900}];
     for(const [index,floor] of floors.entries()){
       // Opaque scenery backing also occludes supports through texture alpha/NPOT tiling.
       this.add.rectangle(floor.x,582,floor.width,138,0xc8a581).setOrigin(0).setDepth(5.9);
@@ -150,8 +159,8 @@ export class TheaterScene extends Phaser.Scene {
     const lightDevice=this.add.image(STAGE.lightX,570,'device').setDisplaySize(146,138).setOrigin(.5,1).setDepth(7);
     this.rig.attach(bridgeDevice,'bridge-device','bottom',.5,.85,8);this.lighting.shadow(bridgeDevice,.17);
     this.rig.attach(lightDevice,'light-device','bottom',.5,.85,8);this.lighting.shadow(lightDevice,.17);
-    this.add.text(STAGE.consoleX,585,'무대 조작',{fontFamily:'Gowun Dodum',fontSize:'18px',color:'#514455'}).setOrigin(.5).setDepth(8);
-    this.add.text(STAGE.lightX,585,'조명 제어',{fontFamily:'Gowun Dodum',fontSize:'18px',color:'#514455'}).setOrigin(.5).setDepth(8);
+    this.add.text(STAGE.consoleX,585,'무대 조작',{fontFamily:'WT Readable',fontSize:'19px',color:'#382c3c'}).setOrigin(.5).setDepth(8);
+    this.add.text(STAGE.lightX,585,'조명 제어',{fontFamily:'WT Readable',fontSize:'19px',color:'#382c3c'}).setOrigin(.5).setDepth(8);
     for(let i=0;i<10;i++){
       const flower=this.add.image(2220+i*100,570,'flower').setDisplaySize(55+(i%2)*17,90+(i%3)*16).setOrigin(.5,1).setDepth(6).setAngle((i%3-1)*5);
       this.rig.attach(flower,`clock-flower-${i}`,'bottom',.5,.91,4);this.stageLife.plant(flower);
@@ -179,6 +188,18 @@ export class TheaterScene extends Phaser.Scene {
     this.add.text(640,17,'THE FORGOTTEN WITCH’S THEATER',{fontFamily:'Georgia',fontSize:'13px',letterSpacing:5,color:'#eddbc1'}).setOrigin(.5).setScrollFactor(0).setDepth(17);
   }
   start() {this.theaterSound.unlock();this.mode='explore';this.controls.clear();this.publish();}
+  teleport(target:TestArea){
+    if(this.mode!=='explore')return;
+    const area=TEST_AREAS.find(item=>item.id===target)!;
+    Object.assign(this.actor,createActor(),{x:area.x});this.respawnPoint=area.x;this.world.checkpoint=area.x;this.combat.reset();
+    this.cameras.main.scrollX=Phaser.Math.Clamp(area.x-440,0,TUNING.worldWidth-1280);this.controls.clear();this.theaterSound.cue('ui');this.publish();
+  }
+  async prepareRespawn(){
+    if(this.mode!=='gameover')return;
+    Object.assign(this.actor,createActor(),{x:this.respawnPoint});this.combat.reset();this.cameras.main.scrollX=Phaser.Math.Clamp(this.actor.x-440,0,TUNING.worldWidth-1280);this.controls.clear();this.publish();
+    await new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve())));
+  }
+  finishRespawn(){if(this.mode==='gameover'){this.mode='explore';this.combat.state.invulnerable=1.5;this.controls.clear();this.publish();}}
   pause() {if(this.mode==='explore'){this.mode='pause';this.controls.clear();this.publish();}}
   resume() {if(this.mode==='pause'){this.mode='explore';this.controls.clear();this.publish();}}
   closePuzzle() {
@@ -198,6 +219,8 @@ export class TheaterScene extends Phaser.Scene {
     this.theaterSound.cue('solve');this.toast('조명이 켜지고 마지막 커튼이 열립니다.');this.publish();
   }
   toggleSound(){this.theaterSound.unlock();this.theaterSound.muted=!this.theaterSound.muted;return this.theaterSound.muted;}
+  speak(speaker:Speaker,emotion:Emotion,pace:number){if(this.mode==='dialogue')this.theaterSound.blip(speaker,emotion,pace);}
+  curtainSound(){this.theaterSound.cue('curtain');}
   private toast(text:string){this.message=text;this.nextMessageUntil=this.time.now+4700;}
   private nearby() {
     if(Math.abs(this.actor.x-STAGE.consoleX)<150&&this.world.bridge!=='SOLVED')return 'bridge';
@@ -227,7 +250,13 @@ export class TheaterScene extends Phaser.Scene {
         const wasGrounded=this.actor.grounded;
         if(moveActor(this.actor,this.world,dt,input.direction,input.jump)==='rescued')this.toast('무대 아래는 아직 준비 중입니다. 안전한 자리로 돌아왔어요.');
         if(!wasGrounded&&this.actor.grounded){this.stageLife.impact(this.actor.x,this.actor.y);this.theaterSound.cue('footstep');}
-        if(this.world.lights==='SOLVED'&&this.lightAmount>.98&&this.actor.x>STAGE.doorX){this.mode='complete';this.actor.vx=0;this.theaterSound.cue('applause');}
+        const events=updateCombat(this.combat.state,this.actor,dt,input.attack);
+        for(const event of events){
+          this.theaterSound.cue(event);
+          if(event==='hit')this.stageLife.impact(this.actor.x+this.actor.facing*90,this.actor.y-65,4);
+          if(event==='gameover'){this.mode='gameover';this.actor.vx=0;this.controls.clear();}
+        }
+        if(this.world.lights==='SOLVED'&&this.lightAmount>.98&&this.actor.x>STAGE.doorX&&this.actor.x<4600){this.mode='complete';this.actor.vx=0;this.theaterSound.cue('applause');}
       }
     }
     if(this.mode==='explore'){
@@ -243,15 +272,17 @@ export class TheaterScene extends Phaser.Scene {
     const bounce=walk?Math.abs(Math.sin(t*14))*4:0;
     if(walk&&Math.abs(this.actor.x-this.footstepX)>80){this.footstepX=this.actor.x;this.stageLife.impact(this.actor.x,this.actor.y,2);this.theaterSound.cue('footstep');}
     if(!walk)this.footstepX=this.actor.x;
-    const pose=puppetPose(this.actor.grounded,this.actor.vx,this.mode);
+    const pose=this.mode==='explore'&&this.combat.state.casting>0?{texture:'witch-attack',height:198,joint:{u:.48,v:.79}}:puppetPose(this.actor.grounded,this.actor.vx,this.mode);
     if(this.puppet.texture.key!==pose.texture)this.puppet.setTexture(pose.texture);
     this.puppet.setOrigin(this.actor.facing<0?1-pose.joint.u:pose.joint.u,1).setData('rodJoint',pose.joint);
     this.puppet.setPosition(this.actor.x,this.actor.y-bounce).setFlipX(this.actor.facing<0).setRotation(tilt+(this.mode==='dialogue'?this.actor.facing*.055:0));
     const squash=this.actor.landing*.09;
     this.puppet.setScale(pose.height/this.puppet.height*(1+squash),pose.height/this.puppet.height*(1-squash));
+    this.puppet.setAlpha(this.combat.state.invulnerable>0?.65+Math.sin(this.combat.state.clock*24)*.2:1);
     const greeting=Math.abs(this.actor.x-STAGE.floraX)<170?(this.actor.x<STAGE.floraX?-.018:.018):0;
     this.flora.setRotation(Math.sin(t*1.3)*.016+greeting);
     this.stageLife.update(dt,this.mode==='explore'||this.mode==='intro',this.lightAmount);
+    this.combat.render();
     this.rig.update();
     if(this.world.lights==='SOLVED'&&this.mode==='explore')this.lightAmount=Math.min(1,this.lightAmount+dt*.32);
     this.lighting.update(this.actor.x,this.actor.y,this.actor.grounded,this.world.bridge==='SOLVED',this.lightAmount);
@@ -259,13 +290,13 @@ export class TheaterScene extends Phaser.Scene {
     this.hint.setVisible(Boolean(near)&&this.mode==='explore').setPosition(this.actor.x,this.actor.y-212).setText(near==='flora'?'E  플로라와 대화':near==='bridge'?'E  무대 조작':'E  조명 조사');
     if(this.message&&this.time.now>this.nextMessageUntil)this.message='';
     // Read-only telemetry for browser regression tests; no debug controls or bypasses.
-    this.game.canvas.dataset.theater=JSON.stringify({x:this.actor.x,y:this.actor.y,grounded:this.actor.grounded,camera:this.cameras.main.scrollX,mode:this.mode,bridge:this.world.bridge,lights:this.world.lights,visits:this.world.visits,bridgeX:this.bridge.x,bridgeY:this.bridge.y,pose:this.puppet.texture.key,lightAmount:this.lightAmount,lighting:this.lighting.snapshot(),environment:this.stageLife.snapshot()});
+    this.game.canvas.dataset.theater=JSON.stringify({x:this.actor.x,y:this.actor.y,grounded:this.actor.grounded,camera:this.cameras.main.scrollX,mode:this.mode,bridge:this.world.bridge,lights:this.world.lights,visits:this.world.visits,bridgeX:this.bridge.x,bridgeY:this.bridge.y,pose:this.puppet.texture.key,lightAmount:this.lightAmount,lighting:this.lighting.snapshot(),environment:this.stageLife.snapshot(),combat:this.combat.state,audio:this.theaterSound.snapshot()});
     this.game.canvas.dataset.theaterRig=JSON.stringify(this.rig.snapshot());
     this.publish();
   }
   private publish() {
-    const area=this.actor.x<1100?'숲의 입구':this.actor.x<2110?'부서진 종이 다리':this.actor.x<3280?'시계꽃 정원':'마지막 커튼';
-    const view:TheaterView={mode:this.mode,area,prompt:this.nearby(),message:this.message,bridgeSolved:this.world.bridge==='SOLVED',lightsSolved:this.world.lights==='SOLVED',talked:this.world.talked,dialogue:this.dialogue};
+    const area=this.actor.x>4600?'소품실 · 전투':this.actor.x<1100?'숲의 입구':this.actor.x<2110?'부서진 종이 다리':this.actor.x<3280?'시계꽃 정원':'마지막 커튼';
+    const view:TheaterView={mode:this.mode,area,prompt:this.nearby(),message:this.message,bridgeSolved:this.world.bridge==='SOLVED',lightsSolved:this.world.lights==='SOLVED',talked:this.world.talked,dialogue:this.dialogue,lives:this.combat.state.lives};
     const key=JSON.stringify(view);if(key!==this.lastView){this.lastView=key;this.callbacks.view(view);}
   }
 }

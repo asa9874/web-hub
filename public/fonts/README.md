@@ -20,3 +20,9 @@ SIL OFL 1.1 라이선스 전문을 각 파일과 함께 배포한다. 원본 글
 - 파일: `WitchTitle-GowunBatang.ttf`, `GowunBatang-OFL.txt`.
 - Google Fonts CSS의 `text=` 서브셋으로 게임 타이틀/챕터에 쓰는 한글만 다운로드했다. CSS 응답의 실제 포맷이 TrueType이므로 TTF로 보관한다. 게임에서는 외부 폰트 서버 요청 없이 사용한다.
 - 포함 문자: `잊혀진마녀의극장첫번째막이오르지않는숲`. 타이틀 문자를 추가할 때 서브셋도 갱신하거나 기존 로컬 고운돋움 폴백을 사용한다.
+
+## 극장 대화 / 읽기 UI
+
+- SUITE Variable: https://sun.fo/suite/ / https://github.com/sun-typeface/SUITE
+- `SUITE-Variable.woff2`는 공식 배포 `@2/fonts/variable/woff2/`의 원본이며 `SUITE-OFL.txt`에 SIL OFL 라이선스를 포함한다. 외부 CDN 요청 없이 self-host한다.
+- 게임 본문/이름표/메뉴/HUD는 둥근 SUITE, 큰 타이틀은 기존 고운바탕, 종이 장식 제목은 기존 기랑해랑을 사용한다. 대화 본문은 1280×720 기준 25px/1.75 행간, 500 weight이다.

@@ -1,10 +1,37 @@
+import { EMOTIONS, SPEAKERS } from './dialogueModel';
+import type { Emotion, Speaker } from './dialogueModel';
+import { assetUrl } from './config';
+type Cue='paper'|'footstep'|'solve'|'applause'|'cast'|'hit'|'hurt'|'gameover'|'curtain'|'ui'|'enemyAttack';
 export class TheaterSound {
   private context: AudioContext | null = null;
   muted = false;
-  unlock() { this.context ??= new AudioContext(); void this.context.resume(); }
-  cue(kind:'paper'|'footstep'|'solve'|'applause') {
+  private syllable=0;
+  private buffers=new Map<string,AudioBuffer>();
+  private loading=false;
+  private abort=new AbortController();
+  private sampleErrors:string[]=[];
+  blip(speaker:Speaker,emotion:Emotion,pace=1){
+    if(!this.context||this.muted||this.context.state!=='running')return;
+    const ctx=this.context,voice=SPEAKERS[speaker],feeling=EMOTIONS[emotion];
+    const oscillator=ctx.createOscillator(),gain=ctx.createGain(),filter=ctx.createBiquadFilter();
+    const t=ctx.currentTime,duration=feeling.duration/Math.sqrt(pace);
+    oscillator.type=voice.wave;oscillator.frequency.setValueAtTime(voice.frequency*feeling.pitch*(1+((this.syllable++%5)-2)*.008),t);
+    oscillator.frequency.exponentialRampToValueAtTime(voice.frequency*feeling.pitch*.91,t+duration);
+    filter.type='lowpass';filter.frequency.value=speaker==='witch'?1100:1900;
+    gain.gain.setValueAtTime(.0001,t);gain.gain.exponentialRampToValueAtTime(.027*feeling.gain,t+.006);gain.gain.exponentialRampToValueAtTime(.0001,t+duration);
+    oscillator.connect(filter);filter.connect(gain);gain.connect(ctx.destination);
+    oscillator.onended=()=>{oscillator.disconnect();filter.disconnect();gain.disconnect();};
+    oscillator.start(t);oscillator.stop(t+duration+.012);
+  }
+  unlock() { this.context ??= new AudioContext(); void this.context.resume();
+    if(!this.loading){this.loading=true;const ctx=this.context;for(const key of ['paper','footstep','solve','cast','hit','hurt','gameover','curtain','ui'])void fetch(assetUrl(`audio/${key}.ogg`),{signal:this.abort.signal}).then(r=>{if(!r.ok)throw new Error(key);return r.arrayBuffer();}).then(data=>ctx.decodeAudioData(data)).then(buffer=>{if(this.context===ctx)this.buffers.set(key,buffer);}).catch(()=>{if(!this.abort.signal.aborted)this.sampleErrors.push(key);});}
+  }
+  snapshot(){return {loaded:this.buffers.size,errors:this.sampleErrors};}
+  cue(kind:Cue) {
     if(!this.context||this.muted) return;
     const ctx=this.context;
+    const key=kind==='enemyAttack'?'hit':kind,buffer=this.buffers.get(key);
+    if(buffer){const source=ctx.createBufferSource(),gain=ctx.createGain();source.buffer=buffer;gain.gain.value=kind==='footstep'?.16:kind==='hurt'?.24:.22;source.connect(gain);gain.connect(ctx.destination);source.onended=()=>{source.disconnect();gain.disconnect();};source.start();return;}
     if(kind==='applause') {
       const buffer=ctx.createBuffer(1,ctx.sampleRate*.9,ctx.sampleRate);
       const data=buffer.getChannelData(0);
@@ -18,5 +45,5 @@ export class TheaterSound {
       oscillator.connect(gain);gain.connect(ctx.destination);oscillator.start(t);oscillator.stop(t+.25);
     });
   }
-  destroy(){ if(this.context) void this.context.close();this.context=null; }
+  destroy(){ this.abort.abort();this.buffers.clear();if(this.context) void this.context.close();this.context=null; }
 }
