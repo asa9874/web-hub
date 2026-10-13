@@ -1,0 +1,23 @@
+{
+  "first": [
+    {"speaker":"flora","emotion":"미소","text":"안녕하세요, 작은 마녀님. 오늘도 숲은 아주 평화로워요."},
+    {"speaker":"witch","emotion":"무표정","text":"……오늘도?"},
+    {"speaker":"flora","emotion":"미소","text":"네. 언제나 그랬으니까요."},
+    {"speaker":"witch","emotion":"의심","text":"그런데 왜 조명이 전부 꺼져 있지?"},
+    {"speaker":"flora","emotion":"침묵","text":"……."},
+    {"speaker":"flora","emotion":"미소","text":"공연이 시작되어야 하거든요. 먼저 달을 깨우고, 별을 부르고, 마지막에 꽃을 피워 주세요."},
+    {"speaker":"witch","emotion":"무표정","text":"달, 별, 꽃. ……고장 난 걸 고치는 것뿐이야."},
+    {"speaker":"flora","emotion":"미소","text":"그럼 저는 여기서 기다릴게요. 관객들이 아직 자리를 비우지 않았거든요."}
+  ],
+  "repeat": [
+    {"speaker":"flora","emotion":"미소","text":"다시 오셨네요. 달, 별, 꽃. 그 순서로 숲에 빛을 돌려주세요."},
+    {"speaker":"witch","emotion":"의심","text":"누굴 기다리는 거야?"},
+    {"speaker":"flora","emotion":"미소","text":"늘 같은 분들이요."},
+    {"speaker":"witch","emotion":"무표정","text":"……그래. 금방 다녀올게."}
+  ],
+  "lit": [
+    {"speaker":"flora","emotion":"미소","text":"꽃들이 시간을 되찾았어요. 저기, 마지막 커튼이 열렸네요."},
+    {"speaker":"witch","emotion":"희미한 미소","text":"너도 이제 쉬어. ……내가 걱정해서 하는 말은 아니고."},
+    {"speaker":"flora","emotion":"미소","text":"네. 다음 공연까지 기다릴게요."}
+  ]
+}

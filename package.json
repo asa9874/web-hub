@@ -12,7 +12,8 @@
     "deploy": "gh-pages -d dist --nojekyll",
     "test:dist": "node scripts/validate-dist.mjs",
     "test:browser": "node scripts/smoke-browser.mjs",
-    "test:history": "node scripts/verify-history.mjs"
+    "test:history": "node scripts/verify-history.mjs",
+    "test:witch": "node scripts/test-witch.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.17",

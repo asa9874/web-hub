@@ -1,4 +1,4 @@
-import { StrictMode } from 'react'
+import { StrictMode, lazy, Suspense } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import './index.css'
@@ -15,6 +15,7 @@ import HeroinInfo from './VisualNovel/HeroinInfo.tsx'
 import Japan from './Japan/Japan.tsx'
 import English from './English/English.tsx'
 import SuperHotDesign from './SuperHotDesign/SuperHotDesign.tsx'
+const ForgottenWitch = lazy(() => import('./ForgottenWitch/ForgottenWitch.tsx'));
 
 // Preserve bookmarked HashRouter URLs while giving every page a shareable pathname.
 if (window.location.hash.startsWith('#/')) {
@@ -26,6 +27,7 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Routes>
         <Route path="/" element={<App />} />
+        <Route path="/games/forgotten-witch" element={<Suspense fallback={<p>극장을 준비하고 있습니다…</p>}><ForgottenWitch /></Suspense>} />
         <Route path="/ai-prompts" element={<AIPrompts />} />
         <Route path="/network-quiz" element={<NetworkQuiz />} />
         <Route path="/neonspace" element={<NeonSpace />} />

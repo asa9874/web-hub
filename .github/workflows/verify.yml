@@ -23,3 +23,10 @@ jobs:
       - run: npm run build
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
+      - name: Verify Witch Theater playthrough
+        run: |
+          npm run preview -- --host 127.0.0.1 --port 4173 --strictPort &
+          preview_pid=$!
+          trap 'kill "$preview_pid"' EXIT
+          node --input-type=module -e 'for (let attempt = 0; attempt < 60; attempt++) { try { const response = await fetch("http://127.0.0.1:4173/web-hub/"); if (response.ok) process.exit(0); } catch {} await new Promise(resolve => setTimeout(resolve, 500)); } process.exit(1);'
+          WITCH_TEST_URL=http://127.0.0.1:4173/web-hub npm run test:witch
