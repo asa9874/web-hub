@@ -37,9 +37,23 @@ try {
    window.AudioContext=class extends Original {constructor(options){super(options);contexts.push(this);}};
  });
  await page.goto(base+'/games/forgotten-witch/',{waitUntil:'networkidle'});
+ await page.evaluate(()=>document.fonts.ready);
+ const menu=page.getByRole('navigation',{name:'극장 메인 메뉴'});
+ await menu.getByRole('button',{name:'소리 끄기'}).click();await menu.getByRole('button',{name:'소리 켜기'}).click();
+ assert.equal(await page.locator('.wt-title-screen').evaluate(element=>element.scrollTop),0,'Menu focus must not scroll/crop the title frame');
+ await page.screenshot({path:fileURLToPath(new URL('witch-title.png',output))});
  await page.getByRole('button',{name:'극장에 들어가기'}).click();
  const canvas=page.locator('.wt-game canvas');assert.equal(await canvas.count(),1,'StrictMode must create one engine');
  const state=()=>canvas.evaluate(c=>JSON.parse(c.dataset.theater));
+ const checkRig=async()=>{
+   const {rods,s}=await canvas.evaluate(c=>({rods:JSON.parse(c.dataset.theaterRig),s:JSON.parse(c.dataset.theater)}));
+   assert(rods.length>=80,'Every stage cutout/support must be registered');
+   for(const rod of rods){assert(Number.isFinite(rod.start.x)&&Number.isFinite(rod.start.y));assert.equal(rod.end.y,rod.edge==='top'?-16:736,'Support reaches outside viewport boundary: '+rod.name);}
+   for(const prefix of ['rear-tree-','middle-tree-','foreground-tree-','hanging-star-','platform-','clock-flower-','final-curtain-'])assert(rods.some(r=>r.name.startsWith(prefix)),prefix+' has supports');
+   assert(rods.some(r=>r.name==='hanging-moon'&&r.edge==='top'));
+   const pole=rods.find(r=>r.name==='player');assert(pole.visible);assert(Math.abs(pole.start.x-(s.x-s.camera))<25,'Rod follows puppet transform/flip');
+   return {...pole,actorY:s.y};
+ };
  const waitState=async(test,arg)=>{
    try{await page.waitForFunction(({code,arg})=>{const c=document.querySelector('.wt-game canvas');return c?.dataset.theater&&new Function('s','arg',code)(JSON.parse(c.dataset.theater),arg);},{code:'return '+test,arg},{timeout:18000});}
    catch(error){console.log('Failed condition',test,'state',await state());await page.screenshot({path:fileURLToPath(new URL('witch-failure.png',output))});throw error;}
@@ -49,11 +63,16 @@ try {
    try{await waitState(key==='d'?'s.x >= arg':'s.x <= arg',x);}finally{await page.keyboard.up(key);}
    await page.waitForTimeout(220);
  };
- await page.keyboard.press('Space');await page.waitForTimeout(160);assert((await state()).y<540,'Space jumps');
+ await checkRig();
+ await page.keyboard.down('d');await waitState('s.pose === "witch-walk"');await page.waitForTimeout(100);await checkRig();await page.screenshot({path:fileURLToPath(new URL('witch-walk.png',output))});await page.keyboard.up('d');await waitState('s.pose === "witch-puppet"');
+ await page.keyboard.down('a');await waitState('s.pose === "witch-walk"');await checkRig();await page.keyboard.up('a');await waitState('s.pose === "witch-puppet"');
+ await page.keyboard.press('Space');await page.waitForTimeout(160);assert((await state()).y<540,'Space jumps');assert.equal((await state()).pose,'witch-jump');
+ const jumpRod=await checkRig();assert(jumpRod.start.y<jumpRod.actorY-25,'Jump support extends from the body, not a detached fixed-length bar');await page.screenshot({path:fileURLToPath(new URL('witch-jump.png',output))});
  await waitState('s.grounded');
  await runTo(470);await page.keyboard.press('Space');await page.waitForTimeout(700);assert((await state()).y===515,'Land on a practice board');
  await runTo(890);await page.keyboard.down('d');await page.keyboard.press('Space');await waitState('s.x > 1120');await page.keyboard.up('d');await page.waitForTimeout(300);
  await runTo(1220);assert((await state()).camera>600,'Camera follows');
+ await checkRig();
  await page.keyboard.press('e');await waitState('s.mode === "bridge"');
  const frozen=await state();await page.keyboard.down('d');await page.keyboard.press('Space');await page.waitForTimeout(200);await page.keyboard.up('d');assert.equal((await state()).x,frozen.x,'Bridge mode freezes actor');
  await page.keyboard.press('Escape');await waitState('s.mode === "explore"');await page.keyboard.press('e');await waitState('s.mode === "bridge"');
@@ -61,11 +80,16 @@ try {
  const point=(x,y)=>({x:bounds.x+x*bounds.width/1280,y:bounds.y+y*bounds.height/720});
  let s=await state(),start=point(s.bridgeX-s.camera,s.bridgeY+30),end=point(1660-s.camera,585);
  await page.mouse.move(start.x,start.y);await page.mouse.down();await page.mouse.move(end.x,end.y,{steps:24});await page.mouse.up();
+ await checkRig();
  await waitState('s.bridge === "SOLVED" && s.mode === "explore"');
  await runTo(1640);assert.equal((await state()).y,570,'Actually standing on connected bridge');
  await page.screenshot({path:fileURLToPath(new URL('witch-bridge.png',output))});
  await runTo(2580);await page.keyboard.press('e');await waitState('s.mode === "dialogue"');
  await page.locator('.wt-dialogue-paper').waitFor();await page.waitForTimeout(100);
+ const portraits=await page.locator('.wt-portrait').evaluateAll(images=>images.map(image=>({source:image.getAttribute('src'),z:Number(getComputedStyle(image).zIndex),bottom:image.getBoundingClientRect().bottom,top:image.getBoundingClientRect().top})));
+ const dialoguePaper=await page.locator('.wt-dialogue-paper').evaluate(element=>({z:Number(getComputedStyle(element).zIndex),top:element.getBoundingClientRect().top}));
+ assert(portraits.every(p=>p.z<dialoguePaper.z&&p.top<dialoguePaper.top-200&&p.bottom>dialoguePaper.top),'Knee-up portraits are independent actors behind the dialogue paper');
+ assert(portraits.every(p=>p.source.includes('-knee.png')),'Both speakers use matching knee-up art');
  const atDialogue=(await state()).x;
  await page.keyboard.down('d');await page.keyboard.press('Space');await page.waitForTimeout(200);await page.keyboard.up('d');assert.equal((await state()).x,atDialogue,'Dialogue freezes movement');
  // Space reveals one line; Enter advances one line, without native button double activation.
@@ -99,6 +123,7 @@ try {
  await page.reload({waitUntil:'networkidle'});await page.getByRole('button',{name:'극장에 들어가기'}).waitFor();assert.equal(await canvas.count(),1,'Direct URL reload');
  await page.setViewportSize({width:900,height:600});await page.screenshot({path:fileURLToPath(new URL('witch-resize.png',output))});
  await page.getByRole('button',{name:'극장에 들어가기'}).click();await waitState('s.mode === "explore"');
+ await checkRig();
  await page.getByRole('link',{name:'← web hub'}).click();await page.locator('.hub').waitFor();assert.equal(await page.locator('canvas').count(),0,'Unmount cleans canvas');
  assert.equal(await page.evaluate(()=>document.body.style.overflow),'','Unmount restores page scrolling');
  await page.waitForFunction(()=>window.__theaterAudioContexts.length>0&&window.__theaterAudioContexts.every(context=>context.state==='closed'));

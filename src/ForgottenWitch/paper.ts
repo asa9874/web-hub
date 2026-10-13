@@ -56,7 +56,8 @@ export function createPaperTextures(scene:Phaser.Scene) {
     c.fillStyle='#a7bd9d';c.beginPath();c.ellipse(54,153,28,12,.5,0,Math.PI*2);c.ellipse(101,175,26,12,-.5,0,Math.PI*2);c.fill();
     for(let i=0;i<8;i++){const a=i*Math.PI/4;c.fillStyle=i%2?'#e7aeb6':'#ecccbe';c.strokeStyle='#b99882';c.lineWidth=5;c.beginPath();c.ellipse(77+Math.cos(a)*30,65+Math.sin(a)*30,20,27,a,0,Math.PI*2);c.stroke();c.fill();}
     c.fillStyle='#f2dfb4';c.beginPath();c.arc(77,65,24,0,Math.PI*2);c.fill();c.strokeStyle='#736477';c.lineWidth=2;
-    c.beginPath();c.moveTo(77,48);c.lineTo(77,65);c.lineTo(92,68);c.stroke();
+    // Hands are independent moving overlays, drawn by StageLife after lighting is restored.
+    for(let i=0;i<4;i++){const a=i*Math.PI/2;c.beginPath();c.moveTo(77+Math.cos(a)*18,65+Math.sin(a)*18);c.lineTo(77+Math.cos(a)*21,65+Math.sin(a)*21);c.stroke();}
   },6);
   texture('device',170,160,c=>{
     cutout(c,[[12,54],[38,22],[147,30],[156,148],[13,148]],'#b9a3d4');

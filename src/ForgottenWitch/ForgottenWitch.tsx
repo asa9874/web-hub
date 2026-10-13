@@ -7,6 +7,8 @@ import { checkLights } from './model';
 import type { TheaterScene, TheaterView } from './TheaterScene';
 import dialogueData from './dialogue.json';
 import './ForgottenWitch.css';
+import DomPaperRods from './DomPaperRods';
+import TitleScreen from './TitleScreen';
 
 const initialView:TheaterView={mode:'intro',area:'숲의 입구',prompt:'',message:'',bridgeSolved:false,lightsSolved:false,talked:false,dialogue:'first'};
 function useModalFocus(ref:RefObject<HTMLDivElement|null>) {
@@ -38,8 +40,8 @@ function Dialogue({script,advanceRef,onEnd}:{script:keyof typeof dialogueData;ad
   };
   useEffect(()=>{advanceRef.current=next;return ()=>{advanceRef.current=null;};});
   return <div className="wt-dialogue" ref={modal} role="dialog" aria-modal="true" aria-label="플로라와 대화">
-    <img className={`wt-portrait wt-portrait-left ${line.speaker==='witch'?'speaking':''}`} src={assetUrl('witch-portrait.png')} alt="견습 마녀" />
-    <img className={`wt-portrait wt-portrait-right ${line.speaker==='flora'?'speaking':''}`} src={assetUrl('flora-portrait-clean.png')} alt="플로라" />
+    <img className={`wt-portrait wt-portrait-left ${line.speaker==='witch'?'speaking':''}`} src={assetUrl('witch-knee.png')} alt="견습 마녀의 무릎 위까지 보이는 일러스트" />
+    <img className={`wt-portrait wt-portrait-right ${line.speaker==='flora'?'speaking':''}`} src={assetUrl('flora-knee.png')} alt="플로라의 무릎 위까지 보이는 일러스트" />
     <div className="wt-dialogue-paper">
       <div className="wt-speaker">{line.speaker==='witch'?'견습 마녀':'플로라'}<span>{line.emotion}</span></div>
       <p aria-live="polite" aria-label={line.text}>{line.text.slice(0,visible)}<span className="wt-type-cursor">▏</span></p>
@@ -77,7 +79,7 @@ function LightPuzzle({onClose,onCheck,onRetry,onSolve}:{onClose:()=>void;onCheck
     if(target){place(current.id,Number(target.dataset.lightSlot));setSelected(null);}
     setGhost(null);drag.current=null;
   };
-  const tile=(id:SymbolId)=><button className={`wt-symbol wt-symbol-${id} ${selected===id?'selected':''}`} data-symbol={id} aria-label={SYMBOLS[id].label+' 판넬'} onPointerDown={e=>down(id,e)} onPointerMove={move} onPointerUp={up} onPointerCancel={()=>{drag.current=null;setGhost(null);}} onClick={()=>setSelected(id)}><span>{SYMBOLS[id].glyph}</span><small>{SYMBOLS[id].label}</small></button>;
+  const tile=(id:SymbolId)=><button className={`wt-symbol wt-symbol-${id} ${selected===id?'selected':''}`} data-paper-rod={id} data-symbol={id} aria-label={SYMBOLS[id].label+' 판넬'} onPointerDown={e=>down(id,e)} onPointerMove={move} onPointerUp={up} onPointerCancel={()=>{drag.current=null;setGhost(null);}} onClick={()=>setSelected(id)}><span>{SYMBOLS[id].glyph}</span><small>{SYMBOLS[id].label}</small></button>;
   const check=()=>{
     if(status!=='OPEN')return;
     onCheck();setStatus('CHECKING');setSelected(null);
@@ -86,7 +88,7 @@ function LightPuzzle({onClose,onCheck,onRetry,onSolve}:{onClose:()=>void;onCheck
       else {setStatus('FAILED');onRetry();timer.current=window.setTimeout(()=>setStatus('OPEN'),700);}
     },350);
   };
-  return <div className="wt-modal-backdrop"><div ref={modal} className={`wt-puzzle-paper ${status==='FAILED'?'wt-shake':''}`} role="dialog" aria-modal="true" aria-labelledby="wt-light-title" data-puzzle-state={status}>
+  return <div className="wt-modal-backdrop"><DomPaperRods /><div ref={modal} className={`wt-puzzle-paper ${status==='FAILED'?'wt-shake':''}`} role="dialog" aria-modal="true" aria-labelledby="wt-light-title" data-puzzle-state={status}>
     <button className="wt-close" aria-label="조명 퍼즐 닫기" onClick={onClose}>×</button>
     <div className="wt-eyebrow">무대 장치 · LIGHTING</div><h2 id="wt-light-title">숲에 빛을 돌려주는 순서</h2>
     <p className="wt-puzzle-description">플로라의 말을 떠올려 보세요.<br/>종이 판넬을 끌어서 세 칸에 놓습니다.</p>
@@ -98,7 +100,7 @@ function LightPuzzle({onClose,onCheck,onRetry,onSolve}:{onClose:()=>void;onCheck
     <p className="wt-puzzle-result" role="status">{status==='FAILED'?'종이가 떨립니다. 이 순서는 아닌 것 같아요.':status==='SOLVED'?'달이 깨어나고, 별이 빛나고, 꽃이 피어납니다.':status==='CHECKING'?'장치가 순서를 읽고 있습니다…':'클릭으로 판넬 선택 → 빈 칸 클릭도 가능합니다.'}</p>
     <button className="wt-primary" disabled={slots.some(s=>s===null)||status!=='OPEN'} onClick={check}>조명 켜기 <span>✦</span></button>
     <small className="wt-puzzle-escape">Esc · 무대로 돌아가기</small>
-    {ghost&&<div className="wt-drag-ghost" style={{left:ghost.x,top:ghost.y}}>{SYMBOLS[ghost.id].glyph}</div>}
+    {ghost&&<div className="wt-drag-ghost" data-paper-rod="drag-ghost" style={{left:ghost.x,top:ghost.y}}>{SYMBOLS[ghost.id].glyph}</div>}
   </div></div>;
 }
 export default function ForgottenWitch() {
@@ -123,13 +125,7 @@ export default function ForgottenWitch() {
     <div className="wt-stage-shell">
       <div className="wt-game" ref={host} role="application" aria-label="잊혀진 마녀의 극장 게임. A D 이동, Space 점프, E 상호작용" />
       <div className="wt-overlay" data-game-mode={view.mode}>
-        {error?<div className="wt-modal-backdrop"><div className="wt-intro-paper"><h2>무대를 준비하지 못했습니다.</h2><p role="alert">{error}</p><button onClick={replay}>다시 불러오기</button><Link to="/">허브로 돌아가기</Link></div></div>:view.mode==='intro'?<div className="wt-modal-backdrop wt-opening"><div className="wt-intro-paper">
-          <div className="wt-ticket">첫 번째 막 · 01</div><div className="wt-eyebrow">THE FORGOTTEN WITCH’S THEATER</div>
-          <h1>잊혀진<br/>마녀의 극장</h1><div className="wt-intro-rule"/><h2>막이 오르지 않는 숲</h2>
-          <p>멈춘 다리, 시간을 잃은 꽃, 불이 꺼진 무대.<br/>견습 마녀의 첫 공연을 준비해 주세요.</p>
-          <button className="wt-primary" disabled={!ready} onClick={()=>scene.current?.start()}>{ready?'극장에 들어가기':'무대 준비 중…'} <span>→</span></button>
-          <small>키보드 + 마우스 · 약 3–7분 · 진행은 이번 공연 동안 유지됩니다.</small>
-        </div><img className="wt-opening-puppet" src={assetUrl('witch-puppet.png')} alt="골판지 견습 마녀 인형" /></div>:null}
+        {error?<div className="wt-modal-backdrop"><div className="wt-intro-paper"><h2>무대를 준비하지 못했습니다.</h2><p role="alert">{error}</p><button onClick={replay}>다시 불러오기</button><Link to="/">허브로 돌아가기</Link></div></div>:view.mode==='intro'?<TitleScreen ready={ready} muted={muted} onStart={()=>scene.current?.start()} onSound={()=>{if(scene.current)setMuted(scene.current.toggleSound());}} />:null}
         {!['intro','complete'].includes(view.mode)&&<div className="wt-hud"><div><small>첫 번째 막</small><strong>{view.area}</strong></div><ol aria-label="공연 준비 진행"><li className={view.bridgeSolved?'done':''}>다리</li><li className={view.talked?'done':''}>플로라</li><li className={view.lightsSolved?'done':''}>조명</li></ol><button aria-label="일시정지" disabled={view.mode!=='explore'} onClick={()=>scene.current?.pause()}>Ⅱ</button></div>}
         {view.message&&view.mode==='explore'&&<div className="wt-toast" role="status">{view.message}</div>}
         {view.mode==='bridge'&&<div className="wt-bridge-help"><div><small>무대 조작 모드</small><h2>다리를 제자리로</h2><p>떠 있는 종이 다리를 오른쪽 점선으로 끌어 놓으세요.</p></div><button onClick={()=>scene.current?.closePuzzle()}>닫기 · Esc</button></div>}

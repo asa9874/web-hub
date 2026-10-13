@@ -2,7 +2,65 @@
 
 Generated with the built-in image_gen tool on 2026-10-13. No API key or remote service is used at game runtime. User-provided root ref.png is a design/material reference, not a game background. The reference remains untouched.
 
-## Final assets
+
+## Movement pose updates — 2026-10-13
+
+Built-in image_gen edits using witch-puppet.png as the identity-preserving edit target and ref.png as a pose/material reference. Both new PNGs are copied unchanged, preserve generated transparency, contain no baked-in control rods, and are stored with the project for fresh clones.
+
+- witch-walk.png — forward walking step.
+- witch-jump.png — knees bent, airborne pose.
+- Pose scale, facing-aware body pivot and rod joint: src/ForgottenWitch/poses.ts. Stage support rods are procedural in rig.ts; overlay support rods are procedural in DomPaperRods.tsx.
+- Portable user reference: src/ForgottenWitch/codex/reference.png (a copy of ref.png, not rendered as the stage).
+
+### witch-walk
+
+```text
+Use case: identity-preserve. Edit target: image 1 witch-puppet.png, the exact existing game puppet. Supporting reference: image 2 ref.png provides the walking and jumping pose vocabulary only. Create a new SINGLE transparent pose asset of the SAME apprentice witch. Preserve her exact face, half-lidded gray-violet eyes, long black hair, plum dress, cape, boots, broad pointed hat and lavender ribbon, star-tipped wooden wand, 2.7-head SD proportions, hand-painted paper texture and thick tan hand-cut cardboard perimeter. Match the existing colors and drawing quality. The whole hat, hair, both boots and wand must fit inside the frame, with SMALL balanced transparent margin. One isolated flat front-on cardboard cutout, slightly facing right; not a scene or a sprite sheet. No writing, shadow, glow, backdrop, labels or control rod. The rod is separately drawn in game code. Genuine transparent background. No photorealism, 3D or glitter; do not redesign the character.
+Pose change only: a clear natural forward WALKING step to the right. Forward boot extended a little to the right and lowered to the foot baseline, rear boot trailing left with bent knee. Body upright, slight forward lean, cape and long hair sway gently backward. Wand held low and forward in her usual hand. Keep the head/hat proportions and the characteristic deadpan face. The pose must clearly differ from standing while staying a quiet puppet-theater walk.
+```
+
+### witch-jump
+
+```text
+Use case: identity-preserve. Edit target: image 1 witch-puppet.png, the exact existing game puppet. Supporting reference: image 2 ref.png provides the walking and jumping pose vocabulary only. Create a new SINGLE transparent pose asset of the SAME apprentice witch. Preserve her exact face, half-lidded gray-violet eyes, long black hair, plum dress, cape, boots, broad pointed hat and lavender ribbon, star-tipped wooden wand, 2.7-head SD proportions, hand-painted paper texture and thick tan hand-cut cardboard perimeter. Match the existing colors and drawing quality. The whole hat, hair, both boots and wand must fit inside the frame, with SMALL balanced transparent margin. One isolated flat front-on cardboard cutout, slightly facing right; not a scene or a sprite sheet. No writing, shadow, glow, backdrop, labels or control rod. The rod is separately drawn in game code. Genuine transparent background. No photorealism, 3D or glitter; do not redesign the character.
+Pose change only: a clear mid-air JUMP pose. Both knees bent with boots lifted, one boot tucked slightly backward and the other forward, skirt and cape lifted slightly by motion, long hair trailing behind. A small upward body tilt, wand held close in her usual hand. Keep the modest dress, identical deadpan face and broad hat. This must read clearly as a jump when displayed only 200 pixels high. Keep her legs visible below the dress. No speed lines or magic effects.
+```
+
+
+## Title and dialogue polish — 2026-10-13
+
+All artwork below was generated with the built-in image_gen tool and copied unchanged into this folder with its generated transparency. No third-party game screenshot is shipped as a product asset.
+
+- witch-knee.png — original witch portrait extended to knee-up; used for the title and left dialogue actor.
+- flora-knee.png — new knee-up Flora drawn using ONLY the original witch-portrait.png as the line-art/cel-shading style reference. A first Flora candidate retained too much of the earlier painted style and was rejected; the selected second version is used here.
+- title-arch.png — independent transparent paper proscenium/curtain frame, with an empty center. The live stage, logo, menu, and character are separately rendered layers.
+- Font: local public/fonts/WitchTitle-GowunBatang.ttf plus its OFL license. Title UI research is recorded in src/ForgottenWitch/codex/UI-REFERENCES.md.
+
+### witch-knee
+
+```text
+Use case: identity-preserve. Create a premium 2D anime character illustration on genuine transparent background for a storybook game dialogue scene. Knee-up framing: show the ENTIRE head/hat, shoulders, torso, both arms, hips and thighs down to just above BOTH KNEES, with small safe margins. No cardboard perimeter; this is the detailed dialogue illustration. Clean confident economical line art, precise flat two-tone cel shadows, matte local colors, selectively softer hair highlights. Smooth flat skin, beautiful deliberate facial drawing. NO painterly airbrushing, no glossy skin, no 3D, no grain, no glow/halo/vignette/background, no text. Modest costume. Full illustration cutout, not cropped at the waist.
+Image 1 witch-portrait.png is the exact character identity AND line-art/cel-shading style target. Extend and refine this same apprentice witch to knee-up, preserving her half-lidded gray-purple eyes, small deadpan mouth, waist-length straight black hair, broad pointed plum witch hat and lavender ribbon, short cape, star clasp, modest dark plum dress with subdued lavender bow, simple wooden star wand. Slightly facing right. Complete hat entirely inside frame. The hem and thighs should be visible above the knees, dark stockings. Calm, composed posture, one hand holds the wand at her side. Her other arm relaxed. Original anime character design, not chibi. Maintain the source's flat 2D drawn face, fine outlines and restrained palette. One isolated character only.
+```
+
+### title-arch
+
+```text
+Use case: illustration-story. Asset type: isolated transparent foreground proscenium arch for a handmade paper puppet theater title screen, landscape 16:9.
+Reference image role: ref.png provides worn cardboard edges, muted plum and lavender, colored-pencil material only.
+Primary request: A gorgeous miniature abandoned witch theater frame, made of thick layered cream/tan cardboard carved by hand, deep plum and dusty mauve paper curtains gathered on both sides, elegant upper draped curtain, narrow warm aged-gold trim, three tiny celestial ornaments at the crown: moon, star, flower. Refined theatrical decorative wood carvings at the upper corners, subtle crayon scuffs and paper fibers, soft dimensional paper edges. The center must be a LARGE EMPTY TRANSPARENT OPENING covering at least 75% of the width and 75% height, for a separately rendered stage and title. Very narrow ornate side wings only (about 8% each) and an ornate top border (about 10%). No bottom border. This is ONE isolated theater frame asset, NOT a full scene. Complete rectangular outer outline fits the image edges. Dramatic, beautifully hand-crafted, expensive art-book quality with restrained ornament. Palette dark plum #403348, lavender #75677F, aged cream #F3E5CE, dusty pink #E7AEB6, warm cardboard tan #D6B38C. Not photorealistic 3D.
+Constraints: truly transparent center opening AND outside edges. No stage, trees, character, furniture, menu, text, logo, light glow, backdrop, vignette or casting shadows into the center opening. No pixel art or generic vector graphics.
+```
+
+### flora-knee
+
+```text
+Use case: illustration-story. Image 1 is STYLE reference ONLY: witch-portrait.png. Create a DIFFERENT female character, Flora, in exactly that clean Japanese 2D anime drawing language. Do not copy the witch's identity or costume.
+Asset: one knee-up dialogue cutout. Mint bob haircut, pale green eyes, gentle small closed-mouth smile, cream-and-sage petal dress with dusty pink/lavender accents, a small flower clock hair ornament and chest brooch. Her face/eye proportions and economical ink outlines must match the reference witch: clean large but restrained anime eyes, small nose, subtly flushed flat skin, NOT a painterly realistic face. Keep anatomy natural and costume modest. Full head, shoulders, both hands, waist, hips and both thighs down to just ABOVE KNEES visible, with balanced margins. Slightly facing left. Her hands relaxed at waist.
+STRICT RENDER: draw complete flat local-color regions and HARD-EDGED TWO-TONE CEL SHADOWS like the reference. Broad grouped mint hair shapes with simple flat shadow clusters, NO soft airbrush shading, NO brushy hair, NO realistic skin rendering, NO diffuse highlight haze. Exquisite deliberate line art, same ink weight and finish as the witch portrait. Fine details concentrated on face and brooch, large clean color areas in dress. No 3D gloss, grain, glow, scene, cast shadow, text or vignette. Fully transparent background. One character only, no frame, no sheet.
+```
+
+## Original prototype assets
 
 - witch-puppet.png — SD cutout; separate code-rendered wooden rod below the feet.
 - flora-puppet-clean.png — SD cutout; separate wooden rod.

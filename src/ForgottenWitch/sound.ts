@@ -2,7 +2,7 @@ export class TheaterSound {
   private context: AudioContext | null = null;
   muted = false;
   unlock() { this.context ??= new AudioContext(); void this.context.resume(); }
-  cue(kind:'paper'|'solve'|'applause') {
+  cue(kind:'paper'|'footstep'|'solve'|'applause') {
     if(!this.context||this.muted) return;
     const ctx=this.context;
     if(kind==='applause') {
@@ -14,7 +14,7 @@ export class TheaterSound {
     const tones=kind==='solve'?[392,494,587]:[180];
     tones.forEach((frequency,i)=>{
       const oscillator=ctx.createOscillator(),gain=ctx.createGain();oscillator.type='sine';oscillator.frequency.value=frequency;
-      const t=ctx.currentTime+i*.11;gain.gain.setValueAtTime(.0001,t);gain.gain.exponentialRampToValueAtTime(.035,t+.015);gain.gain.exponentialRampToValueAtTime(.0001,t+.22);
+      const t=ctx.currentTime+i*.11;gain.gain.setValueAtTime(.0001,t);gain.gain.exponentialRampToValueAtTime(kind==='footstep'?.009:.035,t+.015);gain.gain.exponentialRampToValueAtTime(.0001,t+(kind==='footstep'?.09:.22));
       oscillator.connect(gain);gain.connect(ctx.destination);oscillator.start(t);oscillator.stop(t+.25);
     });
   }
