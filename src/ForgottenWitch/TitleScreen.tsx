@@ -32,7 +32,6 @@ export default function TitleScreen({ready,muted,onStart,onOpening,onChapter,onS
         <Link to="/" onClick={onExit}><span className="wt-menu-mark" aria-hidden="true">◇</span>허브로 돌아가기</Link>
       </nav>
     </div>
-    <img className="wt-title-arch" src={assetUrl('title-arch.png')} alt="" aria-hidden="true" />
     <div className="wt-title-bottom"><span>키보드 + 마우스</span><i/><span>챕터 1 · 개발 중</span><strong>PROTOTYPE v0.1</strong></div>
   </section>;
 }
