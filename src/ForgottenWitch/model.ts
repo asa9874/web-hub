@@ -1,4 +1,5 @@
 import type {MovementEnvironment} from './livingModel';
+import {surfaceHeight} from './livingModel';
 import { LIGHT_ORDER, STAGE, TUNING } from './config';
 import type { SymbolId } from './config';
 export type GameMode = 'intro' | 'explore' | 'bridge' | 'dialogue' | 'lights' | 'pause' | 'complete' | 'gameover' | 'testing';
@@ -13,21 +14,24 @@ export interface Actor {
 }
 export const createActor = (): Actor => ({ x: 200, y: TUNING.floor, vx: 0, vy: 0, grounded: true, facing: 1, coyote: 100, buffer: 0, landing: 0 });
 export const createWorld = (): WorldState => ({ bridge: 'IDLE', lights: 'CLOSED', talked: false, visits: 0, checkpoint: 200 });
-export function moveActor(actor: Actor, world: WorldState, dt: number, direction: number, jump: boolean, rolling=false,environment?:MovementEnvironment) {
+export function moveActor(actor: Actor, world: WorldState, dt: number, direction: number, jump: boolean, rolling=false,environment?:MovementEnvironment,jumpHeld=true) {
   const ms = dt * 1000;
   actor.buffer = jump ? TUNING.bufferMs : Math.max(0, actor.buffer - ms);
   actor.coyote = actor.grounded ? TUNING.coyoteMs : Math.max(0, actor.coyote - ms);
   actor.landing = Math.max(0, actor.landing - dt * 5);
   const target = direction * (rolling?TUNING.rollSpeed:TUNING.speed);
   const reversing=direction!==0&&actor.vx*direction<0;
-  const amount = (direction ? reversing?TUNING.turnAcceleration:TUNING.acceleration : TUNING.friction) * dt;
+  const amount = (direction ? reversing?(actor.grounded?TUNING.turnAcceleration:TUNING.airTurnAcceleration):(actor.grounded?TUNING.acceleration:TUNING.airAcceleration) : actor.grounded?TUNING.friction:TUNING.airFriction) * dt;
   actor.vx = rolling?target:actor.vx+Math.sign(target-actor.vx)*Math.min(Math.abs(target-actor.vx),amount);
   if (direction) actor.facing = direction;
-  if (actor.buffer > 0 && actor.coyote > 0) {
+  // A landing buffered on the previous tick must also work on a short released tap.
+  const launched=actor.buffer > 0 && actor.coyote > 0;
+  if (launched) {
     actor.vy = -TUNING.jumpSpeed; actor.buffer = 0; actor.coyote = 0; actor.grounded = false;
   }
-  const support=environment?.platforms.find(p=>actor.grounded&&Math.abs(actor.y-p.previousY)<3&&actor.x+22>p.x-p.dx&&actor.x-22<p.x-p.dx+p.width);
-  if(support){actor.x+=support.dx;actor.y+=support.dy;}
+  if(!jumpHeld&&!launched&&actor.vy < -TUNING.jumpCutSpeed)actor.vy=-TUNING.jumpCutSpeed;
+  const support=environment?.platforms.find(p=>actor.grounded&&Math.abs(actor.y-surfaceHeight(p,actor.x,true))<3&&actor.x+22>p.x-p.dx&&actor.x-22<p.x-p.dx+p.width);
+  if(support){actor.x+=support.dx;actor.y=surfaceHeight(support,actor.x);}
   const oldY = actor.y;
   const wasGrounded = actor.grounded;
   actor.vy += TUNING.gravity * (actor.vy>0?TUNING.fallGravity:1) * dt;
@@ -51,10 +55,11 @@ export function moveActor(actor: Actor, world: WorldState, dt: number, direction
     { x: 0, y: TUNING.floor, width: STAGE.gap.left },
     { x: STAGE.gap.right, y: TUNING.floor, width: TUNING.worldWidth - STAGE.gap.right }, ...STAGE.platforms,
   ];
-  if(environment)surfaces.push(...environment.platforms);
+  if(environment)surfaces.push(...environment.platforms.map(p=>({...p,y:surfaceHeight(p,actor.x)})));
   if (world.bridge === 'SOLVED') surfaces.push({ x: STAGE.gap.left, y: TUNING.floor, width: STAGE.bridge.width });
   if (actor.vy >= 0) {
-    for (const surface of surfaces.sort((a,b) => a.y - b.y)) {
+    if(support&&actor.x+TUNING.bodyWidth/2>support.x&&actor.x-TUNING.bodyWidth/2<support.x+support.width){actor.y=surfaceHeight(support,actor.x);actor.vy=0;actor.grounded=true;}
+    for (const surface of (actor.grounded?[]:surfaces).sort((a,b) => a.y - b.y)) {
       if (actor.x + TUNING.bodyWidth / 2 > surface.x && actor.x - TUNING.bodyWidth / 2 < surface.x + surface.width && oldY <= surface.y + 1 && actor.y >= surface.y) {
         actor.y = surface.y; actor.vy = 0; actor.grounded = true;
         if (!wasGrounded) actor.landing = 1;

@@ -170,3 +170,8 @@ WITCH_TEST_URL=http://127.0.0.1:4173/web-hub npm run test:witch
 - combatModel의 stagger/knock/deathAge와 warning 이벤트, CombatStage의 준비 표시/접힘 퇴장은 모든 몬스터에 공통이다. damagePlayer는 적/함정의 무적·구르기 판정을 공유한다.
 - 함정 카테고리3, 사물31. 그림 변경 시 witch:export-props, 신규 검증 test:witch-living. 새 PNG2점의 실제 프롬프트는 idle-image-prompts.json.
 - 완료 기록/실행 결과는 WORKLOG.md의 최신 항목을 참고한다. 낮은 우선순위였던 조종사 실수와 객석 상황 반응은 이번 범위에 넣지 않았다.
+
+
+## 최신 이어받기: 기존 요소 품질 개선
+
+게임 README의 품질 개선14항목 표를 확인한다. StageCamera.ts는 카메라 선행/세로 데드존, renderBudget.ts는 원본 PNG를 보존한 Phaser 렌더면 크기 제한과180프레임 P95이다. model.moveActor의8번째 jumpHeld는 실제 Space hold, 기본값 true는 기존 순수 시뮬레이션 호환이다. 브라우저 발판 테스트는 Space hold로 높은 점프를 실제 입력한다. surfaceHeight는 발판 이전 기울기/변위를 포함한다. combatState.impacts는 현재 틱의 실제 타격 좌표이며 Scene의45ms hitStop은 입력 큐/모달/재등장 정리를 유지한다. 새 SD3점과 실제 quality-image-prompts.json을 Git으로 함께 받는다. 모든 기존 Witch 테스트와 test:witch-quality를 실행한다. 최종 검증 결과는 WORKLOG를 확인한다.

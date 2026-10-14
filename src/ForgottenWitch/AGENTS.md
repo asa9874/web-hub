@@ -17,3 +17,5 @@
 - Git 작업은 현재 사용자의 지시 범위를 따른다. 원본 커밋 기록을 재작성하거나 force push하지 않는다. main 반영은 PR merge commit으로 진행한다.
 
 - 생동감 요소/함정 변경은 test:witch-living도 확인한다. MovementEnvironment의 이전 플랫폼 높이·변위와 실제 탑승 충돌, 바람 이동, 닫힌 비밀 통로, 휴식 checkpoint를 유지한다. 단순 성공 UI로 대체하지 않는다. 장치·대기·반응 시간은 모달/커튼 중 정지하고, NPC 반응은 멀어지거나 debug 이동할 때 정리한다. 함정 손상은 damagePlayer의 구르기·무적 판정을 공유한다.
+
+- 품질 변경은 test:witch-quality도 검증한다. Space hold의 가변 점프와 짧은 탭을 구별하며 테스트의 높은 발판 점프에는 실제 hold 입력을 쓴다. 원본 PNG를 변형하지 않는 renderBudget과 surfaceHeight의 이전 기울기를 유지한다. 타격 정지의 입력 큐는 모달/재등장 때 비우며 단일 입력을 반복 발사하지 않는다.

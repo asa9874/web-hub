@@ -1,0 +1,20 @@
+[
+  {
+    "file": "witch-walk-pass.png",
+    "ref": "witch-walk.png",
+    "pose": "a passing walking frame, front boot flat directly under her torso, rear boot just lifting, arms and wand relaxed, hair less swept than a long stride. Full body, facing right.",
+    "prompt": "Use case: identity-preserve. Asset type: transparent game puppet animation frame. Edit target: referenced witch-walk.png. Change only the action pose to a passing walking frame, front boot flat directly under her torso, rear boot just lifting, arms and wand relaxed, hair less swept than a long stride. Full body, facing right. Preserve EXACT same deadpan gray-violet eyes, black long hair, large plum pointed hat and lavender ribbon with bow/star charm, plum dress, cream cuffs, boots and wooden star wand. Preserve existing hand-cut thick tan cardboard perimeter, worn colored-pencil/crayon finish, subdued colors, 3-head SD proportions, head and hat scale. One complete isolated cardboard cutout with margin. No stick (programmatic support), no floor, no text, no scene, no cast shadow or halo, genuinely transparent background. Keep camera front-three-quarter and original rendering quality. No costume changes, no noisy speckle, no glossy vector or 3D."
+  },
+  {
+    "file": "witch-apex.png",
+    "ref": "witch-jump.png",
+    "pose": "a brief weightless jump apex, knees slightly tucked, boots underneath, free hand balances, hair and cape gently lifted, wand angled forward. Full body, facing right.",
+    "prompt": "Use case: identity-preserve. Asset type: transparent game puppet animation frame. Edit target: referenced witch-jump.png. Change only the action pose to a brief weightless jump apex, knees slightly tucked, boots underneath, free hand balances, hair and cape gently lifted, wand angled forward. Full body, facing right. Preserve EXACT same deadpan gray-violet eyes, black long hair, large plum pointed hat and lavender ribbon with bow/star charm, plum dress, cream cuffs, boots and wooden star wand. Preserve existing hand-cut thick tan cardboard perimeter, worn colored-pencil/crayon finish, subdued colors, 3-head SD proportions, head and hat scale. One complete isolated cardboard cutout with margin. No stick (programmatic support), no floor, no text, no scene, no cast shadow or halo, genuinely transparent background. Keep camera front-three-quarter and original rendering quality. No costume changes, no noisy speckle, no glossy vector or 3D."
+  },
+  {
+    "file": "witch-land.png",
+    "ref": "witch-walk.png",
+    "pose": "a soft landing and roll recovery frame, both boots planted underneath her, knees bent slightly, torso lowered a little, free hand extends slightly for balance, wand held close. Full body, facing right.",
+    "prompt": "Use case: identity-preserve. Asset type: transparent game puppet animation frame. Edit target: referenced witch-walk.png. Change only the action pose to a soft landing and roll recovery frame, both boots planted underneath her, knees bent slightly, torso lowered a little, free hand extends slightly for balance, wand held close. Full body, facing right. Preserve EXACT same deadpan gray-violet eyes, black long hair, large plum pointed hat and lavender ribbon with bow/star charm, plum dress, cream cuffs, boots and wooden star wand. Preserve existing hand-cut thick tan cardboard perimeter, worn colored-pencil/crayon finish, subdued colors, 3-head SD proportions, head and hat scale. One complete isolated cardboard cutout with margin. No stick (programmatic support), no floor, no text, no scene, no cast shadow or halo, genuinely transparent background. Keep camera front-three-quarter and original rendering quality. No costume changes, no noisy speckle, no glossy vector or 3D."
+  }
+]

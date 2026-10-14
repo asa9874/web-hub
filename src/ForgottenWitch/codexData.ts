@@ -28,3 +28,5 @@ for(const entry of codexEntries){const lore=MONSTER_NOTES[entry.id];if(lore){ent
 
 codexEntries.find(e=>e.id==='witch')!.images.push({file:'witch-idle-hat.png',label:'대기 · 모자 고치기'},{file:'witch-idle-wand.png',label:'대기 · 지팡이 정리'});
 codexEntries.push(...TRAPS.map(t=>({id:`trap-${t.id}`,category:'함정' as const,name:t.name,subtitle:'실험실 무대 장치 · 임시 설정',images:[{file:`objects/${t.texture}.png`,label:'실제 무대 소품'}],description:t.description,traits:[t.counter,'테스트 → 생동감·함정 실험실에서 체험','종이 이빨/달은 실제 라이프 손상, 판넬은 실제 지형 변화','구르기 무적과 피격 후 무적 적용'],note:t.note})));
+
+codexEntries.find(e=>e.id==='witch')!.images.push({file:'witch-walk-pass.png',label:'걷기 · 발 교차'},{file:'witch-apex.png',label:'점프 · 정점'},{file:'witch-land.png',label:'착지 · 구르기 마무리'});

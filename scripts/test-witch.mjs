@@ -110,11 +110,11 @@ try {
  const initialLighting=await state();assert.equal(initialLighting.lighting.glows,13);assert(initialLighting.lighting.shadows>=30);assert(initialLighting.lighting.lamps.every(alpha=>alpha===0));
  await page.keyboard.down('d');await waitState('s.pose.startsWith("witch-walk")');await page.waitForTimeout(100);await checkRig();await page.screenshot({path:fileURLToPath(new URL('witch-walk.png',output))});await page.keyboard.up('d');await waitState('s.pose === "witch-puppet"');
  await page.keyboard.down('a');await waitState('s.pose.startsWith("witch-walk")');await checkRig();await page.keyboard.up('a');await waitState('s.pose === "witch-puppet"');
- await runTo(250);await page.keyboard.press('Space');await waitState('s.pose === "witch-jump" && s.y < 540');
- const jumpRod=await checkRig();assert(jumpRod.start.y<jumpRod.actorY-25,'Jump support extends from the body, not a detached fixed-length bar');await page.screenshot({path:fileURLToPath(new URL('witch-jump.png',output))});
+ await runTo(250);await page.keyboard.down('Space');await waitState('s.pose === "witch-jump" && s.y < 540');
+ await page.keyboard.up('Space');const jumpRod=await checkRig();assert(jumpRod.start.y<jumpRod.actorY-25,'Jump support extends from the body, not a detached fixed-length bar');await page.screenshot({path:fileURLToPath(new URL('witch-jump.png',output))});
  await waitState('s.grounded');
- await runTo(470);await page.keyboard.press('Space');await waitState('!s.grounded');await waitState('s.grounded && s.y === 515');
- await runTo(890);await page.keyboard.down('d');await page.keyboard.press('Space');await waitState('s.x > 1120');await page.keyboard.up('d');await page.waitForTimeout(300);
+ await runTo(470);await page.keyboard.down('Space');await waitState('!s.grounded');await waitState('s.grounded && s.y === 515');await page.keyboard.up('Space');
+ await runTo(890);await page.keyboard.down('d');await page.keyboard.down('Space');await waitState('s.x > 1120');await page.keyboard.up('Space');await page.keyboard.up('d');await page.waitForTimeout(300);
  await runTo(1220);assert((await state()).camera>600,'Camera follows');
  assert(Math.abs((await state()).lighting.spotlightX-(await state()).x)<2,'Soft spotlight follows the player in world space');
  await checkRig();

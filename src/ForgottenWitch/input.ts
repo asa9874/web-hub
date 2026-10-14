@@ -14,6 +14,7 @@ export class TheaterInput {
     const frame={
       direction:Number(this.keys.D.isDown||this.keys.RIGHT.isDown)-Number(this.keys.A.isDown||this.keys.LEFT.isDown),
       jump:this.edges.has('SPACE'), interact:this.edges.has('E'),
+      jumpHeld:this.keys.SPACE.isDown,
       next:this.edges.has('ENTER'), escape:this.edges.has('ESC'),
       attack:this.edges.has('F')||this.edges.has('J'),
       roll:this.edges.has('SHIFT')||this.edges.has('K'),

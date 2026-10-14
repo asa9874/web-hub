@@ -1,4 +1,6 @@
 import type Phaser from 'phaser3';
+import {surfaceHeight} from './livingModel';
+import type {MovingSurface} from './livingModel';
 import { STAGE, TUNING } from './config';
 
 interface Shadow {owner:Phaser.GameObjects.Image;image:Phaser.GameObjects.Image}
@@ -49,18 +51,19 @@ export class StageLighting {
     const image=this.scene.add.image(owner.x,owner.y,'wt-soft-light').setDepth(owner.depth-.05);
     this.glows.push({owner,image,strength});
   }
-  update(x:number,y:number,grounded:boolean,bridgeSolved:boolean,amount:number) {
+  update(x:number,y:number,grounded:boolean,bridgeSolved:boolean,amount:number,surfaces:readonly MovingSurface[]=[]) {
     this.spotlight.setPosition(x,y-95).setAlpha(.64+amount*.17);
     const platform=STAGE.platforms.find(p=>x>=p.x&&x<=p.x+p.width&&y<=p.y+2);
-    const floor=platform?.y??TUNING.floor;
-    const onSurface=Boolean(platform)||x<STAGE.gap.left||x>STAGE.gap.right||bridgeSolved;
+    const moving=surfaces.filter(p=>x>=p.x&&x<=p.x+p.width&&y<=surfaceHeight(p,x)+3).sort((a,b)=>surfaceHeight(a,x)-surfaceHeight(b,x))[0];
+    const floor=moving?surfaceHeight(moving,x):platform?.y??TUNING.floor;
+    const onSurface=Boolean(platform)||Boolean(moving)||x<STAGE.gap.left||x>STAGE.gap.right||bridgeSolved;
     const height=Math.max(0,floor-y),scale=Math.max(.35,1-height/330);
     this.contact.setPosition(x,floor+8).setScale(86/256*scale,24/80*scale).setAlpha(onSurface?(grounded?.95:Math.max(.15,.7-height/400)):0);
     this.shade.setAlpha(.12*(1-amount*.55));
     this.lamps.forEach((lamp,i)=>lamp.setAlpha(Math.max(0,Math.min(1,(amount-i*.13)/.45))));
     for(const {owner,image} of this.shadows){
       if(image.texture.key!==owner.texture.key)image.setTexture(owner.texture.key);
-      image.setOrigin(owner.originX,owner.originY).setPosition(owner.x+9,owner.y+7).setScale(owner.scaleX,owner.scaleY).setRotation(owner.rotation).setFlip(owner.flipX,owner.flipY).setScrollFactor(owner.scrollFactorX,owner.scrollFactorY).setVisible(owner.visible).setAlpha(owner.alpha*Number(image.getData('shadowStrength')));
+      image.setOrigin(owner.originX,owner.originY).setPosition(owner.x+9,owner.y+7).setScale(owner.scaleX,owner.scaleY).setRotation(owner.rotation).setFlip(owner.flipX,owner.flipY).setScrollFactor(owner.scrollFactorX,owner.scrollFactorY).setDepth(owner.depth-.2).setVisible(owner.visible).setAlpha(owner.alpha*Number(image.getData('shadowStrength')));
     }
     for(const {owner,image,strength} of this.glows){
       const point=owner.getCenter();image.setPosition(point.x,point.y).setScrollFactor(owner.scrollFactorX,owner.scrollFactorY).setDisplaySize(owner.displayWidth*2.4,owner.displayHeight*2.4).setAlpha(strength*(.7+amount*.3));

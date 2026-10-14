@@ -4,6 +4,8 @@ function random(seed:number) { let n=seed; return () => { n=(n*1664525+101390422
 function grain(c:CanvasRenderingContext2D,w:number,h:number,seed:number) {
   const rand=random(seed);
   c.save(); c.globalCompositeOperation='source-atop';
+  // Broad broken crayon rubs plus fine fibres, masked to the actual cutout.
+  for(let i=0;i<w*h/900;i++){const x=rand()*w,y=rand()*h;c.strokeStyle=i%2?'rgba(91,64,66,.09)':'rgba(255,248,222,.20)';c.lineWidth=2+rand()*3;c.beginPath();c.moveTo(x,y);c.lineTo(x+12+rand()*22,y-5-rand()*9);c.stroke();}
   for(let i=0;i<w*h/55;i++) {
     const x=rand()*w,y=rand()*h;
     c.strokeStyle=i%3 ? 'rgba(91,64,66,.12)' : 'rgba(255,248,222,.30)';
@@ -13,8 +15,9 @@ function grain(c:CanvasRenderingContext2D,w:number,h:number,seed:number) {
 }
 function cutout(c:CanvasRenderingContext2D,points:number[][],color:string) {
   c.beginPath();points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.closePath();
-  c.lineJoin='round'; c.strokeStyle='#b99170';c.lineWidth=10;c.stroke();
-  c.fillStyle=color;c.fill();c.strokeStyle='#edd2a8';c.lineWidth=3;c.stroke();
+  c.lineJoin='round'; c.strokeStyle='#977254';c.lineWidth=13;c.stroke();c.strokeStyle='#c6a079';c.lineWidth=10;c.stroke();
+  c.fillStyle=color;c.fill();c.strokeStyle='#e8cda7';c.lineWidth=3;c.stroke();
+  c.strokeStyle='rgba(74,50,64,.22)';c.lineWidth=1;c.stroke();
 }
 export function createPaperTextures(scene:Phaser.Scene) {
   function texture(name:string,w:number,h:number,draw:(c:CanvasRenderingContext2D)=>void,seed:number) {

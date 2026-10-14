@@ -153,3 +153,8 @@ built-in image_gen으로 `witch-walk.png` / `witch-jump.png`를 각각 편집 �
 
 - witch-idle-hat.png / witch-idle-wand.png: built-in image_gen 편집2점. 기존 witch-puppet.png의 얼굴/복장/SD 골판지 스타일을 참조했다. 생성 PNG 알파를 유지한 채 저장소로 복사했고 원본은 변경하지 않았다. 실제 제출 프롬프트는 src/ForgottenWitch/codex/idle-image-prompts.json.
 - objects/paper-grass, paper-crate, paper-sign, paper-bell, paper-mill, paper-rotor, paper-lamp, paper-bench, paper-teeth.png: paper.ts의 실제 Canvas·종이 테두리·고정 seed 질감으로 작성/추출한9점. AI 생성 그림이 아니다. 풍차 본체와 날개를 분리해 실제 회전한다. 추출 명령은 npm run witch:export-props. 배경을 한 장으로 합성하지 않으며 모두 독립 소품이다.
+
+
+## 기존 동작 품질 — 2026-10-14
+
+witch-walk-pass.png / witch-apex.png / witch-land.png는 built-in image_gen으로 witch-walk.png 또는 witch-jump.png를 편집 참고해 생성한3개 투명 SD 인형. 원본 생성 alpha 그대로 복사했고 기존 파일은 보존했다. 실제 제출 문자열은 src/ForgottenWitch/codex/quality-image-prompts.json. 런타임 연결점/높이는 poses.ts. 설정집 마녀의 다중 이미지에 등록했다. objects/의 절차적 PNG는 paper.ts의 개선된 단면/크레용 재료로 다시 추출했다. renderBudget은 브라우저 렌더면만 줄이며 이 저장소의 원본 PNG나 실제 생성 그림 파일을 편집하지 않는다.

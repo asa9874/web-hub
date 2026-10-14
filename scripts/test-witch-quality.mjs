@@ -1,0 +1,47 @@
+import assert from 'node:assert/strict';
+import {build} from 'esbuild';
+import {mkdir} from 'node:fs/promises';
+import {chromium} from 'playwright';
+await mkdir('.build-projects',{recursive:true});
+await build({stdin:{contents:"export * from './src/ForgottenWitch/model';export * from './src/ForgottenWitch/livingModel';export * from './src/ForgottenWitch/combatModel';export * from './src/ForgottenWitch/StageCamera';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:'.build-projects/witch-quality-model.mjs'});
+const {createActor,createWorld,moveActor,createLiving,surfaceHeight,reaction,createCombat,updateCombat,attackTell,attackRays,StageCamera}=await import('../.build-projects/witch-quality-model.mjs');
+function jumpHeight(held){const a=createActor(),w=createWorld();let low=570;for(let i=0;i<100;i++){moveActor(a,w,1/120,0,i===0,false,undefined,held||i===0);low=Math.min(low,a.y);}return 570-low;}
+assert(jumpHeight(true)>100);assert(jumpHeight(false)<55);assert(jumpHeight(true)>jumpHeight(false)*2,'Hold duration controls useful jump height');
+const p={x:8200,y:490,width:160,previousY:480,dx:4,dy:10,tilt:.055,previousTilt:.02},a=createActor();a.x=8250;a.y=surfaceHeight(p,a.x,true);a.grounded=true;
+moveActor(a,createWorld(),1/120,1,false,false,{wind:0,platforms:[p]});assert(a.grounded);assert(Math.abs(a.y-surfaceHeight(p,a.x))<.001,'Slope carries feet including tilt changes');
+moveActor(a,createWorld(),1/120,1,true,false,{wind:0,platforms:[{...p,previousY:p.y,previousTilt:p.tilt,dx:0,dy:0}]});assert(!a.grounded&&a.vy<0,'Jump leaves moving surface');
+const r=createLiving();reaction(r,'greet','노엘');assert(r.reaction.text.includes('발판'));reaction(r,'jump','노엘');const old=r.reaction;reaction(r,'jump','노엘');assert.equal(r.reaction,old,'Repeated same reaction is debounced');
+const cam=new StageCamera(),c=createActor();c.vx=405;cam.follow(c,0,0,.1);const lead=cam.lead;c.vx=-405;cam.follow(c,0,0,1/60);assert(Math.abs(cam.lead-lead)<6,'Direction lead smooths reversal');c.x=10990;for(let i=0;i<300;i++)assert(cam.follow(c,9720,0,1/60).x<=9720);
+c.y=350;const highCamera=cam.follow(c,9720,0,.1);assert(highCamera.y<0&&highCamera.y>=-28,'Vertical dead zone follows only high jumps');c.y=570;assert(cam.follow(c,9720,highCamera.y,.1).y>highCamera.y,'Return is eased');
+const fight=createCombat('ticket');const tell=attackTell({...fight.monsters[0],action:'charge',facing:1});assert(tell.end>tell.start);const f=createActor();f.x=5200;for(let i=0;i<120;i++)updateCombat(fight,f,1/120,i===0);assert(fight.monsters[0].hp<fight.monsters[0].maxHp);
+const boss=createCombat('conductor').monsters[0];boss.hp=10;boss.action='fan';assert.equal(attackRays(boss).length,5);boss.action='wave';const rays=attackRays(boss);assert(rays.some(r=>r.dx<0)&&rays.some(r=>r.dx>0),'Boss wave previews both directions');
+console.log('Variable jump, tilted platform feet/carry/jump, reaction cooldown, camera reversal/bounds and combat contracts passed.');
+if(process.argv.includes('--logic-only'))process.exit(0);
+const browser=await chromium.launch({headless:true});
+try{
+ const page=await browser.newPage({viewport:{width:1440,height:940}}),base=process.env.WITCH_TEST_URL||'http://127.0.0.1:4174/web-hub',errors=[],missing=[];
+ page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.url().startsWith(base)&&r.status()>=400)missing.push(r.url());});
+ await page.goto(base+'/games/forgotten-witch/',{waitUntil:'networkidle'});
+ const settle=()=>page.waitForFunction(()=>!document.querySelector('.wt-loading,.wt-scene-transition,.wt-motion-panel.is-leaving'));
+ await page.getByRole('button',{name:'테스트',exact:true}).click();await settle();
+ const canvas=page.locator('.wt-game canvas'),read=()=>canvas.evaluate(c=>JSON.parse(c.dataset.theater));
+ const wait=async expr=>page.waitForFunction(expr=>{const c=document.querySelector('.wt-game canvas'),s=JSON.parse(c.dataset.theater);return Function('s','return '+expr)(s);},expr);
+ await page.evaluate(()=>{window.__qualityFrames=[];const record=()=>{const c=document.querySelector('.wt-game canvas');if(c?.dataset.theater){const s=JSON.parse(c.dataset.theater);window.__qualityFrames.push({x:s.x,y:s.y,pose:s.pose,clock:s.combat.clock,stop:s.quality.hitStop});if(window.__qualityFrames.length>1000)window.__qualityFrames.shift();}requestAnimationFrame(record);};record();});
+ const jump=async hold=>{await page.keyboard.down('Space');await page.waitForTimeout(hold);await page.keyboard.up('Space');await wait('s.grounded');await page.waitForTimeout(150);};
+ await jump(20);const short=await page.evaluate(()=>Math.min(...window.__qualityFrames.map(f=>f.y)));await page.evaluate(()=>window.__qualityFrames=[]);await jump(330);const long=await page.evaluate(()=>Math.min(...window.__qualityFrames.map(f=>f.y)));assert(long<short-40,'Real held input makes a higher jump');
+ const poses=await page.evaluate(()=>window.__qualityFrames.map(f=>f.pose));assert(poses.includes('witch-apex')&&poses.includes('witch-land'),'Apex and landing assets actually render');
+ await page.keyboard.down('d');await wait('s.x>330');await page.keyboard.up('d');await wait('s.vx===0');assert((await page.evaluate(()=>window.__qualityFrames.map(f=>f.pose))).includes('witch-walk-pass'));
+ await page.keyboard.press('Shift');await wait('s.combat.rolling>0');await wait('s.combat.rolling===0');assert((await page.evaluate(()=>window.__qualityFrames.map(f=>f.pose))).includes('witch-land'));
+ const go=async label=>{await page.getByRole('button',{name:'테스트 위치',exact:true}).click();await page.getByRole('button',{name:label,exact:true}).click();await settle();};
+ await go('전투 · 라이프');await page.keyboard.press('f');await wait('s.combat.monsters[0].hp<3');await page.waitForTimeout(200);
+ const frames=await page.evaluate(()=>window.__qualityFrames),hit=frames.findIndex(f=>f.stop>0);assert(hit>=0,'Hit stop is observed by browser frames');assert(frames.slice(hit+1,hit+3).some(f=>f.clock===frames[hit].clock),'Combat clock freezes at impact');assert((await read()).environment.emitted.hit>0,'Impact fragments emitted at actual target');
+ await page.getByRole('button',{name:'테스트 위치',exact:true}).click();assert((await page.locator('.wt-quality-readout').innerText()).includes('P95'));
+ await page.getByRole('button',{name:'체크포인트',exact:true}).click();await settle();await page.keyboard.press('e');await page.getByText('숨 고르기 · 재등장 지점',{exact:true}).waitFor();await page.getByText('위치 기록 완료 · 재등장 지점',{exact:true}).waitFor();await wait('!s.motionLocked');
+ await go('조명 퍼즐');await page.keyboard.press('e');await page.getByRole('dialog',{name:'숲에 빛을 돌려주는 순서'}).waitFor();
+ const tile=page.locator('[data-symbol=moon]'),slot=page.locator('[data-light-slot="0"]'),tb=await tile.boundingBox(),sb=await slot.boundingBox();
+ await page.mouse.move(tb.x+10,tb.y+20);await page.mouse.down();await page.mouse.move(sb.x+sb.width/2,sb.y+sb.height/2,{steps:12});assert.equal(await page.locator('.is-drop-target').count(),1);
+ const gb=await page.locator('.wt-drag-ghost').boundingBox();assert(gb.x+gb.width/2>sb.x+sb.width/2+5,'Drag ghost retains off-center grab offset');await page.mouse.up();assert.equal(await slot.locator('[data-symbol=moon]').count(),1);
+ await page.screenshot({path:'.build-projects/witch-quality-puzzle.png'});await page.keyboard.press('Escape');await settle();
+ const s=await read();assert(s.quality.textures.afterPixels<s.quality.textures.beforePixels*.3,'Stage GPU render surfaces consume less than 30% of original pixel area');assert(s.quality.frames.samples>0);assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);
+ console.log(JSON.stringify({textures:s.quality.textures,frames:s.quality.frames}));console.log('Real short/long jump, three new poses, roll exit, hit-stop clock, particles, rest phases, grip-offset/drop hint and render-budget checks passed.');
+}finally{await browser.close();}
