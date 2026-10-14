@@ -158,3 +158,8 @@ built-in image_gen으로 `witch-walk.png` / `witch-jump.png`를 각각 편집 �
 ## 기존 동작 품질 — 2026-10-14
 
 witch-walk-pass.png / witch-apex.png / witch-land.png는 built-in image_gen으로 witch-walk.png 또는 witch-jump.png를 편집 참고해 생성한3개 투명 SD 인형. 원본 생성 alpha 그대로 복사했고 기존 파일은 보존했다. 실제 제출 문자열은 src/ForgottenWitch/codex/quality-image-prompts.json. 런타임 연결점/높이는 poses.ts. 설정집 마녀의 다중 이미지에 등록했다. objects/의 절차적 PNG는 paper.ts의 개선된 단면/크레용 재료로 다시 추출했다. renderBudget은 브라우저 렌더면만 줄이며 이 저장소의 원본 PNG나 실제 생성 그림 파일을 편집하지 않는다.
+
+
+## 전신 쉴드 / 순간이동 — 2026-10-14
+
+새 AI 이미지는 생성하지 않았다. objects/witch-shield.png는 DefenseStage.ts가 실제 사용하는 Canvas 텍스처를 witch:export-props로 추출한 원본이다. 런타임은 같은 코드 재료에 충격 변형과 뒤쪽 StageRig 막대를 적용한다. 순간이동 출발/도착 고리와 종이 조각은 위치와 시간에 따른 코드 렌더링이며 고정 배경 이미지가 아니다. 설정집 에셋에 실제 쉴드/수치/마녀의 노트를 등록했다. 기존 구르기/걷기 후보 PNG는 아카이브로 보존한다.

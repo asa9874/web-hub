@@ -30,8 +30,8 @@ try{
  const jump=async hold=>{await page.keyboard.down('Space');if(hold>100)await wait('s.vy>=0&&!s.grounded');else await page.waitForTimeout(hold);await page.keyboard.up('Space');await wait('s.grounded');await page.waitForTimeout(150);};
  await jump(20);const short=await page.evaluate(()=>Math.min(...window.__qualityFrames.map(f=>f.y)));await page.evaluate(()=>window.__qualityFrames=[]);await jump(330);const long=await page.evaluate(()=>Math.min(...window.__qualityFrames.map(f=>f.y)));assert(long<short-40,'Real held input makes a higher jump');
  const poses=await page.evaluate(()=>window.__qualityFrames.map(f=>f.pose));assert(poses.includes('witch-apex')&&poses.includes('witch-land'),'Apex and landing assets actually render');
- await page.keyboard.down('d');await wait('s.x>330');await page.keyboard.up('d');await wait('s.vx===0');assert((await page.evaluate(()=>window.__qualityFrames.map(f=>f.pose))).includes('witch-walk-pass'));
- await page.keyboard.press('Shift');await wait('s.combat.rolling>0');await wait('s.combat.rolling===0');assert((await page.evaluate(()=>window.__qualityFrames.map(f=>f.pose))).includes('witch-land'));
+ await page.keyboard.down('d');await wait('s.x>330');await page.keyboard.up('d');await wait('s.vx===0');assert(!(await page.evaluate(()=>window.__qualityFrames.map(f=>f.pose))).includes('witch-walk-pass'));
+ await page.keyboard.press('Shift');await wait('s.combat.blinkTime>0');await wait('s.combat.blinkTime===0');assert((await read()).combat.blinkCooldown>0);
  const go=async label=>{await page.getByRole('button',{name:'테스트 위치',exact:true}).click();await page.getByRole('button',{name:label,exact:true}).click();await settle();};
  await go('전투 · 라이프');await page.keyboard.press('f');await wait('s.combat.monsters[0].hp<3');await page.waitForTimeout(200);
  const frames=await page.evaluate(()=>window.__qualityFrames),hit=frames.findIndex(f=>f.stop>0);assert(hit>=0,'Hit stop is observed by browser frames');assert(frames.slice(hit+1,hit+3).some(f=>f.clock===frames[hit].clock),'Combat clock freezes at impact');assert((await read()).environment.emitted.hit>0,'Impact fragments emitted at actual target');

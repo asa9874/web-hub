@@ -29,7 +29,7 @@ export class LivingStage {
     this.notes.setText('접힌 대본 한 장\n“누군가는 마지막 인사를 기다린다.”');
     this.lampGlow=scene.add.image(7550,480,'wt-soft-light').setDisplaySize(250,240).setDepth(7.7).setTint(0xffdfaf).setAlpha(0);
     this.marks=scene.add.graphics().setDepth(7.8);
-    for(const [x,text] of [[6700,'소품을 건드려 보세요'],[7370,'F / J · 종 → 풍차 → 등불'],[7990,'종이 바람 · E 방향 전환'],[8560,'무게를 느끼는 판넬'],[8960,'E · 분장대에서 쉬기'],[9520,'점프 / 구르기로 함정 회피'],[10020,'커튼 틈의 작은 무대']] as const)this.labels.push(scene.add.text(x,340,text,{fontFamily:'WT Readable',fontSize:'21px',color:'#f3e5ce',backgroundColor:'#594453',padding:{x:12,y:8}}).setOrigin(.5).setDepth(7));
+    for(const [x,text] of [[6700,'소품을 건드려 보세요'],[7370,'F / J · 종 → 풍차 → 등불'],[7990,'종이 바람 · E 방향 전환'],[8560,'무게를 느끼는 판넬'],[8960,'E · 분장대에서 쉬기'],[9520,'점프 / 순간이동 / Q 방어'],[10020,'커튼 틈의 작은 무대']] as const)this.labels.push(scene.add.text(x,340,text,{fontFamily:'WT Readable',fontSize:'21px',color:'#f3e5ce',backgroundColor:'#594453',padding:{x:12,y:8}}).setOrigin(.5).setDepth(7));
     for(let i=0;i<12;i++){const tree=prop(6400+i*380,570,'tree-plum',220,350);tree.setDepth(2).setTint(0x74677e).setAlpha(.45);}
   }
   update(state:LivingState,actor:Actor,dt:number,active:boolean){

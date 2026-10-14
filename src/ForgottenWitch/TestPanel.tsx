@@ -16,7 +16,7 @@ export default function TestPanel({quality,monsterId,npcId,onArea,onMonster,onNp
     <section><label>몬스터 전투<select aria-label="테스트할 몬스터" value={monster} onChange={e=>setMonster(e.target.value)}><optgroup label="일반 몬스터 · 20종">{MONSTERS.map(m=><option key={m.id} value={m.id}>{m.name}</option>)}</optgroup><optgroup label="보스 후보">{BOSSES.map(b=><option key={b.id} value={b.id}>{b.name} · BOSS</option>)}</optgroup></select></label><p>{PATTERN_LABELS[monsterById(monster).pattern]} · HP {monsterById(monster).hp}</p><button onClick={()=>onMonster(monster)}>선택 몬스터 소환</button></section>
     <section><label>NPC와 대화<select aria-label="소환할 NPC" value={npc} onChange={e=>setNpc(e.target.value as NpcId)}><option value="flora">플로라</option>{NPCS.map(n=><option key={n.id} value={n.id}>{n.name}</option>)}</select></label><p>골판지 인형 · 다섯 감정 · 고유 말소리</p><button onClick={()=>onNpc(npc)}>선택 NPC 소환</button></section>
     <section className="wt-living-tests"><strong>생동감 · 함정 실험실</strong><div>{LIVING_TESTS.map(t=><button key={t.id} onClick={()=>onLiving(t.id)}>{t.label}</button>)}</div></section>
-    <section className="wt-quality-readout"><strong>조작감 확인</strong><p>Space 짧게: 낮은 점프 · 길게: 높은 점프<br/>이동 발판: 기울어진 끝에서 점프 / 구르기<br/>전투: 타격 순간 멈춤 · 방향과 범위 예고</p>{quality&&<small>직전 180프레임 P95 {quality.p95Ms}ms · 무대 이미지 RGBA 약 {quality.textureMiB}MiB<br/>기기별 실제 측정치이며 전체 브라우저 메모리는 포함하지 않습니다.</small>}</section>
-    <small>F / J 마법 · Shift / K 구르기 · Space 점프</small>
+    <section className="wt-quality-readout"><strong>조작감 확인</strong><p>Space 짧게: 낮은 점프 · 길게: 높은 점프<br/>이동 발판: 기울어진 끝에서 점프 / 순간이동<br/>전투: 타격 순간 멈춤 · 방향과 범위 예고</p>{quality&&<small>직전 180프레임 P95 {quality.p95Ms}ms · 무대 이미지 RGBA 약 {quality.textureMiB}MiB<br/>기기별 실제 측정치이며 전체 브라우저 메모리는 포함하지 않습니다.</small>}</section>
+    <small>F / J 마법 · Shift / K 순간이동 · Q / L 방어 · Space 점프</small>
   </nav>;
 }

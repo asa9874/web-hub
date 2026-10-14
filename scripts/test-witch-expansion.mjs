@@ -4,7 +4,7 @@ import {chromium} from 'playwright';
 import {mkdir,readFile,access} from 'node:fs/promises';
 await mkdir('.build-projects',{recursive:true});
 await build({stdin:{contents:"export * from './src/ForgottenWitch/castData';export * from './src/ForgottenWitch/combatModel';export * from './src/ForgottenWitch/model';export * from './src/ForgottenWitch/codexData';export * from './src/ForgottenWitch/dialogueModel';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:'.build-projects/witch-expansion-model.mjs'});
-const {MONSTERS,BOSS,NPCS,createCombat,createActor,createWorld,moveActor,beginRoll,updateCombat,codexEntries,SPEAKERS,conversationLabel}=await import('../.build-projects/witch-expansion-model.mjs');
+const {MONSTERS,BOSS,NPCS,createCombat,createActor,createWorld,moveActor,translateActor,beginBlink,updateCombat,codexEntries,SPEAKERS,conversationLabel}=await import('../.build-projects/witch-expansion-model.mjs');
 assert.equal(MONSTERS.length,20);assert.equal(NPCS.length,6);assert.equal(new Set(Object.values(SPEAKERS).map(s=>s.frequency)).size,8);
 for(const d of [...MONSTERS,BOSS]){
   const state=createCombat(d.id),actor=createActor();actor.x=state.monsters[0].x-((d.pattern==='clap'||d.pattern==='guard')?50:240);state.invulnerable=100;
@@ -19,10 +19,10 @@ for(const d of [...MONSTERS,BOSS]){
 let fight=createCombat('acorn'),actor=createActor();actor.x=5200;const guard=fight.monsters[0];
 fight.missiles.push({id:0,x:guard.x-20,y:505,baseY:505,direction:1,age:0});updateCombat(fight,actor,1/120,false);assert.equal(guard.hp,5,'Guard blocks front');
 fight.missiles.push({id:1,x:guard.x+20,y:505,baseY:505,direction:-1,age:0});updateCombat(fight,actor,1/120,false);assert.equal(guard.hp,4,'Guard rear is vulnerable');
-fight=createCombat();actor.x=5500;assert(beginRoll(fight,actor));assert(!beginRoll(fight,actor),'Roll cooldown prevents retrigger');fight.monsters[0].phase='windup';fight.monsters[0].timer=.01;updateCombat(fight,actor,.02,false);assert.equal(fight.lives,3,'Roll rejects real melee hit');assert.equal(fight.casting,0);
-actor=createActor();actor.x=4075;const world=createWorld();for(let i=0;i<10;i++)moveActor(actor,world,1/120,1,false,true);assert.equal(actor.x,4080,'Roll retains closed-door collision');
+fight=createCombat();actor.x=5500;assert(beginBlink(fight,actor));assert(!beginBlink(fight,actor),'Blink cooldown prevents retrigger');fight.monsters[0].phase='windup';fight.monsters[0].timer=.01;updateCombat(fight,actor,.02,false);assert.equal(fight.lives,3,'Blink rejects real melee hit');assert.equal(fight.casting,0);
+actor=createActor();actor.x=4075;const world=createWorld();translateActor(actor,world,230);assert.equal(actor.x,4080,'Blink retains closed-door collision');
 fight=createCombat(BOSS.id);actor=createActor();actor.x=5200;const boss=fight.monsters[0];boss.phase='windup';boss.action='fan';boss.timer=.01;updateCombat(fight,actor,.02,false);assert.equal(fight.hazards.length,3);boss.hp=17;boss.phase='windup';boss.action='fan';boss.timer=.01;fight.hazards=[];updateCombat(fight,actor,.02,false);assert.equal(fight.hazards.length,5,'Boss phase two adds projectiles');
-if(process.argv.includes('--logic-only')){console.log('20 monsters, boss cycle/phase two, guard, roll immunity/collision and 8 voices passed.');process.exit(0);}
+if(process.argv.includes('--logic-only')){console.log('20 monsters, boss cycle/phase two, guard, blink immunity/collision and 8 voices passed.');process.exit(0);}
 for(const entry of codexEntries)for(const image of entry.images)await access(new URL('../public/witch-theater/'+image.file,import.meta.url));
 const dialogue=JSON.parse(await readFile('src/ForgottenWitch/npc-dialogue.json','utf8'));assert(Object.values(dialogue).every(lines=>new Set(lines.map(l=>l.emotion)).size===5));
 const browser=await chromium.launch({headless:true});
@@ -46,9 +46,9 @@ try{
     const s=await state();assert.equal(s.combat.monsters[0].kind,d.id);assert.equal(s.combat.monsters[0].hp,d.hp);
     if(d.id===BOSS.id){const bar=page.getByRole('progressbar',{name:BOSS.name+' 체력'});assert.equal(await bar.getAttribute('aria-valuenow'),'36');await page.keyboard.press('f');await page.waitForFunction(()=>Number(document.querySelector('.wt-boss-health [role=progressbar]')?.getAttribute('aria-valuenow'))<36,null,{timeout:12000});assert(Number(await bar.getAttribute('aria-valuenow'))<36,'Boss bar follows real hit');await page.screenshot({path:'.build-projects/witch-boss.png'});}
   }
-  await open();await clickTravel(page.getByRole('button',{name:'이동 · 점프',exact:true}));const beforeRoll=await state();await page.keyboard.press('Shift');
-  await page.waitForFunction(()=>JSON.parse(document.querySelector('.wt-game canvas').dataset.theater).pose==='witch-roll');
-  assert((await canvas.evaluate(c=>JSON.parse(c.dataset.theaterRig))).some(r=>r.name==='player'&&r.end.y===736));await page.screenshot({path:'.build-projects/witch-roll.png'});await page.waitForFunction(()=>JSON.parse(document.querySelector('.wt-game canvas').dataset.theater).combat.rolling===0);assert((await state()).x-beforeRoll.x>200,'Roll moves rapidly forward');
+  await open();await clickTravel(page.getByRole('button',{name:'이동 · 점프',exact:true}));const beforeBlink=await state();await page.keyboard.press('Shift');
+  await page.waitForFunction(()=>JSON.parse(document.querySelector('.wt-game canvas').dataset.theater).combat.blinkTime>0);
+  assert((await canvas.evaluate(c=>JSON.parse(c.dataset.theaterRig))).some(r=>r.name==='player'&&r.end.y===736));await page.screenshot({path:'.build-projects/witch-roll.png'});await page.waitForFunction(()=>JSON.parse(document.querySelector('.wt-game canvas').dataset.theater).combat.blinkTime===0);assert((await state()).x-beforeBlink.x>200,'Blink moves rapidly forward');
   for(const n of NPCS){
     await open();await page.getByLabel('소환할 NPC').selectOption(n.id);await clickTravel(page.getByRole('button',{name:'선택 NPC 소환'}));await page.keyboard.press('e');
     const box=page.getByRole('dialog',{name:conversationLabel(n.id)});await box.waitFor();await page.getByLabel('대사 출력 속도').press('End');
@@ -63,5 +63,5 @@ try{
     await settle();assert.equal(seen.size,5,n.id+' five emotion examples');const tones=await page.evaluate(start=>window.__tones.slice(start),tonesBefore);assert(tones.some(f=>Math.abs(f-n.frequency)<12),n.id+' unique voice');
   }
   await clickTravel(page.getByRole('link',{name:'← web hub'}));assert.equal(await page.locator('.wt-game canvas').count(),0,'Unmount cleans scene');assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);
-  console.log('Actual-input 21 enemy selections, boss HP, rolling, six NPCs/five expressions/unique voices, codex objects/music and cleanup passed.');
+  console.log('Actual-input 21 enemy selections, boss HP, blinking, six NPCs/five expressions/unique voices, codex objects/music and cleanup passed.');
 }finally{await browser.close();}

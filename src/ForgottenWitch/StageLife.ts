@@ -34,10 +34,10 @@ export class StageLife {
   motion(kind:MotionEffect,x:number,y:number,direction:number,strength=1){
     if(this.motionReduced)return;
     this.emitted[kind]=(this.emitted[kind]??0)+1;
-    const count={step:3,jump:7,land:11,brake:7,roll:8,trail:2,cast:7,hit:10}[kind];
+    const count={step:3,jump:7,land:11,brake:7,cast:7,hit:10}[kind];
     for(let i=0;i<count;i++){
-      const spread=(i-(count-1)/2)/(count/2),magic=kind==='cast'||kind==='hit',life=kind==='trail'?.20:magic?.32:.36+(i%3)*.045;
-      this.flecks.push({x:x+spread*10-(kind==='trail'?direction*30:0),y:y-4,vx:magic?direction*(80+i*12)*strength:kind==='land'?spread*95*strength:-direction*55+spread*65,vy:magic?spread*65:-30-(i%4)*12*strength,life,max:life,color:magic?(i%2?0xb9a3d4:0xffdfae):i%2?0xd6b38c:0xf3e5ce,size:magic?3.5:2.5+(i%3),angle:i*.7,spin:spread*5});
+      const spread=(i-(count-1)/2)/(count/2),magic=kind==='cast'||kind==='hit',life=magic?.32:.36+(i%3)*.045;
+      this.flecks.push({x:x+spread*10,y:y-4,vx:magic?direction*(80+i*12)*strength:kind==='land'?spread*95*strength:-direction*55+spread*65,vy:magic?spread*65:-30-(i%4)*12*strength,life,max:life,color:magic?(i%2?0xb9a3d4:0xffdfae):i%2?0xd6b38c:0xf3e5ce,size:magic?3.5:2.5+(i%3),angle:i*.7,spin:spread*5});
     }
     if(this.flecks.length>90)this.flecks.splice(0,this.flecks.length-90);
   }

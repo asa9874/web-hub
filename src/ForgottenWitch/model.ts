@@ -14,16 +14,17 @@ export interface Actor {
 }
 export const createActor = (): Actor => ({ x: 200, y: TUNING.floor, vx: 0, vy: 0, grounded: true, facing: 1, coyote: 100, buffer: 0, landing: 0 });
 export const createWorld = (): WorldState => ({ bridge: 'IDLE', lights: 'CLOSED', talked: false, visits: 0, checkpoint: 200 });
-export function moveActor(actor: Actor, world: WorldState, dt: number, direction: number, jump: boolean, rolling=false,environment?:MovementEnvironment,jumpHeld=true) {
+export function moveActor(actor: Actor, world: WorldState, dt: number, direction: number, jump: boolean, legacyDash=false,environment?:MovementEnvironment,jumpHeld=true) {
+  void legacyDash; // Retain optional argument position for existing movement environments.
   const ms = dt * 1000;
   actor.buffer = jump ? TUNING.bufferMs : Math.max(0, actor.buffer - ms);
   actor.coyote = actor.grounded ? TUNING.coyoteMs : Math.max(0, actor.coyote - ms);
   actor.landing = Math.max(0, actor.landing - dt * 5);
-  const target = direction * (rolling?TUNING.rollSpeed:TUNING.speed);
+  const target = direction * TUNING.speed;
   const reversing=direction!==0&&actor.vx*direction<0;
   const amount = (direction ? reversing?(actor.grounded?TUNING.turnAcceleration:TUNING.airTurnAcceleration):(actor.grounded?TUNING.acceleration:TUNING.airAcceleration) : actor.grounded?TUNING.friction:TUNING.airFriction) * dt;
-  actor.vx = rolling?target:actor.vx+Math.sign(target-actor.vx)*Math.min(Math.abs(target-actor.vx),amount);
-  if (direction) actor.facing = direction;
+  actor.vx = actor.vx+Math.sign(target-actor.vx)*Math.min(Math.abs(target-actor.vx),amount);
+  if (direction) actor.facing = Math.sign(direction);
   // A landing buffered on the previous tick must also work on a short released tap.
   const launched=actor.buffer > 0 && actor.coyote > 0;
   if (launched) {
@@ -73,3 +74,19 @@ export function moveActor(actor: Actor, world: WorldState, dt: number, direction
 }
 export function bridgeCanSnap(x:number,y:number) { return Math.hypot(x-STAGE.bridge.targetX,y-STAGE.bridge.targetY) <= STAGE.bridge.snap; }
 export function checkLights(slots: readonly (SymbolId | null)[]) { return LIGHT_ORDER.every((id,index) => slots[index] === id); }
+
+// Instant displacement is swept against solid scenery, never through a closed gate.
+export function translateActor(actor:Actor,world:WorldState,distance:number,environment?:MovementEnvironment){
+  const old=actor.x;let next=Math.max(70,Math.min(TUNING.worldWidth-80,old+distance));
+  const barriers=world.lights==='SOLVED'?[]:[{left:STAGE.doorX-240,right:STAGE.doorX+240}];
+  if(environment?.barrier!==undefined)barriers.push({left:environment.barrier,right:environment.barrier+30});
+  const obstacle=STAGE.platforms[2];
+  if(actor.y>obstacle.y+1)barriers.push({left:obstacle.x-TUNING.bodyWidth/2,right:obstacle.x+obstacle.width+TUNING.bodyWidth/2});
+  for(const b of barriers){if(old<=b.left&&next>b.left)next=b.left;else if(old>=b.right&&next<b.right)next=b.right;}
+  actor.x=next;
+  // A blink across the unsolved gap does not invent a bridge collider.
+  if(actor.grounded&&next>STAGE.gap.left&&next<STAGE.gap.right&&world.bridge!=='SOLVED')actor.grounded=false;
+  const support=environment?.platforms.find(p=>Math.abs(actor.y-surfaceHeight(p,old))<3&&old>=p.x-22&&old<=p.x+p.width+22);
+  if(support){if(next>=support.x-22&&next<=support.x+support.width+22)actor.y=surfaceHeight(support,next);else actor.grounded=false;}
+  actor.vx=0;return {from:old,to:next};
+}

@@ -3,7 +3,6 @@ export const TUNING = {
   speed: 405, acceleration: 3600, turnAcceleration: 5600, friction: 4100,
   gravity: 2100, fallGravity: 1.12, jumpSpeed: 690, coyoteMs: 100, bufferMs: 100,
   bodyWidth: 44, bodyHeight: 100, cameraFollow: 7.5,
-  rollSpeed:790,rollDuration:.30,rollCooldown:.75,
   airAcceleration: 2600, airTurnAcceleration: 3400, airFriction: 1800,
   jumpCutSpeed: 300, hitStop: .045, cameraLeadFollow: 4.5,
 } as const;

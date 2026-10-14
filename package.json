@@ -19,7 +19,8 @@
     "test:witch-movement": "node scripts/test-witch-movement.mjs",
     "test:witch-living": "node scripts/test-witch-living.mjs",
     "witch:export-props": "node scripts/export-witch-props.mjs",
-    "test:witch-quality": "node scripts/test-witch-quality.mjs"
+    "test:witch-quality": "node scripts/test-witch-quality.mjs",
+    "test:witch-defense": "node scripts/test-witch-defense.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.17",
