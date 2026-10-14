@@ -5,7 +5,7 @@ import {TRAPS} from './livingData';
 import {MONSTER_NOTES} from './monsterNotes';
 import {ACTING_CAST,ACTING_POSES,ACTING_LABELS,actingFile} from './actingData';
 export const CODEX_CATEGORIES=['등장인물','에셋','몬스터','설정','사물','함정','음악'] as const;
-export interface CodexEntry {id:string;category:(typeof CODEX_CATEGORIES)[number];name:string;subtitle:string;images:{file:string;label:string;frame?:number}[];description:string;traits:string[];note:string;musicPrompt?:string}
+export interface CodexEntry {id:string;category:(typeof CODEX_CATEGORIES)[number];name:string;subtitle:string;images:{file:string;label:string;frame?:number}[];description:string;traits:string[];note:string;musicPrompt?:string;usage?:'applied'|'test-only'|'unused'}
 const expressions=(speaker:string)=>['joy','worry','angry','flustered'].map((emotion,i)=>({file:`expressions/${speaker}-${emotion}.png`,label:['기쁨','걱정','분노','당황'][i]}));
 export const codexEntries:CodexEntry[]=[
   {id:'witch',category:'등장인물',name:'견습 마녀',subtitle:'막이 오르기 전에 온 손님',images:[{file:'witch-knee.png',label:'차분함'},...expressions('witch'),{file:'witch-puppet.png',label:'인형 · 서기'},{file:'witch-walk.png',label:'인형 · 걷기'},{file:'witch-jump.png',label:'인형 · 점프'},{file:'witch-attack.png',label:'인형 · 마법'}],description:'이름을 먼저 말하는 법이 없는 견습 마녀. 고장 난 것을 그냥 지나치지 못하면서도, 자신이 친절하다는 말에는 늘 한마디를 덧붙인다.',traits:['긴 흑발과 회보라색 눈','작은 나무 지팡이로 별 모양 마법을 쓴다','감정은 말보다 눈썹과 말끝에 먼저 나타난다'],note:'내 소개를 누가 이렇게 길게 써 놨어. ……친절하다는 부분은 지워.'},
@@ -44,3 +44,9 @@ codexEntries.push(...([
 ] as const).map(([id,name,subtitle,description,note])=>({id:'chapter-'+id,category:'등장인물' as const,name,subtitle:'Chapter 01 · '+subtitle,images:[0,1,2,3].map(frame=>({file:`chapter/${id}-poses.png`,frame,label:['기본 인형','작업 / 과장된 연기','사건 리액션','기쁨 / 인사'][frame]})),description,traits:['밝은 코미디 판타지','Chapter 01의 실제 퀘스트와 공연에 등장','4동작 프레임 + 코드 기반 바운스/기울기','디자인과 설정은 조정 가능한 단계'],note})));
 
 codexEntries.push(...([['flower','접히는 종이 꽃'],['carrot','먹물 토끼의 당근'],['crown','접은 종이 왕관'],['sword','접은 종이 검'],['chest','종이 보물상자'],['material','종이 재료 묶음'],['kitchen','숲속 주방'],['rain','비 내리는 무대 배경'],['sun','맑은 낮 무대 배경'],['night','밤 무대 배경']] as const).map(([id,name])=>({id:'object-ch-'+id,category:'사물' as const,name,subtitle:'Chapter 01 실제 종이 소품',images:[{file:`objects/ch-${id}.png`,label:'실제 코드 기반 텍스처'}],description:'Chapter 01의 독립 소품. chapter/textures.ts와 같은 코드에서 추출한 이미지이며 각 퀘스트와 무대에서 상태에 따라 배치한다.',traits:['독립 위치/방향/상태','원본: chapter/textures.ts','재추출: npm run witch:export-props'],note:'도면은 여기 적어 둔다. 먹는 물건인지도 꼭 표시해 둬야겠다.'})));
+
+// Explicit placement inventory: a playable test actor is different from an unused asset.
+const unused=new Set(['object-title-arch','object-tree-sage','object-tree-pink']);
+const testOnly=new Set<string>([...NPCS.map(n=>n.id),...monsterDefinitions.map(m=>m.id),...TRAPS.map(t=>'trap-'+t.id),'wand','bridge','garden','full-shield',...['paper-rotor','paper-grass','paper-crate','paper-sign','paper-bell','paper-mill','paper-lamp','paper-bench','paper-teeth','flower','device','door-flat','stage-frame','wt-soft-light','wt-contact-shadow','wt-stage-beam','wt-vignette'].map(id=>'object-'+id)]);
+for(const entry of codexEntries)entry.usage=entry.category==='음악'||unused.has(entry.id)?'unused':testOnly.has(entry.id)?'test-only':'applied';
+export const usageLabel=(entry:CodexEntry)=>entry.usage==='unused'?'미적용 · 보관 후보':entry.usage==='test-only'?'본편 미배치 · 테스트에서 사용':'인게임 적용';

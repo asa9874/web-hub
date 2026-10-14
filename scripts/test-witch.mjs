@@ -97,7 +97,8 @@ try {
    const pole=rods.find(r=>r.name==='player');assert(pole.visible);assert(Math.abs(pole.start.x-(s.x-s.camera))<25,'Rod follows puppet transform/flip');
    return {...pole,actorY:s.y};
  };
- const waitState=async(test,arg,timeout=18000)=>{
+ // CI software rendering advances the capped simulation more slowly than wall time. Keep all gameplay assertions, but allow the runner to render the required frames.
+ const waitState=async(test,arg,timeout=process.env.CI?120000:18000)=>{
    try{await page.waitForFunction(({code,arg})=>{const c=document.querySelector('.wt-game canvas');return c?.dataset.theater&&new Function('s','arg',code)(JSON.parse(c.dataset.theater),arg);},{code:'return '+test,arg},{timeout});await settle();}
    catch(error){console.log('Failed condition',test,'state',await state());await page.screenshot({path:fileURLToPath(new URL('witch-failure.png',output))});throw error;}
  };

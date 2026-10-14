@@ -86,3 +86,6 @@
 .wt-title-bottom>strong{font-size:10px}
 .wt-title-hero{left:auto;right:8%}
 .wt-title-orbit{left:52%}
+.wt-portrait{bottom:19%;height:69%;width:36%;z-index:2}
+.wt-portrait-left{left:-4%}.wt-portrait-right{right:-4%}
+.wt-codex-card{position:relative}.wt-codex-card .wt-unused-stamp{position:absolute;top:11px;right:11px;z-index:3;width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:2px solid #f3e5ce;border-radius:43% 50% 46% 40%;background:#cfa9be;color:#4d3553;box-shadow:2px 3px 0 #1b112a66;font:700 29px/1 'WT Readable',sans-serif;transform:rotate(9deg)}
