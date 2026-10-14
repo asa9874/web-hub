@@ -10,6 +10,15 @@ export class TheaterSound {
   private loading=false;
   private abort=new AbortController();
   private sampleErrors:string[]=[];
+  private raw=new Map<string,ArrayBuffer>();
+  private preparation:Promise<void>|null=null;
+  private decoding:Promise<void>|null=null;
+  prepare(progress?:(value:number)=>void){
+    if(this.preparation)return this.preparation;
+    const keys=['paper','footstep','solve','cast','hit','hurt','gameover','curtain','ui'];let done=0;
+    this.preparation=Promise.all(keys.map(async key=>{try{const response=await fetch(assetUrl(`audio/${key}.ogg`),{signal:AbortSignal.any([this.abort.signal,AbortSignal.timeout(15000)])});if(!response.ok)throw Error(key);const data=await response.arrayBuffer();if(!this.abort.signal.aborted)this.raw.set(key,data);}catch{if(!this.abort.signal.aborted)this.sampleErrors.push(key);}finally{if(!this.abort.signal.aborted)progress?.(++done/keys.length);}})).then(()=>{});
+    return this.preparation;
+  }
   blip(speaker:Speaker,emotion:Emotion,pace=1){
     if(!this.context||this.muted||this.context.state!=='running')return;
     const ctx=this.context,voice=SPEAKERS[speaker],feeling=EMOTIONS[emotion];
@@ -23,8 +32,9 @@ export class TheaterSound {
     oscillator.onended=()=>{oscillator.disconnect();filter.disconnect();gain.disconnect();};
     oscillator.start(t);oscillator.stop(t+duration+.012);
   }
-  unlock() { this.context ??= new AudioContext(); void this.context.resume();
-    if(!this.loading){this.loading=true;const ctx=this.context;for(const key of ['paper','footstep','solve','cast','hit','hurt','gameover','curtain','ui'])void fetch(assetUrl(`audio/${key}.ogg`),{signal:this.abort.signal}).then(r=>{if(!r.ok)throw new Error(key);return r.arrayBuffer();}).then(data=>ctx.decodeAudioData(data)).then(buffer=>{if(this.context===ctx)this.buffers.set(key,buffer);}).catch(()=>{if(!this.abort.signal.aborted)this.sampleErrors.push(key);});}
+  unlock() { this.context ??= new AudioContext(); void this.context.resume().catch(()=>{});
+    if(!this.loading){this.loading=true;const ctx=this.context;this.decoding=this.prepare().then(async()=>{await Promise.all([...this.raw].map(async([key,data])=>{try{const buffer=await ctx.decodeAudioData(data.slice(0));if(this.context===ctx)this.buffers.set(key,buffer);}catch{if(!this.abort.signal.aborted)this.sampleErrors.push(key);}}));});}
+    return this.decoding??Promise.resolve();
   }
   snapshot(){return {loaded:this.buffers.size,errors:this.sampleErrors};}
   cue(kind:Cue) {
@@ -45,5 +55,5 @@ export class TheaterSound {
       oscillator.connect(gain);gain.connect(ctx.destination);oscillator.start(t);oscillator.stop(t+.25);
     });
   }
-  destroy(){ this.abort.abort();this.buffers.clear();if(this.context) void this.context.close();this.context=null; }
+  destroy(){ this.abort.abort();this.buffers.clear();this.raw.clear();if(this.context) void this.context.close();this.context=null; }
 }

@@ -44,6 +44,8 @@ const base=process.env.WITCH_TEST_URL||'http://127.0.0.1:5173/web-hub';
 const browser=await chromium.launch({headless:true});
 try {
  const page=await browser.newPage({viewport:{width:1440,height:940}}),errors=[],missing=[];
+ const settle=()=>page.waitForFunction(()=>!document.querySelector('.wt-scene-transition,.wt-motion-panel.is-leaving,.wt-loading'),null,{timeout:30000});
+ const clickTravel=async button=>{await button.click();await settle();};
  page.on('pageerror',e=>errors.push(e.message));
  page.on('response',r=>{if(r.url().startsWith(base)&&r.status()>=400)missing.push(r.status()+' '+r.url());});
  await page.addInitScript(()=>{
@@ -69,7 +71,7 @@ try {
  await page.setViewportSize({width:1440,height:940});
  await page.evaluate(()=>document.body.style.zoom='1.5');await page.waitForTimeout(250);assert((await layout()).align<2,'UI stays aligned under browser-style CSS zoom');
  await page.evaluate(()=>document.body.style.zoom='');await page.waitForTimeout(200);
- await menu.getByRole('button',{name:'일러스트레이션'}).click();
+ await clickTravel(menu.getByRole('button',{name:'일러스트레이션'}));
  assert.equal(await page.locator('.wt-art-card').count(),20);
  await page.locator('.wt-art-card img').evaluateAll(images=>images.forEach(image=>image.loading='eager'));
  await page.waitForFunction(()=>Array.from(document.querySelectorAll('.wt-art-card img')).every(image=>image.complete&&image.naturalWidth>0));
@@ -78,12 +80,12 @@ try {
  await page.getByRole('dialog',{name:'마지막 표 한 장 상세보기'}).waitFor();
  assert((await page.locator('.wt-art-prompt pre').innerText()).includes('rain-soaked abandoned theater'));
  await page.screenshot({path:fileURLToPath(new URL('witch-art-detail.png',output))});
- await page.keyboard.press('Escape');await page.getByRole('button',{name:'← 메인 화면'}).click();
+ await page.keyboard.press('Escape');await clickTravel(page.getByRole('button',{name:'← 메인 화면'}));
  assert(await menu.getByRole('button',{name:/극장에 들어가기/}).isDisabled(),'Story entry remains disabled');
- await menu.getByRole('button',{name:'설정집',exact:true}).click();assert.equal(await page.locator('.wt-codex-tabs button').count(),6);
+ await clickTravel(menu.getByRole('button',{name:'설정집',exact:true}));assert.equal(await page.locator('.wt-codex-tabs button').count(),6);
  await page.getByRole('button',{name:/^견습 마녀/}).click();await page.getByRole('dialog',{name:'견습 마녀 설정'}).waitFor();await page.getByRole('button',{name:'다음 이미지'}).click();assert((await page.locator('.wt-codex-standing img').getAttribute('src')).includes('witch-joy'));assert((await page.locator('.wt-codex-writing aside').innerText()).includes('마녀의 노트'));
- await page.getByRole('button',{name:'닫기 · Esc',exact:true}).click();await page.getByRole('button',{name:'← 메인 화면'}).click();
- await page.getByRole('button',{name:'테스트',exact:true}).click();
+ await page.getByRole('button',{name:'닫기 · Esc',exact:true}).click();await clickTravel(page.getByRole('button',{name:'← 메인 화면'}));
+ await clickTravel(page.getByRole('button',{name:'테스트',exact:true}));
  const canvas=page.locator('.wt-game canvas');assert.equal(await canvas.count(),1,'StrictMode must create one engine');
  const state=()=>canvas.evaluate(c=>JSON.parse(c.dataset.theater));
  const checkRig=async()=>{
@@ -96,7 +98,7 @@ try {
    return {...pole,actorY:s.y};
  };
  const waitState=async(test,arg)=>{
-   try{await page.waitForFunction(({code,arg})=>{const c=document.querySelector('.wt-game canvas');return c?.dataset.theater&&new Function('s','arg',code)(JSON.parse(c.dataset.theater),arg);},{code:'return '+test,arg},{timeout:18000});}
+   try{await page.waitForFunction(({code,arg})=>{const c=document.querySelector('.wt-game canvas');return c?.dataset.theater&&new Function('s','arg',code)(JSON.parse(c.dataset.theater),arg);},{code:'return '+test,arg},{timeout:18000});await settle();}
    catch(error){console.log('Failed condition',test,'state',await state());await page.screenshot({path:fileURLToPath(new URL('witch-failure.png',output))});throw error;}
  };
  const runTo=async x=>{
@@ -186,16 +188,16 @@ try {
  await page.screenshot({path:fileURLToPath(new URL('witch-complete.png',output))});
  assert((await state()).lighting.lamps.every(alpha=>alpha>.98),'All stage lamps finish fading in');
  assert.equal((await state()).bridge,'SOLVED');assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);
- await page.getByRole('button',{name:'한 번 더 공연하기'}).click();await page.getByRole('button',{name:'테스트',exact:true}).waitFor();assert.equal(await canvas.count(),1,'Restart cleans engine');
+ await clickTravel(page.getByRole('button',{name:'한 번 더 공연하기'}));await page.getByRole('button',{name:'테스트',exact:true}).waitFor();assert.equal(await canvas.count(),1,'Restart cleans engine');
  await page.waitForFunction(()=>window.__theaterAudioContexts.length>0&&window.__theaterAudioContexts.every(context=>context.state==='closed'));
  await page.reload({waitUntil:'networkidle'});await page.getByRole('button',{name:'테스트',exact:true}).waitFor();assert.equal(await canvas.count(),1,'Direct URL reload');
  await page.setViewportSize({width:900,height:600});await page.screenshot({path:fileURLToPath(new URL('witch-resize.png',output))});
- await page.getByRole('button',{name:'테스트',exact:true}).click();await waitState('s.mode === "explore"');
+ await clickTravel(page.getByRole('button',{name:'테스트',exact:true}));await waitState('s.mode === "explore"');
  await checkRig();
  await page.keyboard.press('f');await waitState('s.pose === "witch-attack" && s.combat.missiles.length > 0');
  assert((await canvas.evaluate(c=>JSON.parse(c.dataset.theaterRig))).some(rod=>rod.name.startsWith('missile-')&&rod.end.y===736),'Magic missile has a procedural rod');
  await waitState('s.combat.missiles.length === 0');assert(!(await canvas.evaluate(c=>JSON.parse(c.dataset.theaterRig))).some(rod=>rod.name.startsWith('missile-')),'Expired missiles clean their supports');
- await page.getByRole('button',{name:'테스트 위치',exact:true}).click();await page.getByRole('button',{name:'전투 · 라이프',exact:true}).click();await waitState('s.x === 5200');assert.equal((await state()).combat.lives,3);
+ await page.getByRole('button',{name:'테스트 위치',exact:true}).click();await clickTravel(page.getByRole('button',{name:'전투 · 라이프',exact:true}));await waitState('s.x === 5200');assert.equal((await state()).combat.lives,3);
  for(let i=0;i<3;i++){await waitState('s.combat.cooldown === 0');await page.keyboard.press('f');await waitState('s.combat.monsters[0].hp <= arg',2-i);}
  assert.equal((await state()).combat.monsters[0].hp,0,'Magic missiles defeat the monster');
  await runTo(5740);await waitState('s.mode === "gameover"');await page.getByRole('dialog',{name:'게임 오버와 재등장'}).waitFor();assert.equal((await state()).combat.lives,0);await page.screenshot({path:fileURLToPath(new URL('witch-game-over.png',output))});

@@ -28,38 +28,40 @@ const dialogue=JSON.parse(await readFile('src/ForgottenWitch/npc-dialogue.json',
 const browser=await chromium.launch({headless:true});
 try{
   const base=process.env.WITCH_TEST_URL||'http://127.0.0.1:5173/web-hub',page=await browser.newPage({viewport:{width:1440,height:940}}),errors=[],missing=[];
+ const settle=()=>page.waitForFunction(()=>!document.querySelector('.wt-scene-transition,.wt-motion-panel.is-leaving,.wt-loading'),null,{timeout:30000});
+ const clickTravel=async button=>{await button.click();await settle();};
   page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.url().startsWith(base)&&r.status()>=400)missing.push(r.url());});
   await page.addInitScript(()=>{const A=window.AudioContext;window.__tones=[];window.AudioContext=class extends A{createOscillator(){const node=super.createOscillator(),set=node.frequency.setValueAtTime.bind(node.frequency);node.frequency.setValueAtTime=(value,...args)=>{window.__tones.push(value);return set(value,...args);};return node;}};});
   await page.goto(base+'/games/forgotten-witch/',{waitUntil:'networkidle'});const menu=page.getByRole('navigation',{name:'극장 메인 메뉴'});
-  await menu.getByRole('button',{name:'설정집',exact:true}).click();
+  await clickTravel(menu.getByRole('button',{name:'설정집',exact:true}));
   for(const [category,count] of [['등장인물',8],['몬스터',21],['사물',22],['음악',6]]){await page.getByRole('button',{name:category,exact:true}).click();assert.equal(await page.locator('.wt-codex-card').count(),count);}
-  await page.locator('.wt-codex-card').first().click();assert((await page.locator('.wt-music-prompt').innerText()).includes('Instrumental'));await page.keyboard.press('Escape');await page.getByRole('button',{name:'← 메인 화면'}).click();
-  await menu.getByRole('button',{name:'테스트',exact:true}).click();const canvas=page.locator('.wt-game canvas');
+  await page.locator('.wt-codex-card').first().click();assert((await page.locator('.wt-music-prompt').innerText()).includes('Instrumental'));await page.keyboard.press('Escape');await clickTravel(page.getByRole('button',{name:'← 메인 화면'}));
+  await clickTravel(menu.getByRole('button',{name:'테스트',exact:true}));const canvas=page.locator('.wt-game canvas');
   const state=()=>canvas.evaluate(c=>JSON.parse(c.dataset.theater));
   const open=async()=>{await page.getByRole('button',{name:'테스트 위치',exact:true}).click();await page.getByRole('navigation',{name:'기능별 테스트 이동'}).waitFor();};
   for(const d of [...MONSTERS,BOSS]){
     await open();const before=await state();await page.waitForTimeout(150);assert.equal((await state()).combat.clock,before.combat.clock,'Choosing pauses combat');
-    await page.getByLabel('테스트할 몬스터').selectOption(d.id);await page.getByRole('button',{name:'선택 몬스터 소환'}).click();
+    await page.getByLabel('테스트할 몬스터').selectOption(d.id);await clickTravel(page.getByRole('button',{name:'선택 몬스터 소환'}));
     await page.waitForFunction(id=>JSON.parse(document.querySelector('.wt-game canvas').dataset.theater).combat.selection===id,d.id);
     const s=await state();assert.equal(s.combat.monsters[0].kind,d.id);assert.equal(s.combat.monsters[0].hp,d.hp);
     if(d.id===BOSS.id){const bar=page.getByRole('progressbar',{name:BOSS.name+' 체력'});assert.equal(await bar.getAttribute('aria-valuenow'),'36');await page.keyboard.press('f');await page.waitForFunction(()=>Number(document.querySelector('.wt-boss-health [role=progressbar]')?.getAttribute('aria-valuenow'))<36,null,{timeout:12000});assert(Number(await bar.getAttribute('aria-valuenow'))<36,'Boss bar follows real hit');await page.screenshot({path:'.build-projects/witch-boss.png'});}
   }
-  await open();await page.getByRole('button',{name:'이동 · 점프',exact:true}).click();const beforeRoll=await state();await page.keyboard.press('Shift');
+  await open();await clickTravel(page.getByRole('button',{name:'이동 · 점프',exact:true}));const beforeRoll=await state();await page.keyboard.press('Shift');
   await page.waitForFunction(()=>JSON.parse(document.querySelector('.wt-game canvas').dataset.theater).pose==='witch-roll');
   assert((await canvas.evaluate(c=>JSON.parse(c.dataset.theaterRig))).some(r=>r.name==='player'&&r.end.y===736));await page.screenshot({path:'.build-projects/witch-roll.png'});await page.waitForFunction(()=>JSON.parse(document.querySelector('.wt-game canvas').dataset.theater).combat.rolling===0);assert((await state()).x-beforeRoll.x>200,'Roll moves rapidly forward');
   for(const n of NPCS){
-    await open();await page.getByLabel('소환할 NPC').selectOption(n.id);await page.getByRole('button',{name:'선택 NPC 소환'}).click();await page.keyboard.press('e');
+    await open();await page.getByLabel('소환할 NPC').selectOption(n.id);await clickTravel(page.getByRole('button',{name:'선택 NPC 소환'}));await page.keyboard.press('e');
     const box=page.getByRole('dialog',{name:conversationLabel(n.id)});await box.waitFor();await page.getByLabel('대사 출력 속도').press('End');
     const tonesBefore=await page.evaluate(()=>window.__tones.length),seen=new Set();
-    while(await box.count()){
+    while((await state()).mode==='dialogue'){
       seen.add(await box.getAttribute('data-emotion'));const s=await state();await page.keyboard.press('d');assert.equal((await state()).x,s.x,'NPC dialogue locks movement');
       await page.waitForFunction(()=>document.querySelector('.wt-dialogue')?.dataset.typing==='complete',null,{timeout:30000});
       const portrait=page.locator('.wt-portrait-right');await portrait.evaluate(img=>img.decode());assert((await portrait.getAttribute('src')).includes('/npcs/'+n.id+'-'));
       if(seen.size===1){await page.screenshot({path:'.build-projects/witch-npc-'+n.id+'.png'});}
       await page.getByRole('button',{name:/다음 문장|대화 마치기/}).click();
     }
-    assert.equal(seen.size,5,n.id+' five emotion examples');const tones=await page.evaluate(start=>window.__tones.slice(start),tonesBefore);assert(tones.some(f=>Math.abs(f-n.frequency)<12),n.id+' unique voice');
+    await settle();assert.equal(seen.size,5,n.id+' five emotion examples');const tones=await page.evaluate(start=>window.__tones.slice(start),tonesBefore);assert(tones.some(f=>Math.abs(f-n.frequency)<12),n.id+' unique voice');
   }
-  await page.getByRole('link',{name:'← web hub'}).click();assert.equal(await page.locator('.wt-game canvas').count(),0,'Unmount cleans scene');assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);
+  await clickTravel(page.getByRole('link',{name:'← web hub'}));assert.equal(await page.locator('.wt-game canvas').count(),0,'Unmount cleans scene');assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);
   console.log('Actual-input 21 enemy selections, boss HP, rolling, six NPCs/five expressions/unique voices, codex objects/music and cleanup passed.');
 }finally{await browser.close();}

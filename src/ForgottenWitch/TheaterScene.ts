@@ -26,6 +26,7 @@ export interface TheaterView {
 export interface TheaterCallbacks {
   view:(view:TheaterView)=>void; ready:(scene:TheaterScene)=>void;
   advance:()=>void; error:(message:string)=>void;
+  progress?:(value:number)=>void;
 }
 export class TheaterScene extends Phaser.Scene {
   readonly actor=createActor();
@@ -56,8 +57,12 @@ export class TheaterScene extends Phaser.Scene {
   private distantApplausePlayed=false;
   private theaterSound=new TheaterSound();
   private callbacks:TheaterCallbacks;
+  private motionLocked=false;
+  private softLockUntil=0;
+  private disposed=false;
   constructor(callbacks:TheaterCallbacks) { super('theater');this.callbacks=callbacks; }
   preload() {
+    this.load.on('progress',(value:number)=>this.callbacks.progress?.(value));
     this.load.on('loaderror',(file:Phaser.Loader.File)=>this.loadErrors.push(file.key));
     for(const name of ['witch-puppet','witch-walk','witch-jump','flora-puppet','witch-portrait','flora-portrait','paper-tree']) this.load.image(name,assetUrl(name+(name.startsWith('flora')?'-clean':'')+'.png'));
     for(const name of ['witch-knee','flora-knee','title-arch'])this.load.image(name,assetUrl(name+'.png'));
@@ -124,7 +129,7 @@ export class TheaterScene extends Phaser.Scene {
     let cleaned=false;
     const cleanup=()=>{
       if(cleaned)return;cleaned=true;
-      this.game.events.off(Phaser.Core.Events.BLUR,blur);this.theaterSound.destroy();
+      this.game.events.off(Phaser.Core.Events.BLUR,blur);this.disposeAudio();
       this.input.off('pointerdown',down);this.input.off('pointermove',move);this.input.off('pointerup',up);this.input.off('pointerupoutside',up);
     };
     this.events.once(Phaser.Scenes.Events.SHUTDOWN,cleanup);
@@ -194,7 +199,11 @@ export class TheaterScene extends Phaser.Scene {
     this.add.image(0,0,'stage-frame').setOrigin(0).setScrollFactor(0).setDepth(16);
     this.add.text(640,17,'THE FORGOTTEN WITCH’S THEATER',{fontFamily:'Georgia',fontSize:'13px',letterSpacing:5,color:'#eddbc1'}).setOrigin(.5).setScrollFactor(0).setDepth(17);
   }
-  start() {this.theaterSound.unlock();this.mode='explore';this.controls.clear();this.publish();}
+  prepareAudio(progress?:(value:number)=>void){return this.theaterSound.prepare(progress);}
+  disposeAudio(){this.disposed=true;this.theaterSound.destroy();}
+  unlockAudio(){return this.theaterSound.unlock();}
+  motionLock(value:boolean){this.motionLocked=value;this.controls?.clear();}
+  async start() {await this.theaterSound.unlock();if(this.disposed)return;this.mode='explore';this.controls.clear();this.publish();}
   teleport(target:TestArea){
     if(this.mode!=='explore'&&this.mode!=='testing')return;
     this.mode='explore';
@@ -202,7 +211,7 @@ export class TheaterScene extends Phaser.Scene {
     Object.assign(this.actor,createActor(),{x:area.x});this.respawnPoint=area.x;this.world.checkpoint=area.x;this.combat.reset();
     this.cameras.main.scrollX=Phaser.Math.Clamp(area.x-440,0,TUNING.worldWidth-1280);this.controls.clear();this.theaterSound.cue('ui');this.publish();
   }
-  testMenu(open:boolean){if(open&&this.mode==='explore')this.mode='testing';else if(!open&&this.mode==='testing')this.mode='explore';this.controls.clear();this.publish();}
+  testMenu(open:boolean){if(open&&this.mode==='explore')this.mode='testing';else if(!open&&this.mode==='testing'){this.mode='explore';this.softLockUntil=this.time.now+180;}this.controls.clear();this.publish();}
   testMonster(id:string){if(this.mode!=='testing')return;this.teleport('combat');this.combat.reset(id);this.publish();}
   testNpc(id:NpcId){if(this.mode!=='testing')return;this.npc=id;this.flora.setTexture(id==='flora'?'flora-puppet':`npc-${id}`).setScale(190/this.flora.height);this.teleport('dialogue');this.actor.x=STAGE.floraX-100;this.actor.facing=1;this.publish();}
   async prepareRespawn(){
@@ -212,19 +221,19 @@ export class TheaterScene extends Phaser.Scene {
   }
   finishRespawn(){if(this.mode==='gameover'){this.mode='explore';this.combat.state.invulnerable=1.5;this.controls.clear();this.publish();}}
   pause() {if(this.mode==='explore'){this.mode='pause';this.controls.clear();this.publish();}}
-  resume() {if(this.mode==='pause'){this.mode='explore';this.controls.clear();this.publish();}}
+  resume() {if(this.mode==='pause'){this.mode='explore';this.softLockUntil=this.time.now+180;this.controls.clear();this.publish();}}
   closePuzzle() {
     if(this.mode==='bridge'){
       this.dragging=false;this.world.bridge='IDLE';this.guide.setVisible(false);this.bridge.setPosition(STAGE.bridge.startX,STAGE.bridge.startY);
     }else if(this.mode==='lights' && this.world.lights!=='SOLVED')this.world.lights='CLOSED';
     else return;
-    this.mode='explore';this.controls.clear();this.publish();
+    this.mode='explore';this.softLockUntil=this.time.now+180;this.controls.clear();this.publish();
   }
-  finishDialogue() {if(this.mode!=='dialogue')return;if(this.npc==='flora'){this.world.talked=true;this.world.visits++;}this.mode='explore';this.controls.clear();this.publish();}
+  finishDialogue() {if(this.mode!=='dialogue')return;if(this.npc==='flora'){this.world.talked=true;this.world.visits++;}this.mode='explore';this.softLockUntil=this.time.now+180;this.controls.clear();this.publish();}
   checkingLights() { if(this.mode==='lights')this.world.lights='CHECKING'; }
   retryLights() { if(this.mode==='lights')this.world.lights='OPEN'; }
   solveLights() {
-    if(this.mode!=='lights')return;this.world.lights='SOLVED';this.mode='explore';this.controls.clear();
+    if(this.mode!=='lights')return;this.world.lights='SOLVED';this.mode='explore';this.softLockUntil=this.time.now+180;this.controls.clear();
     this.tweens.add({targets:this.curtains[0],x:4070,duration:1900,ease:'Sine.easeInOut'});
     this.tweens.add({targets:this.curtains[1],x:4570,duration:1900,ease:'Sine.easeInOut'});
     this.theaterSound.cue('solve');this.toast('조명이 켜지고 마지막 커튼이 열립니다.');this.publish();
@@ -252,6 +261,8 @@ export class TheaterScene extends Phaser.Scene {
   update(_time:number,delta:number) {
     if(!this.controls)return;
     const input=this.controls.read(),dt=Math.min(delta/1000,.033);
+    const locked=this.motionLocked||this.time.now<this.softLockUntil;
+    if(!locked){
     if(input.escape){
       if(this.mode==='bridge'||this.mode==='lights')this.closePuzzle();else if(this.mode==='testing')this.testMenu(false);else if(this.mode==='pause')this.resume();else if(this.mode==='explore')this.pause();
     }else if(this.mode==='dialogue') {if(input.jump||input.next)this.callbacks.advance();}
@@ -267,10 +278,12 @@ export class TheaterScene extends Phaser.Scene {
         for(const event of events){
           this.theaterSound.cue(event);
           if(event==='hit')this.stageLife.impact(this.actor.x+this.actor.facing*90,this.actor.y-65,4);
+          if(event==='hurt'&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches)this.cameras.main.shake(90,.0015);
           if(event==='gameover'){this.mode='gameover';this.actor.vx=0;this.controls.clear();}
         }
         if(this.world.lights==='SOLVED'&&this.lightAmount>.98&&this.actor.x>STAGE.doorX&&this.actor.x<4600){this.mode='complete';this.actor.vx=0;this.theaterSound.cue('applause');}
       }
+    }
     }
     if(this.mode==='explore'){
       const target=Phaser.Math.Clamp(this.actor.x-440,0,TUNING.worldWidth-1280);
@@ -289,22 +302,22 @@ export class TheaterScene extends Phaser.Scene {
     const pose=rolling?{texture:'witch-roll',height:120,joint:{u:.5,v:.5}}:this.mode==='explore'&&this.combat.state.casting>0?{texture:'witch-attack',height:198,joint:{u:.48,v:.79}}:puppetPose(this.actor.grounded,this.actor.vx,this.mode);
     if(this.puppet.texture.key!==pose.texture)this.puppet.setTexture(pose.texture);
     this.puppet.setOrigin(this.actor.facing<0?1-pose.joint.u:pose.joint.u,rolling?.5:1).setData('rodJoint',pose.joint);
-    this.puppet.setPosition(this.actor.x,this.actor.y-(rolling?88:bounce)).setFlipX(this.actor.facing<0).setRotation(rolling?this.actor.facing*(1-this.combat.state.rolling/COMBAT.rollDuration)*Math.PI*2:tilt+(this.mode==='dialogue'?this.actor.facing*.055:0));
+    this.puppet.setPosition(this.actor.x,this.actor.y-(rolling?88:bounce)).setFlipX(this.actor.facing<0).setRotation(rolling?this.actor.facing*(1-this.combat.state.rolling/COMBAT.rollDuration)*Math.PI*2:tilt+(this.mode==='dialogue'?this.actor.facing*.055:0)+(this.combat.state.casting>0?-.08*this.actor.facing:0));
     const squash=this.actor.landing*.09;
     this.puppet.setScale(pose.height/this.puppet.height*(1+squash),pose.height/this.puppet.height*(1-squash));
     this.puppet.setAlpha(this.combat.state.invulnerable>0?.65+Math.sin(this.combat.state.clock*24)*.2:1);
     const greeting=Math.abs(this.actor.x-STAGE.floraX)<170?(this.actor.x<STAGE.floraX?-.018:.018):0;
     this.flora.setRotation(Math.sin(t*1.3)*.016+greeting);
-    this.stageLife.update(dt,this.mode==='explore'||this.mode==='intro',this.lightAmount);
+    this.stageLife.update(dt,!locked&&(this.mode==='explore'||this.mode==='intro'),this.lightAmount);
     this.combat.render();
     this.rig.update();
-    if(this.world.lights==='SOLVED'&&this.mode==='explore')this.lightAmount=Math.min(1,this.lightAmount+dt*.32);
+    if(this.world.lights==='SOLVED'&&this.mode==='explore'&&!locked)this.lightAmount=Math.min(1,this.lightAmount+dt*.32);
     this.lighting.update(this.actor.x,this.actor.y,this.actor.grounded,this.world.bridge==='SOLVED',this.lightAmount);
     const near=this.nearby();
     this.hint.setVisible(Boolean(near)&&this.mode==='explore').setPosition(this.actor.x,this.actor.y-212).setText(near==='flora'?`E  ${conversationLabel(this.npc)}`:near==='bridge'?'E  무대 조작':'E  조명 조사');
     if(this.message&&this.time.now>this.nextMessageUntil)this.message='';
     // Read-only telemetry for browser regression tests; no debug controls or bypasses.
-    this.game.canvas.dataset.theater=JSON.stringify({x:this.actor.x,y:this.actor.y,grounded:this.actor.grounded,camera:this.cameras.main.scrollX,mode:this.mode,bridge:this.world.bridge,lights:this.world.lights,visits:this.world.visits,bridgeX:this.bridge.x,bridgeY:this.bridge.y,pose:this.puppet.texture.key,lightAmount:this.lightAmount,lighting:this.lighting.snapshot(),environment:this.stageLife.snapshot(),combat:this.combat.state,audio:this.theaterSound.snapshot()});
+    this.game.canvas.dataset.theater=JSON.stringify({x:this.actor.x,y:this.actor.y,grounded:this.actor.grounded,camera:this.cameras.main.scrollX,mode:this.mode,motionLocked:this.motionLocked||this.time.now<this.softLockUntil,bridge:this.world.bridge,lights:this.world.lights,visits:this.world.visits,bridgeX:this.bridge.x,bridgeY:this.bridge.y,pose:this.puppet.texture.key,lightAmount:this.lightAmount,lighting:this.lighting.snapshot(),environment:this.stageLife.snapshot(),combat:this.combat.state,audio:this.theaterSound.snapshot()});
     this.game.canvas.dataset.theaterRig=JSON.stringify(this.rig.snapshot());
     this.publish();
   }

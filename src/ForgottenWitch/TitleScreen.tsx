@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { assetUrl } from './config';
-export default function TitleScreen({ready,muted,onStart,onSound,onIllustrations,onCodex}:{ready:boolean;muted:boolean;onStart:()=>void;onSound:()=>void;onIllustrations:()=>void;onCodex:()=>void}) {
-  return <section className="wt-title-screen" aria-label="게임 타이틀 화면" onKeyDown={event=>{
+export default function TitleScreen({ready,muted,onStart,onSound,onIllustrations,onCodex,onExit}:{ready:boolean;muted:boolean;onStart:()=>void;onSound:()=>void;onIllustrations:()=>void;onCodex:()=>void;onExit?:React.MouseEventHandler<HTMLAnchorElement>}) {
+  return <section className="wt-title-screen" inert={!ready} aria-label="게임 타이틀 화면" onKeyDown={event=>{
     const button=event.target as HTMLElement;
     if((event.key==='Enter'||event.key===' ')&&button.tagName==='BUTTON'){
       event.preventDefault();if(!event.repeat)button.click();
@@ -24,7 +24,7 @@ export default function TitleScreen({ready,muted,onStart,onSound,onIllustrations
         <button onClick={onSound}><span className="wt-menu-mark" aria-hidden="true">◇</span>{muted?'소리 켜기':'소리 끄기'}</button>
         <button onClick={onIllustrations}><span className="wt-menu-mark" aria-hidden="true">◇</span>일러스트레이션</button>
         <button onClick={onCodex}><span className="wt-menu-mark" aria-hidden="true">◇</span>설정집</button>
-        <Link to="/"><span className="wt-menu-mark" aria-hidden="true">◇</span>허브로 돌아가기</Link>
+        <Link to="/" onClick={onExit}><span className="wt-menu-mark" aria-hidden="true">◇</span>허브로 돌아가기</Link>
       </nav>
     </div>
     <img className="wt-title-arch" src={assetUrl('title-arch.png')} alt="" aria-hidden="true" />

@@ -51,3 +51,6 @@ npm run dev -- --host 127.0.0.1 --port 5173
 ## BGM
 
 - Created with Suno AI
+
+
+마녀의 극장에는 SD 인형 로딩 화면과 실제 에셋 진행률, 화면 이동 커튼, 대화·퍼즐·막간 페이드, 구역 자막과 작은 피격/UI 반응이 추가되었습니다. `npm run test:witch-motion`으로 로딩·전환·입력 복구를 검증합니다. 상세 구현과 이어받기 안내는 [게임 문서](src/ForgottenWitch/README.md#로딩과-무대-전환-2026-10-14)에 정리했습니다.
