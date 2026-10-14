@@ -29,8 +29,15 @@ import type {OpeningView} from './OpeningScene';
 import {OPENING_ASSETS} from './openingData';
 import type {OpeningStage} from './openingData';
 import type {LivingTest} from './livingData';
+import {ACTING_CAST,actingFile,prepareActingFrames,ACTING_LABELS} from './actingData';
+import type {ActingPose} from './actingData';
+import {StageDirector} from './StageDirector';
+import type {StageCue} from './directionModel';
+import {AmbientSpeech} from './AmbientSpeech';
+import {AMBIENT_NPCS} from './ambientDialogueData';
 
 export interface TheaterView {
+  direction?:ReturnType<StageDirector['snapshot']>;directionDemo?:boolean;posePreview?:string;
   mode:GameMode; area:string; prompt:string; message:string;
   bridgeSolved:boolean; lightsSolved:boolean; talked:boolean; dialogue:'first'|'repeat'|'lit';
   lives:number;shield?:number;shielding?:boolean;shieldBroken?:boolean;blinkCooldown?:number;
@@ -85,8 +92,11 @@ export class TheaterScene extends Phaser.Scene {
   private frameBudget=new FrameBudget();
   private textureBudget={count:0,beforePixels:0,afterPixels:0};
   private queued={jump:false,attack:false,roll:false};
+  private director!:StageDirector;private speech!:AmbientSpeech;private dialogueFlower!:Phaser.GameObjects.Image;
+  private directionDemo=false;private posePreview='';
   constructor(callbacks:TheaterCallbacks) { super('theater');this.callbacks=callbacks; }
   preload() {
+    for(const id of ACTING_CAST)this.load.image('acting-'+id,assetUrl(actingFile(id)));
     for(const name of OPENING_ASSETS)this.load.image('opening-'+name,assetUrl('opening/'+(name==='witch-falling'?'witch-falling-clean':name)+'.png'));
     this.load.on('progress',(value:number)=>this.callbacks.progress?.(value));
     this.load.on('loaderror',(file:Phaser.Loader.File)=>this.loadErrors.push(file.key));
@@ -100,6 +110,7 @@ export class TheaterScene extends Phaser.Scene {
   create() {
     if(this.loadErrors.length){this.callbacks.error('에셋을 불러오지 못했습니다: '+this.loadErrors.join(', '));return;}
     this.textureBudget=budgetStageTextures(this);
+    prepareActingFrames(this);
     createPaperTextures(this);
     this.cameras.main.setBackgroundColor('#F3E5CE');
     this.cameras.main.setBounds(0,-32,TUNING.worldWidth,TUNING.height+32);
@@ -128,6 +139,11 @@ export class TheaterScene extends Phaser.Scene {
     this.lighting.shadow(this.flora,.14);
     this.hint=this.add.text(0,0,'',{fontFamily:'WT Readable, sans-serif',fontSize:'21px',color:'#302836',backgroundColor:'#f5ead7',padding:{x:14,y:8}}).setOrigin(.5,1).setDepth(14);
     this.controls=new TheaterInput(this);
+    this.director=new StageDirector(this,this.puppet,this.flora,this.dialogueFlower,this.bridge,(kind,point)=>{
+      this.theaterSound.cue(kind==='magic'?'cast':kind==='tap'?'hit':'paper');this.stageLife.motion(kind==='magic'?'cast':'hit',point.x,point.y,1,.6);
+      if(kind==='tap'&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches)this.cameras.main.shake(140,.002);
+    });
+    this.speech=new AmbientSpeech(this,this.rig,id=>this.theaterSound.blip(id,'neutral',1));
     const down=(pointer:Phaser.Input.Pointer)=>{
       if(this.mode!=='bridge')return;
       const x=pointer.x+this.cameras.main.scrollX,y=pointer.y+this.cameras.main.scrollY;
@@ -152,7 +168,7 @@ export class TheaterScene extends Phaser.Scene {
       this.publish();
     };
     this.input.on('pointerdown',down);this.input.on('pointermove',move);this.input.on('pointerup',up);this.input.on('pointerupoutside',up);
-    const blur=()=>{if(this.mode==='explore')this.pause();else if(this.mode==='bridge')this.closePuzzle();};
+    const blur=()=>{if(this.mode==='explore')this.pause();else if(this.mode==='bridge')this.closePuzzle();else if(this.mode==='dialogue'){this.director.paused=true;this.publish();}};
     this.game.events.on(Phaser.Core.Events.BLUR,blur);
     let cleaned=false;
     const cleanup=()=>{
@@ -205,6 +221,7 @@ export class TheaterScene extends Phaser.Scene {
     this.add.text(STAGE.lightX,585,'조명 제어',{fontFamily:'WT Readable',fontSize:'19px',color:'#382c3c'}).setOrigin(.5).setDepth(8);
     for(let i=0;i<10;i++){
       const flower=this.add.image(2220+i*100,570,'flower').setDisplaySize(55+(i%2)*17,90+(i%3)*16).setOrigin(.5,1).setDepth(6).setAngle((i%3-1)*5);
+      if(i===4)this.dialogueFlower=flower;
       this.rig.attach(flower,`clock-flower-${i}`,'bottom',.5,.91,4);this.stageLife.plant(flower);
       this.stageLife.sway(flower,.35);this.lighting.shadow(flower,.13);
     }
@@ -231,6 +248,7 @@ export class TheaterScene extends Phaser.Scene {
   disposeAudio(){this.disposed=true;this.theaterSound.destroy();}
   unlockAudio(){return this.theaterSound.unlock();}
   beginOpening(stage:OpeningStage='library-intro'){
+    this.director.reset();this.speech.clear();this.posePreview='';this.directionDemo=false;
     void this.unlockAudio();
     if(this.scene.manager.getScene('opening')){this.scene.remove('opening');}
     this.mode='intro';this.controls.clear();this.publish();this.scene.pause();this.scene.setVisible(false);
@@ -248,6 +266,7 @@ export class TheaterScene extends Phaser.Scene {
   motionLock(value:boolean){this.motionLocked=value;this.controls?.clear();}
   async start() {await this.theaterSound.unlock();if(this.disposed)return;this.mode='explore';this.controls.clear();this.publish();}
   teleport(target:TestArea){
+    this.director.reset();this.speech.clear();this.cameras.main.setZoom(1);this.directionDemo=false;this.posePreview='';
     if(this.mode!=='explore'&&this.mode!=='testing')return;
     this.mode='explore';
     const area=TEST_AREAS.find(item=>item.id===target)!;
@@ -264,6 +283,13 @@ export class TheaterScene extends Phaser.Scene {
   testMenu(open:boolean){if(open&&this.mode==='explore'){this.mode='testing';this.combat.state.shielding=false;}else if(!open&&this.mode==='testing'){this.mode='explore';this.softLockUntil=this.time.now+180;}this.controls.clear();this.publish();}
   testMonster(id:string){if(this.mode!=='testing')return;this.teleport('combat');this.combat.reset(id);this.publish();}
   testNpc(id:NpcId){if(this.mode!=='testing')return;this.npc=id;this.flora.setTexture(id==='flora'?'flora-puppet':`npc-${id}`).setScale(190/this.flora.height);this.teleport('dialogue');this.actor.x=STAGE.floraX-100;this.actor.facing=1;this.publish();}
+  testDirection(id:NpcId){if(this.mode!=='testing')return;this.testNpc(id);this.openDialogue(true);}
+  testPose(id:Speaker,pose:ActingPose){if(this.mode!=='testing')return;this.testNpc(id==='witch'?this.npc:id);this.openDialogue(true);this.posePreview=`${SPEAKERS[id].name} · ${ACTING_LABELS[pose]}`;this.director.start({id:'pose-'+id+'-'+pose,seconds:6,hideDialogue:true,camera:{target:id==='witch'?'player':'npc',zoom:1.5,follow:true},actors:[{who:id==='witch'?'player':'npc',pose,dx:pose==='run'?180:0,seconds:4,facing:1}]},()=>this.finishDialogue());this.publish();}
+  testBubble(id:string){if(this.mode!=='testing')return;const d=AMBIENT_NPCS.find(n=>n.id===id);if(!d)return;this.teleport('dialogue');this.actor.x=d.x-(d.trigger==='near'?170:Math.max(30,d.radius-20));this.cameras.main.setScroll(Math.max(0,this.actor.x-440),0);this.toast(d.trigger==='near'?'가까이 가면 말풍선을 읽을 수 있습니다. 이동은 계속 가능합니다.':'E · 말을 걸어 보세요. 대화창 없이 지나가며 읽습니다.');this.publish();}
+  playDirection(cue:StageCue,done:()=>void){return this.mode==='dialogue'?this.director.start(cue,done):()=>{};}
+  pauseDirection(){if(this.mode==='dialogue'){this.director.paused=!this.director.paused;this.controls.clear();this.publish();}}
+  cancelDialogue(){if(this.mode==='dialogue'){this.director.end();this.mode='explore';this.posePreview='';this.directionDemo=false;this.controls.clear();this.publish();}}
+  private openDialogue(demo=false){this.mode='dialogue';this.directionDemo=demo;this.posePreview='';this.dialogue=this.world.lights==='SOLVED'?'lit':this.world.visits?'repeat':'first';this.actor.vx=0;this.puppet.setTexture('witch-puppet').setPosition(this.actor.x,this.actor.y);this.flora.setPosition(STAGE.floraX,570);this.director.open(this.npc);this.controls.clear();this.publish();}
   async prepareRespawn(){
     if(this.mode!=='gameover')return;
     Object.assign(this.actor,createActor(),{x:this.respawnPoint});this.combat.reset();this.defense.clear();this.playerMotion.reset();this.cameraRig.reset();this.hitStop=0;this.queued={jump:false,attack:false,roll:false};this.stageLife.clearMotion();this.cameras.main.scrollY=0;this.cameras.main.scrollX=Phaser.Math.Clamp(this.actor.x-440,0,TUNING.worldWidth-1280);this.controls.clear();this.publish();
@@ -279,7 +305,7 @@ export class TheaterScene extends Phaser.Scene {
     else return;
     this.mode='explore';this.softLockUntil=this.time.now+180;this.controls.clear();this.publish();
   }
-  finishDialogue() {if(this.mode!=='dialogue')return;if(this.npc==='flora'){this.world.talked=true;this.world.visits++;}this.mode='explore';this.softLockUntil=this.time.now+180;this.controls.clear();this.publish();}
+  finishDialogue() {if(this.mode!=='dialogue')return;if(this.npc==='flora'&&!this.directionDemo&&!this.posePreview){this.world.talked=true;this.world.visits++;}this.director.end();this.directionDemo=false;this.posePreview='';this.mode='explore';this.softLockUntil=this.time.now+180;this.controls.clear();this.publish();}
   checkingLights() { if(this.mode==='lights')this.world.lights='CHECKING'; }
   retryLights() { if(this.mode==='lights')this.world.lights='OPEN'; }
   solveLights() {
@@ -294,6 +320,7 @@ export class TheaterScene extends Phaser.Scene {
   curtainSound(){this.theaterSound.cue('curtain');}
   private toast(text:string){this.message=text;this.nextMessageUntil=this.time.now+4700;}
   private nearby() {
+    if(this.speech?.nearby(this.actor.x))return 'ambient';
     if(Math.abs(this.actor.x-2180)<90||Math.abs(this.actor.x-8960)<120)return 'rest';
     if(this.actor.x>7780&&this.actor.x<8240)return 'wind';
     if(this.actor.x>9920&&this.actor.x<10180&&!this.living.secretOpen)return 'secret';
@@ -304,12 +331,13 @@ export class TheaterScene extends Phaser.Scene {
   }
   private interact() {
     const target=this.nearby();this.actor.vx=0;
+    if(target==='ambient'){this.speech.interact(this.actor.x);this.controls.clear();return;}
     if(target==='rest'){this.living.checkpoint=this.actor.x;this.living.rests++;this.respawnPoint=this.actor.x;this.world.checkpoint=this.actor.x;this.world.restPoint=this.actor.x;this.combat.state.lives=3;this.combat.state.shield=100;this.restRemaining=1.2;this.theaterSound.cue('solve');this.toast('분장대에서 숨을 고릅니다. 여기가 새 재등장 위치입니다.');}
     if(target==='wind'){this.living.windDirection*=-1;this.theaterSound.cue('paper');this.toast('바람의 방향이 바뀌었습니다.');}
     if(target==='secret'){this.living.secretOpen=true;this.theaterSound.cue('paper');this.toast('커튼 뒤에 다른 무대가 있습니다.');}
     if(target==='bridge'){this.mode='bridge';this.world.bridge='ACTIVE';this.guide.setVisible(true);this.toast('떠 있는 다리를 점선 위치로 옮겨 주세요.');}
     if(target==='flora'){
-      this.mode='dialogue';this.dialogue=this.world.lights==='SOLVED'?'lit':this.world.visits?'repeat':'first';
+      this.openDialogue();
       this.actor.facing=this.actor.x<STAGE.floraX?1:-1;this.theaterSound.cue('paper');
     }
     if(target==='lights'){this.mode='lights';this.world.lights='OPEN';this.theaterSound.cue('paper');}
@@ -327,8 +355,9 @@ export class TheaterScene extends Phaser.Scene {
     const locked=this.motionLocked||this.time.now<this.softLockUntil||this.restRemaining>0;
     if(!locked){
     if(input.escape){
+      if(this.mode==='dialogue')this.pauseDirection();
       if(this.mode==='bridge'||this.mode==='lights')this.closePuzzle();else if(this.mode==='testing')this.testMenu(false);else if(this.mode==='pause')this.resume();else if(this.mode==='explore')this.pause();
-    }else if(this.mode==='dialogue') {if(input.jump||input.next)this.callbacks.advance();}
+    }else if(this.mode==='dialogue') {if(!this.director.paused&&(input.jump||input.next)){if(this.posePreview)this.finishDialogue();else this.callbacks.advance();}}
     else if(this.mode==='explore'&&!stopped) {
       if(input.interact&&this.actor.grounded)this.interact();
       if(this.mode==='explore') {
@@ -372,7 +401,7 @@ export class TheaterScene extends Phaser.Scene {
       }
     }
     }
-    if(this.mode==='explore'&&!locked&&!stopped){
+    if(this.mode==='explore'&&!locked&&!stopped&&!this.director.ownsCamera){
       const point=this.cameraRig.follow(this.actor,this.cameras.main.scrollX,this.cameras.main.scrollY,dt);
       this.cameras.main.setScroll(point.x,point.y);
     }
@@ -395,20 +424,23 @@ export class TheaterScene extends Phaser.Scene {
     this.puppet.setAlpha(this.combat.state.blinkTime>0?Math.abs(1-2*this.combat.state.blinkTime/DEFENSE.blinkDuration)*.7+.08:this.combat.state.invulnerable>0?.65+Math.sin(this.combat.state.clock*24)*.2:1);
     }
     const greeting=Math.abs(this.actor.x-STAGE.floraX)<170?(this.actor.x<STAGE.floraX?-.018:.018):0;
+    this.flora.setTexture(this.npc==='flora'?'flora-puppet':`npc-${this.npc}`).setOrigin(.5,1).setPosition(STAGE.floraX,570).setScale(190/this.flora.height).setData('rodJoint',{u:.5,v:.84});
     this.flora.setFlipX(this.actor.x>STAGE.floraX).setRotation(Math.sin(t*1.3)*.016+greeting+(this.living.reaction?.kind==='magic'?Math.sin(t*12)*.05:0));
     this.livingStage.update(this.living,this.actor,dt,!locked&&!stopped&&this.mode==='explore');
-    this.stageLife.update(dt,!locked&&!stopped&&(this.mode==='explore'||this.mode==='intro'),this.lightAmount);
+    this.stageLife.update(dt,!locked&&!stopped&&(this.mode==='explore'||this.mode==='intro'||this.mode==='dialogue'&&!this.director.paused),this.lightAmount);
+    this.director.update(dt,!locked&&!stopped&&(this.mode==='dialogue'||this.mode==='explore'));
+    this.speech.update(dt,this.mode==='explore'&&!locked&&!stopped,this.actor.x,this.mode!=='dialogue');
     this.combat.render();
     if(this.mode!=='explore')this.combat.state.shielding=false;
     this.defense.update(this.actor,this.combat.state,dt,!locked&&!stopped&&this.mode==='explore');
     this.rig.update();
     if(this.world.lights==='SOLVED'&&this.mode==='explore'&&!locked&&!stopped)this.lightAmount=Math.min(1,this.lightAmount+dt*.32);
-    this.lighting.update(this.actor.x,this.actor.y,this.actor.grounded,this.world.bridge==='SOLVED',this.lightAmount,this.living.platforms);
+    this.lighting.update(this.director.running?this.puppet.x:this.actor.x,this.actor.y,this.actor.grounded,this.world.bridge==='SOLVED',this.lightAmount,this.living.platforms);
     const near=this.nearby();
-    this.hint.setVisible(Boolean(near)&&this.mode==='explore').setPosition(this.actor.x,this.actor.y-212).setText(near==='flora'?`E  ${conversationLabel(this.npc)}`:near==='bridge'?'E  무대 조작':near==='rest'?'E  쉬기 · 체크포인트':near==='wind'?'E  바람 방향':near==='secret'?'E  커튼 틈 조사':'E  조명 조사');
+    this.hint.setVisible(Boolean(near)&&!(near==='ambient'&&this.speech.snapshot().some(n=>n.id==='lamp-helper'&&n.visible))&&this.mode==='explore').setPosition(this.actor.x,this.actor.y-212).setText(near==='ambient'?'E  한마디 듣기':near==='flora'?`E  ${conversationLabel(this.npc)}`:near==='bridge'?'E  무대 조작':near==='rest'?'E  쉬기 · 체크포인트':near==='wind'?'E  바람 방향':near==='secret'?'E  커튼 틈 조사':'E  조명 조사');
     if(this.message&&this.time.now>this.nextMessageUntil)this.message='';
     // Read-only telemetry for browser regression tests; no debug controls or bypasses.
-    this.game.canvas.dataset.theater=JSON.stringify({x:this.actor.x,y:this.actor.y,vx:this.actor.vx,vy:this.actor.vy,movement:this.playerMotion.snapshot(),living:this.living,livingStage:this.livingStage.snapshot(),grounded:this.actor.grounded,camera:this.cameras.main.scrollX,cameraY:this.cameras.main.scrollY,quality:{hitStop:this.hitStop,lead:this.cameraRig.lead,textures:this.textureBudget,frames:this.frameBudget.snapshot()},mode:this.mode,motionLocked:this.motionLocked||this.time.now<this.softLockUntil||this.restRemaining>0,bridge:this.world.bridge,lights:this.world.lights,visits:this.world.visits,bridgeX:this.bridge.x,bridgeY:this.bridge.y,pose:this.puppet.texture.key,lightAmount:this.lightAmount,lighting:this.lighting.snapshot(),environment:this.stageLife.snapshot(),combat:this.combat.state,defense:this.defense.snapshot(this.combat.state),audio:this.theaterSound.snapshot()});
+    this.game.canvas.dataset.theater=JSON.stringify({direction:this.director.snapshot(),speech:this.speech.snapshot(),x:this.actor.x,y:this.actor.y,vx:this.actor.vx,vy:this.actor.vy,movement:this.playerMotion.snapshot(),living:this.living,livingStage:this.livingStage.snapshot(),grounded:this.actor.grounded,camera:this.cameras.main.scrollX,cameraY:this.cameras.main.scrollY,quality:{hitStop:this.hitStop,lead:this.cameraRig.lead,textures:this.textureBudget,frames:this.frameBudget.snapshot()},mode:this.mode,motionLocked:this.motionLocked||this.time.now<this.softLockUntil||this.restRemaining>0,bridge:this.world.bridge,lights:this.world.lights,visits:this.world.visits,bridgeX:this.bridge.x,bridgeY:this.bridge.y,pose:this.puppet.texture.key,poseFrame:this.puppet.frame.name,npcPose:this.flora.texture.key,npcFrame:this.flora.frame.name,flowerY:this.dialogueFlower.y,lightAmount:this.lightAmount,lighting:this.lighting.snapshot(),environment:this.stageLife.snapshot(),combat:this.combat.state,defense:this.defense.snapshot(this.combat.state),audio:this.theaterSound.snapshot()});
     this.game.canvas.dataset.theaterRig=JSON.stringify(this.rig.snapshot());
     this.publish();
   }
@@ -416,6 +448,7 @@ export class TheaterScene extends Phaser.Scene {
     const area=this.actor.x>6400?'무대 실험실':this.actor.x>4600?'소품실 · 전투':this.actor.x<1100?'숲의 입구':this.actor.x<2110?'부서진 종이 다리':this.actor.x<3280?'시계꽃 정원':'마지막 커튼';
     const boss=this.actor.x>4600&&this.actor.x<6400?this.combat.state.monsters.find(m=>monsterById(m.kind).pattern==='boss'):undefined;
     const view:TheaterView={mode:this.mode,area,resting:this.restRemaining>0,restPhase:this.restRemaining>.8?'숨 고르기':this.restRemaining>.4?'라이프 회복':'위치 기록 완료',quality:this.mode==='testing'?{p95Ms:Math.round(this.frameBudget.snapshot().p95Ms*10)/10,textureMiB:Math.round(this.textureBudget.afterPixels*4/1048576)}:undefined,reaction:this.mode==='explore'&&Math.abs(this.actor.x-STAGE.floraX)<320&&this.living.reaction?{text:this.living.reaction.text,emotion:this.living.reaction.emotion,npc:this.npc,x:Math.max(100,Math.min(900,Math.round((STAGE.floraX-this.cameras.main.scrollX)/4)*4-155))}:undefined,prompt:this.nearby(),message:this.message,bridgeSolved:this.world.bridge==='SOLVED',lightsSolved:this.world.lights==='SOLVED',talked:this.world.talked,dialogue:this.dialogue,lives:this.combat.state.lives,shield:Math.round(this.combat.state.shield),shielding:this.combat.state.shielding,shieldBroken:this.combat.state.shieldBroken>0||this.combat.state.shield<25,blinkCooldown:this.combat.state.blinkCooldown,npc:this.npc,monster:this.combat.state.selection,boss:boss?{name:monsterById(boss.kind).name,hp:boss.hp,maxHp:boss.maxHp,act:boss.hp<boss.maxHp/2?2:1}:null};
+    view.direction=this.mode==='dialogue'?this.director?.snapshot():undefined;view.directionDemo=this.directionDemo;view.posePreview=this.posePreview;
     const key=JSON.stringify(view);if(key!==this.lastView){this.lastView=key;this.callbacks.view(view);}
   }
 }

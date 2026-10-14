@@ -256,3 +256,15 @@ GitHub 새 환경의 설치/빌드/이력/기존 페이지 회귀 검증도 통�
 - test:history 성공: web-hub/main/gh-pages 및 javascript-web-games, void-game, text-game, deck-game의 기록된 기존 HEAD 전부 조상으로 보존.
 
 로컬 확인: http://127.0.0.1:4174/web-hub/games/forgotten-witch/ 에서 극장에 들어가기. 새 PC는 이 기능 브랜치 git pull --ff-only + npm ci + npm run dev로 이어받는다. 원본 ref.png는 사용자 미추적 파일로 건드리지 않는다. 새 변경은 기능 브랜치 PR #6에만 전달한다.
+
+## 2026-10-14 — 골판지 배우와 카메라가 함께 움직이는 대화
+
+- StageDirector와 DialogueBeat/Cue 데이터 구조를 추가했다. 실제 인게임 카메라의 확대·이동·NPC 추적, 배우의 손짓/이동, 소품 클로즈업, 대화창 숨김/복귀를 같은 타임라인에서 제어한다. 기존 일반 대화도 인형을 확대하며, 초상화 모드는 버튼으로 선택할 수 있다.
+- stage-dialogue.json의 선택 NPC 리허설: 대사 → 대화창 없이 시계꽃 두드리기 → 반응 대사 → 도망가는 NPC 추적 → 복귀. 실제 꽃과 인형을 움직이며 종이 파티클과 효과음을 연결한다. 연출 이동은 세션 안의 임시 배치이고 종료 시 탐험 위치/카메라/입력을 복원한다. 기존 플로라 첫 대화 여부를 리허설이 소비하지 않는다.
+- AmbientSpeech와 데이터 파일에 지나가며 읽는 안내인 3명을 추가했다. 근접 또는 E로 월드 골판지 말풍선, 개별 음색과 타이핑을 표시한다. 이동·점프를 막지 않고 정지 중 타이머도 멈춘다. 말풍선과 인형 모두 기존 뒤쪽 StageRig 지지대를 사용한다.
+- built-in imagegen으로 마녀와 7 NPC의 투명 2×2 동작 시트 8장/32동작을 생성했다. 말하기·가리키기·달리기·놀람을 개별 런타임 프레임으로 사용하고 설정집에서도 확인할 수 있다. 원본 PNG를 보존하며 프레임 알파 경계 추출과 GPU 상한896px을 적용한다. 참조와 정확한 생성 프롬프트는 acting-image-prompts.json, 인수인계는 DIALOGUE-DIRECTION.md에 기록했다.
+- 실제 검수에서 커튼 전환 중 이전 인형 좌표를 카메라가 잡는 문제, 확대 대화 뒤의 보조 NPC 겹침, 말풍선 위 E 안내 겹침을 수정했다. 그림자도 텍스처와 프레임을 함께 동기화해 시트 전체가 비치는 문제를 방지했다. 일시정지·취소·다시 시작·허브 이탈 시 콜백과 입력을 정리한다.
+
+검증: 최종 npm run build, TypeScript, ForgottenWitch ESLint 통과. 기존36프로젝트/37초기OG/174로컬 참조 유지. Production preview 4174에서 test:witch, test:witch-direction, test:witch-expansion, test:witch-quality, test:witch-defense, test:witch-living, test:witch-movement, test:witch-motion, test:witch-opening 모두 통과. 새 검사는 실제 입력으로 숨김/복귀, 꽃 동작, NPC 추적, 출력 중 입력 제한, 정지, 말풍선 중 자유 이동, 32개 프레임, 카메라 복구와 언마운트를 확인한다. 렌더 예산은29,436,416 / 105,379,456픽셀(약27.9%); 헤드리스 소프트웨어 환경 P95 63.33ms는 사용자 GPU의60fps 보증이 아니다. 기존 CSS/번들 경고는 유지된다.
+
+새 의존성과 외부 API 없이 기존 npm ci/dev로 이어받는다. 현재 기능 브랜치에 커밋·push하고 PR #6으로 전달한다. 사용자 ref.png는 변경하거나 커밋하지 않는다.

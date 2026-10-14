@@ -62,7 +62,7 @@ export class StageLighting {
     this.shade.setAlpha(.12*(1-amount*.55));
     this.lamps.forEach((lamp,i)=>lamp.setAlpha(Math.max(0,Math.min(1,(amount-i*.13)/.45))));
     for(const {owner,image} of this.shadows){
-      if(image.texture.key!==owner.texture.key)image.setTexture(owner.texture.key);
+      if(image.texture.key!==owner.texture.key||image.frame.name!==owner.frame.name)image.setTexture(owner.texture.key,owner.frame.name);
       image.setOrigin(owner.originX,owner.originY).setPosition(owner.x+9,owner.y+7).setScale(owner.scaleX,owner.scaleY).setRotation(owner.rotation).setFlip(owner.flipX,owner.flipY).setScrollFactor(owner.scrollFactorX,owner.scrollFactorY).setDepth(owner.depth-.2).setVisible(owner.visible).setAlpha(owner.alpha*Number(image.getData('shadowStrength')));
     }
     for(const {owner,image,strength} of this.glows){

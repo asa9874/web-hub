@@ -66,3 +66,5 @@ npm run dev -- --host 127.0.0.1 --port 5173
 최신 개발 브랜치에서는 구르기를 Shift/K 전방 순간이동으로 교체하고 Q/L 전신 쉴드·게이지·밀림·지연 회복을 추가했습니다. 현재 조작/설정값/테스트는 [게임 README](src/ForgottenWitch/README.md)의 최신 조작 항목을 확인합니다.
 
 오프닝은 도서관 탐색 → 책 일러스트 → 추락 크레딧 → 종이 위 착지 → 공간 튜토리얼 → 거대한 문/챕터 공개로 이어집니다. 재시청·컷신 스킵·장면별 진입을 지원하며 생성 그림과 실제 프롬프트도 Git에 포함합니다. 검증은 `npm run test:witch-opening`, 세부 구조는 [게임 README](src/ForgottenWitch/README.md)를 참고하세요.
+
+마녀의 극장 대화에 실제 무대 카메라와 인형 동작 연출을 추가했습니다. 테스트 위치의 연출 리허설/말풍선 NPC/동작 보기에서 체험합니다. 주인공·NPC 7명의32자세와 생성 프롬프트도 포함합니다. [데이터 작성·이어받기](src/ForgottenWitch/codex/DIALOGUE-DIRECTION.md), 검증은 `npm run test:witch-direction`입니다.

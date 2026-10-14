@@ -5,7 +5,7 @@ export function budgetStageTextures(scene:Phaser.Scene){
   for(const key of scene.textures.getTextureKeys()){
     const texture=scene.textures.get(key),source=texture.getSourceImage() as HTMLImageElement;
     if(!source?.width||!source.height)continue;
-    const cap=key.startsWith('opening-')?
+    const cap=key.startsWith('acting-')?896:key.startsWith('opening-')?
       key==='opening-witch-falling'||key==='opening-great-door'?1024:
       key.startsWith('opening-witch-')?512:
       key==='opening-library-shelf'||key==='opening-library-desk'?768:1536:

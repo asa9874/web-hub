@@ -1,0 +1,241 @@
+[
+  {
+    "speaker": "npc",
+    "emotion": "joy",
+    "segments": [
+      {
+        "text": "무대에서 이야기하면, 손짓도 대사가 돼요."
+      }
+    ],
+    "direction": {
+      "id": "pair-introduction",
+      "seconds": 1,
+      "camera": {
+        "target": "pair",
+        "zoom": 1.4,
+        "seconds": 1
+      },
+      "actors": [
+        {
+          "who": "npc",
+          "pose": "talk"
+        }
+      ]
+    }
+  },
+  {
+    "speaker": "witch",
+    "emotion": "neutral",
+    "segments": [
+      {
+        "text": "그러면…… 내가 한번 두드려 볼게."
+      }
+    ],
+    "direction": {
+      "id": "witch-points",
+      "seconds": 0.8,
+      "camera": {
+        "target": "pair",
+        "zoom": 1.4
+      },
+      "actors": [
+        {
+          "who": "player",
+          "pose": "point"
+        }
+      ]
+    }
+  },
+  {
+    "cue": {
+      "id": "tap-the-clockflower",
+      "seconds": 2.4,
+      "hideDialogue": true,
+      "camera": {
+        "target": "flower",
+        "zoom": 1.9,
+        "seconds": 0.8
+      },
+      "actors": [
+        {
+          "who": "player",
+          "pose": "strike",
+          "dx": 130,
+          "at": 0.4,
+          "seconds": 0.5
+        },
+        {
+          "who": "npc",
+          "pose": "recoil",
+          "dx": 200,
+          "at": 0.2,
+          "seconds": 0.6
+        }
+      ],
+      "effects": [
+        {
+          "at": 1.05,
+          "target": "flower",
+          "kind": "tap"
+        }
+      ],
+      "prop": {
+        "target": "flower",
+        "at": 1.05,
+        "dy": -14,
+        "angle": 0.16,
+        "seconds": 0.65
+      }
+    }
+  },
+  {
+    "speaker": "witch",
+    "emotion": "neutral",
+    "segments": [
+      {
+        "text": "어때."
+      }
+    ],
+    "direction": {
+      "id": "after-tap",
+      "seconds": 0.8,
+      "camera": {
+        "target": "pair",
+        "zoom": 1.35,
+        "follow": true
+      },
+      "actors": [
+        {
+          "who": "player",
+          "pose": "talk"
+        },
+        {
+          "who": "npc",
+          "pose": "recoil",
+          "dx": "-200",
+          "seconds": 0.65
+        }
+      ]
+    }
+  },
+  {
+    "speaker": "npc",
+    "emotion": "flustered",
+    "segments": [
+      {
+        "text": "꽃이 아니라 객석에서 대답했어요. 잠깐, 저 소리…!",
+        "cps": 44
+      }
+    ]
+  },
+  {
+    "cue": {
+      "id": "npc-runs-away",
+      "seconds": 2.8,
+      "hideDialogue": true,
+      "camera": {
+        "target": "npc",
+        "zoom": 1.4,
+        "seconds": 0.6,
+        "follow": true
+      },
+      "actors": [
+        {
+          "who": "npc",
+          "pose": "run",
+          "dx": 460,
+          "seconds": 2.3,
+          "facing": 1
+        }
+      ],
+      "effects": [
+        {
+          "at": 0.1,
+          "target": "npc",
+          "kind": "surprise"
+        }
+      ]
+    }
+  },
+  {
+    "speaker": "npc",
+    "emotion": "worry",
+    "segments": [
+      {
+        "text": "……너무 멀리 왔네요. 돌아갈게요."
+      }
+    ],
+    "direction": {
+      "id": "npc-stops",
+      "seconds": 0.5,
+      "camera": {
+        "target": "npc",
+        "zoom": 1.45
+      },
+      "actors": [
+        {
+          "who": "npc",
+          "pose": "recoil"
+        }
+      ]
+    }
+  },
+  {
+    "cue": {
+      "id": "npc-returns",
+      "seconds": 2.6,
+      "hideDialogue": true,
+      "camera": {
+        "target": "pair",
+        "zoom": 1.2,
+        "seconds": 1.2,
+        "follow": true
+      },
+      "actors": [
+        {
+          "who": "npc",
+          "pose": "run",
+          "dx": -460,
+          "seconds": 2.3,
+          "facing": -1
+        }
+      ]
+    }
+  },
+  {
+    "speaker": "witch",
+    "emotion": "worry",
+    "segments": [
+      {
+        "text": "도망갈 때도 막대는 붙어 있네."
+      }
+    ],
+    "direction": {
+      "id": "pair-reunited",
+      "seconds": 0.8,
+      "camera": {
+        "target": "pair",
+        "zoom": 1.35
+      },
+      "actors": [
+        {
+          "who": "player",
+          "pose": "recoil"
+        },
+        {
+          "who": "npc",
+          "pose": "talk"
+        }
+      ]
+    }
+  },
+  {
+    "speaker": "npc",
+    "emotion": "joy",
+    "segments": [
+      {
+        "text": "다음 장면도, 같이 연습해 주세요."
+      }
+    ]
+  }
+]

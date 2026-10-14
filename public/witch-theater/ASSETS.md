@@ -169,3 +169,9 @@ witch-walk-pass.png / witch-apex.png / witch-land.png는 built-in image_gen으�
 opening/ 아래 14종: library-back, library-shelf, library-desk, witch-reading, book-close, book-face, book-burst, witch-falling, witch-prone, witch-push, forest-back, forest-middle, forest-front, great-door. 기존 witch-portrait.png/witch-puppet.png를 참조한 실제 이미지 생성 결과다. witch-falling-clean.png는 같은 추락 그림의 배경 제거 편집본이며 런타임에서 사용한다. 원본 witch-falling.png도 보존한다. 캐릭터/문/책상/책장/숲 중경·전경은 alpha 레이어이고, 라이브러리/숲 후경과 책 컷신은 불투명 그림이다. 소품은 독립 배치, 문은 런타임 프레임을 좌우로 분리해 실제로 열린다. 숲 3레이어는 별도의 이미지이고 지형/캐릭터와 별개다.
 
 정확한 생성 지시는 src/ForgottenWitch/codex/opening-image-prompts.json. Canvas 책/문빛, 종이 파티클, 지지대, Mesh 변형은 코드 렌더링. 이미지 파일을 자르거나 원본을 덮어쓰지 않고 renderBudget의 최대1536px 업로드면만 사용한다. 환경/오프닝 음악은 OpeningAudio의 원본 로컬 합성이고 외부 음원/키 의존성은 없다. 향후 녹음 BGM 교체 지점은 이 모듈이다.
+
+## 대화 무대 동작 — 2026-10-14
+
+acting/witch-poses.png, flora-poses.png, lumi-poses.png, serin-poses.png, noel-poses.png, mira-poses.png, iris-poses.png, poppy-poses.png. 기존 각 캐릭터 골판지 인형을 참조해 built-in imagegen으로 생성한 8개 투명 2×2 시트다. 각32실제 프레임은 talk/point/run/recoil 순서이며 PNG 원본을 직접 잘라 덮어쓰지 않는다. actingData의 런타임 알파 경계 프레임과 StageRig의 화면 끝 막대, StageLighting의 동일 프레임 그림자가 실제 무대에서 사용된다. 설정집 Canvas 미리보기에서도 동일 사분면을 표시한다. 소스/실제 지시는 src/ForgottenWitch/codex/acting-image-prompts.json. 별도 컴퓨터의 생성 폴더/API 키에 의존하지 않는다.
+
+AmbientSpeech의 말풍선은 낡은 종이/골판지 테두리/꼬리를 로컬 Canvas로 만든 실제 월드 패널이다. 이미지 생성물로 보고하지 않는다. 기존 각 NPC의 음색/로컬 합성 말소리를 그대로 활용하며 새 외부 음원은 추가하지 않았다. 이미지 예산은 기존 원본 보존 정책에 따라 acting 시트 최대896px(프레임당 최대448px)이다.

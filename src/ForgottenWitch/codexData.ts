@@ -3,8 +3,9 @@ import {OBJECTS,EXTRA_OBJECTS} from './objectData';
 import {MUSIC} from './musicData';
 import {TRAPS} from './livingData';
 import {MONSTER_NOTES} from './monsterNotes';
+import {ACTING_CAST,ACTING_POSES,ACTING_LABELS,actingFile} from './actingData';
 export const CODEX_CATEGORIES=['등장인물','에셋','몬스터','설정','사물','함정','음악'] as const;
-export interface CodexEntry {id:string;category:(typeof CODEX_CATEGORIES)[number];name:string;subtitle:string;images:{file:string;label:string}[];description:string;traits:string[];note:string;musicPrompt?:string}
+export interface CodexEntry {id:string;category:(typeof CODEX_CATEGORIES)[number];name:string;subtitle:string;images:{file:string;label:string;frame?:number}[];description:string;traits:string[];note:string;musicPrompt?:string}
 const expressions=(speaker:string)=>['joy','worry','angry','flustered'].map((emotion,i)=>({file:`expressions/${speaker}-${emotion}.png`,label:['기쁨','걱정','분노','당황'][i]}));
 export const codexEntries:CodexEntry[]=[
   {id:'witch',category:'등장인물',name:'견습 마녀',subtitle:'막이 오르기 전에 온 손님',images:[{file:'witch-knee.png',label:'차분함'},...expressions('witch'),{file:'witch-puppet.png',label:'인형 · 서기'},{file:'witch-walk.png',label:'인형 · 걷기'},{file:'witch-jump.png',label:'인형 · 점프'},{file:'witch-attack.png',label:'인형 · 마법'}],description:'이름을 먼저 말하는 법이 없는 견습 마녀. 고장 난 것을 그냥 지나치지 못하면서도, 자신이 친절하다는 말에는 늘 한마디를 덧붙인다.',traits:['긴 흑발과 회보라색 눈','작은 나무 지팡이로 별 모양 마법을 쓴다','감정은 말보다 눈썹과 말끝에 먼저 나타난다'],note:'내 소개를 누가 이렇게 길게 써 놨어. ……친절하다는 부분은 지워.'},
@@ -32,3 +33,5 @@ codexEntries.push(...TRAPS.map(t=>({id:`trap-${t.id}`,category:'함정' as const
 codexEntries.find(e=>e.id==='witch')!.images.push({file:'witch-walk-pass.png',label:'걷기 · 발 교차'},{file:'witch-apex.png',label:'점프 · 정점'},{file:'witch-land.png',label:'착지 · 순간이동 마무리'});
 
 codexEntries.push({id:'full-shield',category:'에셋',name:'전신 쉴드',subtitle:'방어 마법 · 프로토타입',images:[{file:'objects/witch-shield.png',label:'실제 코드 기반 방어막'}],description:'인형 전체를 감싸는 얇은 종이 마법 고리. Q/L을 누르면 펼치고, 타격을 막으면 게이지25를 쓰며 공격 방향으로 조금 밀린다. 현재의 형태와 이름은 임시다.',traits:['게이지100 / 타격25 / 마지막 타격 후 파손','방어 해제1.4초 뒤 초당22 회복,25 이상에서 다시 사용','Shift/K는 별도의230px 순간이동 회피','원본: DefenseStage.ts / 수치: combatModel.ts의 DEFENSE'],note:'모자 끝까지 덮이는지는 꼭 확인했다. 걱정돼서가 아니라, 모자를 다시 만드는 게 귀찮아서.'});
+
+for(const id of ACTING_CAST){const entry=codexEntries.find(e=>e.id===id)!;entry.images.push(...ACTING_POSES.map((pose,frame)=>({file:actingFile(id),frame,label:'골판지 동작 · '+ACTING_LABELS[pose]})));entry.traits.push('대화 연출 및 동작 리허설: 인사/가리키기/달리기/놀람 네 포즈');}
