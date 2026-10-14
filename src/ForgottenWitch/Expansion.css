@@ -1,0 +1,21 @@
+.wt-test-lab{width:900px;left:190px;right:auto;top:112px;padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:18px;max-height:555px;overflow:auto;box-sizing:border-box;background:#eee1c9;box-shadow:0 14px 30px #20182d70;border:6px double #9f7e67;color:#372a3f;}
+.wt-test-lab header,.wt-test-lab>small,.wt-test-lab>div{grid-column:1/-1;}
+.wt-test-lab header{display:flex;align-items:center;justify-content:space-between;}.wt-test-lab header strong{font-size:30px;font-family:'Gowun Batang',serif;}
+.wt-test-lab section{padding:18px;border:1px dashed #aa8d77;background:#fff7e3;}.wt-test-lab label{display:grid;gap:12px;font-size:23px;font-weight:700;}.wt-test-lab select{font:500 21px 'WT Readable',sans-serif;padding:10px;border:2px solid #ae9176;background:#f9edd8;color:#382d43;border-radius:5px;width:100%;}.wt-test-lab section p{font-size:17px;min-height:26px;}.wt-test-lab button{font-size:19px;}.wt-test-lab section>button{background:#65516e;color:#fff4df;width:100%;padding:12px;}
+.wt-boss-health{position:absolute;bottom:30px;left:260px;width:760px;padding:15px 20px;background:#302334eb;border:4px double #caa98a;color:#f4e6d1;box-shadow:0 5px 14px #22172a70;pointer-events:none;}.wt-boss-health>div:first-child{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px;}.wt-boss-health strong{font:700 24px 'WT Readable',sans-serif;}.wt-boss-health span{font-size:17px;color:#dcc2d4;}.wt-boss-health [role=progressbar]{height:16px;background:#180f24;border:1px solid #a3838d;overflow:hidden;}.wt-boss-health i{display:block;height:100%;background:linear-gradient(90deg,#9d6783,#dec1c7);transition:width .18s;}
+.wt-codex-tabs{flex-wrap:wrap;}.wt-music-prompt{white-space:pre-wrap;font:16px/1.6 'WT Readable',sans-serif;padding:18px;background:#f6e8ce;border:1px dashed #af937e;color:#4d3b52;user-select:text;}.wt-music-status{padding:8px 12px;background:#e7dac6;display:inline-block;font-size:16px;}
+.wt-test-lab header button{flex:0 0 auto;padding:10px 20px;}.wt-test-lab header strong{white-space:nowrap;}.wt-music-status{color:#584461;font-weight:600;}
+
+.wt-living-tests{grid-column:1/-1}.wt-living-tests>div{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px}.wt-living-tests button{padding:12px;background:#65516e;color:#fff4df}.wt-npc-reaction{position:absolute;top:210px;width:335px;min-height:100px;display:flex;gap:12px;padding:15px;background:#f3e5ce;border:4px double #bc9d7e;color:#403348;z-index:18;pointer-events:none;box-shadow:4px 6px 0 #382c4540;animation:wt-panel-arrive .2s ease-out}.wt-npc-reaction img{width:70px;height:90px;object-fit:cover;object-position:50% 14%}.wt-npc-reaction p{font-size:20px;line-height:1.55;margin:0}.wt-rest-note{position:absolute;bottom:70px;left:430px;padding:16px 25px;background:#f3e5ce;color:#403348;border:4px double #bc9d7e;font-size:23px;z-index:20}
+/* Quality pass: one logical canvas, clear priority between scene captions and status. */
+.wt-overlay[data-game-mode=dialogue]>.wt-hud,.wt-overlay[data-game-mode=lights]>.wt-hud{opacity:.28;pointer-events:none}
+.wt-overlay.has-boss>.wt-toast{bottom:123px;max-width:700px}
+.wt-overlay.has-boss .wt-area-caption{left:350px;right:350px}
+.wt-npc-reaction{top:192px;width:310px;min-height:88px;padding:12px 16px;border-radius:5px;box-shadow:3px 5px 0 #382c452c}
+.wt-npc-reaction img{width:54px;height:72px;flex:none}.wt-npc-reaction p{font-size:19px;line-height:1.55}
+.wt-rest-note{left:50%;transform:translateX(-50%);white-space:nowrap;bottom:56px;font-size:22px}
+.wt-quality-readout{grid-column:1/-1}.wt-quality-readout strong{font-size:22px}.wt-quality-readout p{line-height:1.7;font-size:19px}.wt-quality-readout small{display:block;font-size:16px;line-height:1.65;color:#695570}
+.wt-light-slot.is-drop-target{background:#b9a3d44d;border-color:#65516e;box-shadow:inset 0 0 0 3px #eee2cb}.wt-light-slot.is-drop-target .wt-slot-number{color:#403348;font-weight:700}
+.wt-drag-ghost{transition:none;transform:translate(-50%,-50%) rotate(0deg)}
+.wt-overlay[data-game-mode=dialogue]>.wt-npc-reaction{display:none}
+.wt-light-slot .wt-slot-number{font-size:14px}.wt-symbol small{font-size:16px}.wt-puzzle-result{font-size:16px;line-height:1.65;min-height:27px}.wt-puzzle-escape{font-size:14px}.wt-puzzle-description{font-size:18px;line-height:1.7}.wt-puzzle-paper .wt-primary{font-size:19px}

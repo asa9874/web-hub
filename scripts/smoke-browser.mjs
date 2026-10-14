@@ -34,6 +34,12 @@ try {
     assert.equal(response.status(), 200, project.id);
     await page.waitForTimeout(400);
     if (project.type === 'react') await page.waitForFunction(() => document.getElementById('root')?.children.length > 0);
+    if (project.id === 'forgotten-witch') {
+      await page.waitForFunction(() => document.querySelector('.wt-game canvas')?.dataset.theater);
+      assert.equal(await page.locator('.wt-game canvas').count(), 1);
+      await page.getByRole('button', { name:'테스트',exact:true }).click();
+      await page.waitForFunction(() => JSON.parse(document.querySelector('.wt-game canvas').dataset.theater).mode === 'explore');
+    }
     const starts = { 'memory-flip':'.EasyStart', 'rhythm-game':'.startbutton', 'computer-quiz':'.startbutton.easy', 'animation-quiz':'.startbutton', 'text-adventure':'.OpeningSkipBox', 'inspection-game':'.GameStartButton' };
     if (starts[project.id]) { await page.locator(starts[project.id]).click({ force:true }); await page.waitForTimeout(project.id === 'inspection-game' ? 3500 : 1200); }
     if (project.id === 'english-voca') { await page.locator('#btn1').click({ force:true }); await page.waitForTimeout(1300); }
@@ -125,6 +131,7 @@ try {
       await page.goto(origin + '/web-hub/', { waitUntil:'load' });
       await expectCards(projects.length);
       await search.fill('all');
+      await page.waitForFunction(() => new URL(location.href).searchParams.get('q') === 'all' && document.getElementById('hub-search')?.value === 'all');
       assert.equal(await search.inputValue(), 'all');
       assert.equal(new URL(page.url()).searchParams.get('q'), 'all');
       await page.goto(origin + '/web-hub/', { waitUntil:'load' });

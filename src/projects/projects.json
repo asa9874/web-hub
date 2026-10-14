@@ -1,5 +1,16 @@
 [
   {
+    "id": "forgotten-witch",
+    "title": "잊혀진 마녀의 극장",
+    "description": "골판지 인형극 속 견습 마녀. 종이 다리를 잇고 숲의 조명을 되찾는 퍼즐 어드벤처 v0.1.",
+    "category": "game",
+    "path": "/games/forgotten-witch/",
+    "thumbnail": "/web-hub/witch-theater/cover.webp",
+    "ogImage": "og/forgotten-witch.png",
+    "ogPublicSource": "witch-theater/cover.webp",
+    "type": "react"
+  },
+  {
     "id": "ai-prompts",
     "title": "AI그림 프롬프트",
     "description": "생성 결과와 프롬프트를 기록하고 재사용하는 갤러리.",

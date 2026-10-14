@@ -12,7 +12,14 @@
     "deploy": "gh-pages -d dist --nojekyll",
     "test:dist": "node scripts/validate-dist.mjs",
     "test:browser": "node scripts/smoke-browser.mjs",
-    "test:history": "node scripts/verify-history.mjs"
+    "test:history": "node scripts/verify-history.mjs",
+    "test:witch": "node scripts/test-witch.mjs",
+    "test:witch-expansion": "node scripts/test-witch-expansion.mjs",
+    "test:witch-motion": "node scripts/test-witch-motion.mjs",
+    "test:witch-movement": "node scripts/test-witch-movement.mjs",
+    "test:witch-living": "node scripts/test-witch-living.mjs",
+    "witch:export-props": "node scripts/export-witch-props.mjs",
+    "test:witch-quality": "node scripts/test-witch-quality.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.17",

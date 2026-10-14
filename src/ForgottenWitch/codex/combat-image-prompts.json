@@ -1,0 +1,22 @@
+[
+  {
+    "file": "witch-attack.png",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target: the same SD cardboard witch puppet. Create her magic casting attack pose: firmly extend her star-tipped wooden wand horizontally to the RIGHT, other hand balancing, feet grounded, determined half-lidded face. Preserve exact long black hair, violet eyes, plum witch dress/cape, lavender hat bow, tan corrugated thick hand-cut outline, pastel crayon scuffs and cute 3-head proportions. Single full-body separate puppet on genuinely transparent background, all hat/hair/wand/boots visible. No baked control rod; code will draw the rod from her waist/body to viewport edge. No spell effects, no background, no text, no frames or sheet, no modern vector style."
+  },
+  {
+    "file": "game-over.png",
+    "prompt": "Use case: illustration-story. Reference image shows the protagonist's identity and cardboard texture. Create an adorable theatrical game-over paper cutout illustration: same SD dark plum witch with long black hair and lavender witch hat, lying squashed gently beneath large hand-cut cream cardboard letters reading exactly GAME OVER. Eyes are simple cute X marks, surprised comic pose, hat tipped beside her. No blood, injury, realistic death or horror. Thick tan corrugated outlines and chalky pastel crayon texture, matching the reference puppet. Landscape compact poster silhouette with truly transparent background outside letters and character. Single illustration, no UI buttons, no other text, no control rods."
+  },
+  {
+    "file": "clapper-idle.png",
+    "prompt": "Use case: stylized-concept. Reference image is style/material reference ONLY, not a character to copy. Create one new enemy puppet 'The Clapper': a cute slightly eerie squat cream cardboard rabbit with two uneven floppy ears, lavender scarf, sage patch on its belly, two dark plum round button eyes, tiny stitched smile, oversized flat paper paws held near its chest as if about to applaud. About 2.5 heads tall, full body facing RIGHT in relaxed three-quarter standing idle pose, short legs. Thick tan corrugated hand-cut cardboard outline, layered paper anatomy, pastel crayon scratches and colored pencil fibers matching reference witch's puppet craftsmanship. Same clear character silhouette usable in a 2D game. No baked rod, code draws long control pole below body. Genuine transparent background, all paws and ears visible, no floor shadow, no text, no sheet, no neon, no gore."
+  },
+  {
+    "file": "clapper-walk.png",
+    "prompt": "Use case: identity-preserve. Image 1 is the edit target, the cream cardboard rabbit 'The Clapper'. Keep exactly the same cream rabbit, asymmetric floppy ears, dark plum button eyes, tiny stitched smile, lavender scarf, sage belly patch, paper paws, proportions and tan corrugated outline. Create a full-body walking pose facing RIGHT, one short foot lifted, other supporting, paws balanced, slight forward tilt. Match original pastel crayon and layered paper texture. Single independent puppet, all ears/paws/feet visible, genuinely transparent background. No baked control rod, no ground shadow, no text, no sheet, no extra objects, no gore. Preserve character identity and camera size for game texture switching."
+  },
+  {
+    "file": "clapper-attack.png",
+    "prompt": "Use case: identity-preserve. Image 1 is the edit target, the cream cardboard rabbit 'The Clapper'. Keep exactly the same cream rabbit, asymmetric floppy ears, dark plum button eyes, tiny stitched smile, lavender scarf, sage belly patch, paper paws, proportions and tan corrugated outline. Create a full-body attack wind-up pose facing RIGHT, both large flat paws raised and spread ready to clap, tiny mouth open, brows/eyes firm but still cute, slight forward lean. Match original pastel crayon and layered paper texture. Single independent puppet, all ears/paws/feet visible, genuinely transparent background. No baked control rod, no ground shadow, no text, no sheet, no extra objects, no gore. Preserve character identity and camera size for game texture switching."
+  }
+]

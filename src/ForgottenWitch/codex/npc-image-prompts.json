@@ -1,0 +1,182 @@
+[
+  {
+    "id": "iris",
+    "variant": "neutral",
+    "prompt": "Use case: illustration-story. Image 1 witch-portrait.png is DRAWING STYLE reference only. Create a DIFFERENT beautiful adult female NPC: deep violet very long hair tied low with pale mint ribbon, silver eyes, layered sage and cream modest sound collector dress, plum capelet, antique tuning fork necklace. Distinct appealing character, restrained neutral expression, natural anatomy, modest clothing, fine deliberate anime lineart, large restrained eyes, flat local colors with hard edged two tone pastel cel shadows exactly matching reference witch. Knee-up standing dialogue cutout: entire head, hands, hips and thighs to just above knees inside frame. Slightly facing left, relaxed asymmetrical posture. High quality visual novel art. Genuine transparent background. ONE person, no cardboard backing, no text, scenery, frame, glow, grain, glossy/realistic shading or sheet."
+  },
+  {
+    "id": "iris",
+    "variant": "joy",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target iris neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to joy: warm small smile, bright relaxed eyes. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "iris",
+    "variant": "worry",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target iris neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to worry: concerned eyebrows, slightly parted lips, vulnerable subdued eyes. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "iris",
+    "variant": "angry",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target iris neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to angry: firm knitted brows, clearly stern eyes, restrained open speaking mouth, not comic yelling. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "iris",
+    "variant": "flustered",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target iris neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to flustered: flushed cheeks, widened eyes, embarrassed startled mouth. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "iris",
+    "variant": "puppet",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target iris neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Translate this EXACT same character into one FULL BODY 2.7-head SD cardboard puppet. Preserve hair, eyes, costume, props and identity. Thick tan hand-cut backing, layered paper, restrained crayon and pencil material matching image 2. Natural standing pose, gentle neutral face, whole body and all props inside frame. No control rod; added in code. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "lumi",
+    "variant": "neutral",
+    "prompt": "Use case: illustration-story. Image 1 witch-portrait.png is DRAWING STYLE reference only. Create a DIFFERENT beautiful adult female NPC: ivory hair in an asymmetric short braid, amber eyes, navy-lavender lamplighter coat, cream blouse, brass lamp brooch, small lantern at waist. Distinct appealing character, restrained neutral expression, natural anatomy, modest clothing, fine deliberate anime lineart, large restrained eyes, flat local colors with hard edged two tone pastel cel shadows exactly matching reference witch. Knee-up standing dialogue cutout: entire head, hands, hips and thighs to just above knees inside frame. Slightly facing left, relaxed asymmetrical posture. High quality visual novel art. Genuine transparent background. ONE person, no cardboard backing, no text, scenery, frame, glow, grain, glossy/realistic shading or sheet."
+  },
+  {
+    "id": "lumi",
+    "variant": "joy",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target lumi neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to joy: warm small smile, bright relaxed eyes. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "lumi",
+    "variant": "worry",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target lumi neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to worry: concerned eyebrows, slightly parted lips, vulnerable subdued eyes. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "lumi",
+    "variant": "angry",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target lumi neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to angry: firm knitted brows, clearly stern eyes, restrained open speaking mouth, not comic yelling. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "lumi",
+    "variant": "flustered",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target lumi neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to flustered: flushed cheeks, widened eyes, embarrassed startled mouth. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "lumi",
+    "variant": "puppet",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target lumi neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Translate this EXACT same character into one FULL BODY 2.7-head SD cardboard puppet. Preserve hair, eyes, costume, props and identity. Thick tan hand-cut backing, layered paper, restrained crayon and pencil material matching image 2. Natural standing pose, gentle neutral face, whole body and all props inside frame. No control rod; added in code. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "mira",
+    "variant": "neutral",
+    "prompt": "Use case: illustration-story. Image 1 witch-portrait.png is DRAWING STYLE reference only. Create a DIFFERENT beautiful adult female NPC: warm chestnut wavy shoulder length hair, green eyes, dusty pink modest usher uniform, cream cuffs and collar, small crooked pillbox hat, tan ticket wallet. Distinct appealing character, restrained neutral expression, natural anatomy, modest clothing, fine deliberate anime lineart, large restrained eyes, flat local colors with hard edged two tone pastel cel shadows exactly matching reference witch. Knee-up standing dialogue cutout: entire head, hands, hips and thighs to just above knees inside frame. Slightly facing left, relaxed asymmetrical posture. High quality visual novel art. Genuine transparent background. ONE person, no cardboard backing, no text, scenery, frame, glow, grain, glossy/realistic shading or sheet."
+  },
+  {
+    "id": "mira",
+    "variant": "joy",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target mira neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to joy: warm small smile, bright relaxed eyes. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "mira",
+    "variant": "worry",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target mira neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to worry: concerned eyebrows, slightly parted lips, vulnerable subdued eyes. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "mira",
+    "variant": "angry",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target mira neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to angry: firm knitted brows, clearly stern eyes, restrained open speaking mouth, not comic yelling. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "mira",
+    "variant": "flustered",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target mira neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to flustered: flushed cheeks, widened eyes, embarrassed startled mouth. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "mira",
+    "variant": "puppet",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target mira neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Translate this EXACT same character into one FULL BODY 2.7-head SD cardboard puppet. Preserve hair, eyes, costume, props and identity. Thick tan hand-cut backing, layered paper, restrained crayon and pencil material matching image 2. Natural standing pose, gentle neutral face, whole body and all props inside frame. No control rod; added in code. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "noel",
+    "variant": "neutral",
+    "prompt": "Use case: illustration-story. Image 1 witch-portrait.png is DRAWING STYLE reference only. Create a DIFFERENT beautiful adult female NPC: steel blue bob with swept fringe, violet eyes, tailored plum stage mechanic jacket with rolled sleeves over modest cream dress, tan tool belt, miniature wind-up key earrings. Distinct appealing character, restrained neutral expression, natural anatomy, modest clothing, fine deliberate anime lineart, large restrained eyes, flat local colors with hard edged two tone pastel cel shadows exactly matching reference witch. Knee-up standing dialogue cutout: entire head, hands, hips and thighs to just above knees inside frame. Slightly facing left, relaxed asymmetrical posture. High quality visual novel art. Genuine transparent background. ONE person, no cardboard backing, no text, scenery, frame, glow, grain, glossy/realistic shading or sheet."
+  },
+  {
+    "id": "noel",
+    "variant": "joy",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target noel neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to joy: warm small smile, bright relaxed eyes. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "noel",
+    "variant": "worry",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target noel neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to worry: concerned eyebrows, slightly parted lips, vulnerable subdued eyes. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "noel",
+    "variant": "angry",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target noel neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to angry: firm knitted brows, clearly stern eyes, restrained open speaking mouth, not comic yelling. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "noel",
+    "variant": "flustered",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target noel neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to flustered: flushed cheeks, widened eyes, embarrassed startled mouth. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "noel",
+    "variant": "puppet",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target noel neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Translate this EXACT same character into one FULL BODY 2.7-head SD cardboard puppet. Preserve hair, eyes, costume, props and identity. Thick tan hand-cut backing, layered paper, restrained crayon and pencil material matching image 2. Natural standing pose, gentle neutral face, whole body and all props inside frame. No control rod; added in code. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "poppy",
+    "variant": "neutral",
+    "prompt": "Use case: illustration-story. Image 1 witch-portrait.png is DRAWING STYLE reference only. Create a DIFFERENT beautiful adult female NPC: soft peach twin buns with loose short curls, teal eyes, cream and lavender costume tailor dress, dusty pink apron with spool pockets, sage measuring tape ribbon, small sewing scissors pendant. Distinct appealing character, restrained neutral expression, natural anatomy, modest clothing, fine deliberate anime lineart, large restrained eyes, flat local colors with hard edged two tone pastel cel shadows exactly matching reference witch. Knee-up standing dialogue cutout: entire head, hands, hips and thighs to just above knees inside frame. Slightly facing left, relaxed asymmetrical posture. High quality visual novel art. Genuine transparent background. ONE person, no cardboard backing, no text, scenery, frame, glow, grain, glossy/realistic shading or sheet."
+  },
+  {
+    "id": "poppy",
+    "variant": "joy",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target poppy neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to joy: warm small smile, bright relaxed eyes. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "poppy",
+    "variant": "worry",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target poppy neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to worry: concerned eyebrows, slightly parted lips, vulnerable subdued eyes. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "poppy",
+    "variant": "angry",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target poppy neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to angry: firm knitted brows, clearly stern eyes, restrained open speaking mouth, not comic yelling. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "poppy",
+    "variant": "flustered",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target poppy neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to flustered: flushed cheeks, widened eyes, embarrassed startled mouth. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "poppy",
+    "variant": "puppet",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target poppy neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Translate this EXACT same character into one FULL BODY 2.7-head SD cardboard puppet. Preserve hair, eyes, costume, props and identity. Thick tan hand-cut backing, layered paper, restrained crayon and pencil material matching image 2. Natural standing pose, gentle neutral face, whole body and all props inside frame. No control rod; added in code. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "serin",
+    "variant": "neutral",
+    "prompt": "Use case: illustration-story. Image 1 witch-portrait.png is DRAWING STYLE reference only. Create a DIFFERENT beautiful adult female NPC: dusty rose long hair with blunt fringe and tiny ribbon braids, gray blue eyes, cream archivist blouse, sage pinafore skirt, paper bookmark hair clips, notebook held at waist. Distinct appealing character, restrained neutral expression, natural anatomy, modest clothing, fine deliberate anime lineart, large restrained eyes, flat local colors with hard edged two tone pastel cel shadows exactly matching reference witch. Knee-up standing dialogue cutout: entire head, hands, hips and thighs to just above knees inside frame. Slightly facing left, relaxed asymmetrical posture. High quality visual novel art. Genuine transparent background. ONE person, no cardboard backing, no text, scenery, frame, glow, grain, glossy/realistic shading or sheet."
+  },
+  {
+    "id": "serin",
+    "variant": "joy",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target serin neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to joy: warm small smile, bright relaxed eyes. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "serin",
+    "variant": "worry",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target serin neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to worry: concerned eyebrows, slightly parted lips, vulnerable subdued eyes. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "serin",
+    "variant": "angry",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target serin neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to angry: firm knitted brows, clearly stern eyes, restrained open speaking mouth, not comic yelling. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "serin",
+    "variant": "flustered",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target serin neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Change ONLY expression to flustered: flushed cheeks, widened eyes, embarrassed startled mouth. Preserve EXACT identity, hair, outfit, hands, body pose and knee framing, same lineart and hard cel shadows. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  },
+  {
+    "id": "serin",
+    "variant": "puppet",
+    "prompt": "Use case: identity-preserve. Image 1 is edit target serin neutral portrait. Image 2 witch-puppet.png is puppet material reference only. Translate this EXACT same character into one FULL BODY 2.7-head SD cardboard puppet. Preserve hair, eyes, costume, props and identity. Thick tan hand-cut backing, layered paper, restrained crayon and pencil material matching image 2. Natural standing pose, gentle neutral face, whole body and all props inside frame. No control rod; added in code. One isolated transparent character, no backdrop, text, frame, sheet, glow, grain, shadows or additional objects. Genuine transparency, no cropping, high quality consistent anime finish."
+  }
+]
