@@ -24,6 +24,9 @@ import {StageCamera} from './StageCamera';
 import {budgetStageTextures,FrameBudget} from './renderBudget';
 import {LivingStage} from './LivingStage';
 import {LIVING_TESTS} from './livingData';
+import {ChapterScene} from './chapter/ChapterScene';
+import type {ChapterView} from './chapter/ChapterScene';
+import type {Region} from './chapter/model';
 import {OpeningScene} from './OpeningScene';
 import type {OpeningView} from './OpeningScene';
 import {OPENING_ASSETS} from './openingData';
@@ -50,6 +53,7 @@ export interface TheaterCallbacks {
   advance:()=>void; error:(message:string)=>void;
   progress?:(value:number)=>void;
   opening?:(value:OpeningView|null)=>void;
+  chapter?:(value:ChapterView|null)=>void;
 }
 export class TheaterScene extends Phaser.Scene {
   readonly actor=createActor();
@@ -96,6 +100,7 @@ export class TheaterScene extends Phaser.Scene {
   private directionDemo=false;private posePreview='';
   constructor(callbacks:TheaterCallbacks) { super('theater');this.callbacks=callbacks; }
   preload() {
+    for(const id of ['rabbit','mongsil','chef'])this.load.image('acting-'+id,assetUrl(`chapter/${id}-poses.png`));
     for(const id of ACTING_CAST)this.load.image('acting-'+id,assetUrl(actingFile(id)));
     for(const name of OPENING_ASSETS)this.load.image('opening-'+name,assetUrl('opening/'+(name==='witch-falling'?'witch-falling-clean':name)+'.png'));
     this.load.on('progress',(value:number)=>this.callbacks.progress?.(value));
@@ -253,17 +258,13 @@ export class TheaterScene extends Phaser.Scene {
     if(this.scene.manager.getScene('opening')){this.scene.remove('opening');}
     this.mode='intro';this.controls.clear();this.publish();this.scene.pause();this.scene.setVisible(false);
     const opening=new OpeningScene(stage,this.theaterSound.muted,v=>this.callbacks.opening?.(v),()=>{
-      this.scene.setVisible(true);this.scene.resume();Object.assign(this.actor,createActor());this.cameras.main.setZoom(1).setScroll(0,0);void this.start();
-      // Keep the same illustrated scenic flats in the actual playable stage, then reveal its independent props.
-      for(const [i,id] of ['forest-back','forest-middle','forest-front'].entries()){
-        const flat=this.add.image(640,360,'opening-'+id).setDisplaySize(1280,720).setScrollFactor(i===0?.12:i===1?.4:.8).setDepth(i===2?15:i===1?3:.1);
-        if(i>0)this.rig.attach(flat,'chapter-opening-flat-'+i,'bottom',.5,.88,7);
-        this.tweens.add({targets:flat,alpha:0,duration:5000,delay:1500,onComplete:()=>{this.rig.detach(flat);flat.destroy();}});
-      }
+      this.beginChapter();
     });this.scene.add('opening',opening,true);
   }
+  beginChapter(region?:Region,reset=false){if(this.scene.manager.getScene('chapter-one'))this.scene.remove('chapter-one');this.mode='intro';this.controls.clear();this.publish();this.scene.pause();this.scene.setVisible(false);const chapter=new ChapterScene({view:v=>this.callbacks.chapter?.(v),advance:()=>this.callbacks.advance(),replayOpening:()=>{this.scene.remove('chapter-one');this.beginOpening();}},region,reset,this.theaterSound.muted);this.scene.add('chapter-one',chapter,true);}
+  chapterScene(){return this.scene.manager.getScene('chapter-one') as ChapterScene|undefined;}
   openingScene(){return this.scene.manager.getScene('opening') as OpeningScene|undefined;}
-  motionLock(value:boolean){this.motionLocked=value;this.controls?.clear();}
+  motionLock(value:boolean){this.motionLocked=value;this.controls?.clear();this.chapterScene()?.motionLock(value);}
   async start() {await this.theaterSound.unlock();if(this.disposed)return;this.mode='explore';this.controls.clear();this.publish();}
   teleport(target:TestArea){
     this.director.reset();this.speech.clear();this.cameras.main.setZoom(1);this.directionDemo=false;this.posePreview='';
@@ -284,7 +285,7 @@ export class TheaterScene extends Phaser.Scene {
   testMonster(id:string){if(this.mode!=='testing')return;this.teleport('combat');this.combat.reset(id);this.publish();}
   testNpc(id:NpcId){if(this.mode!=='testing')return;this.npc=id;this.flora.setTexture(id==='flora'?'flora-puppet':`npc-${id}`).setScale(190/this.flora.height);this.teleport('dialogue');this.actor.x=STAGE.floraX-100;this.actor.facing=1;this.publish();}
   testDirection(id:NpcId){if(this.mode!=='testing')return;this.testNpc(id);this.openDialogue(true);}
-  testPose(id:Speaker,pose:ActingPose){if(this.mode!=='testing')return;this.testNpc(id==='witch'?this.npc:id);this.openDialogue(true);this.posePreview=`${SPEAKERS[id].name} · ${ACTING_LABELS[pose]}`;this.director.start({id:'pose-'+id+'-'+pose,seconds:6,hideDialogue:true,camera:{target:id==='witch'?'player':'npc',zoom:1.5,follow:true},actors:[{who:id==='witch'?'player':'npc',pose,dx:pose==='run'?180:0,seconds:4,facing:1}]},()=>this.finishDialogue());this.publish();}
+  testPose(id:Speaker,pose:ActingPose){if(id==='rabbit'||id==='mongsil'||id==='chef')return;if(this.mode!=='testing')return;this.testNpc(id==='witch'?this.npc:id);this.openDialogue(true);this.posePreview=`${SPEAKERS[id].name} · ${ACTING_LABELS[pose]}`;this.director.start({id:'pose-'+id+'-'+pose,seconds:6,hideDialogue:true,camera:{target:id==='witch'?'player':'npc',zoom:1.5,follow:true},actors:[{who:id==='witch'?'player':'npc',pose,dx:pose==='run'?180:0,seconds:4,facing:1}]},()=>this.finishDialogue());this.publish();}
   testBubble(id:string){if(this.mode!=='testing')return;const d=AMBIENT_NPCS.find(n=>n.id===id);if(!d)return;this.teleport('dialogue');this.actor.x=d.x-(d.trigger==='near'?170:Math.max(30,d.radius-20));this.cameras.main.setScroll(Math.max(0,this.actor.x-440),0);this.toast(d.trigger==='near'?'가까이 가면 말풍선을 읽을 수 있습니다. 이동은 계속 가능합니다.':'E · 말을 걸어 보세요. 대화창 없이 지나가며 읽습니다.');this.publish();}
   playDirection(cue:StageCue,done:()=>void){return this.mode==='dialogue'?this.director.start(cue,done):()=>{};}
   pauseDirection(){if(this.mode==='dialogue'){this.director.paused=!this.director.paused;this.controls.clear();this.publish();}}

@@ -35,3 +35,12 @@ codexEntries.find(e=>e.id==='witch')!.images.push({file:'witch-walk-pass.png',la
 codexEntries.push({id:'full-shield',category:'에셋',name:'전신 쉴드',subtitle:'방어 마법 · 프로토타입',images:[{file:'objects/witch-shield.png',label:'실제 코드 기반 방어막'}],description:'인형 전체를 감싸는 얇은 종이 마법 고리. Q/L을 누르면 펼치고, 타격을 막으면 게이지25를 쓰며 공격 방향으로 조금 밀린다. 현재의 형태와 이름은 임시다.',traits:['게이지100 / 타격25 / 마지막 타격 후 파손','방어 해제1.4초 뒤 초당22 회복,25 이상에서 다시 사용','Shift/K는 별도의230px 순간이동 회피','원본: DefenseStage.ts / 수치: combatModel.ts의 DEFENSE'],note:'모자 끝까지 덮이는지는 꼭 확인했다. 걱정돼서가 아니라, 모자를 다시 만드는 게 귀찮아서.'});
 
 for(const id of ACTING_CAST){const entry=codexEntries.find(e=>e.id===id)!;entry.images.push(...ACTING_POSES.map((pose,frame)=>({file:actingFile(id),frame,label:'골판지 동작 · '+ACTING_LABELS[pose]})));entry.traits.push('대화 연출 및 동작 리허설: 인사/가리키기/달리기/놀람 네 포즈');}
+
+// Chapter cast are provisional designs, used in the playable comedy chapter.
+codexEntries.push(...([
+ ['rabbit','먹물 토끼','위대한 비극 배우','잃어버린 당근조차 거대한 비극으로 연기하는 배우. 긴 귀는 박수를 기다릴 때 가장 먼저 움직인다.','당근은 저기 있는데. 설명보다 연기를 먼저 하는 토끼다.'],
+ ['mongsil','몽실','무대 미술 담당','작은 안경과 줄자를 가진 양. 정확한 비율보다 작품의 귀여움을 믿어서 꽃을 열 배로 만들어 버렸다.','줄자가 있는데도 열 배. 줄자 탓은 아닌 것 같다.'],
+ ['chef','꽥 셰프','소품 담당 겸 요리사','통통한 오리 요리사. 소품을 과자로 만들고 먼저 먹어 버리지만, 공연 뒤풀이만큼은 누구보다 든든하다.','소품은 선반 위. 과자는 접시 위. 이것부터 외우게 해야겠다.']
+] as const).map(([id,name,subtitle,description,note])=>({id:'chapter-'+id,category:'등장인물' as const,name,subtitle:'Chapter 01 · '+subtitle,images:[0,1,2,3].map(frame=>({file:`chapter/${id}-poses.png`,frame,label:['기본 인형','작업 / 과장된 연기','사건 리액션','기쁨 / 인사'][frame]})),description,traits:['밝은 코미디 판타지','Chapter 01의 실제 퀘스트와 공연에 등장','4동작 프레임 + 코드 기반 바운스/기울기','디자인과 설정은 조정 가능한 단계'],note})));
+
+codexEntries.push(...([['flower','접히는 종이 꽃'],['carrot','먹물 토끼의 당근'],['crown','접은 종이 왕관'],['sword','접은 종이 검'],['chest','종이 보물상자'],['material','종이 재료 묶음'],['kitchen','숲속 주방'],['rain','비 내리는 무대 배경'],['sun','맑은 낮 무대 배경'],['night','밤 무대 배경']] as const).map(([id,name])=>({id:'object-ch-'+id,category:'사물' as const,name,subtitle:'Chapter 01 실제 종이 소품',images:[{file:`objects/ch-${id}.png`,label:'실제 코드 기반 텍스처'}],description:'Chapter 01의 독립 소품. chapter/textures.ts와 같은 코드에서 추출한 이미지이며 각 퀘스트와 무대에서 상태에 따라 배치한다.',traits:['독립 위치/방향/상태','원본: chapter/textures.ts','재추출: npm run witch:export-props'],note:'도면은 여기 적어 둔다. 먹는 물건인지도 꼭 표시해 둬야겠다.'})));

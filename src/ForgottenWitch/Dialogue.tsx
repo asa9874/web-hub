@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { RefObject } from 'react';
 import { assetUrl } from './config';
 import scripts from './dialogue.json';
+import ActingFrame from './ActingFrame';
 import npcScripts from './npc-dialogue.json';
 import stageScript from './stage-dialogue.json';
 import {defaultStageCue} from './directionModel';
@@ -11,13 +12,14 @@ import { buildTimeline, EMOTIONS, lineText, portrait, SPEAKERS,conversationLabel
 import type { DialogueBeat,DialogueLine,NpcDialogueBeat, Emotion, Speaker } from './dialogueModel';
 const EMPTY_LINE:DialogueLine={speaker:'witch',emotion:'neutral',segments:[]};
 
-export default function Dialogue({script,npc='flora',demo=false,paused=false,advanceRef,onEnd,onBlip,onStage}:{script:keyof typeof scripts;npc?:NpcId;demo?:boolean;paused?:boolean;advanceRef:RefObject<(()=>void)|null>;onEnd:()=>void;onBlip:(speaker:Speaker,emotion:Emotion,pace:number)=>void;onStage:(cue:StageCue,done:()=>void)=>()=>void}){
+export default function Dialogue({script,npc='flora',demo=false,paused=false,customBeats,cast,advanceRef,onEnd,onBlip,onStage}:{script:keyof typeof scripts;npc?:NpcId;demo?:boolean;paused?:boolean;customBeats?:DialogueBeat[];cast?:Speaker;advanceRef:RefObject<(()=>void)|null>;onEnd:()=>void;onBlip:(speaker:Speaker,emotion:Emotion,pace:number)=>void;onStage:(cue:StageCue,done:()=>void)=>()=>void}){
   const lines=useMemo<DialogueBeat[]>(()=>npc==='flora'?scripts[script] as DialogueBeat[]:resolveNpcBeats(npcScripts[npc] as NpcDialogueBeat[],npc),[npc,script]);
-  const beats=useMemo<DialogueBeat[]>(()=>demo?stageScript.map(entry=>'cue' in entry?entry as DialogueBeat:{...entry,speaker:entry.speaker==='npc'?npc:entry.speaker} as DialogueLine):lines,[demo,lines,npc]);
+  const beats=useMemo<DialogueBeat[]>(()=>customBeats??(demo?stageScript.map(entry=>'cue' in entry?entry as DialogueBeat:{...entry,speaker:entry.speaker==='npc'?npc:entry.speaker} as DialogueLine):lines),[customBeats,demo,lines,npc]);
   const [index,setIndex]=useState(0),[visible,setVisible]=useState(0),[pace,setPace]=useState(1),[portraits,setPortraits]=useState(false);
   const [faces,setFaces]=useState<Partial<Record<Speaker,Emotion>>>({witch:'neutral',[npc]:'neutral'});
   const entry=beats[index],staging='cue' in entry;
   const line=staging?(beats.slice(0,index).filter((beat):beat is DialogueLine=>'segments' in beat).at(-1)??beats.find((beat):beat is DialogueLine=>'segments' in beat)??EMPTY_LINE):entry;
+  const partner=customBeats?(beats.slice(0,index+1).filter((beat):beat is DialogueLine=>'segments' in beat&&beat.speaker!=='witch').at(-1)?.speaker??cast??npc):npc;
   const timeline=useMemo(()=>staging?[]:buildTimeline(line),[line,staging]),text=lineText(line);
   const done=!staging&&!paused&&visible>=timeline.length;
   const live=useRef({pace,onBlip,onStage,paused,onEnd});useEffect(()=>{live.current={pace,onBlip,onStage,paused,onEnd};},[pace,onBlip,onStage,paused,onEnd]);
@@ -54,7 +56,7 @@ export default function Dialogue({script,npc='flora',demo=false,paused=false,adv
   };
   useEffect(()=>{advanceRef.current=next;return ()=>{advanceRef.current=null;};});
   const expression=(speaker:Speaker)=>line.speaker===speaker?line.emotion:faces[speaker]??'neutral';
-  return <div className={`wt-dialogue ${!portraits?'wt-dialogue-stage':''} ${staging?'wt-dialogue-hidden':''}`} ref={root} role="dialog" aria-modal="true" aria-label={conversationLabel(npc)} aria-hidden={staging||undefined} data-dialogue-index={index} data-typing={staging?'stage':done?'complete':'typing'} data-emotion={line.emotion} data-speaker={line.speaker} onKeyDown={event=>{
+  return <div className={`wt-dialogue ${!portraits?'wt-dialogue-stage':''} ${staging?'wt-dialogue-hidden':''}`} ref={root} role="dialog" aria-modal="true" aria-label={conversationLabel(partner)} aria-hidden={staging||undefined} data-dialogue-index={index} data-typing={staging?'stage':done?'complete':'typing'} data-emotion={line.emotion} data-speaker={line.speaker} onKeyDown={event=>{
     if((event.target as HTMLInputElement).type==='range'&&event.key.startsWith('Arrow'))event.stopPropagation();
     if((event.key==='Enter'||event.key===' ')&&(event.target as HTMLElement).closest('.wt-stage-presentation')){event.preventDefault();event.stopPropagation();if(!event.repeat)setPortraits(v=>!v);return;}
     if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();if(!event.repeat)next();}
@@ -63,7 +65,7 @@ export default function Dialogue({script,npc='flora',demo=false,paused=false,adv
       const current=items.indexOf(document.activeElement as HTMLElement);event.preventDefault();items[(current+(event.shiftKey?-1:1)+items.length)%items.length]?.focus({preventScroll:true});
     }
   }}>
-    {(['witch',npc] as const).map((speaker,i)=><img key={speaker} className={`wt-portrait wt-portrait-${i?'right':'left'} ${line.speaker===speaker?'speaking':''}`} data-expression={expression(speaker)} src={assetUrl(portrait(speaker,expression(speaker)))} alt={`${SPEAKERS[speaker].name} · ${EMOTIONS[expression(speaker)].label}`} />)}
+    {(['witch',partner] as const).map((speaker,i)=>['rabbit','mongsil','chef'].includes(speaker)?<div key={speaker} className={`wt-portrait wt-portrait-${i?'right':'left'}`}><ActingFrame file={`chapter/${speaker}-poses.png`} frame={line.emotion==='joy'?3:line.emotion==='flustered'?2:line.emotion==='worry'?1:0} label={SPEAKERS[speaker].name}/></div>:<img key={speaker} className={`wt-portrait wt-portrait-${i?'right':'left'} ${line.speaker===speaker?'speaking':''}`} data-expression={expression(speaker)} src={assetUrl(portrait(speaker,expression(speaker)))} alt={`${SPEAKERS[speaker].name} · ${EMOTIONS[expression(speaker)].label}`} />)}
     <div className="wt-dialogue-paper">
       <div className={`wt-nameplate wt-nameplate-${line.speaker}`}><strong className="wt-speaker">{SPEAKERS[line.speaker].name}</strong><span>{EMOTIONS[line.emotion].label}</span></div>
       <p className="wt-dialogue-text" aria-label={text}>

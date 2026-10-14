@@ -7,8 +7,8 @@ export type ActingPose=typeof ACTING_POSES[number];
 export const ACTING_LABELS:Record<ActingPose,string>={talk:'말하기 · 인사',point:'가리키기',run:'달리기 · 도망',recoil:'놀람 · 물러서기'};
 export const actingFile=(id:Speaker)=>`acting/${id}-poses.png`;
 /** Frames are alpha-trimmed in memory; the original generated sheets remain untouched. */
-export function prepareActingFrames(scene:Phaser.Scene){
- for(const id of ACTING_CAST){
+export function prepareActingFrames(scene:Phaser.Scene,cast:Speaker[]=ACTING_CAST){
+ for(const id of cast){
   const texture=scene.textures.get('acting-'+id),source=texture.getSourceImage() as HTMLCanvasElement;
   const canvas=document.createElement('canvas');canvas.width=source.width;canvas.height=source.height;
   const ctx=canvas.getContext('2d',{willReadFrequently:true})!;ctx.drawImage(source,0,0);const pixels=ctx.getImageData(0,0,canvas.width,canvas.height).data;

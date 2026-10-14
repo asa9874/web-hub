@@ -5,7 +5,7 @@ import {mkdir,readFile,access} from 'node:fs/promises';
 await mkdir('.build-projects',{recursive:true});
 await build({stdin:{contents:"export * from './src/ForgottenWitch/castData';export * from './src/ForgottenWitch/combatModel';export * from './src/ForgottenWitch/model';export * from './src/ForgottenWitch/codexData';export * from './src/ForgottenWitch/dialogueModel';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:'.build-projects/witch-expansion-model.mjs'});
 const {MONSTERS,BOSS,NPCS,createCombat,createActor,createWorld,moveActor,translateActor,beginBlink,updateCombat,codexEntries,SPEAKERS,conversationLabel}=await import('../.build-projects/witch-expansion-model.mjs');
-assert.equal(MONSTERS.length,20);assert.equal(NPCS.length,6);assert.equal(new Set(Object.values(SPEAKERS).map(s=>s.frequency)).size,8);
+assert.equal(MONSTERS.length,20);assert.equal(NPCS.length,6);assert.equal(new Set(Object.values(SPEAKERS).map(s=>s.frequency)).size,11);
 for(const d of [...MONSTERS,BOSS]){
   const state=createCombat(d.id),actor=createActor();actor.x=state.monsters[0].x-((d.pattern==='clap'||d.pattern==='guard')?50:240);state.invulnerable=100;
   const seen=new Set(),actions=new Set();let shots=false,airborne=false;
@@ -22,7 +22,7 @@ fight.missiles.push({id:1,x:guard.x+20,y:505,baseY:505,direction:-1,age:0});upda
 fight=createCombat();actor.x=5500;assert(beginBlink(fight,actor));assert(!beginBlink(fight,actor),'Blink cooldown prevents retrigger');fight.monsters[0].phase='windup';fight.monsters[0].timer=.01;updateCombat(fight,actor,.02,false);assert.equal(fight.lives,3,'Blink rejects real melee hit');assert.equal(fight.casting,0);
 actor=createActor();actor.x=4075;const world=createWorld();translateActor(actor,world,230);assert.equal(actor.x,4080,'Blink retains closed-door collision');
 fight=createCombat(BOSS.id);actor=createActor();actor.x=5200;const boss=fight.monsters[0];boss.phase='windup';boss.action='fan';boss.timer=.01;updateCombat(fight,actor,.02,false);assert.equal(fight.hazards.length,3);boss.hp=17;boss.phase='windup';boss.action='fan';boss.timer=.01;fight.hazards=[];updateCombat(fight,actor,.02,false);assert.equal(fight.hazards.length,5,'Boss phase two adds projectiles');
-if(process.argv.includes('--logic-only')){console.log('20 monsters, boss cycle/phase two, guard, blink immunity/collision and 8 voices passed.');process.exit(0);}
+if(process.argv.includes('--logic-only')){console.log('20 monsters, boss cycle/phase two, guard, blink immunity/collision and 11 voices passed.');process.exit(0);}
 for(const entry of codexEntries)for(const image of entry.images)await access(new URL('../public/witch-theater/'+image.file,import.meta.url));
 const dialogue=JSON.parse(await readFile('src/ForgottenWitch/npc-dialogue.json','utf8'));assert(Object.values(dialogue).every(lines=>new Set(lines.map(l=>l.emotion)).size===5));
 const browser=await chromium.launch({headless:true});
@@ -34,7 +34,7 @@ try{
   await page.addInitScript(()=>{const A=window.AudioContext;window.__tones=[];window.AudioContext=class extends A{createOscillator(){const node=super.createOscillator(),set=node.frequency.setValueAtTime.bind(node.frequency);node.frequency.setValueAtTime=(value,...args)=>{window.__tones.push(value);return set(value,...args);};return node;}};});
   await page.goto(base+'/games/forgotten-witch/',{waitUntil:'networkidle'});const menu=page.getByRole('navigation',{name:'극장 메인 메뉴'});
   await clickTravel(menu.getByRole('button',{name:'설정집',exact:true}));
-  for(const [category,count] of [['등장인물',8],['몬스터',21],['사물',31],['음악',6]]){await page.getByRole('button',{name:category,exact:true}).click();assert.equal(await page.locator('.wt-codex-card').count(),count);}
+  for(const [category,count] of [['등장인물',11],['몬스터',21],['사물',41],['음악',6]]){await page.getByRole('button',{name:category,exact:true}).click();assert.equal(await page.locator('.wt-codex-card').count(),count);}
   await page.locator('.wt-codex-card').first().click();assert((await page.locator('.wt-music-prompt').innerText()).includes('Instrumental'));await page.keyboard.press('Escape');await clickTravel(page.getByRole('button',{name:'← 메인 화면'}));
   await clickTravel(menu.getByRole('button',{name:'테스트',exact:true}));const canvas=page.locator('.wt-game canvas');
   const state=()=>canvas.evaluate(c=>JSON.parse(c.dataset.theater));
