@@ -216,3 +216,8 @@ GitHub 새 환경의 설치/빌드/이력/기존 페이지 회귀 검증도 통�
 - test:witch-quality 및 CI 추가: 실제 짧은/긴 점프·3새 이미지·구르기 마무리·타격 clock 정지·입자·휴식 단계·퍼즐 grab offset/drop hint·렌더 예산, 순수 기울기/카메라/반응/보스 예고 계약. 기존 테스트의 높은 점프 입력만 업데이트.
 
 완료 검증: 최종 전체 npm build/36개 프로젝트·37개 초기 HTML·OG·174개 로컬 참조/TypeScript/ForgottenWitch ESLint 통과. Production preview에서 test:witch-quality, movement, motion, expansion, living 및 기존 test:witch 전체 완주를 통과했다. 최종 공중 제동1800 보정 뒤 living(실제 발판/함정/재등장), quality(실제 점프/프레임/타격 정지/드래그/렌더 예산), movement 및 전체 완주를 다시 통과했다. 일반20종/보스1종·6NPC/5감정/음색과 로딩·전환은 동일 최종 연출 버전에서 통과했으며 공중 제동 보정의 영향 대상이 아니다. 실제 발판 탑승/퍼즐/하강 화면 및 생성3점을 시각 확인했다. 기존 CSS wildcard/큰 번들 경고는 유지된다. 기능 브랜치 커밋·push와 기존 PR 갱신으로 다른 PC에서 그대로 이어받는다. root ref.png는 사용자 파일로 남겨 두었다.
+
+
+## 2026-10-14 — main / Pages 반영 준비
+
+사용자 요청으로 개발 중인 현재 프로토타입을 main과 GitHub Pages에 반영한다. PR의 Linux CI는 전체 플레이의 게임 오버 대기18초에서 실패했다(렌더 P95 165ms, 실제 전투 시계7.4초/라이프1). 게임 상태를 우회하지 않고 라이프 소진 대기만90초로 확장하며, 높은 점프 검증은 벽시계330ms 대신 실제 상승 종료까지 Space hold한다. 개발 중 표시/본공연 비활성화를 유지한다. 병합은 SHA를 보존하는 merge commit, 배포는 기존 gh-pages 방식을 사용한다.
