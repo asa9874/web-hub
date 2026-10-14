@@ -39,8 +39,11 @@ export class StageRig {
       const world=owner.getWorldTransformMatrix().transformPoint(localX,localY);
       const sx=camera.scrollX*owner.scrollFactorX,sy=camera.scrollY*owner.scrollFactorY;
       const bounds=owner.getBounds();
-      const visible=owner.visible&&bounds.right-sx>=0&&bounds.left-sx<=camera.width&&bounds.bottom-sy>=0&&bounds.top-sy<=camera.height;
+      const z=camera.zoom,cx=camera.width/2,cy=camera.height/2;
+      const screenX=(x:number)=>cx+(x-sx-cx)*z,screenY=(y:number)=>cy+(y-sy-cy)*z;
+      const visible=owner.visible&&screenX(bounds.right)>=0&&screenX(bounds.left)<=camera.width&&screenY(bounds.bottom)>=0&&screenY(bounds.top)<=camera.height;
       const rod=edgeRod({x:world.x-sx,y:world.y-sy},camera.width,camera.height,edge,owner.rotation*44);
+      rod.end={x:Math.max(cx-(cx-8)/z,Math.min(cx+(cx-8)/z,rod.start.x+owner.rotation*44)),y:edge==='top'?cy-(cy+16)/z:cy+(cy+16)/z};
       graphics.setDepth(Math.min(owner.depth-.1,5.8));
       graphics.clear().setVisible(visible);
       if(visible){

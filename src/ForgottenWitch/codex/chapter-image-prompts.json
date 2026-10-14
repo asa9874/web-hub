@@ -1,0 +1,21 @@
+{
+  "mode": "built-in image_gen",
+  "reference": "public/witch-theater/flora-puppet-clean.png",
+  "assets": [
+    {
+      "id": "rabbit",
+      "prompt": "Use case: stylized-concept. Transparent game sprite sheet, clean 2 by 2 grid with wide clear gaps. Reference image is STYLE ONLY, matching its hand-painted pastel pencil/crayon fibers, thick cream cut-paper rim and subtle corrugated cardboard edge, lovely polished handmade puppet theater quality. New subject: A small black ink-colored paper rabbit, long floppy ears, huge expressive eyes, tiny lavender bow tie, short theatrical cream cape. Four distinct poses: neutral elegant standing; exaggerated tragic despair hand to forehead; delighted clutching a carrot; theatrical bow with ears swung sideways. Each cell exactly one full body character; consistent proportions and size, front three-quarter view. No attached wooden rods; rods are drawn in game. No labels, no scenery, no ground, no shadows outside the cardboard, no witch costume, no dark menace. Bright lovable comedy fantasy, tidy silhouettes. Genuine transparent background.",
+      "file": "public/witch-theater/chapter/rabbit-poses.png"
+    },
+    {
+      "id": "mongsil",
+      "prompt": "Use case: stylized-concept. Transparent game sprite sheet, clean 2 by 2 grid with wide clear gaps. Reference image is STYLE ONLY, matching its hand-painted pastel pencil/crayon fibers, thick cream cut-paper rim and subtle corrugated cardboard edge, lovely polished handmade puppet theater quality. New subject: A round fluffy cream sheep stage artist with tiny round spectacles, sage measuring tape around neck, oversized lavender craft ruler. Four distinct poses: neutral standing; proudly measuring with ruler; airborne with feet dangling and flustered face; shy delighted scrunched fluffy body. Each cell exactly one full body character; consistent proportions and size, front three-quarter view. No attached wooden rods; rods are drawn in game. No labels, no scenery, no ground, no shadows outside the cardboard, no witch costume, no dark menace. Bright lovable comedy fantasy, tidy silhouettes. Genuine transparent background.",
+      "file": "public/witch-theater/chapter/mongsil-poses.png"
+    },
+    {
+      "id": "chef",
+      "prompt": "Use case: stylized-concept. Transparent game sprite sheet, clean 2 by 2 grid with wide clear gaps. Reference image is STYLE ONLY, matching its hand-painted pastel pencil/crayon fibers, thick cream cut-paper rim and subtle corrugated cardboard edge, lovely polished handmade puppet theater quality. New subject: A plump pastel yellow paper duck chef wearing a small white chef hat and dusty pink apron, holding a big wooden spatula. Four distinct poses: neutral standing; cheeks puffed secretly nibbling biscuit; startled innocent wings raised; triumphant spatula raised with cheerful open beak. Each cell exactly one full body character; consistent proportions and size, front three-quarter view. No attached wooden rods; rods are drawn in game. No labels, no scenery, no ground, no shadows outside the cardboard, no witch costume, no dark menace. Bright lovable comedy fantasy, tidy silhouettes. Genuine transparent background.",
+      "file": "public/witch-theater/chapter/chef-poses.png"
+    }
+  ]
+}

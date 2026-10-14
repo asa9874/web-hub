@@ -3,7 +3,7 @@ export class TheaterInput {
   private keys: Record<string,Phaser.Input.Keyboard.Key>;
   private edges=new Set<string>();
   constructor(scene:Phaser.Scene) {
-    this.keys=scene.input.keyboard!.addKeys('A,D,LEFT,RIGHT,SPACE,E,ENTER,ESC,F,J,SHIFT,K') as Record<string,Phaser.Input.Keyboard.Key>;
+    this.keys=scene.input.keyboard!.addKeys('A,D,LEFT,RIGHT,SPACE,E,ENTER,ESC,F,J,SHIFT,K,Q,L') as Record<string,Phaser.Input.Keyboard.Key>;
     scene.input.keyboard!.addCapture(['SPACE','LEFT','RIGHT','UP','DOWN']);
     // Preserve short taps even if keyup arrives before the next render frame.
     for(const name of ['SPACE','E','ENTER','ESC','F','J','SHIFT','K'])this.keys[name].on('down',(_key:Phaser.Input.Keyboard.Key,event:KeyboardEvent)=>{
@@ -17,6 +17,7 @@ export class TheaterInput {
       jumpHeld:this.keys.SPACE.isDown,
       next:this.edges.has('ENTER'), escape:this.edges.has('ESC'),
       attack:this.edges.has('F')||this.edges.has('J'),
+      guard:this.keys.Q.isDown||this.keys.L.isDown,
       roll:this.edges.has('SHIFT')||this.edges.has('K'),
     };
     this.edges.clear();return frame;

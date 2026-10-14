@@ -5,7 +5,11 @@ export function budgetStageTextures(scene:Phaser.Scene){
   for(const key of scene.textures.getTextureKeys()){
     const texture=scene.textures.get(key),source=texture.getSourceImage() as HTMLImageElement;
     if(!source?.width||!source.height)continue;
-    const cap=key==='title-arch'?1536:key==='paper-tree'?768:512;
+    const cap=key.startsWith('acting-')?896:key.startsWith('opening-')?
+      key==='opening-witch-falling'||key==='opening-great-door'?1024:
+      key.startsWith('opening-witch-')?512:
+      key==='opening-library-shelf'||key==='opening-library-desk'?768:1536:
+      key==='title-arch'?1536:key==='paper-tree'?768:512;
     before+=source.width*source.height;
     const scale=Math.min(1,cap/Math.max(source.width,source.height));
     if(scale<1){

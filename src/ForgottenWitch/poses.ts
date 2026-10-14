@@ -14,6 +14,6 @@ export function puppetPose(grounded:boolean,vx:number,mode:GameMode,stride=0,vy=
   if(!grounded&&Math.abs(vy)<90)return PUPPET_POSES.apex;
   if(!grounded)return vy>70?PUPPET_POSES.fall:PUPPET_POSES.jump;
   if(mode==='explore'&&(landing>.65||recovery>0))return PUPPET_POSES.land;
-  const frames=[PUPPET_POSES.walk,PUPPET_POSES.walkPass,PUPPET_POSES.walkAlt,PUPPET_POSES.walkPass];
-  return mode==='explore'&&Math.abs(vx)>20?frames[Math.floor(stride/29)%4]:PUPPET_POSES.idle;
+  // Use one coherent cutout; generated silhouettes were changing head/feet every 29px.
+  void stride;return mode==='explore'&&Math.abs(vx)>20?PUPPET_POSES.walk:PUPPET_POSES.idle;
 }

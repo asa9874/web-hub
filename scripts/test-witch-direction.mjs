@@ -1,0 +1,38 @@
+import assert from 'node:assert/strict';
+import {build} from 'esbuild';
+import {mkdir} from 'node:fs/promises';
+import {chromium} from 'playwright';
+await mkdir('.build-projects',{recursive:true});
+await build({entryPoints:['src/ForgottenWitch/directionModel.ts'],bundle:true,platform:'node',format:'esm',outfile:'.build-projects/witch-direction-model.mjs'});
+const {sampleActor,focusPoint,defaultStageCue,progress}=await import('../.build-projects/witch-direction-model.mjs');
+const cue={who:'npc',pose:'run',dx:460,at:.2,seconds:2};
+assert.equal(sampleActor(cue,{x:2500,y:570},.1).x,2500);assert.equal(sampleActor(cue,{x:2500,y:570},2.2).x,2960);assert.equal(sampleActor(cue,{x:2500,y:570},3).x,2960);assert.equal(progress(1,0,2),.5);
+const points={player:{x:2300,y:570},npc:{x:2600,y:570},flower:{x:2620,y:510},bridge:{x:1660,y:570}};assert.deepEqual(focusPoint('pair',points),{x:2450,y:500});assert.deepEqual(focusPoint('flower',points),points.flower);assert.equal(defaultStageCue('npc').camera.target,'pair');assert.equal(defaultStageCue('player',true).camera.target,'player');
+console.log('Stage movement timing/clamping and pair/prop/speaker framing contracts passed.');
+if(process.argv.includes('--logic-only'))process.exit(0);
+const browser=await chromium.launch({headless:true});
+try{
+ const page=await browser.newPage({viewport:{width:1440,height:940}}),errors=[],missing=[],base=process.env.WITCH_TEST_URL||'http://127.0.0.1:4174/web-hub';
+ page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.url().startsWith(base)&&r.status()>=400)missing.push(r.url());});
+ await page.addInitScript(()=>{const A=window.AudioContext;window.__stageVoices=[];window.AudioContext=class extends A{createOscillator(){const o=super.createOscillator(),set=o.frequency.setValueAtTime.bind(o.frequency);o.frequency.setValueAtTime=(v,...args)=>{window.__stageVoices.push(v);return set(v,...args);};return o;}};});
+ await page.goto(base+'/games/forgotten-witch/',{waitUntil:'networkidle'});await page.waitForSelector('.wt-loading',{state:'detached'});await page.getByRole('button',{name:'테스트',exact:true}).click();
+ const settle=()=>page.waitForFunction(()=>!document.querySelector('.wt-scene-transition,.wt-motion-panel.is-leaving,.wt-loading'));
+ const read=()=>page.locator('.wt-game canvas').evaluate(c=>JSON.parse(c.dataset.theater));
+ const wait=expr=>page.waitForFunction(expr=>{const s=JSON.parse(document.querySelector('.wt-game canvas').dataset.theater);return Function('s','return '+expr)(s);},expr,{timeout:45000});
+ await settle();await wait('s.speech.find(n=>n.id==="ticket-guide").visible');const start=(await read()).x;await page.keyboard.down('d');await wait(`s.x>${start+50}`);await page.keyboard.up('d');assert.equal((await read()).mode,'explore');assert.equal(await page.locator('.wt-dialogue').count(),0);
+ await page.keyboard.press('Escape');await wait('s.mode==="pause"');const speech=JSON.stringify((await read()).speech);await page.waitForTimeout(200);assert.equal(JSON.stringify((await read()).speech),speech,'Paused world freezes speech timers');await page.keyboard.press('Escape');await settle();
+ const menu=async()=>{await page.getByRole('button',{name:'테스트 위치',exact:true}).click();await page.getByRole('navigation',{name:'기능별 테스트 이동'}).waitFor();};
+ await menu();await page.getByRole('button',{name:'말풍선 · 루미 · E',exact:true}).click();await settle();assert(!(await read()).speech.find(n=>n.id==='lamp-helper').visible);await page.keyboard.press('e');await wait('s.speech.find(n=>n.id==="lamp-helper").visible');await page.waitForTimeout(800);await page.screenshot({path:'.build-projects/witch-world-speech.png'});assert.equal((await read()).mode,'explore');await page.keyboard.down('d');await page.keyboard.down('Space');await wait('s.vy<0');await page.keyboard.up('Space');await page.keyboard.up('d');
+ assert(await page.evaluate(()=>window.__stageVoices.some(f=>Math.abs(f-338)<12)&&window.__stageVoices.some(f=>Math.abs(f-248)<12)),'Pass-by NPCs retain their own voices');
+ await menu();await page.getByLabel('소환할 NPC').selectOption('flora');await page.getByRole('button',{name:'선택 NPC 연출 리허설',exact:true}).click();await settle();await wait('s.direction.zoom>1.39');await page.screenshot({path:'.build-projects/witch-dialogue-pair.png'});
+ const next=async()=>{const b=page.locator('.wt-dialogue-next');await page.waitForFunction(()=>document.querySelector('.wt-dialogue')?.dataset.typing==='complete');await b.click();};
+ await page.getByLabel('대사 출력 속도').press('End');const actor=(await read()).x;await page.keyboard.press('d');assert.equal((await read()).x,actor);await next();await next();await wait('s.direction.id==="tap-the-clockflower"&&s.direction.hidden');
+ await wait('s.flowerY<567');await page.keyboard.press('Escape');await wait('s.direction.paused');const clock=(await read()).direction.elapsed;await page.keyboard.press('Enter');await page.waitForTimeout(200);assert.equal((await read()).direction.elapsed,clock);assert.equal(await page.locator('.wt-dialogue').getAttribute('data-typing'),'stage');await page.screenshot({path:'.build-projects/witch-dialogue-action.png'});await page.getByRole('button',{name:'연출 계속하기',exact:true}).click();await wait('s.direction.id==="after-tap"');await next();await next();
+ await wait('s.direction.id==="npc-runs-away"&&s.direction.elapsed>.7');const run=await read();await wait(`s.direction.actors.npc.x>${run.direction.actors.npc.x+100}`);assert((await read()).camera>run.camera,'Camera really tracks the escaping puppet');await page.screenshot({path:'.build-projects/witch-dialogue-chase.png'});await wait('s.direction.id==="npc-stops"');await next();await wait('s.direction.id==="pair-reunited"');await next();await next();await settle();await wait('s.mode==="explore"&&s.direction.returning===0');assert.equal((await read()).direction.zoom,1);assert.equal((await read()).visits,0,'Rehearsal does not complete the story dialogue');
+ for(const id of ['witch','flora','lumi','serin','noel','mira','iris','poppy'])for(const pose of ['talk','point','run','recoil']){
+  await menu();await page.getByLabel('동작을 볼 인물').selectOption(id);await page.getByLabel('테스트할 골판지 동작').selectOption(pose);await page.getByRole('button',{name:'선택 동작 보기',exact:true}).click();await settle();await wait(`s.direction.id==="pose-${id}-${pose}"`);const s=await read();assert.equal(id==='witch'?s.poseFrame:s.npcFrame,pose);assert.equal(id==='witch'?s.pose:s.npcPose,'acting-'+id);await page.getByRole('button',{name:'무대로 돌아가기',exact:true}).click();await settle();
+ }
+ await menu();await page.getByLabel('소환할 NPC').selectOption('flora');await page.getByRole('button',{name:'선택 NPC 소환',exact:true}).click();await settle();await page.keyboard.press('e');await wait('s.mode==="dialogue"&&s.direction.zoom>1.3');assert.equal(await page.locator('.wt-stage-presentation').count(),0);assert.equal(await page.locator('.wt-dialogue-stage').count(),0);assert(await page.locator('.wt-portrait-left').isVisible());assert(await page.locator('.wt-portrait-right').isVisible());await page.locator('.wt-portrait-right').evaluate(img=>img.decode());await page.getByRole('button',{name:'무대로 돌아가기',exact:true}).click();await settle();await wait('s.direction.returning===0');
+ await page.getByRole('link',{name:'← web hub',exact:true}).click();await page.waitForSelector('.hub');assert.equal(await page.locator('.wt-game canvas').count(),0);assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);
+ console.log('Actual pass-by/E paper speech with voices and free movement, zoomed dialogue, hidden action/real prop, paused cue, tracked escape/return, all 32 real pose frames, restored controls/camera, default portraits without toggle and teardown passed.');
+}finally{await browser.close();}

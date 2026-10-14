@@ -158,3 +158,26 @@ built-in image_gen으로 `witch-walk.png` / `witch-jump.png`를 각각 편집 �
 ## 기존 동작 품질 — 2026-10-14
 
 witch-walk-pass.png / witch-apex.png / witch-land.png는 built-in image_gen으로 witch-walk.png 또는 witch-jump.png를 편집 참고해 생성한3개 투명 SD 인형. 원본 생성 alpha 그대로 복사했고 기존 파일은 보존했다. 실제 제출 문자열은 src/ForgottenWitch/codex/quality-image-prompts.json. 런타임 연결점/높이는 poses.ts. 설정집 마녀의 다중 이미지에 등록했다. objects/의 절차적 PNG는 paper.ts의 개선된 단면/크레용 재료로 다시 추출했다. renderBudget은 브라우저 렌더면만 줄이며 이 저장소의 원본 PNG나 실제 생성 그림 파일을 편집하지 않는다.
+
+
+## 전신 쉴드 / 순간이동 — 2026-10-14
+
+새 AI 이미지는 생성하지 않았다. objects/witch-shield.png는 DefenseStage.ts가 실제 사용하는 Canvas 텍스처를 witch:export-props로 추출한 원본이다. 런타임은 같은 코드 재료에 충격 변형과 뒤쪽 StageRig 막대를 적용한다. 순간이동 출발/도착 고리와 종이 조각은 위치와 시간에 따른 코드 렌더링이며 고정 배경 이미지가 아니다. 설정집 에셋에 실제 쉴드/수치/마녀의 노트를 등록했다. 기존 구르기/걷기 후보 PNG는 아카이브로 보존한다.
+
+## 오프닝 생성 그림 — 2026-10-14
+
+opening/ 아래 14종: library-back, library-shelf, library-desk, witch-reading, book-close, book-face, book-burst, witch-falling, witch-prone, witch-push, forest-back, forest-middle, forest-front, great-door. 기존 witch-portrait.png/witch-puppet.png를 참조한 실제 이미지 생성 결과다. witch-falling-clean.png는 같은 추락 그림의 배경 제거 편집본이며 런타임에서 사용한다. 원본 witch-falling.png도 보존한다. 캐릭터/문/책상/책장/숲 중경·전경은 alpha 레이어이고, 라이브러리/숲 후경과 책 컷신은 불투명 그림이다. 소품은 독립 배치, 문은 런타임 프레임을 좌우로 분리해 실제로 열린다. 숲 3레이어는 별도의 이미지이고 지형/캐릭터와 별개다.
+
+정확한 생성 지시는 src/ForgottenWitch/codex/opening-image-prompts.json. Canvas 책/문빛, 종이 파티클, 지지대, Mesh 변형은 코드 렌더링. 이미지 파일을 자르거나 원본을 덮어쓰지 않고 renderBudget의 최대1536px 업로드면만 사용한다. 환경/오프닝 음악은 OpeningAudio의 원본 로컬 합성이고 외부 음원/키 의존성은 없다. 향후 녹음 BGM 교체 지점은 이 모듈이다.
+
+## 대화 무대 동작 — 2026-10-14
+
+acting/witch-poses.png, flora-poses.png, lumi-poses.png, serin-poses.png, noel-poses.png, mira-poses.png, iris-poses.png, poppy-poses.png. 기존 각 캐릭터 골판지 인형을 참조해 built-in imagegen으로 생성한 8개 투명 2×2 시트다. 각32실제 프레임은 talk/point/run/recoil 순서이며 PNG 원본을 직접 잘라 덮어쓰지 않는다. actingData의 런타임 알파 경계 프레임과 StageRig의 화면 끝 막대, StageLighting의 동일 프레임 그림자가 실제 무대에서 사용된다. 설정집 Canvas 미리보기에서도 동일 사분면을 표시한다. 소스/실제 지시는 src/ForgottenWitch/codex/acting-image-prompts.json. 별도 컴퓨터의 생성 폴더/API 키에 의존하지 않는다.
+
+AmbientSpeech의 말풍선은 낡은 종이/골판지 테두리/꼬리를 로컬 Canvas로 만든 실제 월드 패널이다. 이미지 생성물로 보고하지 않는다. 기존 각 NPC의 음색/로컬 합성 말소리를 그대로 활용하며 새 외부 음원은 추가하지 않았다. 이미지 예산은 기존 원본 보존 정책에 따라 acting 시트 최대896px(프레임당 최대448px)이다.
+
+### Chapter 01 골판지 동물 3종
+
+built-in image_gen으로 먹물 토끼, 몽실, 꽥 셰프의 투명2×2 시트 각1장/총12동작을 생성했다. `chapter/rabbit-poses.png`, `chapter/mongsil-poses.png`, `chapter/chef-poses.png`. 기존 플로라 인형의 색연필/종이 단면을 스타일 참조로 사용했으며 캐릭터 막대는 코드로 그린다. 정확한 프롬프트는 `src/ForgottenWitch/codex/chapter-image-prompts.json`에 있다. 생성 PNG를 재작성하지 않고896px 이하 GPU 면에서 알파 경계 프레임을 추출한다. 종이 꽃/왕관/검/상자/당근/재료/주방/비·낮·밤 배경은 `chapter/textures.ts`의 독립 코드 기반 소재다. Chapter 01 지역 음악은 로컬 원본 Web Audio 합성이다.
+`video/main_video.mp4`: 사용자 제공 타이틀 배경 영상. 원본을 저장소에 포함하고 음소거 반복 재생한다.
+오프닝 book-close.png / book-face.png / book-burst.png는 보관용 원본이며 현재 런타임에서 로딩·표시하지 않는다. 책 진입은 독립 인게임 책과 코드 기반 ray/화이트아웃으로 렌더링한다.

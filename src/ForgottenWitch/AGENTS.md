@@ -19,3 +19,6 @@
 - 생동감 요소/함정 변경은 test:witch-living도 확인한다. MovementEnvironment의 이전 플랫폼 높이·변위와 실제 탑승 충돌, 바람 이동, 닫힌 비밀 통로, 휴식 checkpoint를 유지한다. 단순 성공 UI로 대체하지 않는다. 장치·대기·반응 시간은 모달/커튼 중 정지하고, NPC 반응은 멀어지거나 debug 이동할 때 정리한다. 함정 손상은 damagePlayer의 구르기·무적 판정을 공유한다.
 
 - 품질 변경은 test:witch-quality도 검증한다. Space hold의 가변 점프와 짧은 탭을 구별하며 테스트의 높은 발판 점프에는 실제 hold 입력을 쓴다. 원본 PNG를 변형하지 않는 renderBudget과 surfaceHeight의 이전 기울기를 유지한다. 타격 정지의 입력 큐는 모달/재등장 때 비우며 단일 입력을 반복 발사하지 않는다.
+
+- 최신 사용자 지시로 구르기는 beginBlink/translateActor 순간이동으로 교체했다. 현재 기능을 구르기 회전 이미지로 되돌리지 않는다. Q/L 방어와 updateDefense의 지연 회복/파손/피격 밀림을 유지하며 test:witch-defense도 실행한다. 쉴드/마법은 DefenseStage의 코드 렌더링과 뒤쪽 막대로 처리한다. 기존 구르기 관련 지침은 최신 교체 기능에 맞춰 해석한다.
+- Chapter 01은 chapter/의 별도 씬/상태/대사를 유지한다. 밝은 코미디 판타지이며 기존 테스트 무대의 미스터리 연출을 가져오지 않는다. 챕터 변경은 test:witch-chapter의 실제 입력 완주와 오프닝 인계, 저장/스킵/재시작을 확인한다. 이동/대화/전투 테스트는 기존 테스트 무대에서 유지한다.

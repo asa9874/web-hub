@@ -1,0 +1,38 @@
+import assert from 'node:assert/strict';
+import {build} from 'esbuild';
+import {mkdir} from 'node:fs/promises';
+import {chromium} from 'playwright';
+await mkdir('.build-projects',{recursive:true});
+await build({stdin:{contents:"export * from './src/ForgottenWitch/model';export * from './src/ForgottenWitch/combatModel';",resolveDir:process.cwd()},bundle:true,platform:'node',format:'esm',outfile:'.build-projects/witch-defense-model.mjs'});
+const {createActor,createWorld,translateActor,createCombat,beginBlink,damagePlayer,updateDefense,DEFENSE,updateCombat}=await import('../.build-projects/witch-defense-model.mjs');
+let a=createActor(),w=createWorld(),s=createCombat();
+assert(beginBlink(s));const move=translateActor(a,w,DEFENSE.blinkDistance);assert.equal(move.to-move.from,230);assert.equal(damagePlayer(s),null);assert(!beginBlink(s));updateDefense(s,.3,false);assert.equal(s.blinkTime,0);assert(s.blinkCooldown>0);
+a.x=4070;translateActor(a,w,230);assert.equal(a.x,4080);a.x=10080;translateActor(a,w,230,{wind:0,platforms:[],barrier:10140});assert.equal(a.x,10140);
+a.x=1380;translateActor(a,w,230);assert(!a.grounded,'Blink into a gap does not create terrain');
+s=createCombat();updateDefense(s,.01,true);assert(s.shielding);assert.equal(damagePlayer(s,-1),'block');assert.equal(s.lives,3);assert.equal(s.shield,75);assert(s.knockback<0);assert.equal(damagePlayer(s),null,'One charge contact cannot drain every frame');
+for(let i=0;i<3;i++){updateDefense(s,.23,true);damagePlayer(s,-1);}assert.equal(s.shield,0);assert(s.shieldBroken>0);assert.equal(s.lives,3,'Final block absorbs the hit');updateDefense(s,1,true);assert.equal(s.shield,0,'Holding exhausted shield never refills it');updateDefense(s,1,false);assert.equal(s.shield,0);updateDefense(s,.5,false);assert(s.shield>0);updateDefense(s,5,false);assert.equal(s.shield,100);updateDefense(s,.01,true);assert(s.shielding);
+s=createCombat();a=createActor();a.x=5500;updateDefense(s,.01,true);s.monsters[0].phase='windup';s.monsters[0].timer=.001;const events=updateCombat(s,a,.01,false);assert(events.includes('block'));assert.equal(s.lives,3);
+console.log('Blink distance/cooldown/invulnerability/walls/gap, real shield hit/knockback/debounce/break/release delay/refill contracts passed.');
+if(process.argv.includes('--logic-only'))process.exit(0);
+const browser=await chromium.launch({headless:true});
+try{
+ const page=await browser.newPage({viewport:{width:1440,height:940}}),base=process.env.WITCH_TEST_URL||'http://127.0.0.1:4174/web-hub',errors=[];
+ page.on('pageerror',e=>errors.push(e.message));await page.goto(base+'/games/forgotten-witch/',{waitUntil:'networkidle'});
+ const settle=()=>page.waitForFunction(()=>!document.querySelector('.wt-loading,.wt-scene-transition,.wt-motion-panel.is-leaving'));
+ await page.getByRole('button',{name:'설정집',exact:true}).click();await settle();await page.getByRole('button',{name:'에셋',exact:true}).click();await page.getByRole('button',{name:/^전신 쉴드/}).click();await page.locator('.wt-codex-standing img').evaluate(img=>img.decode());assert((await page.locator('.wt-codex-writing').innerText()).includes('타격25'));await page.keyboard.press('Escape');await page.getByRole('button',{name:'← 메인 화면',exact:true}).click();await settle();
+ await page.getByRole('button',{name:'테스트',exact:true}).click();await settle();
+ const read=()=>page.locator('.wt-game canvas').evaluate(c=>JSON.parse(c.dataset.theater));
+ const wait=expr=>page.waitForFunction(expr=>{const s=JSON.parse(document.querySelector('.wt-game canvas').dataset.theater);return Function('s','return '+expr)(s);},expr,{timeout:60000});
+ const x=(await read()).x;await page.keyboard.press('Shift');await wait('s.combat.blinkTime>0');let state=await read();assert(state.x-x>=225);assert.notEqual(state.pose,'witch-roll');assert.equal(state.defense.portals,2);const after=state.x;await page.keyboard.press('Shift');await page.waitForTimeout(40);assert(Math.abs((await read()).x-after)<3,'Cooldown rejects immediate reuse');await page.screenshot({path:'.build-projects/witch-blink.png'});await wait('s.combat.blinkTime===0');
+ await page.getByRole('button',{name:'테스트 위치',exact:true}).click();await page.getByRole('button',{name:'전투 · 라이프',exact:true}).click();await settle();
+ await page.keyboard.down('d');await wait('s.x>5470');await page.keyboard.up('d');await page.keyboard.down('q');await wait('s.combat.shielding');const start=(await read()).x;
+ await wait('s.combat.shield<100');state=await read();assert.equal(state.combat.lives,3);assert(state.defense.shieldVisible);await wait(`s.x<${start-3}`);assert.equal(await page.getByRole('progressbar',{name:'쉴드 게이지'}).getAttribute('aria-valuenow'),String((await read()).combat.shield));
+ await page.screenshot({path:'.build-projects/witch-shield.png'});await page.keyboard.press('Escape');await wait('s.mode==="pause"');const energy=(await read()).combat.shield;await page.keyboard.up('q');await page.waitForTimeout(300);assert.equal((await read()).combat.shield,energy,'Pause freezes shield timers');
+ await page.keyboard.press('Escape');await settle();await wait('!s.motionLocked');
+ await page.keyboard.down('a');await wait('s.vx<0');await page.keyboard.press('Shift');await page.keyboard.up('a');await wait('s.combat.blinkTime===0');
+ const depleted=(await read()).combat.shield,clock=(await read()).combat.clock;await wait(`s.combat.clock>${clock+.4}`);assert.equal((await read()).combat.shield,depleted,'Recovery waits after releasing defense');await wait(`s.combat.shield>${depleted}`);await wait('s.combat.shield===100');
+ await page.getByRole('button',{name:'테스트 위치',exact:true}).click();await page.getByRole('button',{name:'이동 · 점프',exact:true}).click();await settle();
+ await page.keyboard.down('q');await wait('s.defense.shieldVisible');await page.keyboard.up('q');await wait('!s.combat.shielding');await page.keyboard.down('d');await wait('s.x>310');await page.keyboard.up('d');assert.notEqual((await read()).pose,'witch-walk-pass');
+ const rods=await page.locator('.wt-game canvas').evaluate(c=>JSON.parse(c.dataset.theaterRig));assert(rods.find(r=>r.name==='player-shield').depth<6);assert.deepEqual(errors,[]);
+ console.log('Real-input teleport portals/cooldown, shield absorption/gauge/knockback, paused defense, release, coherent walking and rear shield rod passed.');
+}finally{await browser.close();}
