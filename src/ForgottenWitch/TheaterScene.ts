@@ -24,6 +24,10 @@ import {StageCamera} from './StageCamera';
 import {budgetStageTextures,FrameBudget} from './renderBudget';
 import {LivingStage} from './LivingStage';
 import {LIVING_TESTS} from './livingData';
+import {OpeningScene} from './OpeningScene';
+import type {OpeningView} from './OpeningScene';
+import {OPENING_ASSETS} from './openingData';
+import type {OpeningStage} from './openingData';
 import type {LivingTest} from './livingData';
 
 export interface TheaterView {
@@ -38,6 +42,7 @@ export interface TheaterCallbacks {
   view:(view:TheaterView)=>void; ready:(scene:TheaterScene)=>void;
   advance:()=>void; error:(message:string)=>void;
   progress?:(value:number)=>void;
+  opening?:(value:OpeningView|null)=>void;
 }
 export class TheaterScene extends Phaser.Scene {
   readonly actor=createActor();
@@ -82,6 +87,7 @@ export class TheaterScene extends Phaser.Scene {
   private queued={jump:false,attack:false,roll:false};
   constructor(callbacks:TheaterCallbacks) { super('theater');this.callbacks=callbacks; }
   preload() {
+    for(const name of OPENING_ASSETS)this.load.image('opening-'+name,assetUrl('opening/'+(name==='witch-falling'?'witch-falling-clean':name)+'.png'));
     this.load.on('progress',(value:number)=>this.callbacks.progress?.(value));
     this.load.on('loaderror',(file:Phaser.Loader.File)=>this.loadErrors.push(file.key));
     for(const name of ['witch-puppet','witch-walk','witch-walk-alt','witch-jump','witch-fall','flora-puppet','paper-tree']) this.load.image(name,assetUrl(name+(name.startsWith('flora')?'-clean':'')+'.png'));
@@ -224,6 +230,21 @@ export class TheaterScene extends Phaser.Scene {
   prepareAudio(progress?:(value:number)=>void){return this.theaterSound.prepare(progress);}
   disposeAudio(){this.disposed=true;this.theaterSound.destroy();}
   unlockAudio(){return this.theaterSound.unlock();}
+  beginOpening(stage:OpeningStage='library-intro'){
+    void this.unlockAudio();
+    if(this.scene.manager.getScene('opening')){this.scene.remove('opening');}
+    this.mode='intro';this.controls.clear();this.publish();this.scene.pause();this.scene.setVisible(false);
+    const opening=new OpeningScene(stage,this.theaterSound.muted,v=>this.callbacks.opening?.(v),()=>{
+      this.scene.setVisible(true);this.scene.resume();Object.assign(this.actor,createActor());this.cameras.main.setZoom(1).setScroll(0,0);void this.start();
+      // Keep the same illustrated scenic flats in the actual playable stage, then reveal its independent props.
+      for(const [i,id] of ['forest-back','forest-middle','forest-front'].entries()){
+        const flat=this.add.image(640,360,'opening-'+id).setDisplaySize(1280,720).setScrollFactor(i===0?.12:i===1?.4:.8).setDepth(i===2?15:i===1?3:.1);
+        if(i>0)this.rig.attach(flat,'chapter-opening-flat-'+i,'bottom',.5,.88,7);
+        this.tweens.add({targets:flat,alpha:0,duration:5000,delay:1500,onComplete:()=>{this.rig.detach(flat);flat.destroy();}});
+      }
+    });this.scene.add('opening',opening,true);
+  }
+  openingScene(){return this.scene.manager.getScene('opening') as OpeningScene|undefined;}
   motionLock(value:boolean){this.motionLocked=value;this.controls?.clear();}
   async start() {await this.theaterSound.unlock();if(this.disposed)return;this.mode='explore';this.controls.clear();this.publish();}
   teleport(target:TestArea){
@@ -267,7 +288,7 @@ export class TheaterScene extends Phaser.Scene {
     this.tweens.add({targets:this.curtains[1],x:4570,duration:1900,ease:'Sine.easeInOut'});
     this.theaterSound.cue('solve');this.toast('조명이 켜지고 마지막 커튼이 열립니다.');this.publish();
   }
-  toggleSound(){this.theaterSound.unlock();this.theaterSound.muted=!this.theaterSound.muted;return this.theaterSound.muted;}
+  toggleSound(){this.theaterSound.unlock();this.theaterSound.muted=!this.theaterSound.muted;this.openingScene()?.setMuted(this.theaterSound.muted);return this.theaterSound.muted;}
   speak(speaker:Speaker,emotion:Emotion,pace:number){if(this.mode==='dialogue')this.theaterSound.blip(speaker,emotion,pace);}
   paperSound(){this.theaterSound.cue('paper');}
   curtainSound(){this.theaterSound.cue('curtain');}

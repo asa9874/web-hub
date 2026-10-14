@@ -22,6 +22,8 @@ import './StageMotion.css';
 import {portrait} from './dialogueModel';
 import {codexEntries} from './codexData';
 import illustrations from './illustrations.json';
+import OpeningOverlay from './OpeningOverlay';
+import type {OpeningView} from './OpeningScene';
 
 const initialView:TheaterView={mode:'intro',area:'숲의 입구',prompt:'',message:'',bridgeSolved:false,lightsSolved:false,talked:false,dialogue:'first',lives:3,npc:'flora',monster:'clapper',boss:null};
 function useModalFocus(ref:RefObject<HTMLDivElement|null>) {
@@ -107,6 +109,7 @@ export default function ForgottenWitch() {
   const [muted,setMuted]=useState(false),[restart,setRestart]=useState(0);
   const [gallery,setGallery]=useState(false),[uiScale,setUiScale]=useState(1);
   const [codex,setCodex]=useState(false);
+  const [opening,setOpening]=useState<OpeningView|null>(null);
   const [loading,setLoading]=useState<LoadingStatus>({progress:0,label:'엔진과 글꼴 준비'}),[loadingVisible,setLoadingVisible]=useState(true),[loadingLeaving,setLoadingLeaving]=useState(false);
   const transition=useStageTransition(value=>scene.current?.motionLock(value),()=>scene.current?.curtainSound());
   const travel=(action:()=>void|Promise<void>)=>{void scene.current?.unlockAudio();void transition.run(action).catch(cause=>setError('화면을 준비하지 못했습니다. '+String(cause)));};
@@ -134,20 +137,21 @@ export default function ForgottenWitch() {
       const finish=()=>{if(active&&engineReady&&audioReady)setReady(true);};
       const report=()=>{if(active)setLoading({progress:.2+images*.65+audio*.15,label:images<1?'종이 인형과 무대 소품':audio<1?'효과음 파일 준비':'무대 준비 완료'});};
       report();
-      const instance=new TheaterScene({view:value=>{if(active)setView(value);},ready:value=>{if(active){scene.current=value;engineReady=true;finish();}},progress:value=>{images=value;report();},advance:()=>advanceRef.current?.(),error:value=>{if(active)setError(value);}});
+      const instance=new TheaterScene({opening:value=>{if(active)setOpening(value);},view:value=>{if(active)setView(value);},ready:value=>{if(active){scene.current=value;engineReady=true;finish();}},progress:value=>{images=value;report();},advance:()=>advanceRef.current?.(),error:value=>{if(active)setError(value);}});
       void instance.prepareAudio(value=>{audio=value;report();}).then(()=>{audioReady=true;finish();});
       const game=new Phaser.Game({type:Phaser.AUTO,parent:host.current,width:TUNING.width,height:TUNING.height,backgroundColor:'#F3E5CE',scene:[instance],render:{antialias:true},scale:{mode:Phaser.Scale.FIT,autoCenter:Phaser.Scale.CENTER_BOTH},audio:{noAudio:true}});
       dispose=()=>{instance.disposeAudio();game.destroy(true);};
     }).catch(cause=>{if(active)setError('게임 엔진을 불러오지 못했습니다. '+String(cause));});
     return ()=>{active=false;scene.current=null;dispose?.();document.body.style.overflow=overflow;};
   },[restart]);
-  const replay=()=>{setReady(false);setError('');setView(initialView);setMuted(false);setGallery(false);setCodex(false);setLoading({progress:0,label:'엔진과 글꼴 준비'});setLoadingVisible(true);setLoadingLeaving(false);setRestart(n=>n+1);};
+  const replay=()=>{setOpening(null);setReady(false);setError('');setView(initialView);setMuted(false);setGallery(false);setCodex(false);setLoading({progress:0,label:'엔진과 글꼴 준비'});setLoadingVisible(true);setLoadingLeaving(false);setRestart(n=>n+1);};
   return <main className="wt-page">
     <header className="wt-topbar"><Link to="/" onClick={exitHub}>← web hub</Link><span>잊혀진 마녀의 극장 <small>v0.1</small></span><button onKeyDown={event=>{if(view.mode==='dialogue'&&(event.key==='Enter'||event.key===' '))event.preventDefault();}} onClick={()=>{if(scene.current)setMuted(scene.current.toggleSound());}} aria-label={muted?'소리 켜기':'소리 끄기'}>{muted?'소리 꺼짐':'소리 켜짐'}</button></header>
     <div className="wt-stage-shell" ref={shell}>
       <div className="wt-game" ref={host} role="application" aria-label="잊혀진 마녀의 극장 게임. A D 이동, Space 점프, E 상호작용" />
       <div className={`wt-overlay ${view.boss?'has-boss':''}`} data-game-mode={view.mode} style={{transform:`scale(${uiScale})`}}>
-        {error?<div className="wt-modal-backdrop"><div className="wt-intro-paper"><h2>무대를 준비하지 못했습니다.</h2><p role="alert">{error}</p><button onClick={replay}>다시 불러오기</button><Link to="/" onClick={exitHub}>허브로 돌아가기</Link></div></div>:view.mode==='intro'?<TitleScreen ready={ready} muted={muted} onStart={()=>travel(async()=>{await warmImages((['witch','flora'] as const).flatMap(id=>(['neutral','joy','worry','angry','flustered'] as const).map(e=>portrait(id,e))));await scene.current?.start();})} onIllustrations={()=>travel(async()=>{await warmImages(illustrations.slice(0,4).map(i=>i.image));setGallery(true);})} onCodex={()=>travel(async()=>{await warmImages(codexEntries.filter(e=>e.category==='등장인물').map(e=>e.images[0].file));setCodex(true);})} onExit={exitHub} onSound={()=>{if(scene.current)setMuted(scene.current.toggleSound());}} />:null}
+        {error?<div className="wt-modal-backdrop"><div className="wt-intro-paper"><h2>무대를 준비하지 못했습니다.</h2><p role="alert">{error}</p><button onClick={replay}>다시 불러오기</button><Link to="/" onClick={exitHub}>허브로 돌아가기</Link></div></div>:view.mode==='intro'&&!opening?<TitleScreen ready={ready} muted={muted} onOpening={()=>scene.current?.beginOpening()} onStart={()=>travel(async()=>{await warmImages((['witch','flora'] as const).flatMap(id=>(['neutral','joy','worry','angry','flustered'] as const).map(e=>portrait(id,e))));await scene.current?.start();})} onIllustrations={()=>travel(async()=>{await warmImages(illustrations.slice(0,4).map(i=>i.image));setGallery(true);})} onCodex={()=>travel(async()=>{await warmImages(codexEntries.filter(e=>e.category==='등장인물').map(e=>e.images[0].file));setCodex(true);})} onExit={exitHub} onSound={()=>{if(scene.current)setMuted(scene.current.toggleSound());}} />:null}
+        {opening&&<OpeningOverlay view={opening} onSkip={()=>scene.current?.openingScene()?.skip()} onPause={()=>scene.current?.openingScene()?.setPaused(!opening.paused)} onScene={stage=>scene.current?.openingScene()?.jumpTo(stage)} onReplay={()=>scene.current?.openingScene()?.jumpTo("library-intro")} />}
         {gallery&&<Illustrations onClose={()=>travel(()=>setGallery(false))} />}
         {codex&&<CodexBook onClose={()=>travel(()=>setCodex(false))} />}
         {!['intro','complete'].includes(view.mode)&&<div className="wt-hud"><div className="wt-stage-ticket"><small>첫 번째 막 · TEST</small><strong>{view.area}</strong></div><ol aria-label="공연 준비 진행"><li className={view.bridgeSolved?'done':''}>다리</li><li className={view.talked?'done':''}>플로라</li><li className={view.lightsSolved?'done':''}>조명</li></ol><Lives count={view.lives}/><div className={`wt-shield-meter ${view.shieldBroken?'broken':view.shielding?'active':''}`}><small>Q / L · 쉴드 {view.shield??100}</small><div role="progressbar" aria-label="쉴드 게이지" aria-valuemin={0} aria-valuemax={100} aria-valuenow={view.shield??100}><i style={{width:`${view.shield??100}%`}}/></div></div><button disabled={!['explore','testing'].includes(view.mode)} aria-expanded={view.mode==='testing'} onClick={()=>scene.current?.testMenu(view.mode!=='testing')}>테스트 위치</button><button aria-label="일시정지" disabled={view.mode!=='explore'} onClick={()=>scene.current?.pause()}>Ⅱ</button></div>}
@@ -161,12 +165,12 @@ export default function ForgottenWitch() {
         <MotionPanel show={view.mode==='dialogue'} name="dialogue"><Dialogue key={view.dialogue+view.npc} script={view.dialogue} npc={view.npc} advanceRef={advanceRef} onEnd={()=>scene.current?.finishDialogue()} onBlip={(speaker,emotion,pace)=>scene.current?.speak(speaker,emotion,pace)} /></MotionPanel>
         <MotionPanel show={view.mode==='lights'} name="lights"><LightPuzzle onPaper={()=>scene.current?.paperSound()} onClose={()=>scene.current?.closePuzzle()} onCheck={()=>scene.current?.checkingLights()} onRetry={()=>scene.current?.retryLights()} onSolve={()=>scene.current?.solveLights()} /></MotionPanel>
         {view.mode==='gameover'&&<GameOver onPrepare={()=>scene.current?.prepareRespawn()??Promise.resolve()} onFinish={()=>scene.current?.finishRespawn()} onCurtain={()=>scene.current?.curtainSound()} />}
-        <MotionPanel show={view.mode==='pause'} name="pause"><div className="wt-modal-backdrop"><div className="wt-intro-paper wt-pause" role="dialog" aria-modal="true" aria-label="일시정지"><div className="wt-eyebrow">INTERMISSION / 막간</div><h2>잠깐, 숨을 고르고.</h2><p>모자를 고쳐 쓰면 다시 시작.</p><button className="wt-primary" onClick={()=>scene.current?.resume()}>공연 계속하기</button><button className="wt-secondary" onClick={()=>travel(replay)}>테스트 처음부터</button><Link to="/" onClick={exitHub}>허브로 나가기</Link></div></div></MotionPanel>
+        <MotionPanel show={view.mode==='pause'} name="pause"><div className="wt-modal-backdrop"><div className="wt-intro-paper wt-pause" role="dialog" aria-modal="true" aria-label="일시정지"><div className="wt-eyebrow">INTERMISSION / 막간</div><h2>잠깐, 숨을 고르고.</h2><p>모자를 고쳐 쓰면 다시 시작.</p><button className="wt-primary" onClick={()=>scene.current?.resume()}>공연 계속하기</button><button className="wt-secondary" onClick={()=>scene.current?.beginOpening()}>오프닝 다시보기</button><button className="wt-secondary" onClick={()=>travel(replay)}>테스트 처음부터</button><Link to="/" onClick={exitHub}>허브로 나가기</Link></div></div></MotionPanel>
         <MotionPanel show={view.mode==='complete'} name="complete"><div className="wt-modal-backdrop wt-completion"><div className="wt-intro-paper" role="dialog" aria-modal="true" aria-label="프로토타입 완료"><div className="wt-ticket">CURTAIN CALL</div><div className="wt-eyebrow">달 · 별 · 꽃</div><h2>첫 번째 막의 준비가<br/>끝났습니다.</h2><p>Prototype v0.1 Complete</p><button className="wt-primary" onClick={()=>travel(replay)}>한 번 더 공연하기</button><Link to="/" onClick={exitHub}>프로젝트 목록으로</Link></div></div></MotionPanel>
         {loadingVisible&&!error&&<LoadingScreen status={loading} leaving={loadingLeaving}/>}
         <StageCurtain phase={transition.phase}/>
       </div>
     </div>
-    <footer className="wt-control-strip"><span><kbd>A</kbd><kbd>D</kbd> 이동</span><span><kbd>Space</kbd> 짧게 / 길게 점프</span><span><kbd>E</kbd> 상호작용</span><span><kbd>F</kbd> / <kbd>J</kbd> 마법</span><span><kbd>Shift</kbd> / <kbd>K</kbd> 순간이동</span><span><kbd>Q</kbd> / <kbd>L</kbd> 방어 유지</span><span>마우스 · 드래그</span><span><kbd>Esc</kbd> 일시정지</span>{view.talked&&<strong>달 → 별 → 꽃</strong>}</footer>
+    {!opening&&<footer className="wt-control-strip"><span><kbd>A</kbd><kbd>D</kbd> 이동</span><span><kbd>Space</kbd> 짧게 / 길게 점프</span><span><kbd>E</kbd> 상호작용</span><span><kbd>F</kbd> / <kbd>J</kbd> 마법</span><span><kbd>Shift</kbd> / <kbd>K</kbd> 순간이동</span><span><kbd>Q</kbd> / <kbd>L</kbd> 방어 유지</span><span>마우스 · 드래그</span><span><kbd>Esc</kbd> 일시정지</span>{view.talked&&<strong>달 → 별 → 꽃</strong>}</footer>}
   </main>;
 }

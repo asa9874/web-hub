@@ -163,3 +163,9 @@ witch-walk-pass.png / witch-apex.png / witch-land.png는 built-in image_gen으�
 ## 전신 쉴드 / 순간이동 — 2026-10-14
 
 새 AI 이미지는 생성하지 않았다. objects/witch-shield.png는 DefenseStage.ts가 실제 사용하는 Canvas 텍스처를 witch:export-props로 추출한 원본이다. 런타임은 같은 코드 재료에 충격 변형과 뒤쪽 StageRig 막대를 적용한다. 순간이동 출발/도착 고리와 종이 조각은 위치와 시간에 따른 코드 렌더링이며 고정 배경 이미지가 아니다. 설정집 에셋에 실제 쉴드/수치/마녀의 노트를 등록했다. 기존 구르기/걷기 후보 PNG는 아카이브로 보존한다.
+
+## 오프닝 생성 그림 — 2026-10-14
+
+opening/ 아래 14종: library-back, library-shelf, library-desk, witch-reading, book-close, book-face, book-burst, witch-falling, witch-prone, witch-push, forest-back, forest-middle, forest-front, great-door. 기존 witch-portrait.png/witch-puppet.png를 참조한 실제 이미지 생성 결과다. witch-falling-clean.png는 같은 추락 그림의 배경 제거 편집본이며 런타임에서 사용한다. 원본 witch-falling.png도 보존한다. 캐릭터/문/책상/책장/숲 중경·전경은 alpha 레이어이고, 라이브러리/숲 후경과 책 컷신은 불투명 그림이다. 소품은 독립 배치, 문은 런타임 프레임을 좌우로 분리해 실제로 열린다. 숲 3레이어는 별도의 이미지이고 지형/캐릭터와 별개다.
+
+정확한 생성 지시는 src/ForgottenWitch/codex/opening-image-prompts.json. Canvas 책/문빛, 종이 파티클, 지지대, Mesh 변형은 코드 렌더링. 이미지 파일을 자르거나 원본을 덮어쓰지 않고 renderBudget의 최대1536px 업로드면만 사용한다. 환경/오프닝 음악은 OpeningAudio의 원본 로컬 합성이고 외부 음원/키 의존성은 없다. 향후 녹음 BGM 교체 지점은 이 모듈이다.

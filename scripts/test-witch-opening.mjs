@@ -1,0 +1,35 @@
+import assert from 'node:assert/strict';
+import {build} from 'esbuild';
+import {mkdir} from 'node:fs/promises';
+import {chromium} from 'playwright';
+await mkdir('.build-projects',{recursive:true});
+await build({entryPoints:['src/ForgottenWitch/openingModel.ts'],bundle:true,platform:'node',format:'esm',outfile:'.build-projects/witch-opening-model.mjs'});
+const {createOpening,tickOpening,enterOpening,skipOpening,fallDepth}=await import('../.build-projects/witch-opening-model.mjs');
+let s=createOpening();const tick=(seconds,dir=0,jump=false,held=false,e=false)=>{for(let i=0;i<Math.ceil(seconds*120);i++)tickOpening(s,1/120,dir,i===0&&jump,held,i===0&&e);};
+tick(3.6);assert.equal(s.stage,'library');const y=s.y;tick(.2,0,true,true);assert.equal(s.y,y,'Library does not permit jumps');s.x=1600;tick(.02,0,false,false,true);assert.equal(s.stage,'book-focus');tick(45);assert.equal(s.stage,'landing');tick(16);assert.equal(s.stage,'tutorial');tick(.2,-1);tick(.6,1);s.x=850;tick(1,1,true,true);assert(s.crossed);s.x=2250;tick(.02,0,false,false,true);assert.equal(s.stage,'door');tick(21);assert(s.complete);
+s=createOpening('fall');s.paused=true;tick(1);assert.equal(s.elapsed,0);s.paused=false;skipOpening(s);assert.equal(s.stage,'tutorial');enterOpening(s,'chapter');skipOpening(s);assert(s.complete);assert(fallDepth(26)>fallDepth(10));console.log('Opening timings, movement restrictions, safe tutorial collision, progression, pause and skip contracts passed.');
+if(process.argv.includes('--logic-only'))process.exit(0);
+const browser=await chromium.launch({headless:true});
+try{
+ const page=await browser.newPage({viewport:{width:1440,height:940}}),errors=[],contexts=[];
+ page.on('pageerror',e=>errors.push(e.message));
+ await page.addInitScript(()=>{window.__openingContexts=[];const Original=window.AudioContext;window.AudioContext=class extends Original{constructor(...args){super(...args);window.__openingContexts.push(this);}};});
+ await page.goto((process.env.WITCH_TEST_URL||'http://127.0.0.1:4174/web-hub')+'/games/forgotten-witch/',{waitUntil:'networkidle'});await page.waitForSelector('.wt-loading',{state:'detached'});
+ const read=()=>page.locator('.wt-game canvas').evaluate(c=>JSON.parse(c.dataset.opening));
+ const wait=expr=>page.waitForFunction(expr=>{const c=document.querySelector('.wt-game canvas'),s=c?.dataset.opening&&JSON.parse(c.dataset.opening);return s&&Function('s','return '+expr)(s);},expr,{timeout:60000});
+ await page.getByRole('button',{name:/극장에 들어가기/}).click();await wait('s.stage==="library-intro"');assert.equal(await page.locator('.wt-hud').count(),0);await page.screenshot({path:'.build-projects/opening-reading.png'});await wait('s.stage==="library"');
+ await page.keyboard.press('Space');assert.equal((await read()).y,570);await page.keyboard.press('e');await wait('s.noteTime>0');
+ await page.keyboard.down('d');await wait('s.x>1530');await page.keyboard.up('d');await page.keyboard.press('e');await wait('s.stage==="book-focus"');await wait('s.stage==="book-close"');await page.screenshot({path:'.build-projects/opening-book.png'});await wait('s.stage==="whiteout"');await wait('s.stage==="fall"');await wait('s.elapsed>8');assert((await read()).visual.fallFaces===null||(await read()).visual.fallFaces>0,'Falling witch must render visible Mesh faces');await page.screenshot({path:'.build-projects/opening-credit.png'});
+ await page.keyboard.press('Escape');await wait('s.paused');const frozen=(await read()).elapsed;await page.waitForTimeout(250);assert.equal((await read()).elapsed,frozen);await page.getByRole('button',{name:'계속하기',exact:true}).last().click();await wait('!s.paused');await wait('s.stage==="landing"');await page.screenshot({path:'.build-projects/opening-impact.png'});await wait('s.stage==="tutorial"');
+ await page.keyboard.down('a');await wait('s.left');await page.keyboard.up('a');await page.keyboard.down('d');await wait('s.x>830');await page.keyboard.down('Space');await wait('s.x>1115');await page.keyboard.up('Space');await wait('s.x>2240');await page.keyboard.up('d');assert((await read()).crossed);await page.screenshot({path:'.build-projects/opening-door-approach.png'});
+ const zoom=(await read()).visual.zoom,rods=JSON.parse(await page.locator('.wt-game canvas').getAttribute('data-opening-rig'));
+ for(const rod of rods.filter(r=>r.visible)){const edge=360+(rod.end.y-360)*zoom;assert(rod.edge==='top'?edge<=-15:edge>=735,'Zoomed poles reach viewport edge');}
+ await page.setViewportSize({width:1080,height:800});const stageBox=await page.locator('.wt-stage-shell').boundingBox(),buttonBox=await page.getByRole('button',{name:'장면 테스트',exact:true}).boundingBox();assert(buttonBox.x+buttonBox.width<=stageBox.x+stageBox.width+1);await page.setViewportSize({width:1440,height:940});
+ await page.keyboard.press('e');await wait('s.stage==="door"');await wait('s.stage==="chapter"');await wait('s.elapsed>2');await page.screenshot({path:'.build-projects/opening-forest.png'});await page.waitForSelector('.wt-opening-ui',{state:'detached',timeout:20000});await page.waitForFunction(()=>JSON.parse(document.querySelector('.wt-game canvas').dataset.theater).mode==='explore');
+ await page.keyboard.down('d');await page.waitForTimeout(200);await page.keyboard.up('d');assert(JSON.parse(await page.locator('.wt-game canvas').getAttribute('data-theater')).x>200,'Chapter control returned');
+ await page.keyboard.press('Escape');await page.getByRole('button',{name:'오프닝 다시보기',exact:true}).click();await wait('s.stage==="library-intro"');await wait('s.stage==="library"');await page.getByRole('button',{name:'장면 테스트',exact:true}).click();await page.getByRole('button',{name:'03 · 추락 크레딧',exact:true}).click();await wait('s.stage==="fall"');await page.getByRole('button',{name:'컷신 건너뛰기',exact:true}).click();await wait('s.stage==="tutorial"');
+ await page.getByRole('button',{name:'장면 테스트',exact:true}).click();await page.getByRole('button',{name:'06 · 챕터 공개',exact:true}).click();await page.getByRole('button',{name:'컷신 건너뛰기',exact:true}).click();await page.waitForSelector('.wt-opening-ui',{state:'detached'});
+ contexts.push(...await page.evaluate(()=>window.__openingContexts.map(c=>c.state)));assert(contexts.filter(c=>c==='closed').length>=2,'Both replayed opening audio contexts were closed');assert.equal(await page.locator('.wt-game canvas').count(),1);
+ await page.keyboard.press('Escape');await page.getByRole('button',{name:'오프닝 다시보기',exact:true}).click();await wait('s.stage==="library-intro"');await page.getByRole('link',{name:'← web hub',exact:true}).click();await page.waitForSelector('.hub');assert.equal(await page.locator('canvas').count(),0);await page.waitForFunction(()=>window.__openingContexts.every(c=>c.state==='closed'));assert.deepEqual(errors,[]);
+ console.log('Full real-input library → book → 30-second fall → landing → safe tutorial → 20-second door/reveal → playable chapter, pause, replay, direct entry, skip and audio cleanup passed.');
+}finally{await browser.close();}

@@ -1,0 +1,92 @@
+[
+  {
+    "id": "library-back",
+    "transparent": false,
+    "reference": "witch-puppet.png",
+    "prompt": "Use case: illustration-story. Asset type: production opening-sequence game asset. Warm handmade puppet-theater library rear wall: antique cream plaster and plum timber, tall moonlit window on left with amber light shafts, fireplace and brass candle niches on right, delicate paper fibres, elegant painted scenery. Wide 16:9 front elevation, NO floor, no freestanding shelves, no desk, no character, no words. The lower third must be open warm cream wall for independent floor and puppets. Layers of cardboard and colored pencil, soft honey/cream/sage/plum lighting. Avoid cropped silhouettes, glossy 3D, pixel art, smooth vector icons, noisy artificial speckling, watermarks."
+  },
+  {
+    "id": "library-shelf",
+    "transparent": true,
+    "reference": "witch-puppet.png",
+    "prompt": "Use case: illustration-story. Asset type: production opening-sequence game asset. Single tall antique wooden bookshelf filled with cream, plum, sage and dusty pink old books, carved arch, hand-cut tan cardboard perimeter, restrained pencil and crayon finish. Complete isolated front-view theatrical prop, generous transparent margin, no room, no floor, no text, no character or support stick. Avoid cropped silhouettes, glossy 3D, pixel art, smooth vector icons, noisy artificial speckling, watermarks."
+  },
+  {
+    "id": "library-desk",
+    "transparent": true,
+    "reference": "witch-puppet.png",
+    "prompt": "Use case: illustration-story. Asset type: production opening-sequence game asset. Single wide antique study desk and a small stool just left of it as one isolated cardboard stage cutout. Warm tan wood, cream carved trim, a little candle and closed plum books atop the right half, open space on left half for a separate reading witch puppet. Front-three-quarter flattened theater view, tan hand-cut cardboard edges and worn pastel pencil/crayon, transparent background, no character, no room, no support stick or writing. Avoid cropped silhouettes, glossy 3D, pixel art, smooth vector icons, noisy artificial speckling, watermarks."
+  },
+  {
+    "id": "witch-reading",
+    "transparent": true,
+    "reference": "witch-puppet.png",
+    "prompt": "Use case: illustration-story. Asset type: production opening-sequence game asset. The EXACT reference SD cardboard witch seated facing right, both knees bent and boots below, holding an open cream book at chest height and reading with calm half-closed gray-violet eyes. Preserve broad plum pointed hat, lavender bow/star charm, long black hair, cape/dress/cream cuffs. Full isolated cutout, no chair or table, no support rod, no background or shadows. Same face/head scale and thick tan scissor-cut edge, crayon finish. Avoid cropped silhouettes, glossy 3D, pixel art, smooth vector icons, noisy artificial speckling, watermarks."
+  },
+  {
+    "id": "book-close",
+    "transparent": false,
+    "reference": "witch-portrait.png",
+    "prompt": "Use case: illustration-story. Asset type: production opening-sequence game asset. High-quality 16:9 cinematic anime illustration in the EXACT reference witch portrait rendering style. Tight close-up of an old plum book cover and the witch's cream-cuffed hands beginning to open it in a warm library. Center book at x50%, y55%, cover tilted toward viewer, subtle blank embossed crescent and flower motif, warm candle light, emerging cream light between pages. No lettering. Crisp restrained anime linework, matte pastel cel shading, rich painted setting. Same costume details, no noisy AI stippling, no UI. Avoid cropped silhouettes, glossy 3D, pixel art, smooth vector icons, noisy artificial speckling, watermarks."
+  },
+  {
+    "id": "book-face",
+    "transparent": false,
+    "reference": "witch-portrait.png",
+    "prompt": "Use case: illustration-story. Asset type: production opening-sequence game asset. High-quality 16:9 anime film close-up of the SAME reference witch in the warm library. Her face centered, gray-violet eyes subtly widened in startled confusion, lips slightly parted, plum hat partially framing upper edge, long black hair lit from an unseen open book below. Cream magical light rises across face and pupils, warm shelves softly out of focus. EXACT delicate portrait linework/cel shading, no chibi, no noisy speckles, no UI or text. Avoid cropped silhouettes, glossy 3D, pixel art, smooth vector icons, noisy artificial speckling, watermarks."
+  },
+  {
+    "id": "book-burst",
+    "transparent": false,
+    "reference": "witch-portrait.png",
+    "prompt": "Use case: illustration-story. Asset type: production opening-sequence game asset. High-quality 16:9 cinematic anime illustration matching EXACT reference witch portrait identity and linework. Wide warm library view, witch centered at x50%, y60%, holding an open old plum book. Loose cream pages and several old books lift around her in a spiraling composition, hair/cape flutter outward, expression startled. A soft brilliant cream light pours upward from book, expands toward frame edges; preserve enough readable character and room detail for code animation overlays. Beautiful controlled matte anime painting, no lettering/UI, no noisy texture. Avoid cropped silhouettes, glossy 3D, pixel art, smooth vector icons, noisy artificial speckling, watermarks."
+  },
+  {
+    "id": "witch-falling",
+    "transparent": true,
+    "reference": "witch-portrait.png",
+    "prompt": "Use case: illustration-story. Asset type: production opening-sequence game asset. EXACT reference anime witch as a detailed full-body transparent illustration, not chibi/cardboard. Falling feet downward in empty space, arms slightly extended balancing, knees softly bent, long black hair and short cape flow upward and spread into clear separate ribbons, wide plum hat and lavender ribbon stay on head, eyes opening in surprised concern. Gray-violet eyes, cream cuffs, modest plum dress, boots. Dynamic graceful silhouette with large transparent margins, no scene, no glow, no shadow, no support stick, no words. Refined clean anime cel shading matching the portrait exactly. Avoid cropped silhouettes, glossy 3D, pixel art, smooth vector icons, noisy artificial speckling, watermarks."
+  },
+  {
+    "id": "witch-prone",
+    "transparent": true,
+    "reference": "witch-puppet.png",
+    "prompt": "Use case: illustration-story. Asset type: production opening-sequence game asset. EXACT reference SD cardboard witch in a cute face-down landing pose, angled side view facing right, body low on her stomach, bent elbows bracing against imaginary floor, hat still on head slightly crooked, eyes startled but unharmed, long black hair sprawled to left. Full isolated cutout with thick hand-cut tan cardboard edge and same worn crayon clothes/head scale. No floor, no support stick, no shadow, genuinely transparent. Avoid cropped silhouettes, glossy 3D, pixel art, smooth vector icons, noisy artificial speckling, watermarks."
+  },
+  {
+    "id": "witch-push",
+    "transparent": true,
+    "reference": "witch-puppet.png",
+    "prompt": "Use case: illustration-story. Asset type: production opening-sequence game asset. EXACT reference SD cardboard witch standing facing right in a braced pushing pose, both hands stretched forward at chest height, boots planted wide and knees slightly bent, torso leaning a little forward, determined reserved face. Preserve identical hat/plum dress/long black hair/head proportions. Empty hands, wand tucked near belt. Hand-cut tan cardboard rim and pastel crayon finish. One full transparent cutout, no door, no scene, no support stick. Avoid cropped silhouettes, glossy 3D, pixel art, smooth vector icons, noisy artificial speckling, watermarks."
+  },
+  {
+    "id": "forest-back",
+    "transparent": false,
+    "reference": "witch-puppet.png",
+    "prompt": "Use case: illustration-story. Asset type: production opening-sequence game asset. High-quality 16:9 storybook painted cardboard-theater rear scenic flat, a brilliant cream morning sky over distant layered sage/lavender hills and distant paper forest, suspended paper clouds and tiny stars, rays of warm sun. Reserve lower center for independent tree/path/foreground layers and a witch below. Rich but restrained pastel #F3E5CE #A9C9B4 #B9A3D4 #E7AEB6. Colored-pencil and crayon broad rubs, exposed layered paper edges, elegant detailed handmade stage illustration. No character, no text/UI, no large foreground trees or flowers, no neon or 3D. Avoid cropped silhouettes, glossy 3D, pixel art, smooth vector icons, noisy artificial speckling, watermarks."
+  },
+  {
+    "id": "forest-middle",
+    "transparent": true,
+    "reference": "witch-puppet.png",
+    "prompt": "Use case: illustration-story. Asset type: production opening-sequence game asset. Wide 16:9 transparent scenic theater flat: layered sage green cardboard trees on both sides with warm tan trunks, lavender leaf accents, a small cream woodland path winding into center bottom, center remains an open clearing for a separate witch. These are middle-distance paper scenic panels with exposed thick tan edges, sophisticated crayon and colored-pencil detail matching reference cardboard witch. Genuinely transparent sky and gaps between trees, no background rectangle, no character, no stars, no words, no support sticks. Avoid cropped silhouettes, glossy 3D, pixel art, smooth vector icons, noisy artificial speckling, watermarks."
+  },
+  {
+    "id": "forest-front",
+    "transparent": true,
+    "reference": "witch-puppet.png",
+    "prompt": "Use case: illustration-story. Asset type: production opening-sequence game asset. Wide 16:9 transparent foreground scenic cutout for the SAME bright paper forest: large cream/dusty-pink clock flowers and sage folded grass clusters along bottom left and bottom right, two tall leaves framing outer sides. Upper two thirds and middle bottom opening remain genuinely transparent so separate tree layers and character can show through. Beautiful handmade thick tan cardboard edge, pastel colored-pencil and broad crayon rubs matching reference witch, no character, no background, no writing, no support sticks. Avoid cropped silhouettes, glossy 3D, pixel art, smooth vector icons, noisy artificial speckling, watermarks."
+  },
+  {
+    "id": "witch-falling-clean",
+    "transparent": true,
+    "reference": "opening/witch-falling.png",
+    "prompt": "Edit the provided falling witch illustration: remove ONLY every part of the dark purple vignette/background and glow around the figure. Preserve this exact witch, pose, linework, hair flyaways, colors, face and clothing without redesign. Output a single clean cutout with real transparent alpha around her and between hair gaps, no shadow, no halo, no backdrop. This is a game cinematic character layer."
+  },
+  {
+    "id": "great-door",
+    "transparent": true,
+    "reference": "witch-puppet.png",
+    "prompt": "A single CLOSED double door stage prop for a handcrafted cardboard puppet theater fantasy game. Tall monumental arched door, two plum wood-paper panels, each with a tiny cream moon carving, thin gold paper hinges, lavender raised cardboard edges, richly textured colored pencil and crayon on rough cardboard. Front view orthographic, full door centered isolated, no floor or background, no drop shadow outside cutout, no character, no text. Strong tall silhouette. Split seam exactly at center so game can crop into two independently opening halves. Real transparent background. Match the handmade warm pastel cardboard palette of the reference witch."
+  }
+]
