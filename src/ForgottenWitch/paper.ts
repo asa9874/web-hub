@@ -74,4 +74,14 @@ export function createPaperTextures(scene:Phaser.Scene) {
     for(let x=20;x<300;x+=38){const gradient=c.createLinearGradient(x,0,x+34,0);gradient.addColorStop(0,'rgba(67,40,57,.35)');gradient.addColorStop(.65,'rgba(245,195,193,.18)');gradient.addColorStop(1,'rgba(67,40,57,.22)');c.fillStyle=gradient;c.fillRect(x,8,34,544);}
     c.strokeStyle='#e5c29e';c.lineWidth=7;c.beginPath();c.moveTo(10,538);c.lineTo(300,539);c.stroke();
   },8);
+
+  texture('paper-grass',140,100,c=>{cutout(c,[[10,90],[20,45],[42,77],[48,12],[70,69],[90,24],[96,72],[125,48],[132,94]],'#A9C9B4');},21);
+  texture('paper-crate',140,110,c=>{cutout(c,[[8,10],[130,7],[132,102],[12,100]],'#D6B38C');c.strokeStyle='#917056';c.lineWidth=7;c.strokeRect(20,20,98,69);c.beginPath();c.moveTo(23,23);c.lineTo(115,87);c.moveTo(115,23);c.lineTo(23,87);c.stroke();},22);
+  texture('paper-sign',140,150,c=>{cutout(c,[[63,63],[77,63],[81,143],[60,143]],'#D6B38C');cutout(c,[[8,10],[122,8],[132,45],[118,83],[8,82]],'#E7AEB6');c.fillStyle='#736477';c.font='40px serif';c.fillText('↗',48,60);},23);
+  texture('paper-bell',130,140,c=>{cutout(c,[[55,10],[75,10],[78,35],[97,46],[107,108],[119,118],[12,118],[24,107],[33,46],[53,35]],'#edcca3');c.fillStyle='#736477';c.beginPath();c.arc(65,121,10,0,Math.PI*2);c.fill();},24);
+  texture('paper-mill',160,200,c=>{cutout(c,[[70,66],[90,66],[106,190],[54,190]],'#D6B38C');},25);
+  texture('paper-rotor',160,160,c=>{c.save();c.translate(80,80);for(let i=0;i<4;i++){c.rotate(Math.PI/2);cutout(c,[[0,0],[10,-60],[40,-66],[37,-31]],i%2?'#B9A3D4':'#A9C9B4');}c.restore();},29);
+  texture('paper-lamp',130,180,c=>{cutout(c,[[60,85],[72,85],[80,173],[54,173]],'#736477');cutout(c,[[27,32],[43,12],[85,12],[105,34],[97,100],[34,100]],'#F3E5CE');c.strokeStyle='#b99170';c.lineWidth=6;c.strokeRect(42,38,45,48);},26);
+  texture('paper-bench',220,150,c=>{cutout(c,[[14,13],[204,13],[204,85],[14,85]],'#A9C9B4');cutout(c,[[8,81],[211,81],[211,106],[8,106]],'#D6B38C');cutout(c,[[27,103],[48,103],[42,142],[23,142]],'#D6B38C');cutout(c,[[172,103],[191,103],[198,142],[175,142]],'#D6B38C');},27);
+  texture('paper-teeth',240,90,c=>{const p:number[][]=[[5,81],[5,61]];for(let i=0;i<5;i++)p.push([12+i*45,62],[30+i*45,8],[48+i*45,62]);p.push([235,81]);cutout(c,p,'#ecd2c9');},28);
 }

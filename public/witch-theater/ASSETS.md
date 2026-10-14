@@ -147,3 +147,9 @@ Constraints: one isolated tree only on a genuinely transparent background, NO sc
 ## 빠른 동작 프레임 — 2026-10-14
 
 built-in image_gen으로 `witch-walk.png` / `witch-jump.png`를 각각 편집 대상으로 사용한 투명 PNG2점. 원본 파일을 유지하고 생성된 알파를 수정하지 않고 프로젝트로 복사했다. `witch-walk-alt.png`는 중간 걸음, `witch-fall.png`는 하강 준비이며 새 캐릭터 디자인이 아니다. 실제 제출 프롬프트는 src/ForgottenWitch/codex/movement-image-prompts.json. 포즈 높이/몸체 연결점은 poses.ts, 변환/거리 주기는 PlayerMotion.ts, 파티클은 StageLife.ts의 코드로 처리한다. 조종 막대나 파티클을 그림에 합성하지 않았다.
+
+
+## 생동감 실험실 — 2026-10-14
+
+- witch-idle-hat.png / witch-idle-wand.png: built-in image_gen 편집2점. 기존 witch-puppet.png의 얼굴/복장/SD 골판지 스타일을 참조했다. 생성 PNG 알파를 유지한 채 저장소로 복사했고 원본은 변경하지 않았다. 실제 제출 프롬프트는 src/ForgottenWitch/codex/idle-image-prompts.json.
+- objects/paper-grass, paper-crate, paper-sign, paper-bell, paper-mill, paper-rotor, paper-lamp, paper-bench, paper-teeth.png: paper.ts의 실제 Canvas·종이 테두리·고정 seed 질감으로 작성/추출한9점. AI 생성 그림이 아니다. 풍차 본체와 날개를 분리해 실제 회전한다. 추출 명령은 npm run witch:export-props. 배경을 한 장으로 합성하지 않으며 모두 독립 소품이다.

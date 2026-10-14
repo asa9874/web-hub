@@ -41,6 +41,7 @@ export class StageRig {
       const bounds=owner.getBounds();
       const visible=owner.visible&&bounds.right-sx>=0&&bounds.left-sx<=camera.width&&bounds.bottom-sy>=0&&bounds.top-sy<=camera.height;
       const rod=edgeRod({x:world.x-sx,y:world.y-sy},camera.width,camera.height,edge,owner.rotation*44);
+      graphics.setDepth(Math.min(owner.depth-.1,5.8));
       graphics.clear().setVisible(visible);
       if(visible){
         this.stroke(graphics,rod.start,rod.end,width,owner.alpha);

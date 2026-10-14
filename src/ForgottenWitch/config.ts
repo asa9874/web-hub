@@ -1,5 +1,5 @@
 export const TUNING = {
-  width: 1280, height: 720, worldWidth: 6400, floor: 570,
+  width: 1280, height: 720, worldWidth: 11000, floor: 570,
   speed: 405, acceleration: 3600, turnAcceleration: 5600, friction: 4100,
   gravity: 2100, fallGravity: 1.12, jumpSpeed: 690, coyoteMs: 100, bufferMs: 100,
   bodyWidth: 44, bodyHeight: 100, cameraFollow: 7.5,

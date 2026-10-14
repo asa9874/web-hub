@@ -1,8 +1,9 @@
 import {NPCS,monsterDefinitions,monsterFile,PATTERN_LABELS,npcPuppetFile} from './castData';
 import {OBJECTS,EXTRA_OBJECTS} from './objectData';
 import {MUSIC} from './musicData';
+import {TRAPS} from './livingData';
 import {MONSTER_NOTES} from './monsterNotes';
-export const CODEX_CATEGORIES=['등장인물','에셋','몬스터','설정','사물','음악'] as const;
+export const CODEX_CATEGORIES=['등장인물','에셋','몬스터','설정','사물','함정','음악'] as const;
 export interface CodexEntry {id:string;category:(typeof CODEX_CATEGORIES)[number];name:string;subtitle:string;images:{file:string;label:string}[];description:string;traits:string[];note:string;musicPrompt?:string}
 const expressions=(speaker:string)=>['joy','worry','angry','flustered'].map((emotion,i)=>({file:`expressions/${speaker}-${emotion}.png`,label:['기쁨','걱정','분노','당황'][i]}));
 export const codexEntries:CodexEntry[]=[
@@ -24,3 +25,6 @@ codexEntries.push(...EXTRA_OBJECTS.map(o=>({id:`object-${o.id}`,category:'사물
 codexEntries.push(...['wt-soft-light','wt-contact-shadow','wt-stage-beam','wt-vignette'].map((id,i)=>({id:`object-${id}`,category:'사물' as const,name:['부드러운 빛','접지 그림자','무대 조명 빔','가장자리 음영'][i],subtitle:'조명 재료 · 사용 중',images:[{file:`objects/${id}.png`,label:'실제 조명 텍스처'}],description:'StageLighting.ts에서 만든 로컬 Canvas 조명 재료. 실제 오브젝트가 아니라 렌더링 효과이며 막대를 붙이지 않는다.',traits:[`텍스처 키: ${id}`,'원본: src/ForgottenWitch/StageLighting.ts','같은 코드로 자동 추출'],note:'빛은 손에 잡히지 않는데, 사물의 자리는 확실히 바꿔 놓는다.'})));
 codexEntries.push(...MUSIC.map(m=>({id:`music-${m.id}`,category:'음악' as const,name:m.name,subtitle:'BGM 후보 · 음원 미제작',images:[{file:m.file,label:'분위기 참고 · 기존 그림'}],description:m.description,traits:['아직 음원 파일이 없으며 게임에서 재생되지 않는다','아래 프롬프트는 Suno 제작을 위한 임시 제안','향후 파일/라이선스 확인 후 연결 예정'],note:'소리가 생기기 전에도 기다리는 박자는 있다. 여기는 아직 빈 악보.',musicPrompt:m.prompt})));
 for(const entry of codexEntries){const lore=MONSTER_NOTES[entry.id];if(lore){entry.description=lore.description+' 실제 배치와 설정은 아직 후보 단계다.';entry.note=lore.note;}}
+
+codexEntries.find(e=>e.id==='witch')!.images.push({file:'witch-idle-hat.png',label:'대기 · 모자 고치기'},{file:'witch-idle-wand.png',label:'대기 · 지팡이 정리'});
+codexEntries.push(...TRAPS.map(t=>({id:`trap-${t.id}`,category:'함정' as const,name:t.name,subtitle:'실험실 무대 장치 · 임시 설정',images:[{file:`objects/${t.texture}.png`,label:'실제 무대 소품'}],description:t.description,traits:[t.counter,'테스트 → 생동감·함정 실험실에서 체험','종이 이빨/달은 실제 라이프 손상, 판넬은 실제 지형 변화','구르기 무적과 피격 후 무적 적용'],note:t.note})));

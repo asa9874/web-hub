@@ -34,7 +34,7 @@ try{
   await page.addInitScript(()=>{const A=window.AudioContext;window.__tones=[];window.AudioContext=class extends A{createOscillator(){const node=super.createOscillator(),set=node.frequency.setValueAtTime.bind(node.frequency);node.frequency.setValueAtTime=(value,...args)=>{window.__tones.push(value);return set(value,...args);};return node;}};});
   await page.goto(base+'/games/forgotten-witch/',{waitUntil:'networkidle'});const menu=page.getByRole('navigation',{name:'극장 메인 메뉴'});
   await clickTravel(menu.getByRole('button',{name:'설정집',exact:true}));
-  for(const [category,count] of [['등장인물',8],['몬스터',21],['사물',22],['음악',6]]){await page.getByRole('button',{name:category,exact:true}).click();assert.equal(await page.locator('.wt-codex-card').count(),count);}
+  for(const [category,count] of [['등장인물',8],['몬스터',21],['사물',31],['음악',6]]){await page.getByRole('button',{name:category,exact:true}).click();assert.equal(await page.locator('.wt-codex-card').count(),count);}
   await page.locator('.wt-codex-card').first().click();assert((await page.locator('.wt-music-prompt').innerText()).includes('Instrumental'));await page.keyboard.press('Escape');await clickTravel(page.getByRole('button',{name:'← 메인 화면'}));
   await clickTravel(menu.getByRole('button',{name:'테스트',exact:true}));const canvas=page.locator('.wt-game canvas');
   const state=()=>canvas.evaluate(c=>JSON.parse(c.dataset.theater));

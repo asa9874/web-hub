@@ -3,31 +3,34 @@ import {monsterById} from './castData';
 import type {Pattern} from './castData';
 import {TUNING} from './config';
 export const COMBAT={arenaStart:5050,arenaEnd:6100,spawn:5200,enemyPositions:[5510,5840],missileSpeed:580,missileLifetime:1.25,castCooldown:.38,invulnerability:1.25,rollDuration:TUNING.rollDuration,rollCooldown:TUNING.rollCooldown,rollSpeed:TUNING.rollSpeed} as const;
-export interface Monster {id:number;kind:string;x:number;y:number;home:number;hp:number;maxHp:number;facing:number;phase:'walk'|'windup'|'active'|'recover'|'dead';timer:number;cycle:number;action:Pattern;travel:number}
+export interface Monster {id:number;kind:string;x:number;y:number;home:number;hp:number;maxHp:number;facing:number;phase:'walk'|'windup'|'active'|'recover'|'dead';timer:number;cycle:number;action:Pattern;travel:number;stagger:number;knock:number;deathAge:number}
 export interface Missile {id:number;x:number;y:number;baseY:number;direction:number;age:number}
 export interface Hazard {id:number;x:number;y:number;vx:number;vy:number;age:number;life:number;wave:boolean}
 export interface CombatState {selection:string;lives:number;invulnerable:number;cooldown:number;casting:number;clock:number;serial:number;rolling:number;rollCooldown:number;rollFacing:number;monsters:Monster[];missiles:Missile[];hazards:Hazard[]}
-export type CombatEvent='cast'|'hit'|'hurt'|'enemyAttack'|'gameover';
+export type CombatEvent='cast'|'hit'|'hurt'|'enemyAttack'|'gameover'|'warning';
 export function createCombat(selection='clapper'):CombatState{
   const d=monsterById(selection),positions=d.pattern==='boss'?[5730]:COMBAT.enemyPositions;
-  return {selection:d.id,lives:3,invulnerable:0,cooldown:0,casting:0,clock:0,serial:0,rolling:0,rollCooldown:0,rollFacing:1,missiles:[],hazards:[],monsters:positions.map((x,id)=>({id,kind:d.id,x,y:570,home:x,hp:d.hp,maxHp:d.hp,facing:-1,phase:'walk',timer:0,cycle:0,action:d.pattern,travel:0}))};
+  return {selection:d.id,lives:3,invulnerable:0,cooldown:0,casting:0,clock:0,serial:0,rolling:0,rollCooldown:0,rollFacing:1,missiles:[],hazards:[],monsters:positions.map((x,id)=>({id,kind:d.id,x,y:570,home:x,hp:d.hp,maxHp:d.hp,facing:-1,phase:'walk',timer:0,cycle:0,action:d.pattern,travel:0,stagger:0,knock:0,deathAge:0}))};
 }
+export function damagePlayer(state:CombatState):CombatEvent|null {if(state.invulnerable>0||state.rolling>0||state.lives<=0)return null;state.lives--;state.invulnerable=COMBAT.invulnerability;return state.lives===0?'gameover':'hurt';}
 export function beginRoll(state:CombatState,actor:Actor){if(state.lives<=0||state.rollCooldown>0||!actor.grounded)return false;state.rolling=COMBAT.rollDuration;state.rollCooldown=COMBAT.rollCooldown;state.rollFacing=actor.facing;state.casting=0;return true;}
 export function updateCombat(state:CombatState,actor:Actor,dt:number,attack:boolean):CombatEvent[]{
   if(state.lives<=0)return [];
   const events:CombatEvent[]=[];state.clock+=dt;
   for(const key of ['invulnerable','cooldown','casting','rolling','rollCooldown'] as const)state[key]=Math.max(0,state[key]-dt);
-  const hurt=()=>{if(state.invulnerable>0||state.rolling>0||state.lives<=0)return;state.lives--;state.invulnerable=COMBAT.invulnerability;events.push(state.lives===0?'gameover':'hurt');};
+  const hurt=()=>{const event=damagePlayer(state);if(event)events.push(event);};
   const spawn=(m:Monster,angle:number,speed:number,wave=false)=>state.hazards.push({id:state.serial++,x:m.x+m.facing*60,y:wave?555:m.y-75,vx:Math.cos(angle)*speed*m.facing,vy:Math.sin(angle)*speed,age:0,life:3,wave});
   if(attack&&state.cooldown===0&&state.rolling===0){state.cooldown=COMBAT.castCooldown;state.casting=.3;state.missiles.push({id:state.serial++,x:actor.x+actor.facing*52,y:actor.y-65,baseY:actor.y-65,direction:actor.facing,age:0});events.push('cast');}
   for(const m of state.monsters){
     const d=monsterById(m.kind);
-    if(m.hp<=0){m.phase='dead';continue;}
+    if(m.hp<=0){m.phase='dead';m.deathAge+=dt;continue;}
+    m.x=Math.max(COMBAT.arenaStart+75,Math.min(COMBAT.arenaEnd-75,m.x+m.knock*dt));m.knock*=Math.exp(-12*dt);
+    if(m.stagger>0){m.stagger=Math.max(0,m.stagger-dt);continue;}
     const distance=actor.x-m.x,close=Math.abs(distance)<700&&Math.abs(actor.y-570)<220;
     if(m.phase==='walk'){
       if(close)m.facing=distance<0?-1:1;else if(m.x>m.home+100)m.facing=-1;else if(m.x<m.home-100)m.facing=1;
       const reach=d.pattern==='clap'||d.pattern==='guard'?105:d.pattern==='hop'?330:650;
-      if(close&&Math.abs(distance)<reach){const sequence=d.bossPatterns??['charge','fan','wave'];m.phase='windup';m.timer=d.windup;m.action=d.pattern==='boss'?sequence[m.cycle%sequence.length]:d.pattern;}
+      if(close&&Math.abs(distance)<reach){const sequence=d.bossPatterns??['charge','fan','wave'];events.push('warning');m.phase='windup';m.timer=d.windup;m.action=d.pattern==='boss'?sequence[m.cycle%sequence.length]:d.pattern;}
       else m.x+=m.facing*(close?d.speed:d.speed*.5)*dt;
     }else if(m.phase==='windup'){
       m.timer-=dt;
@@ -52,7 +55,7 @@ export function updateCombat(state:CombatState,actor:Actor,dt:number,attack:bool
   for(const missile of state.missiles){
     missile.age+=dt;missile.x+=missile.direction*COMBAT.missileSpeed*dt;missile.y=missile.baseY+Math.sin(missile.age*13)*2+Math.sin(missile.age*21)*.6;
     for(const m of state.monsters){const d=monsterById(m.kind);if(m.hp>0&&Math.abs(missile.x-m.x)<(d.pattern==='boss'?100:48)&&missile.y>m.y-d.height*.8&&missile.y<m.y+5){
-      if(!(d.pattern==='guard'&&m.phase==='walk'&&missile.direction===-m.facing))m.hp--;
+      if(!(d.pattern==='guard'&&m.phase==='walk'&&missile.direction===-m.facing)){m.hp--;m.stagger=.14;m.knock=missile.direction*(d.pattern==='boss'?55:150);}
       missile.age=COMBAT.missileLifetime;events.push('hit');if(m.hp===0&&d.pattern==='boss')state.hazards=[];break;
     }}
   }

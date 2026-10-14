@@ -160,3 +160,13 @@ WITCH_TEST_URL=http://127.0.0.1:4173/web-hub npm run test:witch
 ## 최신 이어받기: 빠른 동작 / 입자
 
 이동 수치는 config.ts에서 조절한다. PlayerMotion.ts는 실제 거리 기반 걷기 주기와 동작 이벤트/몸 기울기를 담당하며 일시정지 중 업데이트하지 않는다. 새 걷기/하강 PNG는 poses.ts와 Phaser preload, 설정집에 등록했다. 프레임별 몸 중심·발끝·반전과 막대를 함께 검수한다. StageLife.motion()은 작은 종이 입자이며 수명/90개 상한/reduced-motion/모달 정지/순간이동 정리를 유지한다. 신규 검증은 `npm run test:witch-movement`. 실사용 이미지2점과 실제 프롬프트 movement-image-prompts.json을 Git으로 함께 받는다.
+
+
+## 최신 이어받기: 생동감 10요소 / 함정
+
+- livingData.ts: 실험실 이동 버튼 9개(전투 2요소는 기존 몬스터 선택), 함정 설정3종. livingModel.ts는 바람/이동 발판/장치/함정/NPC 반응/숨겨진 문/대기를 관리한다. LivingStage.ts는 독립 소품과 막대/표시를 렌더링한다.
+- moveActor의 선택적 MovementEnvironment가 실제 바람 이동, 움직이는 발판 탑승, 비밀 통로 충돌을 담당한다. 기존 호출은 같은 물리를 유지한다. 플랫폼은 이전 높이/변위를 보관해야 탑승자가 함께 움직인다.
+- 체크포인트는 world.restPoint/Scene.respawnPoint를 함께 설정한다. E 휴식으로 라이프3 회복. debug 이동은 해당 테스트 시작점으로 다시 지정하며, 새 공연은 장치/발견/체크포인트를 초기화한다.
+- combatModel의 stagger/knock/deathAge와 warning 이벤트, CombatStage의 준비 표시/접힘 퇴장은 모든 몬스터에 공통이다. damagePlayer는 적/함정의 무적·구르기 판정을 공유한다.
+- 함정 카테고리3, 사물31. 그림 변경 시 witch:export-props, 신규 검증 test:witch-living. 새 PNG2점의 실제 프롬프트는 idle-image-prompts.json.
+- 완료 기록/실행 결과는 WORKLOG.md의 최신 항목을 참고한다. 낮은 우선순위였던 조종사 실수와 객석 상황 반응은 이번 범위에 넣지 않았다.
