@@ -180,3 +180,4 @@ AmbientSpeech의 말풍선은 낡은 종이/골판지 테두리/꼬리를 로컬
 
 built-in image_gen으로 먹물 토끼, 몽실, 꽥 셰프의 투명2×2 시트 각1장/총12동작을 생성했다. `chapter/rabbit-poses.png`, `chapter/mongsil-poses.png`, `chapter/chef-poses.png`. 기존 플로라 인형의 색연필/종이 단면을 스타일 참조로 사용했으며 캐릭터 막대는 코드로 그린다. 정확한 프롬프트는 `src/ForgottenWitch/codex/chapter-image-prompts.json`에 있다. 생성 PNG를 재작성하지 않고896px 이하 GPU 면에서 알파 경계 프레임을 추출한다. 종이 꽃/왕관/검/상자/당근/재료/주방/비·낮·밤 배경은 `chapter/textures.ts`의 독립 코드 기반 소재다. Chapter 01 지역 음악은 로컬 원본 Web Audio 합성이다.
 `video/main_video.mp4`: 사용자 제공 타이틀 배경 영상. 원본을 저장소에 포함하고 음소거 반복 재생한다.
+오프닝 book-close.png / book-face.png / book-burst.png는 보관용 원본이며 현재 런타임에서 로딩·표시하지 않는다. 책 진입은 독립 인게임 책과 코드 기반 ray/화이트아웃으로 렌더링한다.

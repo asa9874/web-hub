@@ -21,7 +21,7 @@ export class OpeningScene extends Phaser.Scene {
  private witch!:Image;private reading!:Image;private book!:Image;private candle!:Phaser.GameObjects.Arc;
  private clock!:Phaser.GameObjects.Text;private floor:Image[]=[];private step!:Image;private floorBacking!:Phaser.GameObjects.Rectangle;
  private door:Image[]=[];private beam!:Image;
- private cuts:Image[]=[];private forest:Image[]=[];private falling!:Image;private fallMesh?:Phaser.GameObjects.Mesh;private vertices:{x:number;y:number}[]=[];
+ private forest:Image[]=[];private falling!:Image;private fallMesh?:Phaser.GameObjects.Mesh;private vertices:{x:number;y:number}[]=[];
  private light!:Phaser.GameObjects.Graphics;private pages!:Phaser.GameObjects.Graphics;
  private shade!:Phaser.GameObjects.Rectangle;private note!:Phaser.GameObjects.Text;
  private guides!:Phaser.GameObjects.Text[];private title!:Phaser.GameObjects.Text;
@@ -52,7 +52,6 @@ export class OpeningScene extends Phaser.Scene {
   this.beam=add('dark',this.add.image(2420,260,'opening-door-glow').setDisplaySize(120,900).setAlpha(.45).setDepth(7));
   this.guides=[this.add.text(640,315,'A  ←     →  D',{fontFamily:'WT Readable',fontSize:'32px',color:'#f3e5ce',stroke:'#332c3f',strokeThickness:4}).setOrigin(.5).setDepth(12),this.add.text(850,395,'SPACE  ↥',{fontFamily:'WT Readable',fontSize:'30px',color:'#f3e5ce',stroke:'#332c3f',strokeThickness:4}).setOrigin(.5).setDepth(12)];this.groups.dark.push(...this.guides);
   this.witch=this.add.image(580,570,'witch-puppet').setOrigin(.5,1).setDepth(10);this.witch.setDisplaySize(170,198);this.rig.attach(this.witch,'opening-player','bottom',.5,.79,9);
-  for(const id of ['book-close','book-face','book-burst']){const c=add('cinema',this.add.image(640,360,'opening-'+id).setDisplaySize(1280,720).setScrollFactor(0).setDepth(20));this.cuts.push(c);}
   this.falling=add('cinema',this.add.image(640,330,'opening-witch-falling').setScrollFactor(0).setDepth(24));
   if(this.game.renderer.type===Phaser.WEBGL){
     this.fallMesh=this.add.mesh(640,330,'opening-witch-falling').setScrollFactor(0).setDepth(24);this.fallMesh.setOrtho();this.fallMesh.hideCCW=false;this.fallMesh.ignoreDirtyCache=true;
@@ -83,12 +82,12 @@ export class OpeningScene extends Phaser.Scene {
   if(s.stage==='library-intro'&&dir&&!s.paused&&s.elapsed>3)enterOpening(s,'library');
   if(s.stage==='library'&&interact){const prop=LIBRARY_NOTES.find(p=>Math.abs(p.x-s.x)<115);if(prop){s.note=prop.text;s.noteTime=4;this.audio.cue('page');}}
   if(!s.paused){let remaining=dt,first=true;while(remaining>0){const step=Math.min(1/120,remaining);tickOpening(s,step,dir,first&&jump,k.SPACE.isDown,first&&interact);remaining-=step;first=false;}this.audio.update(s.stage,s.elapsed,dt);this.renderStage(dt);}
-  this.publish();this.game.canvas.dataset.opening=JSON.stringify({...s,visual:{fallFaces:this.fallMesh?.totalRendered??null,credits:this.credits.filter(c=>c.visible).length,zoom:this.cameras.main.zoom}});this.game.canvas.dataset.openingRig=JSON.stringify(this.rig.snapshot());if(s.complete)this.done();
+  this.publish();this.game.canvas.dataset.opening=JSON.stringify({...s,visual:{fallFaces:this.fallMesh?.totalRendered??null,credits:this.credits.filter(c=>c.visible).length,zoom:this.cameras.main.zoom,cameraX:this.cameras.main.scrollX,cameraY:this.cameras.main.scrollY,bookVisible:this.book.visible,rays:s.stage==='book-burst'?16:0,whiteAlpha:this.shade.alpha}});this.game.canvas.dataset.openingRig=JSON.stringify(this.rig.snapshot());if(s.complete)this.done();
  }
  private renderStage(dt:number){
   const s=this.state,t=s.elapsed,cam=this.cameras.main;
-  const lib=s.stage.startsWith('library')||s.stage==='book-focus',dark=['fall','landing','tutorial','door'].includes(s.stage),cut=s.stage.startsWith('book-')&&s.stage!=='book-focus',forest=s.stage==='chapter';
-  for(const [key,list] of Object.entries(this.groups)){const visible=key==='library'?lib:key==='dark'?dark:key==='cinema'?cut||s.stage==='fall':forest;for(const obj of list)(obj as Image).setVisible(visible);}
+  const lib=s.stage.startsWith('library')||s.stage==='book-focus'||s.stage==='book-burst',dark=['fall','landing','tutorial','door'].includes(s.stage),forest=s.stage==='chapter';
+  for(const [key,list] of Object.entries(this.groups)){const visible=key==='library'?lib:key==='dark'?dark:key==='cinema'?s.stage==='fall':forest;for(const obj of list)(obj as Image).setVisible(visible);}
   if(this.lastStage!==s.stage){this.lastStage=s.stage;this.focusFrom=cam.scrollX;cam.setZoom(1);cam.scrollY=0;if(!lib&&s.stage!=='tutorial'&&s.stage!=='door')cam.scrollX=0;if(s.stage==='landing')cam.shake(280,.004);}
   this.shade.setAlpha(0).setFillStyle(0xffffff);this.light.clear();this.pages.clear();this.note.setText(s.noteTime>0?s.note:'');
   this.credits.forEach(c=>c.setVisible(false));this.fallMesh?.setVisible(s.stage==='fall');this.falling.setVisible(s.stage==='fall');this.step.setVisible(s.stage==='tutorial');this.floorBacking.setVisible(['landing','tutorial','door'].includes(s.stage));
@@ -98,17 +97,26 @@ export class OpeningScene extends Phaser.Scene {
    this.candle.setAlpha(.45+Math.sin(s.total*7)*.08);this.clock.setRotation(Math.sin(s.total*.5)*.004);
    if(s.stage==='library-intro'){this.witch.setVisible(false);cam.scrollX=0;this.reading.setRotation(Math.sin(t)*.01);}
    else if(s.stage==='book-focus'){const q=ease(clamp(t/.8));cam.scrollX=Phaser.Math.Linear(this.focusFrom,960,q);this.witch.x=Phaser.Math.Linear(s.x,1535,ease(clamp(t/1.2)));this.witch.setTexture('opening-witch-push').setDisplaySize(170,198).setRotation(-.08);this.book.setPosition(1600,470-Math.sin(clamp((t-.8)/2)*Math.PI)*58).setRotation(-clamp((t-1.5)/1.3)*.2);}
+   else if(s.stage==='book-burst'){
+    const power=ease(clamp(t/5)),reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches,shake=reduced?0:power*5;
+    cam.scrollX=960+Math.sin(t*39)*shake;cam.scrollY=Math.sin(t*31)*shake*.55;
+    this.witch.setPosition(1535,570).setRotation(-.06-Math.sin(t*3)*.012);
+    this.book.setPosition(1600,470).setRotation(-.2);
+    const x=this.book.x-cam.scrollX,y=this.book.y-cam.scrollY-24;
+    for(let i=0;i<16;i++){
+     const angle=i*Math.PI/8+t*.035,spread=.025+(i%3)*.018,length=1450;
+     this.light.fillStyle(i%3?0xfff5d8:0xffffff,(.025+power*.085)*(i%2?.7:1));
+     this.light.fillTriangle(x,y,x+Math.cos(angle-spread)*length,y+Math.sin(angle-spread)*length,x+Math.cos(angle+spread)*length,y+Math.sin(angle+spread)*length);
+    }
+    for(let i=10;i>0;i--)this.light.fillStyle(0xfff7df,.018+power*.018).fillEllipse(x,y,25+i*(8+power*9),20+i*(6+power*7));
+    this.shade.setAlpha(ease(clamp((t-5.5)/2.5)));this.note.setText('');
+   }
    else {this.book.setPosition(1600,470).setRotation(Math.sin(s.total)*.02);const screen=s.x-cam.scrollX;if(screen>850)cam.scrollX+=Math.min(s.x-850-cam.scrollX,400*dt);if(screen<360)cam.scrollX-=Math.min(cam.scrollX,400*dt);if(Math.abs(s.vx)>12)this.witch.setTexture('witch-walk').setDisplaySize(178,198).setRotation(Math.sin(s.total*13)*.018).setY(s.y-Math.abs(Math.sin(s.total*13))*2);this.note.setText(s.noteTime>0?s.note:Math.abs(s.x-1600)<125?'E · 낡은 책 펼치기':LIBRARY_NOTES.some(p=>Math.abs(p.x-s.x)<115)?'E · 살펴보기':'');}
    for(let i=0;i<28;i++){this.pages.fillStyle(0xffebc8,.15).fillCircle((i*137+s.total*7)%1280,90+(i*37+s.total*3)%450,1.2);}
   }
-  if(cut){const index=s.stage==='book-close'?0:s.stage==='book-face'?1:2;this.cuts.forEach((c,i)=>c.setVisible(i===index));const c=this.cuts[index];c.setDisplaySize(1280*(1+t*.015),720*(1+t*.015));c.x=640+Math.sin(t*.5)*6;c.y=360+t*2;
-   if(index===0){c.setAlpha(clamp(t/.45));for(const obj of this.groups.library)(obj as Image).setVisible(t<.45);this.witch.setVisible(t<.45).setPosition(1535,570);cam.scrollX=t<.45?960:0;for(let i=0;i<5;i++){const phase=(t*1.8+i*.2)%1;this.pages.fillStyle(0xffedce,.17).fillTriangle(570,450,570+phase*250,335,705,450);}}
-   else c.setAlpha(1);
-   if(index===2){for(let i=0;i<18;i++){const y=(600-t*(90+i*8)+i*43)%800;this.pages.fillStyle(0xf3e5ce,.65).fillRect(150+i*57+Math.sin(t+i)*24,y,12+i%4*5,7);}this.shade.setAlpha(ease(clamp((t-2)/1)));}
-  }
-  if(s.stage==='whiteout'){this.shade.setFillStyle(0xffffff).setAlpha(1);this.shade.setFillStyle(Phaser.Display.Color.GetColor(...([243,241,239].map(c=>Math.round(c*(1-ease(clamp((t-.5)/3.5))))) as [number,number,number])));this.witch.setVisible(false);}
+  if(s.stage==='whiteout'){this.shade.setFillStyle(0xffffff).setAlpha(1);this.shade.setFillStyle(Phaser.Display.Color.GetColor(...([255,255,255].map(c=>Math.round(c*(1-ease(clamp((t-.5)/3.5))))) as [number,number,number])));this.witch.setVisible(false);}
   if(s.stage==='fall'){
-   this.cuts.forEach(c=>c.setVisible(false));const depth=fallDepth(t),final=ease(clamp((t-27)/3)),angle=Math.sin(t*.65)*.045+(t>12?Math.sin((t-12)*.3)*.09:0);this.falling.setVisible(!this.fallMesh).setDisplaySize(300*(1-final*.88),450*(1-final*.88)).setPosition(640,325+final*200).setRotation(angle);
+   const depth=fallDepth(t),final=ease(clamp((t-27)/3)),angle=Math.sin(t*.65)*.045+(t>12?Math.sin((t-12)*.3)*.09:0);this.falling.setVisible(!this.fallMesh).setDisplaySize(300*(1-final*.88),450*(1-final*.88)).setPosition(640,325+final*200).setRotation(angle);
    if(this.fallMesh){this.fallMesh.setVisible(true).setPosition(640,325+final*200).setScale(1-final*.88).setRotation(angle);this.fallMesh.vertices.forEach((v,i)=>{const p=this.vertices[i],edge=clamp((Math.abs(p.x)-.11)*5);v.x=p.x+Math.sin(t*2.8+p.y*10)*.014*edge;v.y=p.y+Math.sin(t*2+p.x*11)*.009*edge;});}
    this.floor.forEach(f=>f.setAlpha(clamp((t-26)/3)));this.door.forEach(d=>d.setVisible(false));this.beam.setVisible(false);this.guides.forEach(g=>g.setVisible(false));
    OPENING_CREDITS.forEach((credit,i)=>{const y=430+(fallDepth(credit.at)-depth)*2300;this.credits[i].setVisible(t>=credit.at-2&&t<25).setY(y).setAlpha(clamp((t-credit.at+2)/2)*clamp((25-t)/2));});
