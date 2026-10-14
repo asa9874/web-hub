@@ -18,7 +18,8 @@ export function moveActor(actor: Actor, world: WorldState, dt: number, direction
   actor.coyote = actor.grounded ? TUNING.coyoteMs : Math.max(0, actor.coyote - ms);
   actor.landing = Math.max(0, actor.landing - dt * 5);
   const target = direction * (rolling?TUNING.rollSpeed:TUNING.speed);
-  const amount = (direction ? TUNING.acceleration : TUNING.friction) * dt;
+  const reversing=direction!==0&&actor.vx*direction<0;
+  const amount = (direction ? reversing?TUNING.turnAcceleration:TUNING.acceleration : TUNING.friction) * dt;
   actor.vx = rolling?target:actor.vx+Math.sign(target-actor.vx)*Math.min(Math.abs(target-actor.vx),amount);
   if (direction) actor.facing = direction;
   if (actor.buffer > 0 && actor.coyote > 0) {
@@ -26,7 +27,7 @@ export function moveActor(actor: Actor, world: WorldState, dt: number, direction
   }
   const oldY = actor.y;
   const wasGrounded = actor.grounded;
-  actor.vy += TUNING.gravity * dt;
+  actor.vy += TUNING.gravity * (actor.vy>0?TUNING.fallGravity:1) * dt;
   const oldX=actor.x;
   actor.x = Math.min(TUNING.worldWidth - 80, Math.max(70, actor.x + actor.vx * dt));
   if(world.lights!=='SOLVED'){

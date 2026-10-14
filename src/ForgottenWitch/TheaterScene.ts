@@ -9,6 +9,7 @@ import { TheaterSound } from './sound';
 import { StageRig } from './rig';
 import { puppetPose } from './poses';
 import { StageLife } from './StageLife';
+import {PlayerMotion} from './PlayerMotion';
 import { StageLighting } from './StageLighting';
 import type { Emotion, Speaker } from './dialogueModel';
 import {conversationLabel} from './dialogueModel';
@@ -36,7 +37,7 @@ export class TheaterScene extends Phaser.Scene {
   private puppet!:Phaser.GameObjects.Image;
   private rig!:StageRig;
   private stageLife!:StageLife;
-  private footstepX=200;
+  private playerMotion=new PlayerMotion();
   private flora!:Phaser.GameObjects.Image;
   private bridge!:Phaser.GameObjects.Image;
   private guide!:Phaser.GameObjects.Graphics;
@@ -64,7 +65,7 @@ export class TheaterScene extends Phaser.Scene {
   preload() {
     this.load.on('progress',(value:number)=>this.callbacks.progress?.(value));
     this.load.on('loaderror',(file:Phaser.Loader.File)=>this.loadErrors.push(file.key));
-    for(const name of ['witch-puppet','witch-walk','witch-jump','flora-puppet','witch-portrait','flora-portrait','paper-tree']) this.load.image(name,assetUrl(name+(name.startsWith('flora')?'-clean':'')+'.png'));
+    for(const name of ['witch-puppet','witch-walk','witch-walk-alt','witch-jump','witch-fall','flora-puppet','witch-portrait','flora-portrait','paper-tree']) this.load.image(name,assetUrl(name+(name.startsWith('flora')?'-clean':'')+'.png'));
     for(const name of ['witch-knee','flora-knee','title-arch'])this.load.image(name,assetUrl(name+'.png'));
     for(const name of ['witch-attack','clapper-idle','clapper-walk','clapper-attack','game-over'])this.load.image(name,assetUrl(name+'.png'));
     this.load.image('witch-roll',assetUrl('witch-roll-clean.png'));
@@ -208,7 +209,7 @@ export class TheaterScene extends Phaser.Scene {
     if(this.mode!=='explore'&&this.mode!=='testing')return;
     this.mode='explore';
     const area=TEST_AREAS.find(item=>item.id===target)!;
-    Object.assign(this.actor,createActor(),{x:area.x});this.respawnPoint=area.x;this.world.checkpoint=area.x;this.combat.reset();
+    Object.assign(this.actor,createActor(),{x:area.x});this.respawnPoint=area.x;this.world.checkpoint=area.x;this.combat.reset();this.playerMotion.reset();this.stageLife.clearMotion();
     this.cameras.main.scrollX=Phaser.Math.Clamp(area.x-440,0,TUNING.worldWidth-1280);this.controls.clear();this.theaterSound.cue('ui');this.publish();
   }
   testMenu(open:boolean){if(open&&this.mode==='explore')this.mode='testing';else if(!open&&this.mode==='testing'){this.mode='explore';this.softLockUntil=this.time.now+180;}this.controls.clear();this.publish();}
@@ -216,7 +217,7 @@ export class TheaterScene extends Phaser.Scene {
   testNpc(id:NpcId){if(this.mode!=='testing')return;this.npc=id;this.flora.setTexture(id==='flora'?'flora-puppet':`npc-${id}`).setScale(190/this.flora.height);this.teleport('dialogue');this.actor.x=STAGE.floraX-100;this.actor.facing=1;this.publish();}
   async prepareRespawn(){
     if(this.mode!=='gameover')return;
-    Object.assign(this.actor,createActor(),{x:this.respawnPoint});this.combat.reset();this.cameras.main.scrollX=Phaser.Math.Clamp(this.actor.x-440,0,TUNING.worldWidth-1280);this.controls.clear();this.publish();
+    Object.assign(this.actor,createActor(),{x:this.respawnPoint});this.combat.reset();this.playerMotion.reset();this.stageLife.clearMotion();this.cameras.main.scrollX=Phaser.Math.Clamp(this.actor.x-440,0,TUNING.worldWidth-1280);this.controls.clear();this.publish();
     await new Promise<void>(resolve=>requestAnimationFrame(()=>requestAnimationFrame(()=>resolve())));
   }
   finishRespawn(){if(this.mode==='gameover'){this.mode='explore';this.combat.state.invulnerable=1.5;this.controls.clear();this.publish();}}
@@ -269,14 +270,19 @@ export class TheaterScene extends Phaser.Scene {
     else if(this.mode==='explore') {
       if(input.interact&&this.actor.grounded)this.interact();
       if(this.mode==='explore') {
-        const wasGrounded=this.actor.grounded;
+        const before={...this.actor};
         if(input.roll&&beginRoll(this.combat.state,this.actor))this.theaterSound.cue('paper');
         const rolling=this.combat.state.rolling>0;
-        if(moveActor(this.actor,this.world,dt,rolling?this.combat.state.rollFacing:input.direction,!rolling&&input.jump,rolling)==='rescued')this.toast('무대 아래는 아직 준비 중입니다. 안전한 자리로 돌아왔어요.');
-        if(!wasGrounded&&this.actor.grounded){this.stageLife.impact(this.actor.x,this.actor.y);this.theaterSound.cue('footstep');}
+        const rescued=moveActor(this.actor,this.world,dt,rolling?this.combat.state.rollFacing:input.direction,!rolling&&input.jump,rolling)==='rescued';
+        if(rescued){this.toast('무대 아래는 아직 준비 중입니다. 안전한 자리로 돌아왔어요.');this.playerMotion.reset();this.stageLife.clearMotion();}
+        else for(const beat of this.playerMotion.update(this.actor,before,dt,input.direction,rolling)){
+          this.stageLife.motion(beat.kind,beat.x,beat.y,beat.direction,beat.strength);
+          if(beat.kind==='step'||beat.kind==='land')this.theaterSound.cue('footstep');
+        }
         const events=updateCombat(this.combat.state,this.actor,dt,input.attack);
         for(const event of events){
           this.theaterSound.cue(event);
+          if(event==='cast')this.stageLife.motion('cast',this.actor.x+this.actor.facing*52,this.actor.y,this.actor.facing);
           if(event==='hit')this.stageLife.impact(this.actor.x+this.actor.facing*90,this.actor.y-65,4);
           if(event==='hurt'&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches)this.cameras.main.shake(90,.0015);
           if(event==='gameover'){this.mode='gameover';this.actor.vx=0;this.controls.clear();}
@@ -286,26 +292,26 @@ export class TheaterScene extends Phaser.Scene {
     }
     }
     if(this.mode==='explore'){
-      const target=Phaser.Math.Clamp(this.actor.x-440,0,TUNING.worldWidth-1280);
+      const target=Phaser.Math.Clamp(this.actor.x-440+Phaser.Math.Clamp(this.actor.vx*.10,-40,40),0,TUNING.worldWidth-1280);
       this.cameras.main.scrollX+=(target-this.cameras.main.scrollX)*(1-Math.exp(-TUNING.cameraFollow*dt));
     }
-    const t=this.time.now/1000;
+    const t=this.playerMotion.clock;
     if(this.mode==='explore'){
       if(!this.distantApplausePlayed&&this.actor.x>2400){this.distantApplausePlayed=true;this.theaterSound.cue('applause');}
     }
+    if(this.mode!=='pause'&&this.mode!=='testing'){
     const walk=this.mode==='explore'&&Math.abs(this.actor.vx)>20&&this.actor.grounded;
-    const tilt=!this.actor.grounded?Phaser.Math.Clamp(this.actor.vy/2700,-.16,.18):walk?Math.sin(t*14)*.08:Math.sin(t*1.8)*.018;
-    const bounce=walk?Math.abs(Math.sin(t*14))*4:0;
-    if(walk&&Math.abs(this.actor.x-this.footstepX)>80){this.footstepX=this.actor.x;this.stageLife.impact(this.actor.x,this.actor.y,2);this.theaterSound.cue('footstep');}
-    if(!walk)this.footstepX=this.actor.x;
+    const shape=this.playerMotion.shape(this.actor,walk);
+    const tilt=this.playerMotion.lean+(walk?0:Math.sin(this.playerMotion.clock*1.8)*.012);
+    const bounce=shape.bounce;
     const rolling=this.mode==='explore'&&this.combat.state.rolling>0;
-    const pose=rolling?{texture:'witch-roll',height:120,joint:{u:.5,v:.5}}:this.mode==='explore'&&this.combat.state.casting>0?{texture:'witch-attack',height:198,joint:{u:.48,v:.79}}:puppetPose(this.actor.grounded,this.actor.vx,this.mode);
+    const pose=rolling?{texture:'witch-roll',height:120,joint:{u:.5,v:.5}}:this.mode==='explore'&&this.combat.state.casting>0?{texture:'witch-attack',height:198,joint:{u:.48,v:.79}}:puppetPose(this.actor.grounded,this.actor.vx,this.mode,this.playerMotion.stride,this.actor.vy);
     if(this.puppet.texture.key!==pose.texture)this.puppet.setTexture(pose.texture);
     this.puppet.setOrigin(this.actor.facing<0?1-pose.joint.u:pose.joint.u,rolling?.5:1).setData('rodJoint',pose.joint);
-    this.puppet.setPosition(this.actor.x,this.actor.y-(rolling?88:bounce)).setFlipX(this.actor.facing<0).setRotation(rolling?this.actor.facing*(1-this.combat.state.rolling/COMBAT.rollDuration)*Math.PI*2:tilt+(this.mode==='dialogue'?this.actor.facing*.055:0)+(this.combat.state.casting>0?-.08*this.actor.facing:0));
-    const squash=this.actor.landing*.09;
-    this.puppet.setScale(pose.height/this.puppet.height*(1+squash),pose.height/this.puppet.height*(1-squash));
+    this.puppet.setPosition(this.actor.x,this.actor.y-(rolling?88:bounce)).setFlipX(this.actor.facing<0).setRotation(rolling?this.actor.facing*(1-this.combat.state.rolling/COMBAT.rollDuration)*Math.PI*2:tilt+(this.mode==='dialogue'?this.actor.facing*.055:0)+(this.combat.state.casting>0?-Math.sin(Math.PI*this.combat.state.casting/.3)*.095*this.actor.facing:0));
+    this.puppet.setScale(pose.height/this.puppet.height*shape.x,pose.height/this.puppet.height*shape.y);
     this.puppet.setAlpha(this.combat.state.invulnerable>0?.65+Math.sin(this.combat.state.clock*24)*.2:1);
+    }
     const greeting=Math.abs(this.actor.x-STAGE.floraX)<170?(this.actor.x<STAGE.floraX?-.018:.018):0;
     this.flora.setRotation(Math.sin(t*1.3)*.016+greeting);
     this.stageLife.update(dt,!locked&&(this.mode==='explore'||this.mode==='intro'),this.lightAmount);
@@ -317,7 +323,7 @@ export class TheaterScene extends Phaser.Scene {
     this.hint.setVisible(Boolean(near)&&this.mode==='explore').setPosition(this.actor.x,this.actor.y-212).setText(near==='flora'?`E  ${conversationLabel(this.npc)}`:near==='bridge'?'E  무대 조작':'E  조명 조사');
     if(this.message&&this.time.now>this.nextMessageUntil)this.message='';
     // Read-only telemetry for browser regression tests; no debug controls or bypasses.
-    this.game.canvas.dataset.theater=JSON.stringify({x:this.actor.x,y:this.actor.y,grounded:this.actor.grounded,camera:this.cameras.main.scrollX,mode:this.mode,motionLocked:this.motionLocked||this.time.now<this.softLockUntil,bridge:this.world.bridge,lights:this.world.lights,visits:this.world.visits,bridgeX:this.bridge.x,bridgeY:this.bridge.y,pose:this.puppet.texture.key,lightAmount:this.lightAmount,lighting:this.lighting.snapshot(),environment:this.stageLife.snapshot(),combat:this.combat.state,audio:this.theaterSound.snapshot()});
+    this.game.canvas.dataset.theater=JSON.stringify({x:this.actor.x,y:this.actor.y,vx:this.actor.vx,vy:this.actor.vy,movement:this.playerMotion.snapshot(),grounded:this.actor.grounded,camera:this.cameras.main.scrollX,mode:this.mode,motionLocked:this.motionLocked||this.time.now<this.softLockUntil,bridge:this.world.bridge,lights:this.world.lights,visits:this.world.visits,bridgeX:this.bridge.x,bridgeY:this.bridge.y,pose:this.puppet.texture.key,lightAmount:this.lightAmount,lighting:this.lighting.snapshot(),environment:this.stageLife.snapshot(),combat:this.combat.state,audio:this.theaterSound.snapshot()});
     this.game.canvas.dataset.theaterRig=JSON.stringify(this.rig.snapshot());
     this.publish();
   }

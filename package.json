@@ -16,6 +16,7 @@
     "test:witch": "node scripts/test-witch.mjs",
     "test:witch-expansion": "node scripts/test-witch-expansion.mjs",
     "test:witch-motion": "node scripts/test-witch-motion.mjs",
+    "test:witch-movement": "node scripts/test-witch-movement.mjs",
     "witch:export-props": "node scripts/export-witch-props.mjs"
   },
   "dependencies": {

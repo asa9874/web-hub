@@ -142,3 +142,8 @@ Constraints: one isolated tree only on a genuinely transparent background, NO sc
 
 `cutscenes/*.png`는 built-in `image_gen`으로 각 장면마다 별도 호출하여 생성한 고해상도 원본입니다. 스타일/인물 기준은 `witch-portrait.png`이며, 이 파일을 모든 호출의 referenced_image_paths에 사용했습니다. 출력은 불투명 풍경 일러스트입니다. 실제 제출 프롬프트 전부는 [illustrations.json](../../src/ForgottenWitch/illustrations.json)에 그대로 저장되어 있고 게임 갤러리 상세보기에서도 볼 수 있습니다. 17점은 일반 애니메이션 일러스트, 3점은 chibi 컷씬입니다. 스토리와 사용 여부는 미정이며 현재 플레이의 확정 사건이 아닙니다. 생성 결과 PNG는 변형 없이 저장소로 복사했습니다.
 
+
+
+## 빠른 동작 프레임 — 2026-10-14
+
+built-in image_gen으로 `witch-walk.png` / `witch-jump.png`를 각각 편집 대상으로 사용한 투명 PNG2점. 원본 파일을 유지하고 생성된 알파를 수정하지 않고 프로젝트로 복사했다. `witch-walk-alt.png`는 중간 걸음, `witch-fall.png`는 하강 준비이며 새 캐릭터 디자인이 아니다. 실제 제출 프롬프트는 src/ForgottenWitch/codex/movement-image-prompts.json. 포즈 높이/몸체 연결점은 poses.ts, 변환/거리 주기는 PlayerMotion.ts, 파티클은 StageLife.ts의 코드로 처리한다. 조종 막대나 파티클을 그림에 합성하지 않았다.

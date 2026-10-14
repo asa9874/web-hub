@@ -1,9 +1,9 @@
 export const TUNING = {
   width: 1280, height: 720, worldWidth: 6400, floor: 570,
-  speed: 335, acceleration: 2200, friction: 2600,
-  gravity: 1700, jumpSpeed: 620, coyoteMs: 100, bufferMs: 100,
-  bodyWidth: 44, bodyHeight: 100, cameraFollow: 5,
-  rollSpeed:690,rollDuration:.36,rollCooldown:.85,
+  speed: 405, acceleration: 3600, turnAcceleration: 5600, friction: 4100,
+  gravity: 2100, fallGravity: 1.12, jumpSpeed: 690, coyoteMs: 100, bufferMs: 100,
+  bodyWidth: 44, bodyHeight: 100, cameraFollow: 7.5,
+  rollSpeed:790,rollDuration:.30,rollCooldown:.75,
 } as const;
 export const STAGE = {
   gap: { left: 1420, right: 1900 },

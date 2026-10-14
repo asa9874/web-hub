@@ -10,7 +10,7 @@ await build({entryPoints:[fileURLToPath(new URL('../src/ForgottenWitch/model.ts'
 const {createActor,createWorld,moveActor,checkLights,bridgeCanSnap}=await import(new URL('witch-model.mjs',output));
 // Physics contracts: edge grace, buffered landing, obstacle collision, actual bridge collision.
 let actor=createActor(),world=createWorld();actor.x=1660;actor.y=550;actor.grounded=false;
-for(let i=0;i<60;i++)moveActor(actor,world,1/120,0,false);
+for(let i=0;i<40;i++)moveActor(actor,world,1/120,0,false);
 assert(actor.y>570,'Unsolved bridge must not have a collider');
 actor=createActor();world.bridge='SOLVED';actor.x=1660;actor.y=550;actor.grounded=false;
 for(let i=0;i<60;i++)moveActor(actor,world,1/120,0,false);
@@ -108,8 +108,8 @@ try {
  };
  await checkRig();
  const initialLighting=await state();assert.equal(initialLighting.lighting.glows,13);assert(initialLighting.lighting.shadows>=30);assert(initialLighting.lighting.lamps.every(alpha=>alpha===0));
- await page.keyboard.down('d');await waitState('s.pose === "witch-walk"');await page.waitForTimeout(100);await checkRig();await page.screenshot({path:fileURLToPath(new URL('witch-walk.png',output))});await page.keyboard.up('d');await waitState('s.pose === "witch-puppet"');
- await page.keyboard.down('a');await waitState('s.pose === "witch-walk"');await checkRig();await page.keyboard.up('a');await waitState('s.pose === "witch-puppet"');
+ await page.keyboard.down('d');await waitState('s.pose.startsWith("witch-walk")');await page.waitForTimeout(100);await checkRig();await page.screenshot({path:fileURLToPath(new URL('witch-walk.png',output))});await page.keyboard.up('d');await waitState('s.pose === "witch-puppet"');
+ await page.keyboard.down('a');await waitState('s.pose.startsWith("witch-walk")');await checkRig();await page.keyboard.up('a');await waitState('s.pose === "witch-puppet"');
  await runTo(250);await page.keyboard.press('Space');await waitState('s.pose === "witch-jump" && s.y < 540');
  const jumpRod=await checkRig();assert(jumpRod.start.y<jumpRod.actorY-25,'Jump support extends from the body, not a detached fixed-length bar');await page.screenshot({path:fileURLToPath(new URL('witch-jump.png',output))});
  await waitState('s.grounded');

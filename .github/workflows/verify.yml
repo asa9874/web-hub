@@ -32,3 +32,4 @@ jobs:
           WITCH_TEST_URL=http://127.0.0.1:4173/web-hub npm run test:witch
           WITCH_TEST_URL=http://127.0.0.1:4173/web-hub npm run test:witch-expansion
           WITCH_TEST_URL=http://127.0.0.1:4173/web-hub npm run test:witch-motion
+          WITCH_TEST_URL=http://127.0.0.1:4173/web-hub npm run test:witch-movement

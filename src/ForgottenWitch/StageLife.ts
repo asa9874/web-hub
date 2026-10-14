@@ -1,5 +1,6 @@
 import type Phaser from 'phaser3';
-interface Fleck {x:number;y:number;vx:number;vy:number;life:number;max:number}
+import type {MotionEffect} from './PlayerMotion';
+interface Fleck {x:number;y:number;vx:number;vy:number;life:number;max:number;color:number;size:number;angle:number;spin:number}
 // Presentation only: these light/dust effects never participate in collisions or puzzles.
 export class StageLife {
   private dust:Phaser.GameObjects.Graphics;
@@ -14,6 +15,7 @@ export class StageLife {
   private flecks:Fleck[]=[];
   private clock=0;
   private flowerClock=0;
+  private emitted:Partial<Record<MotionEffect,number>>={};
   private motionReduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   constructor(scene:Phaser.Scene) {
     this.scene=scene;
@@ -26,9 +28,20 @@ export class StageLife {
   plant(flower:Phaser.GameObjects.Image){this.flowers.push(flower);}
   impact(x:number,y:number,count=7) {
     if(this.motionReduced)return;
-    for(let i=0;i<count;i++)this.flecks.push({x:x+(i-count/2)*4,y:y-3,vx:(i-count/2)*18,vy:-20-(i%3)*15,life:.42,max:.42});
+    for(let i=0;i<count;i++)this.flecks.push({x:x+(i-count/2)*4,y:y-3,vx:(i-count/2)*18,vy:-20-(i%3)*15,life:.42,max:.42,color:0xe5c49c,size:3,angle:0,spin:0});
     if(this.flecks.length>50)this.flecks.splice(0,this.flecks.length-50);
   }
+  motion(kind:MotionEffect,x:number,y:number,direction:number,strength=1){
+    if(this.motionReduced)return;
+    this.emitted[kind]=(this.emitted[kind]??0)+1;
+    const count={step:3,jump:7,land:11,brake:7,roll:8,trail:2,cast:7}[kind];
+    for(let i=0;i<count;i++){
+      const spread=(i-(count-1)/2)/(count/2),magic=kind==='cast',life=kind==='trail'?.20:magic?.32:.36+(i%3)*.045;
+      this.flecks.push({x:x+spread*10-(kind==='trail'?direction*30:0),y:y-(magic?65:4),vx:magic?direction*(80+i*12):kind==='land'?spread*95*strength:-direction*55+spread*65,vy:magic?spread*65:-30-(i%4)*12*strength,life,max:life,color:magic?(i%2?0xb9a3d4:0xffdfae):i%2?0xd6b38c:0xf3e5ce,size:magic?3.5:2.5+(i%3),angle:i*.7,spin:spread*5});
+    }
+    if(this.flecks.length>90)this.flecks.splice(0,this.flecks.length-90);
+  }
+  clearMotion(){this.flecks=[];}
   update(dt:number,animate:boolean,lightAmount:number) {
     if(animate&&!this.motionReduced){this.clock+=dt;this.flowerClock+=dt*lightAmount;}
     const t=this.clock;
@@ -59,10 +72,10 @@ export class StageLife {
     });
     this.impacts.clear();
     for(const fleck of this.flecks){
-      if(animate){fleck.life-=dt;fleck.x+=fleck.vx*dt;fleck.y+=fleck.vy*dt;fleck.vy+=95*dt;}
-      if(fleck.life>0)this.impacts.fillStyle(0xe5c49c,fleck.life/fleck.max*.5).fillRect(fleck.x,fleck.y,3,1.5);
+      if(animate){fleck.life-=dt;fleck.x+=fleck.vx*dt;fleck.y+=fleck.vy*dt;fleck.vy+=95*dt;fleck.angle+=fleck.spin*dt;}
+      if(fleck.life>0){this.impacts.save();this.impacts.translateCanvas(fleck.x,fleck.y);this.impacts.rotateCanvas(fleck.angle);this.impacts.fillStyle(fleck.color,fleck.life/fleck.max*.65).fillRect(-fleck.size/2,-fleck.size/4,fleck.size,fleck.size/2);this.impacts.lineStyle(.6,0x8d6e61,fleck.life/fleck.max*.35).strokeRect(-fleck.size/2,-fleck.size/4,fleck.size,fleck.size/2);this.impacts.restore();}
     }
     this.flecks=this.flecks.filter(fleck=>fleck.life>0);
   }
-  snapshot(){return {clock:this.clock,reducedMotion:this.motionReduced,hanging:this.stars.length,swaying:this.props.length,mysteryActive:Boolean(this.mystery&&this.clock-this.mystery.start<3)};}
+  snapshot(){return {clock:this.clock,reducedMotion:this.motionReduced,hanging:this.stars.length,swaying:this.props.length,mysteryActive:Boolean(this.mystery&&this.clock-this.mystery.start<3),particles:this.flecks.length,emitted:{...this.emitted}};}
 }
