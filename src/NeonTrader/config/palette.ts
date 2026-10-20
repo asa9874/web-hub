@@ -1,0 +1,2 @@
+export const PALETTE = ['#090B18', '#10162A', '#19213B', '#263052', '#3B4670', '#8795B8', '#DCE8FF', '#F8F6FF', '#9B5DE5', '#F15BB5', '#FF4D9D', '#33D6FF', '#34E5A0', '#FF627C', '#FFC857', '#6C8CFF'] as const;
+export const COLORS = { bg: PALETTE[0], panel: PALETTE[1], grid: PALETTE[4], muted: PALETTE[5], text: PALETTE[6], pink: PALETTE[9], cyan: PALETTE[11], up: PALETTE[12], down: PALETTE[13], warning: PALETTE[14] };

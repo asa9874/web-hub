@@ -23,7 +23,12 @@
     "test:witch-defense": "node scripts/test-witch-defense.mjs",
     "test:witch-opening": "node scripts/test-witch-opening.mjs",
     "test:witch-direction": "node scripts/test-witch-direction.mjs",
-    "test:witch-chapter": "node scripts/test-witch-chapter.mjs"
+    "test:witch-chapter": "node scripts/test-witch-chapter.mjs",
+    "test:neon": "node scripts/test-neon-trader.mjs",
+    "test:neon-browser": "node scripts/test-neon-browser.mjs",
+    "test:neon-audio": "node scripts/test-neon-audio.mjs",
+    "test:neon-endings": "node scripts/test-neon-endings.mjs",
+    "test:neon-scroll": "node scripts/test-neon-scroll.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.17",

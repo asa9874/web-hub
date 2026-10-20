@@ -15,6 +15,7 @@ import HeroinInfo from './VisualNovel/HeroinInfo.tsx'
 import Japan from './Japan/Japan.tsx'
 import English from './English/English.tsx'
 import SuperHotDesign from './SuperHotDesign/SuperHotDesign.tsx'
+const NeonTrader = lazy(() => import('./NeonTrader/NeonTrader.tsx'));
 const ForgottenWitch = lazy(() => import('./ForgottenWitch/ForgottenWitch.tsx'));
 
 // Preserve bookmarked HashRouter URLs while giving every page a shareable pathname.
@@ -27,6 +28,7 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <Routes>
         <Route path="/" element={<App />} />
+        <Route path="/games/neon-trader" element={<Suspense fallback={<p>거래소를 준비하고 있습니다…</p>}><NeonTrader /></Suspense>} />
         <Route path="/games/forgotten-witch" element={<Suspense fallback={<p>극장을 준비하고 있습니다…</p>}><ForgottenWitch /></Suspense>} />
         <Route path="/ai-prompts" element={<AIPrompts />} />
         <Route path="/network-quiz" element={<NetworkQuiz />} />
