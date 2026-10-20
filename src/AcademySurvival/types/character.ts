@@ -1,4 +1,5 @@
-import type {Condition} from './index';
+import type {CharacterSocialIdentity,RandomSocialSlot} from './social';
+import type {RandomContentSlot} from './slots';
 import type {CharacterKnowledge,RankLevel,StatId} from './knowledge';
 import type {StatusInstance} from './status';
 export type CharacterKind='player'|'random_npc'|'fixed_npc';
@@ -9,18 +10,16 @@ export interface CharacterIdentity {
  objective:string;tendencies:{id:string;label:string;description:string}[];
 }
 export interface CharacterRelationship {targetId:string;label:string;description:string;affinity:number|null}
-export interface Character extends CharacterIdentity,CharacterKnowledge {
+export interface Character extends CharacterIdentity,CharacterKnowledge,CharacterSocialIdentity {
  id:string;templateId?:string;kind:CharacterKind;statuses:StatusInstance[];relationships:CharacterRelationship[];
 }
-export interface RandomAbilitySlot {
- id:string;kind:'trait'|'gift';description:string;drawAt:'campaign-start';withoutReplacement:true;
- candidates:{entryId:string;weight:number;condition?:Condition}[];
-}
+export type RandomAbilitySlot=RandomContentSlot<'trait'|'gift'>;
 export interface FixedCharacterTemplate {
  id:string;identity:CharacterIdentity;role:string;coreNotes:string[];
  stats:Record<StatId,{base:number;min:number;max:number}>;
  proficiencies:{id:string;base:RankLevel;min:RankLevel;max:RankLevel}[];
  fixedTraitIds:string[];fixedGiftIds:string[];randomSlots:RandomAbilitySlot[];
+ social:{fixed:CharacterSocialIdentity;randomSlots:RandomSocialSlot[]};
  statuses:{fixed:StatusInstance[];optional:{id:string;definitionId:string;stageId?:string;weight:number;description:string}[];noneWeight:number;maxSelections:number};
  variation:{id:string;description:string;options:{id:string;label:string;weight:number}[]}[];
  relationships:{targetRole:string;description:string}[];
@@ -28,4 +27,4 @@ export interface FixedCharacterTemplate {
  contentMappings:{requested:string;actualId:string;reason:string}[];
 }
 // The panel's discriminant prevents unresolved slots being passed off as a real campaign character.
-export type CharacterPanelProps=({mode:'template';template:FixedCharacterTemplate}|{mode:'actual';character:Character})&{debug?:boolean};
+export type CharacterPanelProps=({mode:'template';template:FixedCharacterTemplate}|{mode:'actual';character:Character})&{debug?:boolean;onSocialChange?:(social:CharacterSocialIdentity)=>void};

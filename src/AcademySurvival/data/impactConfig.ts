@@ -1,0 +1,3 @@
+import type {ImpactDomain} from '../types/impact';
+export const IMPACT_DOMAINS:Record<ImpactDomain,string>={combat:'전투',magic:'마법',politics:'정치',society:'사회',economy:'경제',academia:'학술',religion:'종교',information:'정보',mind:'정신',fate:'운명',other:'기타'};
+export const IMPACT_GRADES=[{id:'minor',name:'미미',min:0,max:99},{id:'small',name:'소규모',min:100,max:249},{id:'regional',name:'지역급',min:250,max:449},{id:'faction',name:'세력급',min:450,max:649},{id:'national',name:'국가급',min:650,max:799},{id:'continental',name:'대륙급',min:800,max:899},{id:'legendary',name:'전설급',min:900,max:969},{id:'world',name:'세계급',min:970,max:999},{id:'unbounded',name:'규격 외',min:1000,max:1000}] as const;

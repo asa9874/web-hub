@@ -1,0 +1,12 @@
+import type {ImpactDomain} from '../../types/impact';
+import type {AcquisitionKind,OrganizationType,PositionCategory,PositionDefinition,TitleCategory,TitleDefinition} from '../../types/social';
+import {makeImpact} from '../../systems/impact';
+const rule=(id:string,description:string)=>({condition:{kind:'flag' as const,key:id},description});
+type PositionOptions={group?:string;parents?:string[];gain?:PositionDefinition['acquisition']['type'];tags?:string[];origins?:string[]};
+export function positionCategory(categoryId:PositionCategory,organizationType:OrganizationType,domains:ImpactDomain[]){
+ return (id:string,name:string,value:number,description:string,systemDescription:string,permission:string,duty:string,gain:string,loss:string,o:PositionOptions={}):PositionDefinition=>({kind:'position',id:'position-'+id,name,categoryId,description,systemDescription,impact:makeImpact(value,domains,o.origins),organizationType,permissions:[permission],duties:[duty],acquisition:{type:o.gain??'appointment',rule:rule('position-'+id+'-gain',gain)},loss:rule('position-'+id+'-loss',loss),exclusiveGroupId:o.group??null,parentIds:o.parents?.map(p=>'position-'+p)??[],changes:[],effects:[],eventTags:o.tags??[categoryId==='academy'?'study':categoryId==='military'?'training':categoryId==='clergy'?'blessing':categoryId==='research'?'research':categoryId==='commerce'?'bargain':'society']});
+}
+type TitleOptions={type?:AcquisitionKind;visibility?:'public'|'group'|'secret';recognition?:string;loss?:string;related?:string[];tags?:string[];reactions?:string[];origins?:string[]};
+export function titleCategory(categoryId:TitleCategory,domains:ImpactDomain[]){
+ return (id:string,name:string,value:number,description:string,systemDescription:string,gain:string,o:TitleOptions={}):TitleDefinition=>({kind:'title',id:'title-'+id,name,categoryId,description,systemDescription,impact:makeImpact(value,domains,o.origins),acquisition:{type:o.type??'achievement',rule:rule('title-'+id+'-gain',gain)},publicity:{default:o.visibility??'public',recognition:o.recognition??'인정 주체가 근거를 확인한 범위에서만 인지한다. 획득만으로 모든 사람에게 전파되지 않는다.'},loss:{possible:!!o.loss,rule:o.loss?rule('title-'+id+'-loss',o.loss):null},effects:[],eventTags:o.tags??[categoryId==='learning'?'study':categoryId==='battle'?'duel':categoryId==='research'?'research':categoryId==='heroic'?'rescue':categoryId==='eccentric'?'daily':'society'],reactionTags:o.reactions??[categoryId+'-reputation'],relatedTitleIds:o.related?.map(r=>'title-'+r)??[]});
+}

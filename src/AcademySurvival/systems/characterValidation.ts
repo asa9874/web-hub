@@ -7,6 +7,8 @@ import {applyStatus,validateInstance} from './statusApplication';
 import {makeInstance} from './statusApplication';
 import {randomSlotPool,templateContext,templateOwned} from './characterRules';
 import {statusRegistry} from './statusRegistry';
+import {validateSocialIdentity} from './socialValidation';
+import {socialSlotPool,positionRegistry,titleRegistry,positionConflict} from './socialRules';
 const unique=(values:string[])=>new Set(values).size===values.length;
 function conditionValid(c:Condition):boolean{
  if(!c||typeof c!=='object')return false;
@@ -29,6 +31,13 @@ function abilityIssues(traitIds:string[],giftIds:string[],id:string){
 export function validateFixedCharacters(templates:FixedCharacterTemplate[]):Issue[]{
  const issues:Issue[]=[],ids=new Set<string>(),fail=(id:string,message:string)=>issues.push({id,message});
  for(const t of templates){
+  issues.push(...validateSocialIdentity(t.social.fixed,t.id));
+  for(const slot of t.social.randomSlots){
+   if(!slot.id||!slot.description||slot.drawAt!=='campaign-start'||!slot.withoutReplacement||!['position','title'].includes(slot.kind)||!slot.candidates.length||!unique(slot.candidates.map(c=>c.entryId+'@'+(c.organizationId??''))))fail(t.id,'사회적 랜덤 슬롯 오류');
+   for(const c of slot.candidates){if(!Number.isFinite(c.weight)||c.weight<=0||(c.condition&&!conditionValid(c.condition))||(slot.kind==='position'?!positionRegistry.has(c.entryId)||!!positionConflict({definitionId:c.entryId,organizationId:c.organizationId??''},t.social.fixed.positions):!titleRegistry.has(c.entryId)||t.social.fixed.titles.some(t=>t.definitionId===c.entryId)))fail(t.id,'직급/칭호 슬롯 후보 오류');}
+   if(!socialSlotPool(slot,templateContext(t),t.social.fixed).length)fail(t.id,'사회적 랜덤 슬롯 후보 없음');
+  }
+  if(!unique([...t.randomSlots,...t.social.randomSlots].map(s=>s.id)))fail(t.id,'전체 슬롯 ID 중복');
   if(!/^fixed-[a-z][a-z-]*$/.test(t.id)||ids.has(t.id))fail(t.id,'템플릿 ID 중복/형식 오류');ids.add(t.id);issues.push(...identityIssues(t.identity,t.id),...abilityIssues(t.fixedTraitIds,t.fixedGiftIds,t.id));
   if(!t.role||!t.coreNotes.length)fail(t.id,'고정 역할/핵심 설정 누락');
   if(Object.keys(t.stats).length!==stats.length)fail(t.id,'기본 능력치 7종 필요');
@@ -55,6 +64,7 @@ export function validateFixedCharacters(templates:FixedCharacterTemplate[]):Issu
 export function validateCharacters(characters:Character[],templates:FixedCharacterTemplate[]=[]):Issue[]{
  const issues:Issue[]=[],ids=new Set<string>(),fail=(id:string,message:string)=>issues.push({id,message});
  for(const c of characters){
+  issues.push(...validateSocialIdentity(c,c.id));
   if(!c.id||ids.has(c.id))fail(c.id,'캐릭터 ID 중복/누락');ids.add(c.id);issues.push(...identityIssues(c,c.id),...abilityIssues(c.traitIds,c.giftIds,c.id));
   if(!['player','random_npc','fixed_npc'].includes(c.kind))fail(c.id,'캐릭터 종류 오류');
   const template=templates.find(t=>t.id===c.templateId);

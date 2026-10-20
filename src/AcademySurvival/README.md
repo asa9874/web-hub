@@ -1,12 +1,14 @@
 # 아카데미에서 살아남기 — 설정집
 
-본게임 이전 단계의 **실제 콘텐츠 정의와 열람 UI**다. 특성 405개, 기프트 403개, 특성 계열 49개, 공통 예정 이벤트 참조 21개를 포함한다. 검술·마법·신체뿐 아니라 성향/단점, 영향력 0의 일상 능력까지 직접 작성했다. 기프트 95점 이상은 3개뿐이다.
+본게임 이전 단계의 **실제 콘텐츠 정의와 열람 UI**다. 특성 405개, 기프트 403개, 특성 계열 49개, 공통 예정 이벤트 참조 21개를 포함한다. 검술·마법·신체뿐 아니라 성향/단점, 영향력 0의 일상 능력까지 직접 작성했다. 요소 영향력은 0~1,000으로 통일했으며 캐릭터 최종 영향력은 아직 계산하지 않는다.
 
 설정집에는 **능력치 7종·숙련도 49종**도 포함한다. 능력치의 등급 설명 70개와 숙련도의 경지 설명 490개, 합계 **560개의 고유 문장**을 작성했다. 특성·기프트와 숙련도는 독립적인 정의다.
 
 **상태 150종**과 별도 단계 설명 **38개**를 추가했다. 상태 정의와 적용 인스턴스를 분리하며, DEBUG에서 임시 적용·제거·단계/부위 변경·중복/충돌·효과 계산을 확인한다. [상태 데이터 및 적용 계약](data/statuses/README.md)을 먼저 읽고 확장한다.
 
 고정 등장인물은 **세레나 1명**이다. 공통 `Character` 타입과 `CharacterStatusPanel`을 플레이어·랜덤 NPC·고정 인물 모두에 사용하며, 템플릿의 랜덤 슬롯은 결과를 정하지 않고 `?`로 표시한다. [캐릭터 데이터·상태창 인계](data/characters/README.md)에 재사용 방법을 정리했다.
+
+직급·신분 **200종**, 칭호 **200종**을 추가했다. 모든 특성405개·기프트403개에도 버전이 있는 영향력 메타데이터를 적용했다. [사회적 요소·영향력 계약](data/social/README.md)에 분포와 보유/대표/마이그레이션 규칙을 정리했다.
 
 ## 실행
 
@@ -21,6 +23,7 @@ npm run dev
 - 능력치: `?view=catalog&kind=stat&item=STR`. 숙련도: `?view=catalog&kind=proficiency&item=proficiency-sword`. 기존 특성·기프트 URL은 그대로 유효하다.
 - 상태: `?view=catalog&kind=status&item=status-rabbit-form`. `&debug=1`이면 원본 정의와 임시 적용 패널이 열린다. 임시 인스턴스는 페이지 새로고침 또는 DEBUG 종료 시 사라진다.
 - 고정 등장인물: `?view=catalog&kind=character&item=fixed-serena`. DEBUG에서 공통 상태창의 실제 레코드 모드를 확인할 수 있다. 확인용 레코드는 회차 생성이나 세레나의 랜덤 결과가 아니다.
+- 직급·신분: `?view=catalog&kind=position`. 칭호: `?view=catalog&kind=title`.
 - 읽기 전용 콘텐츠 도감이다. 게임 플레이/날짜 진행/전투/실제 이벤트/성장 시뮬레이션/기프트 시너지를 제공하지 않는다.
 
 ## 파일 구조와 데이터 추가
@@ -85,6 +88,7 @@ npm run test:academy
 npm run test:academy-knowledge
 npm run test:academy-status
 npm run test:academy-character
+npm run test:academy-social
 npm run build
 # 실제 화면을 바꿔 확인해야 할 때만:
 $env:ACADEMY_TEST_URL='http://127.0.0.1:5178/web-hub'
@@ -92,6 +96,7 @@ npm run test:academy-browser
 node scripts/test-academy-knowledge-browser.mjs
 npm run test:academy-status-browser
 npm run test:academy-character-browser
+npm run test:academy-social-browser
 ```
 
 엔진/데이터 검사는 808개 콘텐츠와 2만 회 추첨의 중복·상호 배타 방지, 확률 정규화, 조건/단위/중복 해석, 분기/단독/순환 감지, 검색·3종 정렬, 잘못된 데이터 검출을 확인한다. 기존 도감 브라우저 검사 스크립트는 허브 진입, 405개 노드, 분기/상세 이전 이동, 조건부 시작 확률, 403개 기프트 필터/정렬, DEBUG, 링크 복원, 빈 목록, 390px 가로 트리와 상세 이동을 다룬다. 각 개발 작업에서는 변경된 기능의 시나리오만 선택해 실행한다.

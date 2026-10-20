@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Context, Entry } from '../types';
-import { CATEGORIES, FAMILIES, GIFT_CATEGORIES, impactLabel, RARITIES, PROBABILITY } from '../data/config';
+import { CATEGORIES, FAMILIES, GIFT_CATEGORIES, RARITIES, PROBABILITY } from '../data/config';
 import { gifts, traits, previousTraits, relatedEvents, traitRegistry } from '../systems/registry';
 import { formatChance, slotPool } from '../systems/probability';
 import { conditionText } from '../systems/conditions';
 import { effectText } from '../systems/effectResolver';
 import DebugPanel from './DebugPanel';
+import ImpactBadge from './ImpactBadge';
 
 export default function EntryDetail({entry,debug,context,onSelect}:{entry:Entry;debug:boolean;context:Context;onSelect:(id:string)=>void}) {
  const [copied,setCopied]=useState(false),copyTimer=useRef(0);
@@ -15,7 +16,7 @@ export default function EntryDetail({entry,debug,context,onSelect}:{entry:Entry;
  return <article className="ac-detail" aria-label="선택 항목 상세">
   <header><p className="ac-kicker">{entry.kind==='trait'?'TRAIT RECORD':'GIFT RECORD'} <span>{RARITIES[entry.rarity].name}</span></p><h2>{entry.name}</h2><p className="ac-breadcrumb">{entry.kind==='trait'?`${CATEGORIES[entry.category]} / ${FAMILIES[entry.family].name} / ${entry.tier+1}단계`:`${GIFT_CATEGORIES[entry.category]} / 선천 · 고정 성능`}</p><button className="ac-copy" onClick={copy}>{copied?'링크 복사됨':'항목 링크 복사 ↗'}</button></header>
   <blockquote>{entry.lore}</blockquote>
-  {entry.kind==='gift'&&<div className="ac-impact-detail"><span>영향력 <strong>{entry.impact}</strong> / 100</span><b>{impactLabel(entry.impact)}</b><meter min="0" max="100" value={entry.impact}/><small>전투력·희귀도·보유 확률과 별개인 관리 지표</small></div>}
+  <ImpactBadge impact={entry.impact}/>
   <section><h3>시스템 효과</h3>{entry.kind==='gift'&&<p className="ac-activation">{entry.activation}</p>}<ul className="ac-effects">{entry.effects.map(effect=><li key={effect.id}>{effectText(effect)}</li>)}</ul></section>
   <section><h3>시작 추첨 확률 <span>임시 모델</span></h3><p className="ac-probability">{formatChance(row?.probability??0)} <small>/ 적격 첫 슬롯</small></p><p>{row?'현재 기준의 추첨 풀에서 해당 슬롯이 이 항목을 고를 조건부 확률입니다.':'현재 기준의 시작 풀에는 포함되지 않습니다. 조건 미충족 또는 시작 획득 불가입니다.'}</p><p className="ac-note">{pool.length}개 적격 · {debug?`가중치 ${entry.birth.weight} / 총 ${total.toFixed(2)} · `:''}중복·상호 배타 항목을 제외한 다음 슬롯은 다시 정규화합니다. 전체 캐릭터 보유 확률이 아닙니다.</p>
    <div className="ac-distribution">{(entry.kind==='trait'?PROBABILITY.traitCounts:PROBABILITY.giftCounts).map(r=><span key={r.count}>{r.count}개 <b>{formatChance(r.probability)}</b></span>)}</div>

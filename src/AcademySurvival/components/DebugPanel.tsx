@@ -7,6 +7,7 @@ export default function DebugPanel({entry,context}:{entry:Entry;context:Context}
  const issues=validationIssues.filter(issue=>issue.id===entry.id||issue.id==='catalog');
  return <section className="ac-debug"><h3>DEBUG / 내부 참조</h3><p className={issues.length?'ac-invalid':'ac-valid'}>{issues.length?issues.map(i=>i.message).join(' · '):'데이터 유효 · 참조 검사 통과'}</p>
   <dl><div><dt>ID</dt><dd>{entry.id}</dd></div><div><dt>이벤트 태그</dt><dd>{entry.eventTags.join(', ')}</dd></div><div><dt>추첨 가중치</dt><dd>{entry.birth.weight} · 적격 {String(entry.birth.eligible)}</dd></div></dl>
+  <details><summary>요소 영향력 메타데이터</summary><pre>{JSON.stringify(entry.impact,null,2)}</pre></details>
   <details><summary>효과 타입 · 보정 수치</summary><pre>{JSON.stringify(entry.effects,null,2)}</pre></details>
   <details><summary>능력치·숙련도 정의 참조</summary>{knowledgeReferencesForEntry(entry.id).length?<ul>{knowledgeReferencesForEntry(entry.id).map(def=><li key={def.id}><Link to={`?view=catalog&kind=${def.kind}&item=${def.id}&debug=1`}>{def.name} · {def.id} ↗</Link></li>)}</ul>:<p>명시적 효과 대상과 일치하는 정의 미연결</p>}<p>읽기용 참조만 연결되며 숙련도 경지나 특성을 자동 변경하지 않습니다.</p></details>
   {specialRules[entry.id]&&<details><summary>고유 규칙 · 발동 키 · 고정 파라미터</summary><pre>{JSON.stringify(specialRules[entry.id],null,2)}</pre></details>}

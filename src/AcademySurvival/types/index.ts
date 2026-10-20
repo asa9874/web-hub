@@ -1,3 +1,4 @@
+import type {ImpactMetadata} from './impact';
 export type Rarity = 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
 export type Category = 'martial' | 'magic' | 'body' | 'mind' | 'intellect' | 'social' | 'personality' | 'special';
 export type GiftCategory = 'combat' | 'survival' | 'information' | 'relations' | 'fortune' | 'space' | 'memory' | 'omen' | 'society' | 'daily';
@@ -19,12 +20,13 @@ export interface Acquisition { condition: Condition; chance: number | null; note
 export interface Evolution { to: string; condition: Condition; chance: number | null; note: string }
 export interface EventReference { id: string; title: string; tags: string[]; status: 'planned'; condition: Condition }
 export interface ContentBase {
+  impact:ImpactMetadata;
   id: string; name: string; rarity: Rarity; lore: string; system: string;
   effects: Effect[]; eventTags: string[]; eventIds: string[];
   birth: { eligible: boolean; weight: number; condition?: Condition; excludes: string[] };
 }
 export interface Trait extends ContentBase { kind: 'trait'; category: Category; family: string; tier: number; acquisitions: Acquisition[]; evolutions: Evolution[]; exclusiveGroup?: string }
-export interface Gift extends ContentBase { kind: 'gift'; category: GiftCategory; activation: string; impact: number }
+export interface Gift extends ContentBase { kind: 'gift'; category: GiftCategory; activation: string }
 export type Entry = Trait | Gift;
 export interface SpecialRule {
   id: string; trigger: string; operation: 'reveal' | 'prevent' | 'create' | 'transform' | 'transfer' | 'bind' | 'remember' | 'conceal' | 'repeat' | 'move' | 'delay' | 'guarantee';

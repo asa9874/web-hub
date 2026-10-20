@@ -1,5 +1,6 @@
 import type { Category, GiftCategory, Rarity } from '../types';
 import {EXPANSION_LABELS} from './expansionLabels';
+import {impactGrade} from '../systems/impact';
 export const RARITIES: Record<Rarity, { name: string; weight: number }> = {
   common: { name: '보통', weight: 100 }, uncommon: { name: '비범', weight: 35 }, rare: { name: '희귀', weight: 8 }, epic: { name: '영웅', weight: 1.5 }, legendary: { name: '전설', weight: .15 },
 };
@@ -26,7 +27,7 @@ export const PROBABILITY = {
 export const TUNING = { skillScore: [4,9,16,25,38], training: [1.08,1.16,1.28,1.42,1.65], stat: [2,5,9,14,20], resist: [5,12,22,35,50], action: [1.15,1.3,1.5,1.75,2] };
 export const EFFECT_BALANCE = { statScale:1, checkScoreScale:1, percentagePointScale:1, growthDeltaScale:1, actionDeltaScale:1, eventDeltaScale:1 };
 export const EMPTY_CONTEXT = { stats: {}, flags: [], tags: [], traits: [], gifts: [] };
-export const impactLabel = (n: number) => n < 10 ? '미미' : n < 25 ? '소규모' : n < 45 ? '실용' : n < 65 ? '중요' : n < 80 ? '고위험' : n < 95 ? '국가급' : '세계급';
+export const impactLabel = (n:number) => impactGrade(n)?.name??'평가 오류';
 export const TARGET_NAMES: Record<string,string> = {
  'mana-control':'마력 제어','holy-magic':'신성마법','despair-resistance':'절망 저항','ally-morale-recovery':'동료 사기 회복 기여',
  ...EXPANSION_LABELS,

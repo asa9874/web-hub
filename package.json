@@ -35,7 +35,9 @@
     "test:academy-status": "node scripts/test-academy-status.mjs",
     "test:academy-status-browser": "node scripts/test-academy-status-browser.mjs",
     "test:academy-character": "node scripts/test-academy-character.mjs",
-    "test:academy-character-browser": "node scripts/test-academy-character-browser.mjs"
+    "test:academy-character-browser": "node scripts/test-academy-character-browser.mjs",
+    "test:academy-social": "node scripts/test-academy-social.mjs",
+    "test:academy-social-browser": "node scripts/test-academy-social-browser.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.17",

@@ -399,7 +399,7 @@
   {
     "id": "academy-survival",
     "title": "아카데미에서 살아남기",
-    "description": "특성·기프트·능력치·숙련도·상태와 고정 등장인물을 열람하는 판타지 아카데미 설정집. 세레나의 기록과 공통 캐릭터 상태창을 살펴보세요.",
+    "description": "특성·기프트·상태·고정 인물과 직급·칭호를 기록한 판타지 아카데미 설정집. 재능과 사회적 위치, 행적이 남긴 이름을 살펴보세요.",
     "category": "game",
     "path": "/games/academy-survival/",
     "thumbnail": "/web-hub/og/academy-survival.png",

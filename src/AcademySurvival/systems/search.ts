@@ -5,5 +5,5 @@ export function matches(entry:Entry,query:string):boolean {
  return normalize(query).split(/\s+/).filter(Boolean).every(term=>haystack.includes(term));
 }
 export function sortGifts(gifts:Gift[],order:string):Gift[] {
- return [...gifts].sort((a,b)=>(order==='impact-desc'?b.impact-a.impact:order==='impact-asc'?a.impact-b.impact:0)||a.name.localeCompare(b.name,'ko'));
+ return [...gifts].sort((a,b)=>(order==='impact-desc'?b.impact.baseImpact-a.impact.baseImpact:order==='impact-asc'?a.impact.baseImpact-b.impact.baseImpact:0)||a.name.localeCompare(b.name,'ko'));
 }

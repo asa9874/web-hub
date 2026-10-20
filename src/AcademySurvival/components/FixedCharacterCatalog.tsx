@@ -2,10 +2,11 @@ import {useState} from 'react';
 import {fixedCharacters} from '../systems/characterRegistry';
 import CharacterStatusPanel from './CharacterStatusPanel';
 import type {Character} from '../types/character';
+import {emptySocial} from '../systems/socialRules';
 import {makeInstance} from '../systems/statusApplication';
 type Props={params:URLSearchParams;update:(patch:Record<string,string|null>,replace?:boolean)=>void};
 // Fixed, explicit UI fixtures. Not registered NPCs and never campaign slot results.
-const testRecord:Character={id:'panel-demo-record',kind:'player',name:'상태창 검증 레코드',age:17,gender:'미지정',species:'인간',origin:'검증용 데이터',schoolYear:1,affiliation:'상태창 테스트',title:'공통 레코드 예시',introduction:'회차 생성 없이 확정 레코드의 표시만 확인합니다.',summary:'고정 인물과 같은 Character 타입을 사용합니다.',background:['게임 인물이 아닌 UI 확인용 레코드다.'],personality:['차분함'],values:['기록의 일관성'],weaknesses:[],appearance:{description:'외형 이미지가 없는 레코드',provisional:true},objective:'같은 데이터가 캐릭터 종류와 무관하게 같은 규칙으로 표시되는지 확인',tendencies:[],stats:{STR:30,AGI:42,VIT:50,MAG:69,INT:100,WIL:121,CHA:200},proficiencyRanks:{'proficiency-sword':1},traitIds:[],giftIds:[],statuses:[makeInstance('status-fracture','demo-arm-fracture','crack','left-arm')],relationships:[]};
+const testRecord:Character={...emptySocial(),id:'panel-demo-record',kind:'player',name:'상태창 검증 레코드',age:17,gender:'미지정',species:'인간',origin:'검증용 데이터',schoolYear:1,affiliation:'상태창 테스트',title:'공통 레코드 예시',introduction:'회차 생성 없이 확정 레코드의 표시만 확인합니다.',summary:'고정 인물과 같은 Character 타입을 사용합니다.',background:['게임 인물이 아닌 UI 확인용 레코드다.'],personality:['차분함'],values:['기록의 일관성'],weaknesses:[],appearance:{description:'외형 이미지가 없는 레코드',provisional:true},objective:'같은 데이터가 캐릭터 종류와 무관하게 같은 규칙으로 표시되는지 확인',tendencies:[],stats:{STR:30,AGI:42,VIT:50,MAG:69,INT:100,WIL:121,CHA:200},proficiencyRanks:{'proficiency-sword':1},traitIds:[],giftIds:[],statuses:[makeInstance('status-fracture','demo-arm-fracture','crack','left-arm')],relationships:[]};
 export default function FixedCharacterCatalog({params,update}:Props){
  const q=params.get('q')??'',debug=params.get('debug')==='1',list=fixedCharacters.filter(t=>(t.identity.name+' '+t.identity.englishName+' '+t.role).toLocaleLowerCase().includes(q.trim().toLocaleLowerCase())),selected=fixedCharacters.find(t=>t.id===params.get('item'))??list[0];
  const [demo,setDemo]=useState<'template'|'player'|'random_npc'>('template');

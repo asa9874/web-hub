@@ -34,13 +34,13 @@ try{
  await page.getByRole('searchbox',{name:'도감 검색'}).fill('');
  await count('.ac-gift-card',403);
  const values=()=>page.locator('.ac-gift-bottom>b').allTextContents().then(rows=>rows.map(r=>Number(r.replace('IMPACT','').trim())));
- assert.equal((await values())[0],99);
+ assert.equal((await values())[0],990);
  await page.getByLabel('기프트 정렬').selectOption('impact-asc');await page.waitForFunction(()=>document.querySelector('.ac-gift-bottom>b').textContent.trim()==='IMPACT 0');assert.equal((await values())[0],0);
  await page.getByLabel('기프트 정렬').selectOption('name');await page.waitForFunction(()=>{const n=[...document.querySelectorAll('.ac-gift-card h3')].map(e=>e.textContent);return n.every((s,i)=>!i||n[i-1].localeCompare(s,'ko')<=0);});
  const names=await page.locator('.ac-gift-card h3').allTextContents();assert(names.every((n,i)=>!i||names[i-1].localeCompare(n,'ko')<=0));
- await page.getByLabel('최소 영향력',{exact:true}).fill('95');await count('.ac-gift-card',3);
+ await page.getByLabel('최소 영향력',{exact:true}).fill('950');await count('.ac-gift-card',3);
  await page.getByRole('button',{name:/세계의 작은 오기/}).click();
- }else await page.goto((process.env.ACADEMY_TEST_URL||'http://127.0.0.1:5178/web-hub')+'/games/academy-survival/?view=catalog&kind=gift&min=95&order=name&item=gift-world-small-error&debug=1&context=swordsman');
+ }else await page.goto((process.env.ACADEMY_TEST_URL||'http://127.0.0.1:5178/web-hub')+'/games/academy-survival/?view=catalog&kind=gift&min=950&order=name&item=gift-world-small-error&debug=1&context=swordsman');
  await page.getByRole('heading',{name:'세계의 작은 오기',exact:true,level:2}).waitFor();
  assert.equal(await page.getByRole('heading',{name:'진화 기록',exact:true}).count(),0);
  assert((await page.locator('.ac-detail').innerText()).includes('세계급'));
