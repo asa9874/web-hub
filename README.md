@@ -69,3 +69,4 @@ npm run dev -- --host 127.0.0.1 --port 5173
 
 마녀의 극장 대화에 실제 무대 카메라와 인형 동작 연출을 추가했습니다. 테스트 위치의 연출 리허설/말풍선 NPC/동작 보기에서 체험합니다. 주인공·NPC 7명의32자세와 생성 프롬프트도 포함합니다. [데이터 작성·이어받기](src/ForgottenWitch/codex/DIALOGUE-DIRECTION.md), 검증은 `npm run test:witch-direction`입니다.
 Chapter 01 개발 빌드는 오프닝 뒤 6지역/자유 순서3에피소드/직접 조작하는 공연/꽃 선물과 배웅으로 이어집니다. 브라우저 진행 저장, 챕터 재플레이, 지역 직접 진입을 지원합니다. [Chapter 01 인수인계](src/ForgottenWitch/codex/CHAPTER-01.md), 검증은 npm run test:witch-chapter입니다.
+NEON TRADER: /web-hub/games/neon-trader/ — 30일 가상 거래·빚 상환 캠페인. 구현/실행/검증/에셋 프롬프트는 src/NeonTrader/README.md에 정리했다.
