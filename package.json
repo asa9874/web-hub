@@ -37,7 +37,9 @@
     "test:academy-character": "node scripts/test-academy-character.mjs",
     "test:academy-character-browser": "node scripts/test-academy-character-browser.mjs",
     "test:academy-social": "node scripts/test-academy-social.mjs",
-    "test:academy-social-browser": "node scripts/test-academy-social-browser.mjs"
+    "test:academy-social-browser": "node scripts/test-academy-social-browser.mjs",
+    "test:academy-impact": "node scripts/test-academy-impact.mjs",
+    "test:academy-impact-browser": "node scripts/test-academy-impact-browser.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.17",

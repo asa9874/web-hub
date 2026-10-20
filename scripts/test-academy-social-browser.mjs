@@ -15,7 +15,7 @@ try{
  console.log('Acquisition condition search and mobile 1000 input passed.');
  }
  if(!process.env.ACADEMY_SOCIAL_CASE){
- await page.goto(base+'?view=catalog&kind=position');await count('.ac-social-card',200);assert.equal(await page.locator('.ac-tabs button').count(),8);
+ await page.goto(base+'?view=catalog&kind=position');await count('.ac-social-card',200);assert.equal(await page.locator('.ac-tabs button').count(),9);
  await page.getByRole('navigation',{name:'직급·칭호 대분류'}).getByRole('button',{name:'아카데미·교육 30',exact:true}).click();await count('.ac-social-card',30);
  await page.getByLabel('직급 배타 그룹').selectOption('academic-year');await count('.ac-social-card',4);
  await page.getByRole('button',{name:'필터 초기화',exact:true}).click();await count('.ac-social-card',200);
@@ -44,5 +44,5 @@ try{
  }
  await page.setViewportSize({width:390,height:844});await page.goto(base+'?view=catalog&kind=position&item=position-crown-heir&debug=1&q=황태자');await page.locator('#ac-social-detail h2').filter({hasText:'제국 황태자'}).waitFor();assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'mobile overflow');await page.screenshot({path:'.build-projects/academy-social-mobile.png',fullPage:true});
  await page.setViewportSize({width:1440,height:1000});await page.screenshot({path:'.build-projects/academy-social-desktop.png',fullPage:true});
- assert.deepEqual(errors,[]);if(process.env.ACADEMY_SOCIAL_CASE!=='condition')console.log(`Social UI ${process.env.ACADEMY_SOCIAL_CASE||'full'} passed: 200/200 catalogs, filters/search/grades/ordering, trait tree + impact list, migrated gift display, representatives/removal/history/backlinks and 390px eight-tab layout.`);
+ assert.deepEqual(errors,[]);if(process.env.ACADEMY_SOCIAL_CASE!=='condition')console.log(`Social UI ${process.env.ACADEMY_SOCIAL_CASE||'full'} passed: 200/200 catalogs, filters/search/grades/ordering, trait tree + impact list, migrated gift display, representatives/removal/history/backlinks and 390px nine-tab layout.`);
 }finally{await browser.close();}

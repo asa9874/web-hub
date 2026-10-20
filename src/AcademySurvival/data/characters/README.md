@@ -86,3 +86,6 @@ npm run test:academy-character-browser
 - 기존 공통 `.animate-*` CSS 경고와 번들 크기 경고는 남아 있다. Academy 지연 로딩 청크는 약549KB(압축204KB)다. 새 패키지·이미지·백엔드·DB 없음.
 
 직급·칭호 확장 후 공통 Character는 `CharacterSocialIdentity`도 확장한다. 템플릿은 `social.fixed/randomSlots`를 가진다. 세레나는 용사·아카데미1학년과 3개 정식 칭호를 보유하며, 대표·소속·사실/인지 구분 계약은 [사회 요소 문서](../social/README.md)를 따른다. 기존 소개용 `identity.title` 문자열은 대표 직급의 근거로 사용하지 않는다.
+
+
+공통 상태창에는 `character-impact-v1` 최종 영향력과6영역 기여도를 표시한다. 템플릿은 고정 보유와 기준 능력치/숙련도로만 계산하고 미확정 슬롯을 포함하지 않는다. 결과는 Character에 저장하지 않는다. 실제 레코드는 kind에 무관하게 같은 함수를 사용한다. DEBUG 직급 제거·칭호 박탈 테스트의 현재 보유 목록과 점수도 함께 갱신된다.
