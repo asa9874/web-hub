@@ -31,7 +31,9 @@
     "test:neon-scroll": "node scripts/test-neon-scroll.mjs",
     "test:academy": "node scripts/test-academy.mjs",
     "test:academy-browser": "node scripts/test-academy-browser.mjs",
-    "test:academy-knowledge": "node scripts/test-academy-knowledge.mjs"
+    "test:academy-knowledge": "node scripts/test-academy-knowledge.mjs",
+    "test:academy-status": "node scripts/test-academy-status.mjs",
+    "test:academy-status-browser": "node scripts/test-academy-status-browser.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.17",

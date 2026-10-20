@@ -71,4 +71,4 @@ npm run dev -- --host 127.0.0.1 --port 5173
 Chapter 01 개발 빌드는 오프닝 뒤 6지역/자유 순서3에피소드/직접 조작하는 공연/꽃 선물과 배웅으로 이어집니다. 브라우저 진행 저장, 챕터 재플레이, 지역 직접 진입을 지원합니다. [Chapter 01 인수인계](src/ForgottenWitch/codex/CHAPTER-01.md), 검증은 npm run test:witch-chapter입니다.
 NEON TRADER: /web-hub/games/neon-trader/ — 30일 가상 거래·빚 상환 캠페인. 구현/실행/검증/에셋 프롬프트는 src/NeonTrader/README.md에 정리했다.
 
-아카데미에서 살아남기: `/web-hub/games/academy-survival/` — 특성 404개·기프트 400개·능력치 7종·숙련도 48종의 설정집. 능력치·숙련도의 고유 등급·경지 설명 550개를 포함한다. [데이터 구조·확률·효과 계약·검증 및 이어받기](src/AcademySurvival/README.md). 본게임은 아직 구현하지 않았다.
+아카데미에서 살아남기: `/web-hub/games/academy-survival/` — 특성 404개·기프트 400개·능력치 7종·숙련도 48종·상태 150종의 설정집. 능력치·숙련도 설명 550개와 상태 단계 설명 38개, 상태 관계·DEBUG 적용 테스트를 포함한다. [데이터 구조·확률·효과 계약·검증 및 이어받기](src/AcademySurvival/README.md). 본게임은 아직 구현하지 않았다.

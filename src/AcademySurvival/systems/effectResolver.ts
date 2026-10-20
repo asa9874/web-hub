@@ -22,7 +22,7 @@ export interface Resolved {
  checks:Record<string,{score:number;percentagePoints:number}>;options:string[];rules:{sourceId:string;definition:SpecialRule}[];
 }
 // Resolves definitions only. SPECIAL_RULE descriptors are handed to a future event adapter, not executed here.
-export function resolveEffects(entries:Entry[],ctx:Context):Resolved {
+export function resolveEffects(entries:Pick<Entry,'id'|'effects'>[],ctx:Context):Resolved {
  const output:Resolved={stats:{},growth:{},actions:{},events:{},checks:{},options:[],rules:[]},seen=new Set<string>();
  const apply=(sourceId:string,e:Effect)=>{
   if(e.type==='CONDITIONAL_EFFECT'){if(meets(e.condition,ctx))e.effects.forEach(child=>apply(sourceId,child));return;}

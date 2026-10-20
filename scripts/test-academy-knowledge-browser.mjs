@@ -66,8 +66,8 @@ try{
  await page.locator('.ac-knowledge-nav button').click();await page.waitForURL(/item=proficiency-clockwork/);
  await page.locator('.ac-rank-reading h2').filter({hasText:'정밀기계'}).waitFor();
  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'mobile document overflow');
- assert.equal(await page.locator('.ac-tabs button').count(),4);
+ assert.equal(await page.locator('.ac-tabs button').count(),5);
  await page.screenshot({path:'.build-projects/academy-knowledge-mobile.png',fullPage:true});
  assert.deepEqual(errors,[]);
- console.log(`Knowledge UI case ${process.env.ACADEMY_KNOWLEDGE_CASE||'full'} passed. Full scope: four tabs, 7 stats, 48 skills, grade/rank reading, filters/search/empty state, expand/collapse, DEBUG, URL restoration, real content backlinks, existing gift sorting and 390px layout.`);
+ console.log(`Knowledge UI case ${process.env.ACADEMY_KNOWLEDGE_CASE||'full'} passed. Full scope: five tabs, 7 stats, 48 skills, grade/rank reading, filters/search/empty state, expand/collapse, DEBUG, URL restoration, real content backlinks, existing gift sorting and 390px layout.`);
 }finally{await browser.close();}

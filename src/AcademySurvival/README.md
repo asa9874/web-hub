@@ -4,6 +4,8 @@
 
 설정집에는 **능력치 7종·숙련도 48종**도 포함한다. 능력치의 등급 설명 70개와 숙련도의 경지 설명 480개, 합계 **550개의 고유 문장**을 작성했다. 특성·기프트와 숙련도는 독립적인 정의다.
 
+**상태 150종**과 별도 단계 설명 **38개**를 추가했다. 상태 정의와 적용 인스턴스를 분리하며, DEBUG에서 임시 적용·제거·단계/부위 변경·중복/충돌·효과 계산을 확인한다. [상태 데이터 및 적용 계약](data/statuses/README.md)을 먼저 읽고 확장한다.
+
 ## 실행
 
 ```powershell
@@ -15,6 +17,7 @@ npm run dev
 - 도감 바로 가기: `/web-hub/games/academy-survival/?view=catalog`.
 - 개별 항목: `?view=catalog&kind=gift&item=gift-world-small-error`. 선택/검색/필터/DEBUG가 URL에 남아 새로고침·뒤로가기·링크 복사를 지원한다.
 - 능력치: `?view=catalog&kind=stat&item=STR`. 숙련도: `?view=catalog&kind=proficiency&item=proficiency-sword`. 기존 특성·기프트 URL은 그대로 유효하다.
+- 상태: `?view=catalog&kind=status&item=status-rabbit-form`. `&debug=1`이면 원본 정의와 임시 적용 패널이 열린다. 임시 인스턴스는 페이지 새로고침 또는 DEBUG 종료 시 사라진다.
 - 읽기 전용 콘텐츠 도감이다. 게임 플레이/날짜 진행/전투/실제 이벤트/성장 시뮬레이션/기프트 시너지를 제공하지 않는다.
 
 ## 파일 구조와 데이터 추가
@@ -41,6 +44,10 @@ npm run dev
 | `systems/knowledgeRegistry.ts` | 정의 조회, 수치별 등급, 실제 효과·예정 이벤트 참조 |
 | `systems/knowledgeValidation.ts` | 범위·순서·중복 문장·참조·데이터 수 검사 |
 | `components/KnowledgeCatalog.tsx` | 능력치·숙련도 검색/분류/경지 읽기/상세/DEBUG |
+| `types/status.ts` / `data/statuses/` | 상태·단계·부위·지속·충돌·효과·조건부 변화 경로 |
+| `systems/statusRegistry.ts` / `statusValidation.ts` | 150종 레지스트리·실제 예정 이벤트 참조·정의 검증 |
+| `systems/statusApplication.ts` | 임시 인스턴스 검사·변경·충돌·부위별 효과·행동 금지 |
+| `components/StatusCatalog.tsx` / `StatusTester.tsx` | 상태 탐색/상세/관계 및 DEBUG 임시 테스트 |
 
 새 항목은 대응 데이터 파일에서 헬퍼로 작성한다. ID는 이름 변경 시에도 유지한다. 새 계열은 config에 추가하고, 진화는 대상 ID를 연결한다. 기프트에는 단계·진화 필드를 추가하지 않는다. 고유 규칙을 추가할 때 표시명과 테스트도 보완한다. 명세에 맞는 콘텐츠 품질은 사람이 검토해야 하며, 스키마 검사만으로 독창성을 증명하지 않는다.
 
@@ -69,11 +76,13 @@ npm run dev
 ```powershell
 npm run test:academy
 npm run test:academy-knowledge
+npm run test:academy-status
 npm run build
 # 실제 화면을 바꿔 확인해야 할 때만:
 $env:ACADEMY_TEST_URL='http://127.0.0.1:5178/web-hub'
 npm run test:academy-browser
 node scripts/test-academy-knowledge-browser.mjs
+npm run test:academy-status-browser
 ```
 
 엔진/데이터 검사는 804개 콘텐츠와 2만 회 추첨의 중복·상호 배타 방지, 확률 정규화, 조건/단위/중복 해석, 분기/단독/순환 감지, 검색·3종 정렬, 잘못된 데이터 검출을 확인한다. 브라우저 검사는 새 페이지의 허브 진입, 404개 노드, 분기/상세 이전 이동, 조건부 시작 확률, 400개 기프트 필터/정렬, DEBUG, 링크 복원, 빈 목록, 390px 가로 트리와 상세 이동만 확인한다.
