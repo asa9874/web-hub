@@ -1,0 +1,47 @@
+import assert from 'node:assert/strict';
+import {build} from 'esbuild';
+import {mkdir} from 'node:fs/promises';
+import React from 'react';
+import {renderToStaticMarkup} from 'react-dom/server';
+import {MemoryRouter} from 'react-router-dom';
+await mkdir('.build-projects',{recursive:true});
+await build({stdin:{contents:["export * from './src/AcademySurvival/systems/characterRegistry';","export * from './src/AcademySurvival/systems/characterRules';","export * from './src/AcademySurvival/systems/characterValidation';","export * from './src/AcademySurvival/systems/knowledgeRegistry';","export * from './src/AcademySurvival/systems/registry';","export * from './src/AcademySurvival/systems/effectResolver';","export * from './src/AcademySurvival/systems/statusApplication';","export {default as Panel} from './src/AcademySurvival/components/CharacterStatusPanel';"].join('\n'),resolveDir:process.cwd()},external:['react','react-dom','react-router-dom'],jsx:'automatic',bundle:true,platform:'node',format:'esm',outfile:'.build-projects/academy-character-model.mjs'});
+const m=await import('../.build-projects/academy-character-model.mjs');
+assert.deepEqual(m.characterIssues,[]);assert.deepEqual(m.validationIssues,[]);assert.deepEqual(m.knowledgeIssues,[]);
+assert.equal(m.fixedCharacters.length,1);const t=m.fixedCharacters[0];assert.equal(t.id,'fixed-serena');assert.equal(t.identity.name,'세레나');
+assert.deepEqual(Object.fromEntries(Object.entries(t.stats).map(([id,r])=>[id,r.base])),{STR:88,AGI:94,VIT:83,MAG:112,INT:76,WIL:118,CHA:96});
+for(const [id,grade] of [['STR','B'],['AGI','A'],['VIT','B'],['MAG','S'],['INT','B'],['WIL','S'],['CHA','A']])assert.equal(m.statGradeFor(id,t.stats[id].base).grade,grade);
+assert.equal(t.fixedTraitIds.length,4);assert.equal(t.randomSlots.filter(s=>s.kind==='trait').length,1);assert.equal(t.fixedGiftIds.length,3);assert.equal(t.statuses.fixed.length,0);
+assert.equal(t.proficiencies.length,6);assert.equal(m.proficiencyRankFor('proficiency-holy-magic',3).name,'정예');
+const owned=m.templateOwned(t),ctx=m.templateContext(t),slot=t.randomSlots[0],before=JSON.stringify(t),pool=m.randomSlotPool(slot,ctx,owned);
+assert.equal(pool.length,6);assert(Math.abs(pool.reduce((n,r)=>n+r.probability,0)-1)<1e-12);assert.deepEqual(pool.map(p=>p.weight),[20,25,15,15,15,10]);
+const already=pool[0].entry;assert(!m.randomSlotPool(slot,{...ctx,traits:[...ctx.traits,already.id]},[...owned,already]).some(r=>r.entry.id===already.id));
+const conditioned={...slot,candidates:[{entryId:'trait-study-review',weight:1,condition:{kind:'flag',key:'ready'}}]};assert.equal(m.randomSlotPool(conditioned,ctx,owned).length,0);assert.equal(m.randomSlotPool(conditioned,{...ctx,flags:['ready']},owned).length,1);
+const conflict={...slot,candidates:[{entryId:'trait-sword-grip',weight:1}]};assert.equal(m.randomSlotPool(conflict,ctx,owned).length,0,'same evolution family excluded by common compatibility rule');
+assert.equal(JSON.stringify(t),before,'template pool query must never choose or mutate slots');
+const base={...structuredClone(t.identity),id:'test-actual-fixed',templateId:t.id,kind:'fixed_npc',stats:Object.fromEntries(Object.entries(t.stats).map(([id,r])=>[id,r.base])),proficiencyRanks:Object.fromEntries(t.proficiencies.map(p=>[p.id,p.base])),traitIds:[...t.fixedTraitIds,already.id],giftIds:[...t.fixedGiftIds],statuses:[],relationships:[]};
+assert.deepEqual(m.validateCharacters([base],[t]),[]);
+const render=props=>renderToStaticMarkup(React.createElement(MemoryRouter,null,React.createElement(m.Panel,props)));
+const preview=render({mode:'template',template:t});assert(preview.includes('미확정 슬롯'));assert(!preview.includes(already.name),'template must not disclose a random result');
+const actual=render({mode:'actual',character:base});assert(!actual.includes('미확정 슬롯'));assert(actual.includes(already.name));assert(actual.includes('현재 특별한 상태 없음'));
+for(const kind of ['player','random_npc','fixed_npc']){
+ const c={...base,id:'same-'+kind,kind};assert.deepEqual(m.validateCharacters([c],[t]),[]);
+ const output=render({mode:'actual',character:c});assert(output.includes('112'));assert(output.includes('S · 초인'));assert(output.includes('성검의 응답'));
+ assert.deepEqual(m.resolveEffects(m.ownedEntries(c),{...ctx,tags:['danger'],flags:[]}),m.resolveEffects(m.ownedEntries(base),{...ctx,tags:['danger'],flags:[]}));
+}
+const empty={...base,id:'empty-player',kind:'player',templateId:undefined,traitIds:[],giftIds:[],proficiencyRanks:{}};
+assert.deepEqual(m.validateCharacters([empty]),[]);const emptyHtml=render({mode:'actual',character:empty});for(const text of ['보유 특성 없음','보유 기프트 없음','등록된 숙련도 없음','등록된 관계 없음'])assert(emptyHtml.includes(text));
+const high={...empty,stats:{...empty.stats,MAG:250},traitIds:t.fixedTraitIds,giftIds:t.fixedGiftIds};assert.deepEqual(m.validateCharacters([high]),[],'no kind-specific caps');assert(render({mode:'actual',character:high}).includes('EX · 규격 외'));
+const injured={...empty,statuses:[m.makeInstance('status-fracture','test-fracture','broken','left-arm')]};assert.deepEqual(m.validateCharacters([injured]),[]);const injuryHtml=render({mode:'actual',character:injured});assert(injuryHtml.includes('왼팔'));assert(injuryHtml.includes('전위 골절'));assert(injuryHtml.includes('kind=status'));
+const sad={...empty,traitIds:['trait-diligence-morning','trait-laziness-pillow']};assert(m.validateCharacters([sad]).some(i=>i.message.includes('충돌')));
+assert(m.validateCharacters([base,{...base}],[t]).some(i=>i.message.includes('캐릭터 ID 중복')));
+assert(m.validateCharacters([{...base,traitIds:[base.traitIds[0],...base.traitIds]}],[t]).some(i=>i.message.includes('중복')));
+assert(m.validateCharacters([{...base,stats:{...base.stats,STR:-1}}],[t]).some(i=>i.message.includes('능력치')));
+assert(m.validateCharacters([{...base,giftIds:[]}],[t]).some(i=>i.message.includes('고정 핵심')));
+const invalid=structuredClone(t);invalid.proficiencies[0].id='proficiency-missing';invalid.fixedGiftIds[0]='gift-missing';invalid.randomSlots[0].candidates[0].weight=-1;invalid.stats.STR.min=200;invalid.statuses.optional[0].definitionId='status-missing';
+const errors=m.validateFixedCharacters([invalid]).map(i=>i.message).join(' / ');for(const term of ['숙련도','gift 참조','랜덤 후보','능력치','선택 상태'])assert(errors.includes(term),term);
+assert(render({mode:'template',template:invalid,debug:true}).includes('gift 참조 오류'),'panel validates the supplied template rather than assuming only registered Serena data');
+assert.equal(m.giftRegistry.get('gift-heir-of-dawn').impact,88);assert.equal(m.giftRegistry.get('gift-unbroken-star').impact,82);assert.equal(m.giftRegistry.get('gift-sacred-sword-answer').impact,91);
+for(const id of t.fixedGiftIds){const gift=m.giftRegistry.get(id);assert(!('tier' in gift));assert(!('evolutions' in gift));}
+assert(m.resolveEffects([m.giftRegistry.get('gift-unbroken-star')],{...ctx,flags:['fatal-crisis-with-valid-escape']}).rules[0].definition.limit.includes('회차당 1회'));
+console.log('Characters: Serena, 7 derived grades, 6 proficiency refs, 4 fixed + 1 unresolved trait slots, 3 catalog gifts, read-only weighted pool, duplicate/exclusion rules, empty/scoped status display, both panel modes and identical player/random/fixed rules passed. No campaign generation.');

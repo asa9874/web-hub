@@ -11,7 +11,7 @@ try{
  await page.goto(`${process.env.ACADEMY_TEST_URL||'http://127.0.0.1:5178/web-hub'}/`);
  await page.getByRole('link',{name:/아카데미에서 살아남기/}).click();
  await page.getByRole('button',{name:/설정집 기록 열람/}).click();
- await count('.ac-node',404);
+ await count('.ac-node',405);
  assert.equal(await page.locator('.ac-debug').count(),0);
  await page.getByRole('button',{name:/^마법/}).click();
  await page.getByRole('button',{name:'결계',exact:true}).click();
@@ -23,16 +23,16 @@ try{
  await page.getByRole('heading',{name:'분필로 그은 선',exact:true}).waitFor();
  await page.getByLabel('DEBUG',{exact:true}).click();await count('.ac-debug',1);
  assert((await page.locator('.ac-debug').innerText()).includes('trait-barrier-chalk'));
- assert((await page.locator('.ac-debug-context').innerText()).includes('804개 데이터 검증 통과'));
+ assert((await page.locator('.ac-debug-context').innerText()).includes('808개 데이터 검증 통과'));
  await page.getByRole('button',{name:'필터 초기화',exact:true}).click();
  await page.getByRole('searchbox',{name:'도감 검색'}).fill('수평선을 긋는 자');
  await page.locator('.ac-node').filter({hasText:'수평선을 긋는 자'}).click();
  await page.getByRole('heading',{name:'수평선을 긋는 자',exact:true}).waitFor();assert((await page.locator('.ac-probability').innerText()).includes('0%'));
  await page.getByLabel('확률·효과 확인 기준').selectOption('swordsman');
  await page.waitForFunction(()=>!document.querySelector('.ac-probability').textContent.startsWith('0%'));
- await page.getByRole('button',{name:/^기프트 400$/}).click();
+ await page.getByRole('button',{name:/^기프트 403$/}).click();
  await page.getByRole('searchbox',{name:'도감 검색'}).fill('');
- await count('.ac-gift-card',400);
+ await count('.ac-gift-card',403);
  const values=()=>page.locator('.ac-gift-bottom>b').allTextContents().then(rows=>rows.map(r=>Number(r.replace('IMPACT','').trim())));
  assert.equal((await values())[0],99);
  await page.getByLabel('기프트 정렬').selectOption('impact-asc');await page.waitForFunction(()=>document.querySelector('.ac-gift-bottom>b').textContent.trim()==='IMPACT 0');assert.equal((await values())[0],0);
@@ -54,7 +54,7 @@ try{
  await page.getByRole('button',{name:'전체 기록 보기',exact:true}).click();
  await page.screenshot({path:'.build-projects/academy-desktop.png'});
  await page.setViewportSize({width:390,height:844});
- await page.getByRole('button',{name:/^특성 404$/}).click();
+ await page.getByRole('button',{name:/^특성 405$/}).click();
  await page.locator('.ac-node').filter({hasText:'흔들리는 칼끝'}).click();
  await page.waitForFunction(()=>document.getElementById('ac-detail').getBoundingClientRect().top<100);
  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
@@ -63,5 +63,5 @@ try{
  await page.screenshot({path:'.build-projects/academy-mobile.png'});
  await page.getByRole('link',{name:'← WEB HUB',exact:true}).click();await page.locator('.hub').waitFor();
  assert.deepEqual(errors,[]);
- console.log(process.env.ACADEMY_BROWSER_CASE==='remaining'?'Academy remaining scenarios passed: detail URL restore, debug off, rarity/empty search, mobile horizontal tree/detail scroll and hub return.':'Academy focused browser: hub entry, 404 nodes, ID forks, detail navigation, conditional probabilities, 400 gifts, filters/all sorts, 3 world-class entries, debug visibility, URL reload, empty state, mobile horizontal tree and hub return passed.');
+ console.log(process.env.ACADEMY_BROWSER_CASE==='remaining'?'Academy remaining scenarios passed: detail URL restore, debug off, rarity/empty search, mobile horizontal tree/detail scroll and hub return.':'Academy focused browser: hub entry, 405 nodes, ID forks, detail navigation, conditional probabilities, 403 gifts, filters/all sorts, 3 world-class entries, debug visibility, URL reload, empty state, mobile horizontal tree and hub return passed.');
 }finally{await browser.close();}

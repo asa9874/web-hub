@@ -28,6 +28,7 @@ export const EFFECT_BALANCE = { statScale:1, checkScoreScale:1, percentagePointS
 export const EMPTY_CONTEXT = { stats: {}, flags: [], tags: [], traits: [], gifts: [] };
 export const impactLabel = (n: number) => n < 10 ? '미미' : n < 25 ? '소규모' : n < 45 ? '실용' : n < 65 ? '중요' : n < 80 ? '고위험' : n < 95 ? '국가급' : '세계급';
 export const TARGET_NAMES: Record<string,string> = {
+ 'mana-control':'마력 제어','holy-magic':'신성마법','despair-resistance':'절망 저항','ally-morale-recovery':'동료 사기 회복 기여',
  ...EXPANSION_LABELS,
  strength:'근력', endurance:'지구력', perception:'지각', recovery:'회복', mana:'마력', will:'의지', focus:'집중', charisma:'매력', intellect:'지성', stress:'스트레스', health:'건강',
  sword:'검술',spear:'창술',bow:'궁술',fist:'격투',stealth:'잠행',shield:'방패',flame:'화염',frost:'빙결',storm:'뇌전',healing:'치유',barrier:'결계',arcane:'비전',

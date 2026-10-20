@@ -1,0 +1,41 @@
+import type {FixedCharacterTemplate} from '../../types/character';
+export const serena:FixedCharacterTemplate={
+ id:'fixed-serena',role:'용사',
+ identity:{name:'세레나',englishName:'Serena',age:17,gender:'여성',species:'인간',origin:'신탁이 전해진 제국의 변방 마을',schoolYear:1,affiliation:'아카데미',title:'용사',
+  summary:'구원의 이름을 받았지만, 아직 도움을 청하는 법은 배우는 중인 신입생.',
+  introduction:'신탁은 한 소녀를 가리켰다.\n세상은 그녀를 용사라 불렀고, 사람들은 그녀가 자신들을 구원하리라 믿었다.\n그러나 누구도 묻지 않았다.\n그 소녀가 과연 구원받을 수 있는지.',
+  background:['어린 시절부터 마나의 흐름을 먼저 알아차렸다. 마을을 찾은 신탁 사절은 그 감각에 용사라는 이름을 붙였다.','기대에 답하는 일은 곧 일상이 되었다. 넘어져도 웃는 법을 배웠지만, 아프다고 말하는 연습은 누구도 시키지 않았다.','아카데미에는 보호 대상이 아닌 학생으로 입학하고 싶었다. 그러나 소개장에는 이름보다 용사라는 직위가 먼저 적혀 있다.'],
+  personality:['올곧고 친절하며 먼저 인사를 건넨다.','약자를 외면하지 못하고 부당한 대우에는 조용히 이의를 제기한다.','실패한 일을 오래 기억하고 쉽게 포기하지 않는다.','약점을 감추려 하지만 친밀한 상대 앞에서는 서툰 농담과 사소한 취향도 드러낸다.'],
+  values:['구해야 할 사람을 숫자만으로 부르지 않는다.','힘을 가진 사람이 먼저 책임져야 한다고 믿는다.','누군가를 돕는 일과 그 사람의 선택을 대신하는 일은 구별하려 애쓴다.'],
+  weaknesses:['타인의 기대를 저버리는 상황을 두려워한다.','구하지 못한 사람의 몫까지 혼자 짊어지려 한다.','도움을 받으면 약해 보일까 걱정해 지쳤다는 말을 미룬다.'],
+  appearance:{description:'은백색의 긴 머리와 맑고 밝은 눈동자. 단정한 아카데미 제복에 검을 갖추었다. 고결하고 청초한 인상을 주지만 가까이에서는 또래의 표정이 보인다.',provisional:true},
+  objective:'누구도 뒤에 남기지 않으면서, 용사라는 호칭 밖에서도 함께 지낼 친구를 찾는다.',
+  tendencies:[{id:'responsibility',label:'책임감',description:'남은 사람이 없는지 마지막까지 확인한다.'},{id:'self-disclosure',label:'약점 드러내기',description:'친해지기 전에는 불안과 피로를 잘 말하지 않는다.'}],
+ },
+ coreNotes:['고정된 핵심 성격과 정체성은 회차별 세부 변동으로 덮어쓰지 않는다.','책임감과 자책 가능성은 인물 설정이다. 기본 상태에 절망·강박 효과를 강제로 부여하지 않는다.'],
+ stats:{STR:{base:88,min:84,max:92},AGI:{base:94,min:90,max:98},VIT:{base:83,min:79,max:87},MAG:{base:112,min:108,max:116},INT:{base:76,min:72,max:80},WIL:{base:118,min:114,max:120},CHA:{base:96,min:92,max:100}},
+ proficiencies:[{id:'proficiency-sword',base:4,min:4,max:4},{id:'proficiency-holy-magic',base:3,min:3,max:3},{id:'proficiency-mana-control',base:3,min:2,max:3},{id:'proficiency-tactics',base:2,min:2,max:3},{id:'proficiency-etiquette',base:3,min:3,max:3},{id:'proficiency-leadership',base:2,min:2,max:3}],
+ fixedTraitIds:['trait-will-name','trait-sword-line','trait-x-exception-mercy','trait-mana-attunement'],
+ fixedGiftIds:['gift-heir-of-dawn','gift-unbroken-star','gift-sacred-sword-answer'],
+ randomSlots:[{id:'serena-extra-trait',kind:'trait',description:'전투·학습·사회적 재능과 작은 약점 가운데 한 가지. 핵심 성격과 고정 보유 항목은 유지한다. 가중치는 임시 밸런스이며 추첨 자격·상호 배타 검사 후 남은 후보 사이에서 정규화한다.',drawAt:'campaign-start',withoutReplacement:true,candidates:[
+  {entryId:'trait-shield-brace',weight:20},{entryId:'trait-study-review',weight:25},{entryId:'trait-memory-hook',weight:15},{entryId:'trait-leadership-roll',weight:15},{entryId:'trait-x-martyr-reflex',weight:15},{entryId:'trait-timidity-door',weight:10},
+ ]}],
+ statuses:{fixed:[],noneWeight:60,maxSelections:1,optional:[
+  {id:'serena-day-happy',definitionId:'status-happiness',stageId:'small',weight:15,description:'입학 전날의 작은 기쁜 일'},
+  {id:'serena-day-confident',definitionId:'status-confidence',weight:10,description:'충분히 준비한 첫 수업'},
+  {id:'serena-day-sleepy',definitionId:'status-sleepy',weight:10,description:'이른 집합 시간의 졸림'},
+  {id:'serena-day-insomnia',definitionId:'status-insomnia',weight:5,description:'낯선 기숙사에서 잠을 설친 날'},
+ ]},
+ variation:[
+  {id:'small-comfort',description:'핵심 성격을 바꾸지 않는 사소한 위안의 취향',options:[{id:'warm-tea',label:'따뜻한 차와 짧은 휴식',weight:1},{id:'margin-stars',label:'공책 여백에 별 그리기',weight:1},{id:'quiet-garden',label:'정원 한 바퀴 걷기',weight:1}]},
+  {id:'first-letter',description:'입학 때 가지고 온 짧은 배경 변수',options:[{id:'home-letter',label:'고향에서 온 안부 편지',weight:2},{id:'mentor-note',label:'지도자에게 받은 한 줄의 당부',weight:1}]},
+ ],
+ relationships:[{targetRole:'player',description:'회차에서 정해질 관계. 이름과 역할만으로 호감이나 신뢰를 확정하지 않는다.'}],
+ events:[{id:'serena-unasked-question',tags:['rescue','reconciliation','will'],status:'planned',description:'언젠가 도움을 청하는 세레나를 위한 사건 기반 메모. 현재 실행하지 않는다.'}],
+ contentMappings:[
+  {requested:'불굴의 의지',actualId:'trait-will-name',reason:'강압 앞에서도 자기 이름으로 답하는 기존 의지 계열 상위 특성을 재사용.'},
+  {requested:'상급 검술',actualId:'trait-sword-line',reason:'기존 검술 계열 2단계 특성. 숙련도 달인과는 독립적으로 보유.'},
+  {requested:'정의로운 심성',actualId:'trait-x-exception-mercy',reason:'규칙과 개인 사정을 함께 살피는 기존 특성을 재사용.'},
+  {requested:'천부적인 마력 감응',actualId:'trait-mana-attunement',reason:'기존 원소·정령 친화와 구별되는 일반 마력 감응을 정식 특성으로 추가.'},
+ ],
+};

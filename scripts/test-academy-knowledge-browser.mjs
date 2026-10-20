@@ -13,7 +13,7 @@ try{
  if(process.env.ACADEMY_KNOWLEDGE_CASE!=='remaining'){
  await page.goto(base);
  await page.getByRole('button',{name:/설정집 기록 열람/}).click();
- await count('.ac-node',404);
+ await count('.ac-node',405);
  await page.getByRole('button',{name:'능력치 7',exact:true}).click();
  await count('.ac-knowledge-nav button',7);await count('.ac-rank-row',10);
  assert((await page.locator('.ac-rank-list').innerText()).includes('90~100'));
@@ -26,8 +26,8 @@ try{
  await page.goto(base+'?view=catalog&kind=stat&item=CHA');
  await page.locator('.ac-rank-reading h2').filter({hasText:'매력 CHA'}).waitFor();
  }
- await page.getByRole('button',{name:'숙련도 48',exact:true}).click();
- await count('.ac-knowledge-nav button',48);
+ await page.getByRole('button',{name:'숙련도 49',exact:true}).click();
+ await count('.ac-knowledge-nav button',49);
  await page.getByRole('navigation',{name:'숙련도 대분류'}).getByRole('button',{name:'생활 7',exact:true}).click();
  await count('.ac-knowledge-nav button',7);
  await page.getByRole('searchbox',{name:'능력치·숙련도 검색'}).fill('요리');
@@ -40,7 +40,7 @@ try{
  assert((await page.locator('.ac-knowledge-detail .ac-debug').innerText()).includes('proficiency-cooking'));
  await page.reload();await count('.ac-rank-row',10);
  assert((await page.locator('.ac-rank-reading h2').innerText()).includes('요리'));
- await page.getByRole('button',{name:'필터 초기화',exact:true}).click();await count('.ac-knowledge-nav button',48);
+ await page.getByRole('button',{name:'필터 초기화',exact:true}).click();await count('.ac-knowledge-nav button',49);
  await page.getByRole('searchbox',{name:'능력치·숙련도 검색'}).fill('존재하지않는기술기록');await count('.ac-knowledge-nav button',0);
  await page.getByRole('heading',{name:'일치하는 기록이 없습니다'}).waitFor();
  await page.goto(base+'?view=catalog&kind=proficiency&item=proficiency-sword&debug=1');await count('.ac-rank-row',10);
@@ -51,7 +51,7 @@ try{
  }
  if(process.env.ACADEMY_KNOWLEDGE_CASE!=='mobile'){
  await page.goto(base+'?view=catalog&kind=gift&item=gift-world-small-error');
- await page.getByRole('heading',{name:'세계의 작은 오기',exact:true,level:2}).waitFor();await count('.ac-gift-card',400);
+ await page.getByRole('heading',{name:'세계의 작은 오기',exact:true,level:2}).waitFor();await count('.ac-gift-card',403);
  await page.getByLabel('기프트 정렬').selectOption('impact-asc');
  await page.waitForFunction(()=>document.querySelector('.ac-gift-bottom>b')?.textContent.trim()==='IMPACT 0');
  await page.goto(base+'?view=catalog&kind=stat&item=STR&debug=1');await count('.ac-rank-row',10);
@@ -60,14 +60,14 @@ try{
  await page.goto(base+'?view=catalog&kind=stat&item=STR&debug=1');await count('.ac-rank-row',10);
  }
  await page.setViewportSize({width:390,height:844});
- await page.getByRole('button',{name:'숙련도 48',exact:true}).click();await count('.ac-knowledge-nav button',48);
+ await page.getByRole('button',{name:'숙련도 49',exact:true}).click();await count('.ac-knowledge-nav button',49);
  await page.getByRole('searchbox',{name:'능력치·숙련도 검색'}).fill('시계');
  await count('.ac-knowledge-nav button',1);
  await page.locator('.ac-knowledge-nav button').click();await page.waitForURL(/item=proficiency-clockwork/);
  await page.locator('.ac-rank-reading h2').filter({hasText:'정밀기계'}).waitFor();
  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'mobile document overflow');
- assert.equal(await page.locator('.ac-tabs button').count(),5);
+ assert.equal(await page.locator('.ac-tabs button').count(),6);
  await page.screenshot({path:'.build-projects/academy-knowledge-mobile.png',fullPage:true});
  assert.deepEqual(errors,[]);
- console.log(`Knowledge UI case ${process.env.ACADEMY_KNOWLEDGE_CASE||'full'} passed. Full scope: five tabs, 7 stats, 48 skills, grade/rank reading, filters/search/empty state, expand/collapse, DEBUG, URL restoration, real content backlinks, existing gift sorting and 390px layout.`);
+ console.log(`Knowledge UI case ${process.env.ACADEMY_KNOWLEDGE_CASE||'full'} passed. Full scope: six tabs, 7 stats, 49 skills, grade/rank reading, filters/search/empty state, expand/collapse, DEBUG, URL restoration, real content backlinks, existing gift sorting and 390px layout.`);
 }finally{await browser.close();}

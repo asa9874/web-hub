@@ -1,0 +1,31 @@
+import type {Condition} from './index';
+import type {CharacterKnowledge,RankLevel,StatId} from './knowledge';
+import type {StatusInstance} from './status';
+export type CharacterKind='player'|'random_npc'|'fixed_npc';
+export interface CharacterIdentity {
+ name:string;englishName?:string;age:number;gender:string;species:string;origin:string;schoolYear:number;affiliation:string;title:string;
+ introduction:string;summary:string;background:string[];personality:string[];values:string[];weaknesses:string[];
+ appearance:{description:string;provisional:boolean;portrait?:{src:string;alt:string}};
+ objective:string;tendencies:{id:string;label:string;description:string}[];
+}
+export interface CharacterRelationship {targetId:string;label:string;description:string;affinity:number|null}
+export interface Character extends CharacterIdentity,CharacterKnowledge {
+ id:string;templateId?:string;kind:CharacterKind;statuses:StatusInstance[];relationships:CharacterRelationship[];
+}
+export interface RandomAbilitySlot {
+ id:string;kind:'trait'|'gift';description:string;drawAt:'campaign-start';withoutReplacement:true;
+ candidates:{entryId:string;weight:number;condition?:Condition}[];
+}
+export interface FixedCharacterTemplate {
+ id:string;identity:CharacterIdentity;role:string;coreNotes:string[];
+ stats:Record<StatId,{base:number;min:number;max:number}>;
+ proficiencies:{id:string;base:RankLevel;min:RankLevel;max:RankLevel}[];
+ fixedTraitIds:string[];fixedGiftIds:string[];randomSlots:RandomAbilitySlot[];
+ statuses:{fixed:StatusInstance[];optional:{id:string;definitionId:string;stageId?:string;weight:number;description:string}[];noneWeight:number;maxSelections:number};
+ variation:{id:string;description:string;options:{id:string;label:string;weight:number}[]}[];
+ relationships:{targetRole:string;description:string}[];
+ events:{id:string;tags:string[];status:'planned';description:string}[];
+ contentMappings:{requested:string;actualId:string;reason:string}[];
+}
+// The panel's discriminant prevents unresolved slots being passed off as a real campaign character.
+export type CharacterPanelProps=({mode:'template';template:FixedCharacterTemplate}|{mode:'actual';character:Character})&{debug?:boolean};

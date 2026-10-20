@@ -1,4 +1,5 @@
 export const RULE_TARGET_LABELS:Record<string,string>={
+ 'self.instant-incapacitation':'즉시 무력화 위기의 마지막 행동 기회',
  'attacker.stagger':'공격자 경직','duelists.exit':'결투자의 원 이탈 제한','weapon.clash-sound':'무기의 충돌음 삭제','target.static-jolt':'표적에게 작은 정전기 충격','self.shadow':'자신의 그림자 잔류','target.lethal-wound':'상대의 치명상 방지',
  'self.breath':'자신의 추가 호흡','stone.collapse-warning':'돌 붕괴 경고','self.latest-footprint':'자신의 마지막 발자국 표시','self.sleep':'수면 중단','self.left-shoe':'왼쪽 신발 고정','edible-plant.nutrition':'가식 식물의 영양 보충','self.fall-damage':'추락 피해 완화',
  'wall.last-spoken-sentence':'벽에 남은 마지막 문장 재생','item.last-paid-price':'물건의 마지막 실지급 가격 표시','ink.age-days':'잉크 경과 일수 판독','map.actual-rivers':'지도에 실제 하천 표시','group.absent-count':'모임의 결원 수 확인','seal.last-hand-image':'봉인을 만진 마지막 손 재생',
