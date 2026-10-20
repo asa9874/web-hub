@@ -5,7 +5,7 @@ export const tag = (key: string): Condition => ({ kind:'tag',key });
 export const stat = (key: string, min: number): Condition => ({ kind:'stat',key,min });
 export const all = (...conditions: Condition[]): Condition => ({kind:'all',conditions});
 export const check = (target:string, amount:number, unit:'score'|'percentagePoints'='score'): Effect => ({id:`check-${target}-${unit}-${amount}`,type:'CHECK_MODIFIER',target,amount:amount*(unit==='score'?EFFECT_BALANCE.checkScoreScale:EFFECT_BALANCE.percentagePointScale),unit});
-export const attribute = (target:string, amount:number): Effect => ({id:`stat-${target}`,type:'STAT_MODIFIER',target,amount:amount*EFFECT_BALANCE.statScale});
+export const attribute = (target:string, amount:number): Effect => ({id:`stat-${target}-${amount}`,type:'STAT_MODIFIER',target,amount:amount*EFFECT_BALANCE.statScale});
 export const growth = (target:string,multiplier:number): Effect => ({id:`growth-${target}`,type:'GROWTH_MODIFIER',target,multiplier:1+(multiplier-1)*EFFECT_BALANCE.growthDeltaScale});
 export const action = (target:string,multiplier:number): Effect => ({id:`action-${target}`,type:'ACTION_WEIGHT',target,multiplier:1+(multiplier-1)*EFFECT_BALANCE.actionDeltaScale});
 export const event = (target:string,multiplier:number): Effect => ({id:`event-${target}`,type:'EVENT_WEIGHT',target,multiplier:1+(multiplier-1)*EFFECT_BALANCE.eventDeltaScale});

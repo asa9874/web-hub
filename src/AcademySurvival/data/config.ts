@@ -1,4 +1,5 @@
 import type { Category, GiftCategory, Rarity } from '../types';
+import {EXPANSION_LABELS} from './expansionLabels';
 export const RARITIES: Record<Rarity, { name: string; weight: number }> = {
   common: { name: '보통', weight: 100 }, uncommon: { name: '비범', weight: 35 }, rare: { name: '희귀', weight: 8 }, epic: { name: '영웅', weight: 1.5 }, legendary: { name: '전설', weight: .15 },
 };
@@ -13,6 +14,9 @@ export const FAMILIES: Record<string, { name: string; category: Category }> = Ob
   ['speech','화술','social'],['etiquette','예법','social'],['leadership','통솔','social'],['bargain','협상','social'],
   ['diligence','근면','personality'],['laziness','태만','personality'],['pride','오만','personality'],['timidity','소심','personality'],['frugality','검약','personality'],
   ['curse','저주','special'],['blessing','축복','special'],['spirit','정령 친화','special'],['forbidden','금기','special'],
+  ['fieldcraft','야전 전술','martial'],['armscraft','병장기 운용','martial'],['materialmagic','물질 마법','magic'],['ritualmagic','의식술','magic'],
+  ['physiology','몸의 버릇','body'],['innerlife','내면과 감정','mind'],['scholarship','학술 실무','intellect'],['craft','제작과 정비','intellect'],
+  ['citizenship','공동체 실무','social'],['habit','생활 습관','personality'],['values','신념과 결점','personality'],['liminal','경계의 흔적','special'],
 ].map(([id,name,category]) => [id,{ name, category: category as Category }]));
 export const PROBABILITY = {
   traitCounts: [{ count: 1, probability: .98 }, { count: 2, probability: .019 }, { count: 3, probability: .001 }],
@@ -24,6 +28,7 @@ export const EFFECT_BALANCE = { statScale:1, checkScoreScale:1, percentagePointS
 export const EMPTY_CONTEXT = { stats: {}, flags: [], tags: [], traits: [], gifts: [] };
 export const impactLabel = (n: number) => n < 10 ? '미미' : n < 25 ? '소규모' : n < 45 ? '실용' : n < 65 ? '중요' : n < 80 ? '고위험' : n < 95 ? '국가급' : '세계급';
 export const TARGET_NAMES: Record<string,string> = {
+ ...EXPANSION_LABELS,
  strength:'근력', endurance:'지구력', perception:'지각', recovery:'회복', mana:'마력', will:'의지', focus:'집중', charisma:'매력', intellect:'지성', stress:'스트레스', health:'건강',
  sword:'검술',spear:'창술',bow:'궁술',fist:'격투',stealth:'잠행',shield:'방패',flame:'화염',frost:'빙결',storm:'뇌전',healing:'치유',barrier:'결계',arcane:'비전',
  fear:'공포 저항',madness:'심연 저항',study:'학습',research:'연구',memory:'기억',inference:'추리',speech:'설득',etiquette:'예법',leadership:'통솔',bargain:'협상',

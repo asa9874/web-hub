@@ -1,6 +1,12 @@
 import type { EventReference } from '../types';
 import { flag } from './factories';
 export const events:EventReference[] = [
+ {id:'event-field-audit',title:'혼성 분대의 야전 실습과 장비 회수',tags:['fieldcraft','armscraft','training','retreat','camp','throwing'],status:'planned',condition:flag('field-audit')},
+ {id:'event-material-lab',title:'재료의 실패와 의식 중단 심사',tags:['materialmagic','ritualmagic','metal','craft'],status:'planned',condition:flag('material-lab')},
+ {id:'event-student-care',title:'생활 의무실의 재활과 상담',tags:['physiology','innerlife','recovery','will'],status:'planned',condition:flag('student-care')},
+ {id:'event-restoration-workshop',title:'학생 연구실의 복원품 공개 평가',tags:['scholarship','craft','research'],status:'planned',condition:flag('restoration-workshop')},
+ {id:'event-dorm-governance',title:'기숙사 자치회의와 생활 기록',tags:['citizenship','habit','society','daily'],status:'planned',condition:flag('dorm-governance')},
+ {id:'event-boundary-ethics',title:'경계 현상 사례의 책임 심의',tags:['values','liminal','forbidden','reconciliation'],status:'planned',condition:flag('boundary-ethics')},
  {id:'event-duel',title:'귀족 학생의 결투 신청',tags:['duel','sword','spear','bow','fist','shield','storm','pride'],status:'planned',condition:flag('duel-challenge')},
  {id:'event-practical',title:'마법 실기 시험',tags:['flame','frost','storm','arcane','focus','study'],status:'planned',condition:flag('practical-exam')},
  {id:'event-midterm',title:'중간고사와 빈 답안',tags:['study','memory','research'],status:'planned',condition:flag('midterm')},
