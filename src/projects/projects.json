@@ -397,6 +397,17 @@
     }
   },
   {
+    "id": "academy-survival",
+    "title": "아카데미에서 살아남기",
+    "description": "특성의 성장 계열과 선천 기프트를 기록한 판타지 아카데미 도감. 효과, 획득 조건과 진화 기록을 열람하세요.",
+    "category": "game",
+    "path": "/games/academy-survival/",
+    "thumbnail": "/web-hub/og/academy-survival.png",
+    "ogImage": "og/academy-survival.png",
+    "ogPublicSource": "academy-survival/cover.svg",
+    "type": "react"
+  },
+  {
     "id": "neon-trader",
     "title": "NEON TRADER — 오늘도 청산당했습니다!",
     "description": "허당 트레이더 니아와 30일 가상 코인 캠페인. 시장을 읽고, 빚 1억을 갚으세요.",

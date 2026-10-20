@@ -28,7 +28,9 @@
     "test:neon-browser": "node scripts/test-neon-browser.mjs",
     "test:neon-audio": "node scripts/test-neon-audio.mjs",
     "test:neon-endings": "node scripts/test-neon-endings.mjs",
-    "test:neon-scroll": "node scripts/test-neon-scroll.mjs"
+    "test:neon-scroll": "node scripts/test-neon-scroll.mjs",
+    "test:academy": "node scripts/test-academy.mjs",
+    "test:academy-browser": "node scripts/test-academy-browser.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.17",
