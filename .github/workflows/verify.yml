@@ -29,6 +29,7 @@ jobs:
       - run: npm run test:academy-social
       - run: npm run test:academy-impact
       - run: npm run test:academy-npc
+      - run: npm run test:academy-organizations
       - run: npx playwright install --with-deps chromium
       - run: npm run test:browser
       - name: Verify Witch Theater playthrough

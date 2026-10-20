@@ -109,3 +109,6 @@ FNV-1a + Mulberry32를 사용한다. 생략 시 고정 기본 시드 npc-v1-defa
 NPC 단위 검사와 기존 영향력 검사는 통과했다. Academy 범위 ESLint와 TypeScript도 통과했다. 개발 서버의 변경 화면 시나리오 및 빌드 산출물 프리뷰에서 Worker 생성/학적 재생성 검사도 통과했다. 프리뷰는 같은 권한 실행 환경에서 서버와 브라우저를 함께 실행해 확인했다.
 
 `npm run build` 통과:38프로젝트/39OG페이지/181로컬HTML·CSS참조 검증. 기존 `.animate-*` CSS 문법 경고와 큰 청크 경고는 남아 있다. Academy 청크757.48KB(gzip274.01KB), 생성 Worker673.25KB이며 Worker는 생성 버튼을 누를 때 로드한다. 번들 데이터의 추가 분할·압축은 후속 개선이다. 기존 도감 전체와 다른 게임의 장시간 E2E는 반복하지 않았다.
+
+
+소속 확장으로 현재 프로필 버전은npc-generation-v1.1이다. 생성 근거의 affiliation grant와 공통 Character의 직접 가입/대표를 추가했다. 기존 능력·이름 난수는 유지한다. 학부/학생회/비생도 공동체/연구기관 연결과 가입 검증은 ../organizations/README.md를 따른다. 테스트기의 대량 표에도 대표 소속을 표시한다.

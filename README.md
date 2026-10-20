@@ -75,3 +75,6 @@ NEON TRADER: /web-hub/games/neon-trader/ — 30일 가상 거래·빚 상환 캠
 
 
 아카데미 설정집 상단에 개발용 **NPC 생성 테스트**를 추가했습니다. 시드 기반7전공/5성장 유형/4학년의 NPC를1~100명 생성하고 공통 상태창·영향력v1·실제 통계를 확인합니다. 결과는 게임 저장에 추가하지 않습니다. 자세한 API와 재현 표본은 `src/AcademySurvival/data/generation/README.md`를 참고하세요.
+
+
+아카데미 설정집의 **소속** 도감은 제국·마계2개 루트의33개 정식 조직을 제공합니다. 펼치기·검색·조직 상세, 공통 캐릭터의 복수/대표/비밀 가입, 직급·학적 검사와 NPC 생성기를 연결했습니다. 전체 트리와 기존 조직 범위 호환 정책은 `src/AcademySurvival/data/organizations/README.md`에 정리했습니다.

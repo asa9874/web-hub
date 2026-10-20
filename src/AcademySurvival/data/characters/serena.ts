@@ -1,5 +1,6 @@
 import type {FixedCharacterTemplate} from '../../types/character';
 export const serena:FixedCharacterTemplate={
+ affiliations:{affiliations:[{organizationId:'academy-main',visibility:'public',sourceId:'fixed-enrollment'}],primaryOrganizationId:'academy-main'},
  id:'fixed-serena',role:'용사',
  identity:{name:'세레나',englishName:'Serena',age:17,gender:'여성',species:'인간',origin:'신탁이 전해진 제국의 변방 마을',schoolYear:1,affiliation:'아카데미',title:'용사',
   summary:'구원의 이름을 받았지만, 아직 도움을 청하는 법은 배우는 중인 신입생.',

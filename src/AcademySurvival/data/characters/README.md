@@ -89,3 +89,6 @@ npm run test:academy-character-browser
 
 
 공통 상태창에는 `character-impact-v1` 최종 영향력과6영역 기여도를 표시한다. 템플릿은 고정 보유와 기준 능력치/숙련도로만 계산하고 미확정 슬롯을 포함하지 않는다. 결과는 Character에 저장하지 않는다. 실제 레코드는 kind에 무관하게 같은 함수를 사용한다. DEBUG 직급 제거·칭호 박탈 테스트의 현재 보유 목록과 점수도 함께 갱신된다.
+
+
+Character에 affiliations/primaryOrganizationId를 추가했다. 고정 템플릿의 affiliations도 같은 CharacterAffiliations 구조다. 기존 identity.affiliation 문자열은 소개 호환용이며 가입 근거가 아니다. 세레나는 기존 학적에 맞는 academy-main 직접 가입을 추가했고 능력/고정 핵심은 유지했다. 직접 가입/대표/비밀 공개·학적/필수직급 검증은 ../organizations/README.md를 따른다.
