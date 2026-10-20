@@ -8,7 +8,7 @@ export default defineConfig({
     tailwind(),  // Tailwind v4 Vite 플러그인
   ],
   define: {
-    global: 'window',  // 필요 시 추가
+    global: 'globalThis',  // Browser and Worker share a portable global alias.
   },
   base: '/web-hub/',
 });

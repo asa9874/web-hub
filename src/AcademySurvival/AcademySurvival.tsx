@@ -3,6 +3,7 @@ import type { Context, GiftCategory, Rarity } from './types';
 import { CATEGORIES, EMPTY_CONTEXT, FAMILIES, GIFT_CATEGORIES, impactLabel, RARITIES } from './data/config';
 import { entries, gifts, traits, validationIssues } from './systems/registry';
 import { matches, sortGifts } from './systems/search';
+import NpcGenerator from './components/NpcGenerator';
 import NumericSystems from './components/NumericSystems';
 import TraitTree from './components/TraitTree';
 import EntryDetail from './components/EntryDetail';
@@ -25,7 +26,7 @@ const CONTEXTS:Record<string,{name:string;context:Context}>={
  crisis:{name:'구조·위기 상황',context:{...EMPTY_CONTEXT,tags:['rescue','danger','injured','under-pressure'],stats:{will:35},flags:['companion-distress']}},
 };
 export default function AcademySurvival(){
- const [params,setParams]=useSearchParams(),catalog=params.get('view')==='catalog',kind=params.get('kind')==='gift'?'gift':'trait',query=params.get('q')??'',category=params.get('category')??'all',family=params.get('family')??'all',rarity=params.get('rarity')??'all',debug=params.get('debug')==='1';
+ const [params,setParams]=useSearchParams(),catalog=params.get('view')==='catalog',generatorView=params.get('view')==='npc-generator',kind=params.get('kind')==='gift'?'gift':'trait',query=params.get('q')??'',category=params.get('category')??'all',family=params.get('family')??'all',rarity=params.get('rarity')??'all',debug=params.get('debug')==='1';
  const context=CONTEXTS[params.get('context')??'admission']??CONTEXTS.admission;
  const numericView=params.get('kind')==='numbers';
  const socialKind=params.get('kind')==='position'?'position':params.get('kind')==='title'?'title':null;
@@ -44,8 +45,8 @@ export default function AcademySurvival(){
  const sorted=sortGifts(results.filter(g=>g.kind==='gift'),order);
  const reset=()=>update({category:null,family:null,rarity:null,min:null,max:null,q:null,grade:null,domain:null});
  return <main className="ac-page">
-  <header className="ac-top"><Link to="/" className="ac-back">← WEB HUB</Link><button className="ac-brand" onClick={()=>update({view:null})}>아카데미에서 살아남기<span>ACADEMY SURVIVAL / ARCHIVE</span></button><span className="ac-edition">CONTENT EDITION 01</span></header>
-  {!catalog?<section className="ac-intro">
+  <header className="ac-top"><Link to="/" className="ac-back">← WEB HUB</Link><button className="ac-brand" onClick={()=>update({view:null})}>아카데미에서 살아남기<span>ACADEMY SURVIVAL / ARCHIVE</span></button><button className="ac-generator-link" onClick={()=>update({view:'npc-generator'})}>NPC 생성 테스트</button><span className="ac-edition">CONTENT EDITION 01</span></header>
+  {generatorView?<NpcGenerator/>:!catalog?<section className="ac-intro">
    <div className="ac-intro-copy"><p className="ac-kicker">입학 기록실 / 세계관 설정집</p><h1>아카데미에서<br/><em>살아남기</em></h1><p className="ac-intro-description">같은 교복 아래, 서로 다른 재능과 비밀.<br/>검을 처음 쥔 학생부터 이름을 숨긴 기프트 보유자까지.</p><button className="ac-enter" onClick={()=>update({view:'catalog'})}>설정집 <span>기록 열람 →</span></button><p className="ac-scope">본게임은 준비 중입니다. 특성·기프트·능력치·숙련도·상태와 고정 등장인물·직급·칭호의 기록을 열람할 수 있습니다.</p></div>
    <aside className="ac-volume" aria-label="도감 구성"><div className="ac-volume-mark" aria-hidden="true">A<span>Ⅰ</span></div><p>등록된 기록</p><div className="ac-volume-row"><span>TRAITS<small>성장하는 재능과 성향</small></span><strong>{traits.length}</strong></div><div className="ac-volume-row"><span>GIFTS<small>태어날 때 정해진 기적</small></span><strong>{gifts.length}</strong></div><div className="ac-volume-row"><span>ATTRIBUTES<small>공통 바탕과 등급</small></span><strong>{stats.length}</strong></div><div className="ac-volume-row"><span>PROFICIENCIES<small>독립적인 기술의 경지</small></span><strong>{proficiencies.length}</strong></div><div className="ac-volume-row"><span>STATUSES<small>사건이 남긴 변화</small></span><strong>{statuses.length}</strong></div><div className="ac-volume-row"><span>CHARACTERS<small>회차를 잇는 고정 인물</small></span><strong>{fixedCharacters.length}</strong></div><div className="ac-volume-note">수치는 초기 밸런스안입니다.<br/>예정 이벤트는 실제 게임에 아직 구현되지 않았습니다.</div></aside>
    <div className="ac-intro-samples">{[traits[0],traits[43],gifts[90]].map(entry=><button key={entry.id} onClick={()=>update({view:'catalog',kind:entry.kind,item:entry.id})}><small>{entry.kind==='trait'?'특성':'기프트'}</small><strong>{entry.name}</strong><p>{entry.lore}</p><span>기록 보기 ↗</span></button>)}</div>

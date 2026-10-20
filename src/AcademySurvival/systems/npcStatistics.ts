@@ -1,0 +1,7 @@
+import type {BatchGenerationResult} from '../types/npcGeneration';
+import type {StatId} from '../types/knowledge';
+const counts=(values:(string|number)[])=>values.reduce<Record<string,number>>((result,value)=>({...result,[value]:(result[value]??0)+1}),{});
+export function npcStatistics(batch:BatchGenerationResult){
+ const rows=batch.results,n=rows.length,average=(values:number[])=>values.length?values.reduce((a,b)=>a+b,0)/values.length:0;
+ return {total:n,success:rows.filter(r=>r.success).length,failed:rows.filter(r=>!r.success).length,valid:rows.filter(r=>r.valid).length,averageImpact:average(rows.map(r=>r.impact.impact)),minImpact:n?Math.min(...rows.map(r=>r.impact.impact)):0,maxImpact:n?Math.max(...rows.map(r=>r.impact.impact)):0,grades:counts(rows.map(r=>r.impact.grade?.name??'미분류')),stats:Object.fromEntries((['STR','AGI','VIT','MAG','INT','WIL','CHA'] as StatId[]).map(id=>[id,average(rows.map(r=>r.character.stats[id]))])),averagePrimaryRank:average(rows.map(r=>r.character.proficiencyRanks[r.primaryProficiencyId]??0)),specializations:counts(rows.map(r=>r.specializationId)),years:counts(rows.map(r=>r.character.schoolYear)),growthTypes:counts(rows.map(r=>r.growthType)),traitCounts:counts(rows.map(r=>r.character.traitIds.length)),giftCounts:counts(rows.map(r=>r.character.giftIds.length)),giftHolderRate:n?rows.filter(r=>r.character.giftIds.length>0).length/n:0,targetAchievementRate:n?rows.filter(r=>r.targetMet).length/n:0,averageRetries:average(rows.map(r=>r.attempts-1))};
+}
