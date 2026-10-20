@@ -399,7 +399,7 @@
   {
     "id": "academy-survival",
     "title": "아카데미에서 살아남기",
-    "description": "특성의 성장 계열과 선천 기프트를 기록한 판타지 아카데미 도감. 효과, 획득 조건과 진화 기록을 열람하세요.",
+    "description": "특성·기프트·능력치·숙련도를 열람하는 판타지 아카데미 설정집. 성장 계열과 고유한 경지의 기록을 살펴보세요.",
     "category": "game",
     "path": "/games/academy-survival/",
     "thumbnail": "/web-hub/og/academy-survival.png",

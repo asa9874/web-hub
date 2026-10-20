@@ -10,7 +10,7 @@ try{
  if(process.env.ACADEMY_BROWSER_CASE!=='remaining'){
  await page.goto(`${process.env.ACADEMY_TEST_URL||'http://127.0.0.1:5178/web-hub'}/`);
  await page.getByRole('link',{name:/아카데미에서 살아남기/}).click();
- await page.getByRole('button',{name:/특성 & 기프트 기록 열람/}).click();
+ await page.getByRole('button',{name:/설정집 기록 열람/}).click();
  await count('.ac-node',404);
  assert.equal(await page.locator('.ac-debug').count(),0);
  await page.getByRole('button',{name:/^마법/}).click();

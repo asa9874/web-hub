@@ -1,6 +1,8 @@
-# 아카데미에서 살아남기 — 콘텐츠 도감
+# 아카데미에서 살아남기 — 설정집
 
 본게임 이전 단계의 **실제 콘텐츠 정의와 열람 UI**다. 특성 404개, 기프트 400개, 특성 계열 49개, 예정 이벤트 참조 21개를 포함한다. 검술·마법·신체뿐 아니라 성향/단점, 영향력 0의 일상 능력까지 직접 작성했다. 기프트 95점 이상은 3개뿐이다.
+
+설정집에는 **능력치 7종·숙련도 48종**도 포함한다. 능력치의 등급 설명 70개와 숙련도의 경지 설명 480개, 합계 **550개의 고유 문장**을 작성했다. 특성·기프트와 숙련도는 독립적인 정의다.
 
 ## 실행
 
@@ -9,9 +11,10 @@ npm ci
 npm run dev
 ```
 
-- 진입: `/web-hub/games/academy-survival/` → **특성 & 기프트**. 허브 게임 목록에서도 이동한다.
+- 진입: `/web-hub/games/academy-survival/` → **설정집**. 허브 게임 목록에서도 이동한다.
 - 도감 바로 가기: `/web-hub/games/academy-survival/?view=catalog`.
 - 개별 항목: `?view=catalog&kind=gift&item=gift-world-small-error`. 선택/검색/필터/DEBUG가 URL에 남아 새로고침·뒤로가기·링크 복사를 지원한다.
+- 능력치: `?view=catalog&kind=stat&item=STR`. 숙련도: `?view=catalog&kind=proficiency&item=proficiency-sword`. 기존 특성·기프트 URL은 그대로 유효하다.
 - 읽기 전용 콘텐츠 도감이다. 게임 플레이/날짜 진행/전투/실제 이벤트/성장 시뮬레이션/기프트 시너지를 제공하지 않는다.
 
 ## 파일 구조와 데이터 추가
@@ -31,6 +34,13 @@ npm run dev
 | `systems/effectResolver.ts` | 효과 중복 방지, 단위별 누적·배율 계산, 조건부 해금/고유 규칙 전달 |
 | `systems/validation.ts` | 데이터 수·중복·참조·진화 DAG·확률·효과·이벤트 검증 |
 | `components/` | ID 기반 분기 트리, 공통 상세, DEBUG 원본/해석 결과 |
+| `types/knowledge.ts` | 능력치·숙련도 정의 및 실제 캐릭터 보유 수치의 별도 타입 |
+| `data/knowledge/config.ts` | 공통 등급 범위·경지 이름·분류, 미확정 경험치 설정 |
+| `data/knowledge/stats.ts` | 기본 능력치 7종과 개별 등급 설명 70개 |
+| `data/knowledge/proficiencies*.ts` | 7개 대분류, 48개 기술 및 개별 경지 설명 480개 |
+| `systems/knowledgeRegistry.ts` | 정의 조회, 수치별 등급, 실제 효과·예정 이벤트 참조 |
+| `systems/knowledgeValidation.ts` | 범위·순서·중복 문장·참조·데이터 수 검사 |
+| `components/KnowledgeCatalog.tsx` | 능력치·숙련도 검색/분류/경지 읽기/상세/DEBUG |
 
 새 항목은 대응 데이터 파일에서 헬퍼로 작성한다. ID는 이름 변경 시에도 유지한다. 새 계열은 config에 추가하고, 진화는 대상 ID를 연결한다. 기프트에는 단계·진화 필드를 추가하지 않는다. 고유 규칙을 추가할 때 표시명과 테스트도 보완한다. 명세에 맞는 콘텐츠 품질은 사람이 검토해야 하며, 스키마 검사만으로 독창성을 증명하지 않는다.
 
@@ -58,10 +68,12 @@ npm run dev
 
 ```powershell
 npm run test:academy
+npm run test:academy-knowledge
 npm run build
 # 실제 화면을 바꿔 확인해야 할 때만:
 $env:ACADEMY_TEST_URL='http://127.0.0.1:5178/web-hub'
 npm run test:academy-browser
+node scripts/test-academy-knowledge-browser.mjs
 ```
 
 엔진/데이터 검사는 804개 콘텐츠와 2만 회 추첨의 중복·상호 배타 방지, 확률 정규화, 조건/단위/중복 해석, 분기/단독/순환 감지, 검색·3종 정렬, 잘못된 데이터 검출을 확인한다. 브라우저 검사는 새 페이지의 허브 진입, 404개 노드, 분기/상세 이전 이동, 조건부 시작 확률, 400개 기프트 필터/정렬, DEBUG, 링크 복원, 빈 목록, 390px 가로 트리와 상세 이동만 확인한다.
@@ -69,3 +81,5 @@ npm run test:academy-browser
 개발 중 검사는 전반부와 남은 시나리오를 나누어 확인했다. 재실행이 필요한 미완료 부분만 `ACADEMY_BROWSER_CASE=remaining`으로 실행할 수 있다. 기존 게임 전체 E2E는 영향 범위 밖이어서 실행하지 않았다. 기존 CI와 테스트는 유지한다. 신규 의존성 없음. 이미지 생성 없이 코드 기반 문양으로 OG 표지를 추가했다.
 
 콘텐츠 확장 01에서 특성·기프트를 각각 300개 추가했다. 분류별 의도와 품질 검토는 [확장 기록](data/expansion/README.md)에 정리했다.
+
+능력치·숙련도 추가 규칙과 연동 경계는 [정의 데이터 인계 문서](data/knowledge/README.md)를 참고한다. 이번 확장의 검사는 해당 데이터와 설정집 화면에 한정하며 기존 게임 전체 E2E는 실행하지 않는다.

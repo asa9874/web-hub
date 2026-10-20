@@ -5,6 +5,8 @@ import { entries, gifts, traits, validationIssues } from './systems/registry';
 import { matches, sortGifts } from './systems/search';
 import TraitTree from './components/TraitTree';
 import EntryDetail from './components/EntryDetail';
+import KnowledgeCatalog from './components/KnowledgeCatalog';
+import {stats,proficiencies} from './systems/knowledgeRegistry';
 import './AcademySurvival.css';
 
 const CONTEXTS:Record<string,{name:string;context:Context}>={
@@ -15,10 +17,11 @@ const CONTEXTS:Record<string,{name:string;context:Context}>={
 export default function AcademySurvival(){
  const [params,setParams]=useSearchParams(),catalog=params.get('view')==='catalog',kind=params.get('kind')==='gift'?'gift':'trait',query=params.get('q')??'',category=params.get('category')??'all',family=params.get('family')??'all',rarity=params.get('rarity')??'all',debug=params.get('debug')==='1';
  const context=CONTEXTS[params.get('context')??'admission']??CONTEXTS.admission;
+ const referenceKind=params.get('kind')==='stat'?'stat':params.get('kind')==='proficiency'?'proficiency':null;
  const clamp=(value:string|null,fallback:number)=>value===null||!Number.isFinite(Number(value))?fallback:Math.max(0,Math.min(100,Number(value)));
  const min=clamp(params.get('min'),0),max=Math.max(min,clamp(params.get('max'),100)),order=params.get('order')??'impact-desc';
  const update=(patch:Record<string,string|null>,replace=false)=>{const next=new URLSearchParams(window.location.search);Object.entries(patch).forEach(([key,value])=>{if(value===null||value==='')next.delete(key);else next.set(key,value);});setParams(next,{replace});};
- const switchKind=(next:string)=>update({kind:next,category:null,family:null,rarity:null,item:null,min:null,max:null});
+ const switchKind=(next:string)=>update({kind:next,category:null,family:null,rarity:null,item:null,min:null,max:null,q:null});
  const select=(id:string)=>{update({item:id,kind:id.startsWith('gift-')?'gift':'trait'});if(matchMedia('(max-width:1100px)').matches)requestAnimationFrame(()=>document.getElementById('ac-detail')?.scrollIntoView({block:'start'}));};
  const source=kind==='trait'?traits:gifts;
  const results=source.filter(entry=>(category==='all'||entry.category===category)&&(rarity==='all'||entry.rarity===rarity)&&matches(entry,query)&&(entry.kind==='gift'?(entry.impact>=min&&entry.impact<=max):(family==='all'||entry.family===family)));
@@ -29,11 +32,12 @@ export default function AcademySurvival(){
  return <main className="ac-page">
   <header className="ac-top"><Link to="/" className="ac-back">← WEB HUB</Link><button className="ac-brand" onClick={()=>update({view:null})}>아카데미에서 살아남기<span>ACADEMY SURVIVAL / ARCHIVE</span></button><span className="ac-edition">CONTENT EDITION 01</span></header>
   {!catalog?<section className="ac-intro">
-   <div className="ac-intro-copy"><p className="ac-kicker">입학 기록실 / 콘텐츠 도감</p><h1>아카데미에서<br/><em>살아남기</em></h1><p className="ac-intro-description">같은 교복 아래, 서로 다른 재능과 비밀.<br/>검을 처음 쥔 학생부터 이름을 숨긴 기프트 보유자까지.</p><button className="ac-enter" onClick={()=>update({view:'catalog'})}>특성 &amp; 기프트 <span>기록 열람 →</span></button><p className="ac-scope">본게임은 준비 중입니다. 현재는 능력 데이터와 진화 기록을 열람할 수 있습니다.</p></div>
-   <aside className="ac-volume" aria-label="도감 구성"><div className="ac-volume-mark" aria-hidden="true">A<span>Ⅰ</span></div><p>등록된 기록</p><div className="ac-volume-row"><span>TRAITS<small>성장하는 재능과 성향</small></span><strong>{traits.length}</strong></div><div className="ac-volume-row"><span>GIFTS<small>태어날 때 정해진 기적</small></span><strong>{gifts.length}</strong></div><div className="ac-volume-note">수치는 초기 밸런스안입니다.<br/>예정 이벤트는 실제 게임에 아직 구현되지 않았습니다.</div></aside>
+   <div className="ac-intro-copy"><p className="ac-kicker">입학 기록실 / 세계관 설정집</p><h1>아카데미에서<br/><em>살아남기</em></h1><p className="ac-intro-description">같은 교복 아래, 서로 다른 재능과 비밀.<br/>검을 처음 쥔 학생부터 이름을 숨긴 기프트 보유자까지.</p><button className="ac-enter" onClick={()=>update({view:'catalog'})}>설정집 <span>기록 열람 →</span></button><p className="ac-scope">본게임은 준비 중입니다. 특성·기프트와 능력치·숙련도의 정의를 열람할 수 있습니다.</p></div>
+   <aside className="ac-volume" aria-label="도감 구성"><div className="ac-volume-mark" aria-hidden="true">A<span>Ⅰ</span></div><p>등록된 기록</p><div className="ac-volume-row"><span>TRAITS<small>성장하는 재능과 성향</small></span><strong>{traits.length}</strong></div><div className="ac-volume-row"><span>GIFTS<small>태어날 때 정해진 기적</small></span><strong>{gifts.length}</strong></div><div className="ac-volume-row"><span>ATTRIBUTES<small>공통 바탕과 등급</small></span><strong>{stats.length}</strong></div><div className="ac-volume-row"><span>PROFICIENCIES<small>독립적인 기술의 경지</small></span><strong>{proficiencies.length}</strong></div><div className="ac-volume-note">수치는 초기 밸런스안입니다.<br/>예정 이벤트는 실제 게임에 아직 구현되지 않았습니다.</div></aside>
    <div className="ac-intro-samples">{[traits[0],traits[43],gifts[90]].map(entry=><button key={entry.id} onClick={()=>update({view:'catalog',kind:entry.kind,item:entry.id})}><small>{entry.kind==='trait'?'특성':'기프트'}</small><strong>{entry.name}</strong><p>{entry.lore}</p><span>기록 보기 ↗</span></button>)}</div>
   </section>:<>
-   <section className="ac-catalog-top"><div><p className="ac-kicker">RECORDS / {entries.length} ENTRIES</p><h1>특성 &amp; 기프트</h1></div><div className="ac-tabs" role="group" aria-label="도감 종류"><button aria-pressed={kind==='trait'} onClick={()=>switchKind('trait')}>특성 <span>{traits.length}</span></button><button aria-pressed={kind==='gift'} onClick={()=>switchKind('gift')}>기프트 <span>{gifts.length}</span></button></div><label className="ac-debug-toggle"><input type="checkbox" checked={debug} onChange={e=>update({debug:e.target.checked?'1':null})}/> DEBUG</label></section>
+   <section className="ac-catalog-top"><div><p className="ac-kicker">RECORDS / {entries.length+stats.length+proficiencies.length} ENTRIES</p><h1>설정집</h1></div><div className="ac-tabs" role="group" aria-label="도감 종류"><button aria-pressed={!referenceKind&&kind==='trait'} onClick={()=>switchKind('trait')}>특성 <span>{traits.length}</span></button><button aria-pressed={!referenceKind&&kind==='gift'} onClick={()=>switchKind('gift')}>기프트 <span>{gifts.length}</span></button><button aria-pressed={referenceKind==='stat'} onClick={()=>switchKind('stat')}>능력치 <span>{stats.length}</span></button><button aria-pressed={referenceKind==='proficiency'} onClick={()=>switchKind('proficiency')}>숙련도 <span>{proficiencies.length}</span></button></div><label className="ac-debug-toggle"><input type="checkbox" checked={debug} onChange={e=>update({debug:e.target.checked?'1':null})}/> DEBUG</label></section>
+   {referenceKind?<KnowledgeCatalog kind={referenceKind} params={params} update={update} onOpenEntry={id=>update({kind:id.startsWith('gift-')?'gift':'trait',item:id,category:null,family:null,q:null,rarity:null,min:null,max:null})}/>:<>
    <div className="ac-searchbar"><label><span>검색</span><input aria-label="도감 검색" type="search" value={query} placeholder="이름, 설명으로 찾기" onChange={e=>update({q:e.target.value},true)}/></label><span role="status" aria-live="polite">{results.length}개 일치</span><button onClick={reset}>필터 초기화</button></div>
    <div className="ac-workspace">
     <aside className="ac-sidebar"><details open><summary>분류 및 필터</summary><nav aria-label="대분류"><button aria-pressed={category==='all'} onClick={()=>update({category:null,family:null})}>전체 {kind==='trait'?'특성':'기프트'}</button>{Object.entries(kind==='trait'?CATEGORIES:GIFT_CATEGORIES).map(([key,name])=><div key={key}><button aria-pressed={category===key} onClick={()=>update({category:key,family:null})}>{name}<span>{source.filter(e=>e.category===key).length}</span></button>{kind==='trait'&&category===key&&<nav className="ac-subfamilies" aria-label="세부 계열">{Object.entries(FAMILIES).filter(([,f])=>f.category===key).map(([id,f])=><button key={id} aria-pressed={family===id} onClick={()=>update({family:id===family?null:id})}>{f.name}</button>)}</nav>}</div>)}</nav>
@@ -46,6 +50,7 @@ export default function AcademySurvival(){
     </section>
     <div id="ac-detail" className="ac-detail-container" key={selected.id}><EntryDetail entry={selected} debug={debug} context={context.context} onSelect={select}/></div>
    </div>
+   </>}
   </>}
   <footer className="ac-footer"><span>ACADEMY SURVIVAL · CONTENT ARCHIVE</span><span>설정·효과·확률은 개발 중이며 변경될 수 있습니다.</span></footer>
  </main>;
