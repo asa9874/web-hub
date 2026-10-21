@@ -78,3 +78,5 @@ NEON TRADER: /web-hub/games/neon-trader/ — 30일 가상 거래·빚 상환 캠
 
 
 아카데미 설정집의 **소속** 도감은 제국·마계2개 루트의33개 정식 조직을 제공합니다. 펼치기·검색·조직 상세, 공통 캐릭터의 복수/대표/비밀 가입, 직급·학적 검사와 NPC 생성기를 연결했습니다. 전체 트리와 기존 조직 범위 호환 정책은 `src/AcademySurvival/data/organizations/README.md`에 정리했습니다.
+
+설정집 상세는 공통 팝업으로 표시하고, 특성·기프트는 설명 없는 작은 카드로 탐색합니다. 조직은 연결선이 있는 트리 카드로 펼쳐 볼 수 있습니다. 인게임 재사용 방법은 [상세 팝업 API](src/AcademySurvival/components/CATALOG_POPUPS.md)를 참고하세요.

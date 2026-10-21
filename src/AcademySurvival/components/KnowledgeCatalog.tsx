@@ -26,34 +26,36 @@ function KnowledgeDetail({definition,debug,onOpen,onStat}:{definition:KnowledgeD
   </section>}
  </article>;
 }
-export default function KnowledgeCatalog({kind,params,update,onOpenEntry}:{kind:'stat'|'proficiency';params:URLSearchParams;update:Update;onOpenEntry:(id:string)=>void}){
+export default function KnowledgeCatalog({kind,params,update }:{kind:'stat'|'proficiency';params:URLSearchParams;update:Update}){
  const query=params.get('q')??'',category=params.get('category')??'all',debug=params.get('debug')==='1',source:KnowledgeDefinition[]=kind==='stat'?stats:proficiencies;
  const terms=normalize(query).split(/\s+/).filter(Boolean),visible=source.filter(definition=>{
   const categoryMatches=definition.kind==='stat'||category==='all'||definition.categoryId===category;
   const texts=definition.kind==='stat'?definition.grades:definition.ranks;
   const haystack=normalize([definition.name,definition.id,definition.description,...texts.map(row=>row.flavorText)].join(' '));return categoryMatches&&terms.every(term=>haystack.includes(term));
  });
- const selected=source.find(def=>def.id===params.get('item'))??visible[0]??source[0];
- const [collapsed,setCollapsed]=useState<Set<string>>(()=>new Set());
- const rows=selected.kind==='stat'?selected.grades.map((grade,index)=>({key:grade.grade,title:grade.title,subtitle:range(grade.min,grade.max),text:grade.flavorText,index})):selected.ranks.map(rank=>({key:String(rank.level),title:rank.name,subtitle:PROFICIENCY_RANKS[rank.level].hanja,text:rank.flavorText,index:rank.level}));
- const toggle=(key:string)=>setCollapsed(previous=>{const next=new Set(previous);if(next.has(key))next.delete(key);else next.add(key);return next;});
- const toggleAll=(close:boolean)=>setCollapsed(previous=>{const next=new Set(previous);rows.forEach(row=>{const key=selected.id+'/'+row.key;if(close)next.add(key);else next.delete(key);});return next;});
- const select=(id:string)=>{update({item:id});if(matchMedia('(max-width:1100px)').matches)requestAnimationFrame(()=>document.getElementById('ac-knowledge-reading')?.scrollIntoView({block:'start'}));};
+ const selected=source.find(def=>def.id===params.get('item'));
+ const select=(id:string)=>update({item:id});
  const reset=()=>update({q:null,category:null});
  return <>
   <div className="ac-searchbar"><label><span>검색</span><input aria-label="능력치·숙련도 검색" type="search" value={query} placeholder={kind==='stat'?'능력치 이름·설명 검색':'기술명·경지 설명 검색'} onChange={e=>update({q:e.target.value},true)}/></label><span role="status" aria-live="polite">{visible.length}개 일치</span><button onClick={reset}>필터 초기화</button></div>
   <div className="ac-workspace ac-knowledge-workspace">
    <aside className="ac-sidebar"><details open><summary>{kind==='stat'?'기본 능력치':'숙련도 분류'}</summary>{kind==='proficiency'&&<nav aria-label="숙련도 대분류"><button aria-pressed={category==='all'} onClick={()=>update({category:null,item:null})}>전체 기술 <span>{proficiencies.length}</span></button>{Object.entries(PROFICIENCY_CATEGORIES).map(([id,name])=><div key={id}><button aria-pressed={category===id} onClick={()=>update({category:id,item:null})}>{name}<span>{proficiencies.filter(p=>p.categoryId===id).length}</span></button></div>)}</nav>}
-    <nav className="ac-knowledge-nav" aria-label={kind==='stat'?'능력치 빠른 이동':'숙련도 빠른 이동'}>{visible.map(definition=><button key={definition.id} aria-pressed={selected.id===definition.id} onClick={()=>select(definition.id)}>{definition.name}{definition.kind==='stat'&&<small>{definition.id}</small>}</button>)}</nav>
+    <nav className="ac-knowledge-nav" aria-label={kind==='stat'?'능력치 빠른 이동':'숙련도 빠른 이동'}>{visible.map(definition=><button key={definition.id} aria-pressed={selected?.id===definition.id} onClick={()=>select(definition.id)}>{definition.name}{definition.kind==='stat'&&<small>{definition.id}</small>}</button>)}</nav>
     <p className="ac-sidebar-note">{kind==='stat'?'기본 능력치는 캐릭터의 공통 바탕입니다. 정의와 실제 보유 수치는 별도로 관리합니다.':'경지는 기술의 숙달을 뜻합니다. 특성의 진화 단계 및 기프트와 강제로 동기화하지 않습니다.'}</p></details>
     {debug&&<div className="ac-debug-context"><p className={knowledgeIssues.length?'ac-invalid':'ac-valid'}>{knowledgeIssues.length?`${knowledgeIssues.length}건 오류`:`${stats.length}종 능력치 · ${proficiencies.length}종 숙련도 검증 통과`}</p><p>고유 등급·경지 설명 {stats.reduce((n,s)=>n+s.grades.length,0)+proficiencies.reduce((n,p)=>n+p.ranks.length,0)}개</p></div>}
    </aside>
-   <section className="ac-results ac-rank-reading" id="ac-knowledge-reading" key={selected.id} aria-label="등급·경지 설명"><header className="ac-results-heading"><h2>{selected.name} {selected.kind==='stat'?selected.id:''}</h2><span>{selected.kind==='stat'?'수치별 10등급':'독립된 10경지'}</span></header>
-    {visible.length===0?<div className="ac-empty"><h3>일치하는 기록이 없습니다</h3><p>검색어와 분류를 바꿔 보세요.</p><button onClick={reset}>전체 기록 보기</button></div>:<><div className="ac-rank-intro"><p>{selected.description}</p>{!visible.some(d=>d.id===selected.id)&&<p className="ac-note">현재 선택한 항목은 필터 결과 밖에 있습니다.</p>}<div className="ac-rank-tools"><button onClick={()=>toggleAll(false)}>모두 펼치기</button><button onClick={()=>toggleAll(true)}>모두 접기</button></div><small>경지의 비유적 성취는 확정 효과가 아닙니다. 구체적인 판정 규칙은 별도 설계합니다.</small></div>
-     <div className="ac-rank-list">{rows.map(row=>{const key=selected.id+'/'+row.key,open=!collapsed.has(key),bodyId='knowledge-'+selected.id+'-'+row.key;return <section className={`ac-rank-row ${row.index>=6?'ac-rank-upper':''}`} key={row.key}><h3><button aria-expanded={open} aria-controls={bodyId} onClick={()=>toggle(key)}><span className="ac-rank-code">{row.key}</span><strong>{row.title}</strong><small>{row.subtitle}</small><span aria-hidden="true">{open?'−':'+'}</span></button></h3><p id={bodyId} hidden={!open}>{row.text}</p></section>;})}</div>
-    </>}
-   </section>
-   <div id="ac-detail" className="ac-detail-container" key={'detail-'+selected.id}><KnowledgeDetail definition={selected} debug={debug} onOpen={onOpenEntry} onStat={id=>update({kind:'stat',item:id,category:null,q:null})}/></div>
+   <section className="ac-results" aria-label="능력치·숙련도 목록"><header className="ac-results-heading"><h2>{kind==='stat'?'기본 능력치':'기술과 학문'}</h2><span>{visible.length}종</span></header><ul className="ac-status-list">{visible.map(definition=><li key={definition.id}><button className="ac-status-card" onClick={()=>select(definition.id)} aria-pressed={params.get('item')===definition.id}><small>{definition.kind==='stat'?definition.id:PROFICIENCY_CATEGORIES[definition.categoryId]}</small><h3>{definition.name}</h3><small>10{definition.kind==='stat'?'등급':'경지'}</small></button></li>)}</ul>{!visible.length&&<div className="ac-empty"><h3>일치하는 기록이 없습니다</h3><button onClick={reset}>전체 기록 보기</button></div>}</section>
   </div>
  </>;
+}
+
+export function KnowledgeEntryDetail({selected,debug,onOpen,onStat}:{selected:KnowledgeDefinition;debug:boolean;onOpen:(id:string)=>void;onStat:(id:string)=>void}){
+ const [collapsed,setCollapsed]=useState<Set<string>>(()=>new Set());
+ const rows=selected.kind==='stat'?selected.grades.map((grade,index)=>({key:grade.grade,title:grade.title,subtitle:range(grade.min,grade.max),text:grade.flavorText,index})):selected.ranks.map(rank=>({key:String(rank.level),title:rank.name,subtitle:PROFICIENCY_RANKS[rank.level].hanja,text:rank.flavorText,index:rank.level}));
+ const toggle=(key:string)=>setCollapsed(previous=>{const next=new Set(previous);if(next.has(key))next.delete(key);else next.add(key);return next;});
+ const toggleAll=(close:boolean)=>setCollapsed(previous=>{const next=new Set(previous);rows.forEach(row=>{const key=selected.id+'/'+row.key;if(close)next.add(key);else next.delete(key);});return next;});
+ return <>   <section className="ac-results ac-rank-reading" id="ac-knowledge-reading" key={selected.id} aria-label="등급·경지 설명"><header className="ac-results-heading"><h2>{selected.name} {selected.kind==='stat'?selected.id:''}</h2><span>{selected.kind==='stat'?'수치별 10등급':'독립된 10경지'}</span></header>
+    <div className="ac-rank-intro"><p>{selected.description}</p><div className="ac-rank-tools"><button onClick={()=>toggleAll(false)}>모두 펼치기</button><button onClick={()=>toggleAll(true)}>모두 접기</button></div><small>경지의 비유적 성취는 확정 효과가 아닙니다. 구체적인 판정 규칙은 별도 설계합니다.</small></div>
+     <div className="ac-rank-list">{rows.map(row=>{const key=selected.id+'/'+row.key,open=!collapsed.has(key),bodyId='knowledge-'+selected.id+'-'+row.key;return <section className={`ac-rank-row ${row.index>=6?'ac-rank-upper':''}`} key={row.key}><h3><button aria-expanded={open} aria-controls={bodyId} onClick={()=>toggle(key)}><span className="ac-rank-code">{row.key}</span><strong>{row.title}</strong><small>{row.subtitle}</small><span aria-hidden="true">{open?'−':'+'}</span></button></h3><p id={bodyId} hidden={!open}>{row.text}</p></section>;})}</div>
+   </section><KnowledgeDetail definition={selected} debug={debug} onOpen={onOpen} onStat={onStat}/></>;
 }

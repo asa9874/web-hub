@@ -12,7 +12,7 @@ export default function EntryDetail({entry,debug,context,onSelect}:{entry:Entry;
  const [copied,setCopied]=useState(false),copyTimer=useRef(0);
  useEffect(()=>()=>window.clearTimeout(copyTimer.current),[]);
  const pool=slotPool<Entry>(entry.kind==='trait'?traits:gifts,context),row=pool.find(r=>r.entry.id===entry.id),total=pool.reduce((sum,row)=>sum+row.weight,0),previous=entry.kind==='trait'?previousTraits(entry.id):[];
- const copy=async()=>{try{await navigator.clipboard.writeText(location.href);setCopied(true);window.clearTimeout(copyTimer.current);copyTimer.current=window.setTimeout(()=>setCopied(false),1800);}catch{setCopied(false);}};
+ const copy=async()=>{try{const url=new URL(`${import.meta.env.BASE_URL}games/academy-survival/`,location.origin);url.search=new URLSearchParams({view:'catalog',kind:entry.kind,item:entry.id}).toString();await navigator.clipboard.writeText(url.href);setCopied(true);window.clearTimeout(copyTimer.current);copyTimer.current=window.setTimeout(()=>setCopied(false),1800);}catch{setCopied(false);}};
  return <article className="ac-detail" aria-label="선택 항목 상세">
   <header><p className="ac-kicker">{entry.kind==='trait'?'TRAIT RECORD':'GIFT RECORD'} <span>{RARITIES[entry.rarity].name}</span></p><h2>{entry.name}</h2><p className="ac-breadcrumb">{entry.kind==='trait'?`${CATEGORIES[entry.category]} / ${FAMILIES[entry.family].name} / ${entry.tier+1}단계`:`${GIFT_CATEGORIES[entry.category]} / 선천 · 고정 성능`}</p><button className="ac-copy" onClick={copy}>{copied?'링크 복사됨':'항목 링크 복사 ↗'}</button></header>
   <blockquote>{entry.lore}</blockquote>
