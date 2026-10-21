@@ -1,3 +1,4 @@
+import type {RelationshipGenerationResult,RelationshipGenerationOptions} from './relationship';
 import type {MoralityGenerationRequest,MoralityGenerationConfig,DispositionDefinition} from './morality';
 import type {CharacterAffiliation,OrganizationDefinition} from './organization';
 import type {Character} from './character';
@@ -28,8 +29,9 @@ export interface NpcGenerationConfig {
 export interface GenerationEvidence {id:string;description:string;grants:GenerationGrant[];flags:string[]}
 export interface NpcDiagnostic {level:'info'|'warning'|'error';code:string;message:string}
 export interface GeneratedNpcResult {character:Character;impact:CharacterImpactResult;success:boolean;targetMet:boolean;valid:boolean;attempts:number;index:number;seed:string;specializationId:string;growthType:GrowthType;primaryProficiencyId:string;variant:string;evidence:GenerationEvidence[];diagnostics:NpcDiagnostic[]}
-export interface BatchGenerationResult {request:NpcGenerationRequest;seed:string;version:string;results:GeneratedNpcResult[];diagnostics:NpcDiagnostic[]}
+export interface BatchGenerationResult {relationships:RelationshipGenerationResult;request:NpcGenerationRequest;seed:string;version:string;results:GeneratedNpcResult[];diagnostics:NpcDiagnostic[]}
 export interface NpcGenerationContext {
+ relationshipCharacters?:readonly Character[];relationshipOptions?:RelationshipGenerationOptions;
  locations:ReadonlyMap<string,{id:string}>;
  dispositions:ReadonlyMap<string,DispositionDefinition>;
  organizations:ReadonlyMap<string,OrganizationDefinition>;normalizeAffiliations:(character:{affiliations:CharacterAffiliation[];primaryOrganizationId?:string})=>{affiliations:CharacterAffiliation[];primaryOrganizationId?:string};

@@ -17,7 +17,7 @@ try{
  await page.reload();await page.waitForFunction(()=>document.querySelector('[data-testid="character-impact"]')?.textContent.startsWith('726'));
  await page.getByLabel('공통 상태창 표시 테스트').selectOption('player');await page.getByRole('heading',{name:'최종 캐릭터 영향력',exact:true}).waitFor();const playerScore=await score.innerText();
  await page.getByLabel('공통 상태창 표시 테스트').selectOption('random_npc');assert.equal(await score.innerText(),playerScore);
- await popup.close();await page.getByRole('button',{name:'수치 체계',exact:true}).click();await page.getByRole('heading',{name:'캐릭터 영향력 계산식 v1',exact:true}).waitFor();assert.equal(await page.locator('.ac-tabs button').count(),13);assert.equal(await page.getByRole('button',{name:'특성 405',exact:true}).getAttribute('aria-pressed'),'false');
+ await popup.close();await page.getByRole('button',{name:'수치 체계',exact:true}).click();await page.getByRole('heading',{name:'캐릭터 영향력 계산식 v1',exact:true}).waitFor();assert.equal(await page.locator('.ac-tabs button').count(),14);assert.equal(await page.getByRole('button',{name:'특성 405',exact:true}).getAttribute('aria-pressed'),'false');
  assert((await page.locator('.ac-numeric-systems').innerText()).includes('0.25'));
  await page.reload();await page.getByRole('heading',{name:'캐릭터 영향력 계산식 v1',exact:true}).waitFor();await page.screenshot({path:'.build-projects/academy-impact-rules.png',fullPage:true});
  await page.setViewportSize({width:390,height:844});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'numeric mobile overflow');

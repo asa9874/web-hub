@@ -112,3 +112,8 @@ NPC 단위 검사와 기존 영향력 검사는 통과했다. Academy 범위 ESL
 
 
 소속 확장으로 현재 프로필 버전은npc-generation-v1.1이다. 생성 근거의 affiliation grant와 공통 Character의 직접 가입/대표를 추가했다. 기존 능력·이름 난수는 유지한다. 학부/학생회/비생도 공동체/연구기관 연결과 가입 검증은 ../organizations/README.md를 따른다. 테스트기의 대량 표에도 대표 소속을 표시한다.
+
+
+## v1.4 인간관계 결과
+
+배치 생성은 `relationships`에 별도 희소 방향 그래프 결과를 반환한다. 단일 인물의 기존 반환 구조는 유지하고 `generateNpcWithRelationships`에서 인물과 그래프를 함께 받을 수 있다. 실제 전공 ID를 Character에도 보관하며 없는 반/거주지는 만들지 않는다. 기존 인맥은 context의 relationshipCharacters/relationshipOptions로 주입한다. [관계 생성 계약](../relationships/README.md) 참고.

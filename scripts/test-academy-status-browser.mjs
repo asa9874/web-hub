@@ -40,7 +40,7 @@ try{
  await page.screenshot({path:'.build-projects/academy-status-desktop.png',fullPage:true});
  }
  await page.setViewportSize({width:390,height:844});await page.goto(base+'?view=catalog&kind=status&item=status-rabbit-form');await page.locator('.ac-status-detail h2').filter({hasText:'토끼 변이'}).waitFor();
- assert.equal(await page.locator('.ac-tabs button').count(),13);assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'mobile overflow');
+ assert.equal(await page.locator('.ac-tabs button').count(),14);assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'mobile overflow');
  await popup.close();await page.getByRole('searchbox',{name:'상태 이름 검색'}).fill('행복');await count('.ac-status-card',1);await page.locator('.ac-status-card').click();await page.locator('.ac-status-detail h2').filter({hasText:'행복함'}).waitFor();await page.screenshot({path:'.build-projects/academy-status-mobile.png',fullPage:true});
  await popup.close();await page.getByRole('button',{name:'능력치 7',exact:true}).click();await page.locator('.ac-knowledge-nav button').first().click();await count('.ac-rank-row',10);await popup.close();await page.getByRole('button',{name:'기프트 403',exact:true}).click();await count('.ac-gift-card',403);await popup.close();await page.getByRole('button',{name:'숙련도 49',exact:true}).click();await count('.ac-knowledge-nav button',49);await popup.close();await page.getByRole('button',{name:'특성 405',exact:true}).click();await page.getByLabel('특성 정렬').selectOption('tree');await count('.ac-node',405);
  assert.deepEqual(errors,[]);console.log(`Status UI ${process.env.ACADEMY_STATUS_CASE||'full'} passed: catalog filters/search/links, DEBUG state edits/collisions, 390px layout and existing four tabs.`);

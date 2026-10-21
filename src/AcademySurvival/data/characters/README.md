@@ -16,7 +16,7 @@
 | `components/CharacterStatusPanel.tsx` | 모든 캐릭터 종류가 사용하는 상태창 |
 | `components/FixedCharacterCatalog.tsx` | 목록/검색, URL 선택, DEBUG 표시 모드 확인 |
 
-`Character`는 기존 `CharacterKnowledge`를 확장한다. 능력치는 `stats`, 숙련도는 기존 명칭인 `proficiencyRanks`, 보유 능력은 `traitIds/giftIds`, 현재 상태는 기존 `StatusInstance[]`를 쓴다. 종류(player/random_npc/fixed_npc)는 식별용이며 별도의 능력치 체계나 효과 경로를 만들지 않는다. `templateId`는 고정 핵심 정보를 참조한다. 관계 수치는 아직 단위·변동 규칙이 없으므로 nullable 데이터만 보관한다.
+`Character`는 기존 `CharacterKnowledge`를 확장한다. 능력치는 `stats`, 숙련도는 기존 명칭인 `proficiencyRanks`, 보유 능력은 `traitIds/giftIds`, 현재 상태는 기존 `StatusInstance[]`를 쓴다. 종류(player/random_npc/fixed_npc)는 식별용이며 별도의 능력치 체계나 효과 경로를 만들지 않는다. `templateId`는 고정 핵심 정보를 참조한다. 기존 nullable 관계 서술은 호환 기록으로 보존한다. 새 관계 수치는 Character에 중복 저장하지 않고 [인간관계 방향 그래프](../relationships/README.md)에서 조회한다.
 
 ## 세레나 구성과 콘텐츠 대응
 

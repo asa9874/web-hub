@@ -8,7 +8,7 @@ try{
  const popup=popupActions(page);
  const base=(process.env.ACADEMY_TEST_URL||'http://127.0.0.1:5178/web-hub')+'/games/academy-survival/';
  await page.goto(base+'?view=catalog&kind=organization');const tree=page.getByRole('navigation',{name:'조직 계층',exact:true}),node=id=>page.locator(`[data-org-select="${id}"]`),detail=page.getByRole('article',{name:'조직 상세'}),count=async n=>page.waitForFunction(expected=>document.querySelectorAll('[data-org-select]').length===expected,n);
- await count(2);assert.equal(await page.locator('.ac-tabs button').count(),13);
+ await count(2);assert.equal(await page.locator('.ac-tabs button').count(),14);
  await page.getByRole('button',{name:'제국 펼치기',exact:true}).click();await node('imperial-house').waitFor();await page.getByRole('button',{name:'제국군 펼치기',exact:true}).click();await page.getByRole('button',{name:'황실기사단 펼치기',exact:true}).click();await node('royal-first-platoon').click();await detail.getByRole('heading',{name:'제1소대',exact:true}).waitFor();assert((await detail.innerText()).includes('320'));assert((await page.getByRole('navigation',{name:'소속 계층 경로'}).innerText()).includes('제국 > 제국군 > 황실기사단 > 제1소대'));
  await popup.close();await page.getByRole('button',{name:'마계 펼치기',exact:true}).click();assert(await node('imperial-house').isVisible());assert(await node('demon-castle').isVisible());
  await popup.close();await page.getByRole('button',{name:'전체 펼치기',exact:true}).click();await count(33);await page.screenshot({path:'.build-projects/academy-organizations-desktop.png',fullPage:false});await popup.close();await page.getByRole('button',{name:'전체 접기',exact:true}).click();await count(2);
