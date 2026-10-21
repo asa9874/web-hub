@@ -32,7 +32,7 @@ export default function CatalogEntryDialog({reference,debug=false,context=EMPTY_
  const organization=kind==='organization'?organizations.find(e=>e.id===id):undefined;
  const character=kind==='character'?fixedCharacters.find(e=>e.id===id):undefined;
  const title=entry?.name??knowledge?.name??status?.name??social?.name??organization?.name??character?.identity.name??'기록을 찾을 수 없습니다';
- return <DetailDialog title={title} onClose={onClose}><div key={kind+'/'+id} onClickCapture={event=>{
+ return <DetailDialog wide={kind==='character'} title={title} onClose={onClose}><div key={kind+'/'+id} onClickCapture={event=>{
   const link=(event.target as Element).closest<HTMLAnchorElement>('a[href]');
   if(!link||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey||event.button!==0)return;
   const url=new URL(link.href),next=catalogEntryReference(url.searchParams);

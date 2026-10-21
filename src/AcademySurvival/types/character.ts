@@ -29,4 +29,4 @@ export interface FixedCharacterTemplate {
  contentMappings:{requested:string;actualId:string;reason:string}[];
 }
 // The panel's discriminant prevents unresolved slots being passed off as a real campaign character.
-export type CharacterPanelProps=({mode:'template';template:FixedCharacterTemplate}|{mode:'actual';character:Character})&{debug?:boolean;onSocialChange?:(social:CharacterSocialIdentity)=>void};
+export type CharacterPanelProps=({mode:'template';template:FixedCharacterTemplate}|{mode:'actual';character:Character})&{debug?:boolean;density?:'comfortable'|'compact';onSocialChange?:(social:CharacterSocialIdentity)=>void};
