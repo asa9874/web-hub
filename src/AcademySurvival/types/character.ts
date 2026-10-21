@@ -1,3 +1,4 @@
+import type {NpcAiEngine} from '../systems/npcAi';
 import type {MotivationEngine} from '../systems/motivationEngine';
 import type {CharacterMotivationState} from './motivation';
 import type {NpcScheduleEngine} from '../systems/npcSchedules';
@@ -40,4 +41,4 @@ export interface FixedCharacterTemplate {
  contentMappings:{requested:string;actualId:string;reason:string}[];
 }
 // The panel's discriminant prevents unresolved slots being passed off as a real campaign character.
-export type CharacterPanelProps=({mode:'template';template:FixedCharacterTemplate}|{mode:'actual';character:Character})&{motivationEngine?:MotivationEngine|null;motivation?:CharacterMotivationState;scheduleEngine?:NpcScheduleEngine|null;schedule?:CharacterSchedule;relationshipGraph?:RelationshipGraph;relationshipCharacters?:readonly Character[];onInspectCharacter?:(id:string)=>void;debug?:boolean;density?:'comfortable'|'compact';onSocialChange?:(social:CharacterSocialIdentity)=>void};
+export type CharacterPanelProps=({mode:'template';template:FixedCharacterTemplate}|{mode:'actual';character:Character})&{aiEngine?:NpcAiEngine|null;motivationEngine?:MotivationEngine|null;motivation?:CharacterMotivationState;scheduleEngine?:NpcScheduleEngine|null;schedule?:CharacterSchedule;relationshipGraph?:RelationshipGraph;relationshipCharacters?:readonly Character[];onInspectCharacter?:(id:string)=>void;debug?:boolean;density?:'comfortable'|'compact';onSocialChange?:(social:CharacterSocialIdentity)=>void};

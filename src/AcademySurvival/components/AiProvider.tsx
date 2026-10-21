@@ -1,0 +1,3 @@
+import {useEffect,useState} from 'react';import type {ReactNode} from 'react';
+import {createNpcAiEngine} from '../systems/npcAi';import {AiContext} from './aiHooks';import {useMotivationEngine} from './motivationHooks';import {useRelationships} from './RelationshipContext';
+export function AiProvider({children}:{children:ReactNode}){const motivation=useMotivationEngine(),{graph}=useRelationships(),[engine]=useState(()=>createNpcAiEngine(motivation,{relationships:graph,autoConnect:false}));useEffect(()=>engine.connect(),[engine]);return <AiContext.Provider value={engine}>{children}</AiContext.Provider>;}

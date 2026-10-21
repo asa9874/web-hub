@@ -2,9 +2,12 @@ import type {ActivityDefinition,ScheduleEntry,ScheduleTemplate,ScheduleRole} fro
 export const SCHEDULE_RULES={version:'schedule-v1' as const,maxAdvanceDays:31,maxLogs:5000,flexMinutes:8,routeLookaheadMinutes:180,emergencyPriority:100,rolePrecedence:['professor','guard','staff','student','demon-worker','civilian'] as ScheduleRole[]};
 const activity=(id:string,name:string,type:ActivityDefinition['type'],description:string,tags:string[],locations:string[],priority:number,interruptible=true,actions:string[]=[]):ActivityDefinition=>({id,name,type,description,requiredPlaceTags:tags,defaultLocations:locations,defaultPriority:priority,interruptible,actionTags:actions,futureEffectKeys:[]});
 export const activities:ActivityDefinition[]=[
- activity('sleep','취침','sleep','거주 구역에서 하루를 마친다. 수면 욕구나 회복 효과는 아직 계산하지 않는다.',['sleep'],['academy-dorm'],35,true,['sleep']),
+ activity('conversation','대화','free','같은 장소에서 수락한 상대와 대화한다. 실제 공동 활동 시간만 교류로 기록한다.',['meet','socialize'],['academy-plaza'],25,true,['speech']),
+ activity('study_together','함께 공부','training','같은 장소에서 서로 수락한 동료와 공부한다.',['study','read','research'],['academy-library'],40,true,['study']),
+ activity('sparring','대련 연습','training','상대가 수락한 연습 대련이다. 전투 승패와 부상 판정은 포함하지 않는다.',['train'],['academy-arena'],40,true,['training']),
+ activity('sleep','취침','sleep','거주 구역에서 하루를 마친다. 욕구 변화는 별도 욕구 엔진이 실제 수행 구간을 읽어 계산한다.',['sleep'],['academy-dorm'],35,true,['sleep']),
  activity('wake_up','기상 및 준비','rest','거주지에서 일어나 하루의 준비를 한다.',['sleep','rest'],['academy-dorm'],30),
- ...(['breakfast','lunch','dinner'] as const).map((id,i)=>activity(id,['아침 식사','점심 식사','저녁 식사'][i],'meal','정해진 식사 장소에서 식사 시간을 보낸다. 욕구 변화는 후속 시스템에서 처리한다.',['eat'],['academy-dining'],50,true,['eat'])),
+ ...(['breakfast','lunch','dinner'] as const).map((id,i)=>activity(id,['아침 식사','점심 식사','저녁 식사'][i],'meal','정해진 식사 장소에서 식사 시간을 보낸다. 욕구 변화는 별도 욕구 엔진에서 처리한다.',['eat'],['academy-dining'],50,true,['eat'])),
  activity('attend_class','수업 참석','class','실제 교실에 도착해야 참석으로 기록된다.',['classroom'],['academy-class-1-1'],80,false,['public-attendance','study']),
  activity('teach_class','수업 진행','class','배정된 강의실에서 수업을 진행한다.',['classroom'],['academy-class-1-1'],80,false,['public-attendance','speech']),
  activity('sword_training','검술 훈련','training','대련장에서 기본 훈련을 수행한다. 숙련도 경험치는 자동 지급하지 않는다.',['train'],['academy-arena'],40,true,['training']),
@@ -15,7 +18,7 @@ export const activities:ActivityDefinition[]=[
  activity('guard_duty','경비 근무','work','배정된 경비 초소에서 임무를 수행한다.',['guard'],['academy-guard-post'],90,false),
  activity('office_work','행정 업무','work','허가된 집무 공간에서 맡은 업무를 수행한다.',['administration','research'],['academy-admin-office'],90,false),
  activity('rest','휴식','rest','생활관이나 휴게 공간에서 쉰다.',['rest','sleep'],['academy-dorm'],30),
- activity('free_time','자유시간','free','지정한 장소에서 개인 시간을 보낸다. 친구 방문 등 자율 의사결정은 하지 않는다.',['rest','meet','read','socialize'],['academy-plaza'],20),
+ activity('free_time','자유시간','free','지정한 장소에서 개인 시간을 보낸다. 일과 자체는 행동을 선택하지 않으며 별도 AI가 교류·훈련 등을 선택할 수 있다.',['rest','meet','read','socialize'],['academy-plaza'],20),
 ];
 export const activityRegistry=new Map(activities.map(a=>[a.id,a]));
 const e=(id:string,activityId:string,start:number,end:number,binding?:ScheduleEntry['binding'],mandatory=false):ScheduleEntry=>{const a=activityRegistry.get(activityId)!;return {id,activityId,startMinuteOfDay:start,endMinuteOfDay:end,binding,priority:a.defaultPriority,mandatory,interruptible:a.interruptible,conditions:[]};};

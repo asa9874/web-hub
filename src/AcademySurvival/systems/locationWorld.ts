@@ -52,6 +52,7 @@ export function createLocationWorld({clock,characters,catalog=locationCatalog,al
   clock,catalog,connect,subscribeActors:(fn:(event:{kind:string;id:string})=>void)=>{actorListeners.add(fn);return ()=>{actorListeners.delete(fn);};},dispose:()=>{disconnect?.();disconnect=undefined;listeners.clear();actorListeners.clear();},subscribe:(fn:()=>void)=>{listeners.add(fn);return ()=>{listeners.delete(fn);};},getSnapshot:()=>revision,
   getCharacters:()=>structuredClone([...actors.values()]),getCharacter:(id:string)=>structuredClone(actor(id)),getCharacterLocation:(id:string)=>structuredClone(actor(id).location!),getLogs:()=>structuredClone(logs),
   registerCharacter:(c:Character)=>{register(c);emitActor('register',c.id);notify();},
+  getCharacterIdsAtLocation:(id:string)=>{catalog.getLocation(id);return stationary(id).map(c=>c.id);},
   getCharactersAtLocation:(id:string)=>{catalog.getLocation(id);return structuredClone(stationary(id));},
   getCharactersInLocationTree:(id:string)=>{const ids=new Set([id,...catalog.getLocationDescendants(id).map(l=>l.id)]);return structuredClone([...actors.values()].filter(c=>ids.has(c.location!.currentLocationId)&&!c.location!.movement));},
   getLocationPopulation:(id:string)=>{const ids=new Set([id,...catalog.getLocationDescendants(id).map(l=>l.id)]);return {direct:stationary(id).length,includingDescendants:[...actors.values()].filter(c=>ids.has(c.location!.currentLocationId)&&!c.location!.movement).length};},

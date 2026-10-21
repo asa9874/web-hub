@@ -57,7 +57,10 @@
     "test:academy-motivations-browser": "node scripts/test-academy-motivations-browser.mjs",
     "test:academy-schedules": "node scripts/test-academy-schedules.mjs",
     "test:academy-schedules-browser": "node scripts/test-academy-schedules-browser.mjs",
-    "test:academy-relationships-browser": "node scripts/test-academy-relationships-browser.mjs"
+    "test:academy-relationships-browser": "node scripts/test-academy-relationships-browser.mjs",
+    "test:academy-ai": "node scripts/test-academy-ai.mjs",
+    "test:academy-ai-browser": "node scripts/test-academy-ai-browser.mjs",
+    "test:academy-features": "node scripts/test-academy-features.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.17",
