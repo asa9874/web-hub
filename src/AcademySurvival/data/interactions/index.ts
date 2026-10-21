@@ -1,0 +1,24 @@
+import type {InteractionDefinition} from '../../types/interaction';
+export const INTERACTION_RULES={version:'interaction-v1' as const,maxHistory:1000,proposalDelay:1,baseRetry:90,maxNegativePerDay:2,acceptanceMin:5,acceptanceMax:95,noveltyPenalty:8,negativeAiWeight:.15};
+const d=(id:string,name:string,category:InteractionDefinition['category'],description:string,duration:number,activity:string,tags:string[],resolver:InteractionDefinition['outcomeResolver'],outcomes:string[],base:number,likes:string[],negative=false):InteractionDefinition=>({id,name,category,description,baseDurationMinutes:duration,requiredActivityId:activity,requiredPlaceTags:activity==='conversation'||activity==='avoid_contact'?['meet','socialize','train','read','study','rest']:tags,conditions:{sameLocation:true,stationary:true},acceptance:{base,affectionWeight:negative?-.08:.15,trustWeight:.12,maxFatigue:activity==='sparring'||activity==='train_together'?80:95,likes,dislikes:negative?['disposition-pacifist']:['disposition-recluse']},outcomeResolver:resolver,outcomeTypes:outcomes,effectProfileId:id,relatedNeeds:negative?['recognition','autonomy']:['social'],relatedGoalCategories:resolver==='contest'?['전투','성장']:['사회적 관계','개인적 행복'],interruptible:true,retryMinutes:negative?240:90,negative});
+export const interactions:InteractionDefinition[]=[
+ d('casual_chat','잡담','social','복도에서 마주친 하루의 작은 이야기를 나눈다.',20,'conversation',['meet','socialize'],'chat',['pleasant','ordinary','awkward','unpleasant'],72,['disposition-socialite']),
+ d('friendly_chat','친목 대화','social','상대의 사소한 취향을 기억하고 조금 가까워진다.',30,'conversation',['meet','socialize'],'chat',['pleasant','ordinary','awkward','unpleasant'],65,['disposition-socialite','disposition-protector']),
+ d('serious_talk','진지한 대화','social','쉽게 꺼내지 못한 생각을 믿을 만한 상대에게 전한다.',40,'conversation',['meet','socialize'],'empathy',['empathy','trust','disagreement','deterioration'],55,['disposition-idealist']),
+ d('study_together','함께 공부','cooperation','각자의 풀이를 비교하며 이해하지 못한 대목을 확인한다.',60,'study_together',['study','read','research'],'cooperate',['helpful','ordinary','unsuccessful'],65,['disposition-seeker','disposition-perfectionist']),
+ d('train_together','함께 훈련','cooperation','서로의 자세를 살피며 같은 훈련 시간을 보낸다.',60,'train_together',['train'],'cooperate',['helpful','ordinary','unsuccessful'],60,['disposition-competitor']),
+ d('sparring','대련','competition','검을 맞대 서로의 실력을 가늠한다. 간이 승부이며 실제 부상 전투가 아니다.',30,'sparring',['train'],'contest',['actor_win','target_win','draw'],55,['disposition-competitor','disposition-bold']),
+ d('encourage','격려','social','멈춰 선 동료에게 다음 걸음을 내딛을 말을 건넨다.',15,'conversation',['meet','socialize'],'empathy',['empathy','trust','disagreement','deterioration'],75,['disposition-protector']),
+ d('comfort','위로','social','답을 재촉하지 않고 상대의 마음이 가라앉기를 기다린다.',25,'conversation',['meet','socialize'],'empathy',['empathy','trust','disagreement','deterioration'],65,['disposition-altruist']),
+ d('praise','칭찬','social','잘해 낸 일을 구체적으로 알아봐 준다.',10,'conversation',['meet','socialize'],'chat',['pleasant','ordinary','awkward','unpleasant'],80,['disposition-socialite']),
+ d('apologize','사과','cooperation','자신이 남긴 상처를 인정하고 용서를 구한다. 용서는 강제할 수 없다.',20,'conversation',['meet','socialize'],'empathy',['empathy','trust','disagreement','deterioration'],60,['disposition-tolerant']),
+ d('argue','말다툼','conflict','서로 다른 생각이 목소리의 높이로 드러난다.',15,'conversation',['meet','socialize'],'conflict',['disagreement','deterioration','defused'],40,['disposition-impulsive'],true),
+ d('insult','모욕','conflict','상대의 자존심을 겨누는 말은 되돌리기 어렵다.',10,'conversation',['meet','socialize'],'conflict',['deterioration','defused'],35,['disposition-cynic'],true),
+ d('intimidate','위협','conflict','힘의 차이를 내세워 상대를 물러서게 하려 한다.',10,'conversation',['meet','socialize'],'conflict',['intimidated','defused'],35,['disposition-authoritarian'],true),
+ d('reconcile','화해','cooperation','이기는 대신 다시 함께 지낼 방법을 찾아본다.',30,'conversation',['meet','socialize'],'empathy',['empathy','trust','disagreement','deterioration'],50,['disposition-mediator','disposition-tolerant']),
+ d('request_help','도움 요청','cooperation','혼자 해결하지 못한 일을 인정하고 손을 청한다.',30,'conversation',['meet','socialize'],'cooperate',['helpful','ordinary','unsuccessful'],55,['disposition-protector','disposition-altruist']),
+ d('offer_help','도움 제공','cooperation','상대가 필요로 하는 몫을 함께 짊어지려 한다.',30,'conversation',['meet','socialize'],'cooperate',['helpful','ordinary','unsuccessful'],65,['disposition-protector']),
+ d('avoid','회피','conflict','가까운 곳에 있는 상대와 부딪치지 않도록 거리를 둔다. 상대의 동의는 요구하지 않는다.',5,'avoid_contact',['meet','rest','socialize'],'avoid',['avoided'],100,['disposition-cautious'],false),
+ d('compete','경쟁','competition','같은 기준으로 실력을 겨루고 차이를 확인한다.',30,'sparring',['train'],'contest',['actor_win','target_win','draw'],55,['disposition-competitor']),
+];
+export const interactionRegistry=new Map(interactions.map(d=>[d.id,d]));

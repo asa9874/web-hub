@@ -60,6 +60,8 @@
     "test:academy-relationships-browser": "node scripts/test-academy-relationships-browser.mjs",
     "test:academy-ai": "node scripts/test-academy-ai.mjs",
     "test:academy-ai-browser": "node scripts/test-academy-ai-browser.mjs",
+    "test:academy-interactions": "node scripts/test-academy-interactions.mjs",
+    "test:academy-interactions-browser": "node scripts/test-academy-interactions-browser.mjs",
     "test:academy-features": "node scripts/test-academy-features.mjs"
   },
   "dependencies": {

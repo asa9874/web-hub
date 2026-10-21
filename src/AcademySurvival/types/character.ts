@@ -22,7 +22,7 @@ export interface CharacterRelationship {targetId:string;label:string;description
 export interface Character extends Partial<CharacterMorality>,CharacterIdentity,CharacterKnowledge,CharacterSocialIdentity,CharacterAffiliations {
  id:string;templateId?:string;kind:CharacterKind;statuses:StatusInstance[];relationships:CharacterRelationship[];
  // Legacy records may be unset; every active character must be registered with a valid location.
- classId?:string;specializationId?:string;
+ classId?:string;specializationId?:string;generationGrowthType?:'ordinary'|'talented'|'genius'|'weak'|'unusual';
  location?:CharacterLocationState;accessPermissions?:string[];accessTags?:string[];movementModes?:MovementMode[];
 }
 export type RandomAbilitySlot=RandomContentSlot<'trait'|'gift'>;

@@ -2,7 +2,10 @@ import type {ActivityDefinition,ScheduleEntry,ScheduleTemplate,ScheduleRole} fro
 export const SCHEDULE_RULES={version:'schedule-v1' as const,maxAdvanceDays:31,maxLogs:5000,flexMinutes:8,routeLookaheadMinutes:180,emergencyPriority:100,rolePrecedence:['professor','guard','staff','student','demon-worker','civilian'] as ScheduleRole[]};
 const activity=(id:string,name:string,type:ActivityDefinition['type'],description:string,tags:string[],locations:string[],priority:number,interruptible=true,actions:string[]=[]):ActivityDefinition=>({id,name,type,description,requiredPlaceTags:tags,defaultLocations:locations,defaultPriority:priority,interruptible,actionTags:actions,futureEffectKeys:[]});
 export const activities:ActivityDefinition[]=[
- activity('conversation','대화','free','같은 장소에서 수락한 상대와 대화한다. 실제 공동 활동 시간만 교류로 기록한다.',['meet','socialize'],['academy-plaza'],25,true,['speech']),
+ activity('idle_wait','대기','free','특정 장소에 머물러 다음 요청을 기다린다. 완료 보상은 없다.',['meet','rest','train','read','study','eat','sleep','research','guard','patrol','classroom','administration','magic-training'],['academy-plaza'],10,true),
+ activity('train_together','함께 훈련','training','수락한 상대와 같은 장소에서 훈련한다.',['train'],['academy-arena'],40,true,['training']),
+ activity('avoid_contact','접촉 회피','free','같은 공간에서 상대와의 접촉을 삼간다. 강제 이동이나 상대 동의는 요구하지 않는다.',['meet','rest','socialize','train','read','study'],['academy-plaza'],20,true),
+ activity('conversation','대화','free','같은 장소에서 수락한 상대와 대화한다. 실제 공동 활동 시간만 교류로 기록한다.',['meet','socialize','train','read','study','rest'],['academy-plaza'],25,true,['speech']),
  activity('study_together','함께 공부','training','같은 장소에서 서로 수락한 동료와 공부한다.',['study','read','research'],['academy-library'],40,true,['study']),
  activity('sparring','대련 연습','training','상대가 수락한 연습 대련이다. 전투 승패와 부상 판정은 포함하지 않는다.',['train'],['academy-arena'],40,true,['training']),
  activity('sleep','취침','sleep','거주 구역에서 하루를 마친다. 욕구 변화는 별도 욕구 엔진이 실제 수행 구간을 읽어 계산한다.',['sleep'],['academy-dorm'],35,true,['sleep']),

@@ -8,10 +8,10 @@ export const featureNotes:SystemFeatureNote[]=[
  item('char-fixed','고정 인물 템플릿','세레나의 고정·미확정 슬롯과 실제 캐릭터 모드를 분리한다.','systems/characterRegistry.ts','test-academy-character.mjs')],['추가 고정 인물 데이터'],['캐릭터 정보 공개 정책']),
  system('stats','능력치','캐릭터·성장','7개 능력치와 공통 수치 구간·등급 표시.',['character'],[
  item('stats-seven','7종 능력치·등급','STR/AGI/VIT/MAG/INT/WIL/CHA 정의와 범위별 고유 설명.','systems/knowledgeRegistry.ts','test-academy-knowledge.mjs'),
- item('stats-growth','실제 성장 처리','훈련에 따른 영구 능력치 상승 엔진은 없다.','data/knowledge/README.md','', 'not_implemented')],['성장 결과를 적용하는 명시적 API'],['성장 한계와 장기 밸런스']),
+ item('stats-growth','실제 성장 처리','별도 action-effects-v1 임시 XP 규칙으로 완료 활동의 경험치를 누적하고 실제 수치를 올린다.','systems/actionEffects.ts','test-academy-interactions.mjs')],['성장 결과를 적용하는 명시적 API'],['성장 한계와 장기 밸런스']),
  system('proficiency','숙련도','캐릭터·성장','카탈로그 49종과 0~9 경지. 특성 진화와 독립적이다.',['character'],[
  item('skills-catalog','정의·경지·캐릭터 표시','실제 ID로 캐릭터의 숙련도를 조회한다.','systems/knowledgeRegistry.ts','test-academy-knowledge.mjs'),
- item('skills-xp','경험치와 자동 경지 상승','경험치 임계값은 미확정이며 실제 훈련 성장은 구현하지 않았다.','data/knowledge/README.md','', 'not_implemented')],['경험치 규칙 확정'],['훈련 효과와 성장 평가']),
+ item('skills-xp','경험치와 자동 경지 상승','도감 임계값 null을 보존하며 별도의 버전별 런타임 XP 규칙으로 실제 경지를 갱신한다.','systems/actionEffects.ts','test-academy-interactions.mjs')],['경험치 규칙 확정'],['훈련 효과와 성장 평가']),
  system('traits','특성','캐릭터·성장','405종 정의·출생/획득 조건·진화 참조·영향력 메타데이터.',['character'],[
  item('traits-data','특성·진화·확률','도감에서 진화 그래프와 출현 조건·효과를 열람한다.','systems/registry.ts','test-academy.mjs'),
  item('traits-evolve','사건에 따른 자동 획득·진화','진화 참조가 실행 이벤트 엔진을 뜻하지 않는다.','data/expansion/README.md','', 'not_implemented')],['사건 기반 획득 처리'],['장기 성장 사건']),
@@ -65,14 +65,32 @@ export const featureNotes:SystemFeatureNote[]=[
  item('effects-all','모든 고유 규칙의 실제 실행','SPECIAL_RULE 정의가 실행 구현을 보장하지 않는다.','AGENTS.md','', 'partial')],['고유 효과 실행 어댑터'],['복합 사건의 효과 순서']),
  system('events','사건·퀘스트','게임플레이','예정 사건은 기획 참조이며 범용 실행기로 확인되지 않았다.',['character','time'],[
  item('events-engine','사건·퀘스트 실행','예정 이벤트 목록을 플레이 가능한 사건으로 표시하지 않는다.','README.md','', 'not_implemented')],['명시적 사건 결과 모델'],['사건 연쇄·분기 퀘스트']),
- system('combat','전투·성장 결과','게임플레이','훈련·대련 활동과 실제 전투 승패·부상 판정은 다르다.',['character','stats','proficiency','statuses'],[
- item('combat-engine','전투 판정·대련 승패','AI의 연습 대련은 공동 활동이며 전투 결과를 생성하지 않는다.','data/schedules/index.ts','', 'not_implemented')],['전투 결과 계약'],['전투 행동 AI']),
+ system('combat','전투·성장 결과','게임플레이','상호작용의 간이 대련 승패와 별도로 정식 전투·부상 엔진은 미구현이다.',['character','stats','proficiency','statuses'],[
+ item('combat-engine','정식 전투·부상 판정','상호작용 v1의 간이 승패는 능력·숙련·피로를 비교한다. 전투 턴·피해·부상은 구현하지 않는다.','data/schedules/index.ts','', 'not_implemented')],['전투 결과 계약'],['전투 행동 AI']),
  system('archive','설정집·공통 팝업','기반 시스템','데이터 ID 기반 작은 그리드와 재사용 가능한 상세 팝업.',['character'],[
  item('archive-popup','도감 검색·필터·팝업','인게임에서도 재사용할 제어형 상세 다이얼로그를 제공한다.','components/DetailDialog.tsx','test-academy-popup-reuse-browser.mjs')],['정보 공개 정책 통합'],['동적 기록과 발견 도감']),
+ system('action-outcomes','행동 결과·효과','기반 시스템','결과 ID·원자적 적용·성장·관계·도메인 사건 기록. 시간 기반 욕구 효과와 완료 보상은 분리한다.',['stats','proficiency','statuses','motivation','relationships'],[
+ item('outcome-types','공통 효과 타입·실패 검증','욕구/XP/관계/목표/상태/도덕/카르마/등록 처리기. 자원은 명시적 미지원.','types/actionEffects.ts','test-academy-interactions.mjs'),
+ item('outcome-atomic','미리보기·원자적 적용','전부 검증 후 커밋하며 실패 시 부분 상태를 남기지 않는다. 구독자 알림은 커밋 뒤 전달한다.','systems/domainTransaction.ts','test-academy-interactions.mjs'),
+ item('outcome-growth','완료 활동의 실제 성장','버전별 임시 XP 규칙. 시간·피로·경지·특성·환경·지도·시드 편차. 특성 자동 진화 없음.','systems/actionEffects.ts','test-academy-interactions.mjs'),
+ item('outcome-relations','방향성 관계·일일 한도','일일 지표별 절대 변화량 제한, 친밀도 감쇠와 역방향 독립성.','systems/actionEffects.ts','test-academy-interactions.mjs'),
+ item('outcome-need-goal','욕구·목표와 보상 책임 분리','완료 시 식사·수면 회복 중복 금지. 실제 증거로 목표 재판정.','systems/motivationEngine.ts','test-academy-interactions.mjs'),
+ item('outcome-once','중복 방지·저장·보존 정책','결과 지문·14일 원장·용량 초과 거부·저장 후 중복 차단.','systems/actionEffects.ts','test-academy-interactions.mjs'),
+ item('outcome-events','타입 안전 도메인 사건','실제 활동/상호작용/성장/관계/목표/효과 결과만 기록. 사건 자동 발동기는 미구현.','types/actionEffects.ts','test-academy-interactions.mjs'),
+ item('outcome-tester','효과 도감·샌드박스','실제 미리보기·적용·중복·오류·저장·초기화와 원본 격리.','components/InteractionTester.tsx','test-academy-interactions-browser.mjs')],['복합 조건부 효과','지속 효과','효과 간 연쇄 반응','환경 변화 효과'],['대규모 세계 상태 변화','세력 단위 결과','복잡한 사건 연쇄','고급 효과 규칙']),
+ system('interactions','NPC 상호작용','NPC 시뮬레이션','18종 제안·수락·공동 활동·간이 결과와 실제 효과.',['action-outcomes','schedules','relationships','morality','locations'],[
+ item('interaction-catalog','상호작용 카탈로그','활동·장소·시간·수락·결과·재시도 규칙을 등록한다.','data/interactions/index.ts','test-academy-interactions.mjs'),
+ item('interaction-target','같은 장소·정지 대상 선정','실제 위치·이동·현재 활동·의무·피로·상호 잠금을 검사한다.','systems/interactions.ts','test-academy-interactions.mjs'),
+ item('interaction-consent','제안·수락·거절','방향성 감정·성향·욕구·빈도·시드 판정. 거절로 관계를 자동 낮추지 않는다.','systems/interactions.ts','test-academy-interactions.mjs'),
+ item('interaction-shared','공유 인스턴스·중단','양쪽 일정 실행 증거·완료 시각·참여 잠금·상태 전이·중단을 검증한다.','systems/interactions.ts','test-academy-interactions.mjs'),
+ item('interaction-result','결과 판정·성장·관계','대화·공감·협력·갈등·회피·간이 경쟁. 영향력을 전투력으로 사용하지 않는다.','systems/interactions.ts','test-academy-interactions.mjs'),
+ item('interaction-ai','기존 AI 연결','공통 후보와 실제 상호작용 엔진에 위임한다. 중복 공동 활동·보상을 생성하지 않는다.','systems/npcAi.ts','test-academy-interactions.mjs'),
+ item('interaction-save','결정론·저장·실패 대기','동일 시드·작은/큰 시간 진행·실행 중 저장 복원·상호 쿨다운.','systems/aiSandbox.ts','test-academy-interactions.mjs'),
+ item('interaction-tester','도감·팝업·테스트','준비·요청·수락/거절·결과·효과·로그·대량 생성·JSON·모바일.','components/InteractionCatalog.tsx','test-academy-interactions-browser.mjs')],['복잡한 대화','약속 및 만남 예약','다자간 상호작용','관계별 대화 맥락'],['집단 갈등','조직 간 사회적 상호작용','복잡한 협상','정치적 관계']),
  system('feature-notes','설정집 기능 노트','기반 시스템','코드 근거·검증 범위·부분/미구현·의존성·제안을 분리한다.',['archive'],[
  item('notes-registry','타입 안전 레지스트리·상태 집계','기능 항목에서 시스템 상태를 계산하고 검색·분류·검증 상태로 필터한다.','data/features/index.ts','test-academy-features.mjs','needs_verification')],['검사 결과 수집 자동화'],['버전 간 기능 비교']),
 ];
-const currentChecks=new Set(['test-academy-ai.mjs','test-academy-ai-browser.mjs','test-academy-features.mjs','test-academy-character.mjs','test-academy-locations.mjs','test-academy-time.mjs','test-academy-schedules.mjs','test-academy-motivations.mjs']);
+const currentChecks=new Set(['test-academy-interactions.mjs','test-academy-interactions-browser.mjs','test-academy-ai.mjs','test-academy-ai-browser.mjs','test-academy-features.mjs','test-academy-character.mjs','test-academy-locations.mjs','test-academy-time.mjs','test-academy-schedules.mjs','test-academy-motivations.mjs']);
 for(const note of featureNotes)for(const feature of note.versions[0].items)if(feature.evidencePaths.some(path=>currentChecks.has(path.split('/').at(-1)!))&&['implemented','needs_verification'].includes(feature.status)){feature.status='implemented';feature.verificationStatus='passed';feature.verificationScope='current';feature.notes=['이번 변경 범위의 해당 단위 검사 또는 핵심 UI 검사 통과. 전체 게임 E2E 통과를 뜻하지 않는다.'];}
 export function systemStatus(note:SystemFeatureNote):FeatureStatus {const items=note.versions.find(v=>v.version===note.currentVersion)?.items??[];if(!items.length)return 'not_implemented';if(items.every(i=>i.status==='implemented'&&i.verificationStatus==='passed'))return 'implemented';if(items.every(i=>i.status==='not_implemented'))return 'not_implemented';if(items.some(i=>i.status==='partial'||i.status==='not_implemented'))return 'partial';return 'needs_verification';}
 export const featureStatusNames:Record<FeatureStatus,string>={implemented:'구현 완료',partial:'부분 구현',not_implemented:'미구현',planned:'계획',needs_verification:'검증 필요'};
