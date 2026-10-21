@@ -53,6 +53,8 @@
     "test:academy-locations": "node scripts/test-academy-locations.mjs",
     "test:academy-locations-browser": "node scripts/test-academy-locations-browser.mjs",
     "test:academy-relationships": "node scripts/test-academy-relationships.mjs",
+    "test:academy-schedules": "node scripts/test-academy-schedules.mjs",
+    "test:academy-schedules-browser": "node scripts/test-academy-schedules-browser.mjs",
     "test:academy-relationships-browser": "node scripts/test-academy-relationships-browser.mjs"
   },
   "dependencies": {

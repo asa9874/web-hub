@@ -117,3 +117,7 @@ NPC 단위 검사와 기존 영향력 검사는 통과했다. Academy 범위 ESL
 ## v1.4 인간관계 결과
 
 배치 생성은 `relationships`에 별도 희소 방향 그래프 결과를 반환한다. 단일 인물의 기존 반환 구조는 유지하고 `generateNpcWithRelationships`에서 인물과 그래프를 함께 받을 수 있다. 실제 전공 ID를 Character에도 보관하며 없는 반/거주지는 만들지 않는다. 기존 인맥은 context의 relationshipCharacters/relationshipOptions로 주입한다. [관계 생성 계약](../relationships/README.md) 참고.
+
+## v1.5 일과표 결과
+
+유효 NPC의 `CharacterSchedule[]`을 배치 결과 `schedules`에 반환한다. 원본 인물의 수치·위치를 바꾸지 않고 개인 계획을 별도 생성한다. 세계 등록 후 공통 일정 실행기가 자동 연결되며 명시적 계획을 주입할 수도 있다. 기본 시민 직무 미확정이나 거주지 미설정은 진단으로 유지한다. [일과표 계약](../schedules/README.md) 참고.

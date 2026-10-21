@@ -10,17 +10,17 @@ try{
  const popup=popupActions(page);
  const count=(selector,n)=>page.waitForFunction(({selector,n})=>document.querySelectorAll(selector).length===n,{selector,n});
  if(process.env.ACADEMY_SOCIAL_CASE==='condition'){
- await page.goto(base+'?view=catalog&kind=position');await count('.ac-social-card',200);
+ await page.goto(base+'?view=catalog&kind=position');await count('.ac-social-card',201);
  await page.getByLabel('직급 획득 조건 검색').fill('선거');await page.waitForFunction(()=>document.querySelectorAll('.ac-social-card').length>0&&document.querySelectorAll('.ac-social-card').length<200);
  assert((await page.locator('.ac-social-card').allTextContents()).some(t=>t.includes('학생회장')));
  await page.setViewportSize({width:390,height:844});const input=page.getByLabel('최대 영향력',{exact:true});assert.equal(await input.inputValue(),'1000');assert((await input.boundingBox()).width>=80);
  console.log('Acquisition condition search and mobile 1000 input passed.');
  }
  if(!process.env.ACADEMY_SOCIAL_CASE){
- await page.goto(base+'?view=catalog&kind=position');await count('.ac-social-card',200);assert.equal(await page.locator('.ac-tabs button').count(),14);
- await page.getByRole('navigation',{name:'직급·칭호 대분류'}).getByRole('button',{name:'아카데미·교육 30',exact:true}).click();await count('.ac-social-card',30);
+ await page.goto(base+'?view=catalog&kind=position');await count('.ac-social-card',201);assert.equal(await page.locator('.ac-tabs button').count(),15);
+ await page.getByRole('navigation',{name:'직급·칭호 대분류'}).getByRole('button',{name:'아카데미·교육 31',exact:true}).click();await count('.ac-social-card',31);
  await page.getByLabel('직급 배타 그룹').selectOption('academic-year');await count('.ac-social-card',4);
- await popup.close();await page.getByRole('button',{name:'필터 초기화',exact:true}).click();await count('.ac-social-card',200);
+ await popup.close();await page.getByRole('button',{name:'필터 초기화',exact:true}).click();await count('.ac-social-card',201);
  await popup.close();await page.getByRole('searchbox',{name:'직급·칭호 이름 검색'}).fill('용사');await count('.ac-social-card',1);await page.locator('.ac-social-card').click();await page.locator('#ac-social-detail h2').filter({hasText:'용사'}).waitFor();assert((await page.locator('#ac-social-detail').innerText()).includes('830'));
  await page.reload();await count('.ac-social-card',1);
  await popup.close();await page.getByRole('button',{name:'필터 초기화',exact:true}).click();await popup.close();await page.getByLabel('영향력 등급',{exact:true}).selectOption('continental');await count('.ac-social-card',4);
@@ -46,5 +46,5 @@ try{
  }
  await page.setViewportSize({width:390,height:844});await page.goto(base+'?view=catalog&kind=position&item=position-crown-heir&debug=1&q=황태자');await page.locator('#ac-social-detail h2').filter({hasText:'제국 황태자'}).waitFor();assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'mobile overflow');await page.screenshot({path:'.build-projects/academy-social-mobile.png',fullPage:true});
  await page.setViewportSize({width:1440,height:1000});await page.screenshot({path:'.build-projects/academy-social-desktop.png',fullPage:true});
- assert.deepEqual(errors,[]);if(process.env.ACADEMY_SOCIAL_CASE!=='condition')console.log(`Social UI ${process.env.ACADEMY_SOCIAL_CASE||'full'} passed: 200/200 catalogs, filters/search/grades/ordering, trait tree + impact list, migrated gift display, representatives/removal/history/backlinks and 390px ten-tab layout.`);
+ assert.deepEqual(errors,[]);if(process.env.ACADEMY_SOCIAL_CASE!=='condition')console.log(`Social UI ${process.env.ACADEMY_SOCIAL_CASE||'full'} passed: 201/200 catalogs, filters/search/grades/ordering, trait tree + impact list, migrated gift display, representatives/removal/history/backlinks and 390px ten-tab layout.`);
 }finally{await browser.close();}

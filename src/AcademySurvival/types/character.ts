@@ -1,3 +1,5 @@
+import type {NpcScheduleEngine} from '../systems/npcSchedules';
+import type {CharacterSchedule} from './schedule';
 import type {RelationshipGraph} from '../systems/relationships';
 import type {CharacterMorality} from './morality';
 import type {CharacterAffiliations} from './organization';
@@ -36,4 +38,4 @@ export interface FixedCharacterTemplate {
  contentMappings:{requested:string;actualId:string;reason:string}[];
 }
 // The panel's discriminant prevents unresolved slots being passed off as a real campaign character.
-export type CharacterPanelProps=({mode:'template';template:FixedCharacterTemplate}|{mode:'actual';character:Character})&{relationshipGraph?:RelationshipGraph;relationshipCharacters?:readonly Character[];onInspectCharacter?:(id:string)=>void;debug?:boolean;density?:'comfortable'|'compact';onSocialChange?:(social:CharacterSocialIdentity)=>void};
+export type CharacterPanelProps=({mode:'template';template:FixedCharacterTemplate}|{mode:'actual';character:Character})&{scheduleEngine?:NpcScheduleEngine|null;schedule?:CharacterSchedule;relationshipGraph?:RelationshipGraph;relationshipCharacters?:readonly Character[];onInspectCharacter?:(id:string)=>void;debug?:boolean;density?:'comfortable'|'compact';onSocialChange?:(social:CharacterSocialIdentity)=>void};

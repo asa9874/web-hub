@@ -133,3 +133,31 @@
 @media(max-width:1100px){.ac-page .ac-relationship-test-grid{grid-template-columns:minmax(180px,.7fr) 1fr}.ac-page .ac-relationship-test-grid>section:last-child{grid-column:1/-1}.ac-page .ac-relationship-metrics{grid-template-columns:repeat(3,1fr)}}@media(max-width:650px){.ac-page .ac-relationship-test-grid{display:flex;flex-direction:column}.ac-page .ac-relationship-test-grid>*{width:100%;box-sizing:border-box}.ac-page .ac-relationship-metrics{grid-template-columns:1fr}.ac-page .ac-relationship-metrics p{min-height:0}.ac-page .ac-mutual-comparison{grid-template-columns:1fr}.ac-page .ac-relationship-generation-fields>label,.ac-page .ac-relationship-generation-fields input{max-width:100%;box-sizing:border-box}.ac-page .ac-relationship-panel dl{grid-template-columns:repeat(3,1fr)}}
 
 .ac-page .ac-character-condensed .ac-relationship-panel{display:block}.ac-page .ac-character-condensed .ac-relationship-panel .ac-note{display:block}.ac-page .ac-character-condensed .ac-relationship-panel ul{max-height:230px}
+
+/* Schedule catalog and isolated life simulation. */
+.ac-schedule-controls{display:flex;flex-wrap:wrap;gap:.65rem;align-items:end;margin:.8rem 0}
+.ac-schedule-controls label{display:grid;gap:.25rem;min-width:100px;max-width:240px}
+.ac-schedule-controls input,.ac-schedule-controls select{width:100%;min-width:0}
+.ac-schedule-columns{display:grid;grid-template-columns:minmax(170px,240px) minmax(0,1fr);gap:1.2rem}
+.ac-schedule-columns>section,.ac-schedule-columns>aside{min-width:0}
+.ac-schedule-actors{display:grid;gap:.35rem;max-height:650px;overflow:auto}
+.ac-schedule-actors button{text-align:left;display:grid;gap:.2rem;padding:.65rem}
+.ac-schedule-actors small{color:var(--ac-muted,#999)}
+.ac-schedule-actors button[aria-pressed=true]{border-color:#b8a67b;background:#29261f}
+.ac-schedule-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:.5rem}
+.ac-schedule-stats>div{border:1px solid #34343c;padding:.6rem;border-radius:6px}
+.ac-schedule-stats dt{color:#a7a7af;font-size:.76rem}.ac-schedule-stats dd{margin:0;font-size:1.2rem}
+.ac-schedule-table-scroll{overflow-x:auto;max-width:100%}
+.ac-schedule-table{width:100%;border-collapse:collapse;font-size:.82rem}
+.ac-schedule-table td,.ac-schedule-table th{text-align:left;border-bottom:1px solid #303039;padding:.45rem;vertical-align:top}
+.ac-schedule-table td:first-child{white-space:nowrap}
+.ac-schedule-table button{padding:.2rem .4rem}
+.ac-schedule-population{display:flex;flex-wrap:wrap;gap:.5rem;margin:.8rem 0}
+.ac-schedule-population span{border:1px solid #383840;padding:.4rem .7rem;border-radius:5px}
+.ac-schedule-activities{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.5rem}
+.ac-schedule-activities details{padding:.7rem;border:1px solid #34343c;border-radius:6px}
+.ac-character-schedule{grid-column:1/-1;border-top:1px solid #34343c;padding-top:.65rem;font-size:.84rem}
+.ac-character-schedule p{margin:.35rem 0}.ac-character-schedule details{max-height:350px;overflow:auto}
+.ac-schedule-tester details{margin:.7rem 0}.ac-schedule-tester summary,.ac-schedule-catalog summary{cursor:pointer}
+.ac-schedule-tester input[type=checkbox]{width:auto;margin-right:.4rem}
+@media(max-width:700px){.ac-schedule-columns{grid-template-columns:1fr}.ac-schedule-actors{max-height:210px;grid-template-columns:repeat(2,minmax(0,1fr))}.ac-schedule-controls label{flex:1;min-width:120px}.ac-schedule-stats{grid-template-columns:repeat(3,minmax(0,1fr))}.ac-schedule-stats dt{font-size:.68rem}.ac-schedule-table{font-size:.75rem}}

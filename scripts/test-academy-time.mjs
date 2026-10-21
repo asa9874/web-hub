@@ -42,3 +42,12 @@ assert.equal(m.organizationCalendarId('empire'),'imperial');assert.equal(m.organ
 const tiny={...m.organizations[0],id:'additional-root',calendarId:undefined};assert.deepEqual(m.validateOrganizations([...m.organizations,tiny]),[]);
 assert.equal(m.calendarMonthGrid(current,'imperial').days.length,30);assert.equal(m.calendarMonthGrid(current,'abyss').days.length,36);
 console.log(`Time tests passed: six fixed official conversions; ${roundTrips} exhaustive date round trips across five representative years + 10000 deterministic absolute-minute checks; invalid dates, limits, all seasons/period edges/academic months, epoch/weekdays, minute-to-100000-year advances, observer isolation/error reporting, full catch-up interval/recurrences, save round-trip/version rejection and inherited organization calendar IDs.`);
+
+const timelineClock=m.createGameClock(0),events=[],changes=[];let pending=[10,20,1440];
+timelineClock.subscribeTimeline({priority:0,nextEventTime:(_now,limit)=>pending[0]<=limit?pending[0]:null,processAt:at=>{if(pending[0]===at){pending.shift();events.push(['movement',at,timelineClock.getSnapshot()]);}}});
+timelineClock.subscribeTimeline({priority:10,nextEventTime:()=>null,processAt:at=>events.push(['schedule',at,timelineClock.getSnapshot()])});timelineClock.subscribeChanges(c=>changes.push(c));timelineClock.advanceTime(1440);assert.deepEqual(events,[['movement',10,10],['schedule',10,10],['movement',20,20],['schedule',20,20],['movement',1440,1440],['schedule',1440,1440]]);assert.equal(changes.length,1);assert.equal(changes[0].elapsedMinutes,1440);
+assert.throws(()=>timelineClock.setAbsoluteMinute(-1));assert.equal(timelineClock.getSnapshot(),1440);
+const guarded=m.createGameClock(0);guarded.subscribeTimeline({priority:0,nextEventTime:()=>null,processAt:()=>{},beforeAdvance:()=>guarded.advanceTime(1)});assert.throws(()=>guarded.advanceTime(10));assert.equal(guarded.getSnapshot(),0);
+console.log('Chronological timeline priority, one world change, invalid seek and reentrant guard passed.');
+
+const atZero=m.createGameClock(0);let pendingZero=true,zeroNotice=0;atZero.subscribeTimeline({priority:0,nextEventTime:()=>pendingZero?0:null,processAt:()=>{pendingZero=false;}});atZero.subscribe(()=>zeroNotice++);atZero.advanceTime(0);assert.equal(zeroNotice,1);assert.equal(atZero.getSnapshot(),0);

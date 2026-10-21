@@ -3,10 +3,10 @@ import type {MovementMode,RouteResult} from '../types/location';
 import {locationCatalog} from './locationRegistry';
 import type {LocationCatalog} from './locationRegistry';
 import {MOVEMENT_V1} from '../data/locations/config';
-import {accessDenials,canEnterLocation,mobilityReasons,travelFactor} from './locationAccess';
+import {accessDenials,staticAccessDenials,canEnterLocation,mobilityReasons,travelFactor} from './locationAccess';
 import {assertAbsoluteMinute,MAX_ABSOLUTE_MINUTE} from './calendar';
 /** Dijkstra over time-labelled simple paths. A later arrival must not be discarded when an earlier one meets a closed door. No implicit waiting or cycling to wait. */
-export function findRoute(character:Character,from:string,to:string,departureTime:number,mode:MovementMode='walk',catalog:LocationCatalog=locationCatalog):RouteResult{
+export function findRoute(character:Character,from:string,to:string,departureTime:number,mode:MovementMode='walk',catalog:LocationCatalog=locationCatalog,options:{estimateStaticOnly?:boolean}={}):RouteResult{
  assertAbsoluteMinute(departureTime);const fail=(reasons:string[],expanded=0):RouteResult=>({ok:false,reasons,routeLocationIds:[],legs:[],travelMinutes:0,distanceMeters:0,arrivalTime:departureTime,expanded});
  if(!catalog.nodes.has(from)||!catalog.nodes.has(to))return fail(['존재하지 않는 출발지 또는 목적지']);
  if(from===to)return {...fail([]),ok:true,routeLocationIds:[from]};
@@ -20,7 +20,8 @@ export function findRoute(character:Character,from:string,to:string,departureTim
    if(label.route.includes(next))continue;if(!e.allowedModes.includes(mode)){denials.add('해당 연결에서 선택한 이동 방식을 사용할 수 없습니다.');continue;}
    const base=Math.max(e.baseTravelMinutes,(e.distanceMeters??0)/MOVEMENT_V1.walkMetersPerMinute),cost=mode==='teleport'?0:Math.max(1,base*MOVEMENT_V1.terrain[e.terrainType]*travelFactor(character,mode));
    const raw=label.raw+cost,leave=departureTime+Math.ceil(label.raw),arrive=departureTime+Math.ceil(raw);if(raw>MOVEMENT_V1.maxRouteMinutes||arrive>MAX_ABSOLUTE_MINUTE){denials.add('지원 이동 시간 범위 초과');continue;}
-   const reasons=[...accessDenials(character,e.accessRules,leave),...accessDenials(character,e.accessRules,arrive),...canEnterLocation(character,next,leave,catalog,label.at).reasons,...canEnterLocation(character,next,arrive,catalog,label.at).reasons.map(r=>`도착 시각: ${r}`)];
+   const checkRules=options.estimateStaticOnly?staticAccessDenials:accessDenials;
+   const reasons=[...checkRules(character,e.accessRules,leave),...checkRules(character,e.accessRules,arrive),...canEnterLocation(character,next,leave,catalog,label.at,options.estimateStaticOnly).reasons,...canEnterLocation(character,next,arrive,catalog,label.at,options.estimateStaticOnly).reasons.map(r=>`도착 시각: ${r}`)];
    if(reasons.length){reasons.forEach(r=>denials.add(r));continue;}
    queue.push({at:next,raw,route:[...label.route,next],distance:label.distance+(e.distanceMeters??0),legs:[...label.legs,{connectionId:e.id,from:label.at,to:next,departureTime:leave,arrivalTime:arrive,distanceMeters:e.distanceMeters??0}]});
   }
@@ -28,3 +29,10 @@ export function findRoute(character:Character,from:string,to:string,departureTim
  return fail(['유효한 이동 경로가 없습니다.',...[...denials].slice(0,12)],expanded);
 }
 export const calculateTravelTime=(...args:Parameters<typeof findRoute>)=>findRoute(...args);
+
+/** Departure forecast only. Execution always calls requestMovement and rechecks every real window. */
+export function forecastDeparture(c:Character,from:string,to:string,start:number,earliest:number,catalog:LocationCatalog=locationCatalog){
+ const estimate=findRoute(c,from,to,start,'walk',catalog,{estimateStaticOnly:true});let departure=Math.max(earliest,start-estimate.travelMinutes),route=estimate;
+ for(let n=0;n<4&&estimate.ok;n++){route=findRoute(c,from,to,departure,'walk',catalog);if(!route.ok)break;const adjusted=Math.max(earliest,start-route.travelMinutes);if(adjusted===departure)break;departure=adjusted;}
+ return {departure,route};
+}

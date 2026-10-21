@@ -20,7 +20,7 @@ export const locations:LocationDefinition[]=[
  loc('academy-library','도서관','academy','building','종이 냄새와 낮은 발소리가 가득한 학문의 쉼터. 야간 폐관 뒤에는 신규 입장만 제한한다.','academy-main',[time('08:00','22:00')],['read','study']),
  loc('academy-dining','학생 식당','academy','building','식판 소리와 하루의 소문이 가장 먼저 모이는 곳.','academy-main',[],['eat','socialize']),
  loc('academy-arena','대련장','academy','outdoor','목검의 흠집마다 승패와 배움의 기억이 남아 있다.','academy-sword',[],['duel','train']),
- loc('academy-morning','아침단련장','academy','outdoor','새벽 이슬이 마르기 전 열리는 조용한 단련장. 08:00 이후에는 신규 입장을 받지 않는다.','academy-sword',[time('05:00','08:00')],['morning-training']),
+ loc('academy-morning','아침단련장','academy','outdoor','새벽 이슬이 마르기 전 열리는 조용한 단련장. 08:00 이후에는 신규 입장을 받지 않는다.','academy-sword',[time('05:00','08:00')],['morning-training','train']),
  loc('academy-student-hall','학생회관','academy','building','동아리 공고와 자치 활동으로 붐비는 건물.','academy-main'),
  loc('academy-council-office','학생회 집무실','academy-student-hall','room','축제 예산과 생도들의 청원서가 같은 책상 위에서 다투는 방.','academy-council',[council],['administration']),
  loc('academy-dorm','기숙사','academy','facility','수업 밖의 생활과 비밀스러운 야식이 이어지는 거주 구역.','academy-main'),
@@ -37,9 +37,18 @@ export const locations:LocationDefinition[]=[
  loc('demon-office','집무실','demon-castle-place','room','세력들의 서신과 국경 보고서가 모이는 비공개 공간.','demon-executive',[permit('demon-office','마왕성 집무실 출입 허가 필요')]),
  loc('demon-training','마왕군 훈련장','demon-castle-place','outdoor','서로 다른 체격과 전법을 가진 병사들이 호흡을 맞추는 곳.','demon-army',[{type:'organization',organizationIds:['demon-army'],description:'마왕군 소속 필요'}],['train']),
  loc('abyss-library','심연 서고','demon-castle-place','building','봉인된 장서에는 학문과 위험이 함께 잠들어 있다.','abyss-academy',[permit('abyss-library','심연 서고 열람 허가 필요')],['research']),
+ loc('academy-magic-training','마법 훈련장','academy','facility','방호벽 안에서 주문의 방향과 잔류 마력을 점검하는 실습 공간.','academy-magic',[],['magic-training','train']),
+ loc('academy-guard-post','아카데미 경비 초소','academy','room','교대 장부와 정문 통행 기록을 관리하는 근무 공간.','academy-main',[{type:'position',positionIds:['position-academy-guard'],organizationId:'academy-main',description:'아카데미 경비병 신분 필요'}],['guard']),
+ loc('academy-admin-office','교직원 행정실','academy','room','학적과 장서·시설 관련 업무를 나누어 처리하는 사무 공간.','academy-main',[{type:'any',description:'본교 교직원 신분 또는 행정실 허가 필요',rules:[{type:'position',positionIds:['position-professor','position-academy-librarian','position-archive-curator'],organizationId:'academy-main',description:'본교 교직원'},permit('academy-admin-office','행정실 출입 허가')]}],['administration']),
+ loc('academy-staff-residence','교직원 생활관','academy','building','숙직과 교대 근무자를 위한 공동 생활 구역.','academy-main',[],['sleep','rest']),
+ loc('demon-dining','마왕성 식당','demon-castle-place','room','교대 시간이 다른 근무자들을 위해 긴 시간 식사를 제공한다.','demon-executive',[],['eat']),
+ loc('demon-residence','마왕성 생활관','demon-castle-place','room','성 안에 머무는 근무자들의 생활 공간.','demon-executive',[],['sleep','rest']),
 ];
+const addedActivityTags:Record<string,string[]>={'academy-dorm':['sleep','rest'],'academy-room-305':['sleep','rest'],'academy-room-306':['sleep','rest'],'academy-room-205':['sleep','rest'],'academy-class-1-1':['classroom'],'academy-class-2-1':['classroom'],'academy-class-3-1':['classroom'],'academy-class-4-1':['classroom'],'academy-professor-office':['research','administration'],'academy-plaza':['patrol'],'academy-gate':['patrol'],'academy-arena':['patrol'],'demon-office':['administration'],'demon-gate':['patrol','guard','rest']};
+for(const l of locations)l.activityTags=[...new Set([...l.activityTags,...(addedActivityTags[l.id]??[])])];
 const edge=(from:string,to:string,minutes:number):LocationConnection=>({id:`path-${from}-${to}`,fromLocationId:from,toLocationId:to,distanceMeters:minutes*70,baseTravelMinutes:minutes,terrainType:'normal',allowedModes:['walk','run'],bidirectional:true,accessRules:[]});
 export const locationConnections:LocationConnection[]=[
+ edge('academy-plaza','academy-magic-training',5),edge('academy-gate','academy-guard-post',1),edge('academy-plaza','academy-admin-office',3),edge('academy-gate','academy-staff-residence',3),edge('demon-gate','demon-dining',3),edge('demon-gate','demon-residence',4),
  edge('capital-market','academy-gate',15),edge('capital-market','capital-palace',20),edge('academy-gate','academy-plaza',3),edge('academy-plaza','academy-class-building',2),edge('academy-class-building','academy-corridor',1),
  ...[1,2,3,4].map(y=>edge('academy-corridor',`academy-class-${y}-1`,1)),edge('academy-corridor','academy-professor-office',1),
  ...([['academy-library',4],['academy-dining',3],['academy-arena',6],['academy-morning',5],['academy-student-hall',3],['academy-dorm',4]] as const).map(([id,m])=>edge('academy-plaza',id,m)),

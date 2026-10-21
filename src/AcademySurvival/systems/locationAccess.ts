@@ -21,9 +21,9 @@ export function evaluateAccessRule(character:Character,r:AccessRule,time:number)
  }
 }
 export const accessDenials=(c:Character,rules:AccessRule[],time:number)=>rules.filter(r=>!evaluateAccessRule(c,r,time)).map(r=>r.description);
-export function canEnterLocation(c:Character,id:string,time:number,catalog:LocationCatalog=locationCatalog,from?:string){
+export function canEnterLocation(c:Character,id:string,time:number,catalog:LocationCatalog=locationCatalog,from?:string,ignoreTime=false){
  const already=new Set(from?catalog.getLocationPath(from).map(l=>l.id):[]);
- const reasons=catalog.getLocationPath(id).filter(l=>!already.has(l.id)).flatMap(l=>accessDenials(c,l.accessRules,time).map(reason=>`${l.name}: ${reason}`));return {ok:!reasons.length,reasons};
+ const reasons=catalog.getLocationPath(id).filter(l=>!already.has(l.id)).flatMap(l=>(ignoreTime?staticAccessDenials:accessDenials)(c,l.accessRules,time).map(reason=>`${l.name}: ${reason}`));return {ok:!reasons.length,reasons};
 }
 export function canTraverseConnection(c:Character,id:string,time:number,catalog:LocationCatalog=locationCatalog){const edge=catalog.edges.get(id);if(!edge)return {ok:false,reasons:['존재하지 않는 이동 연결']};const reasons=accessDenials(c,edge.accessRules,time);return {ok:!reasons.length,reasons};}
 export function mobilityReasons(c:Character,mode:MovementMode){
@@ -36,3 +36,12 @@ export function travelFactor(c:Character,mode:MovementMode){
  const modifiers=new Map<string,number>();for(const s of c.statuses){if(s.definitionId==='status-muscle-soreness'||s.definitionId==='status-fracture'){if(s.bodyPartId&&!['whole','torso','left-leg','right-leg','left-foot','right-foot'].includes(s.bodyPartId))continue;}const value=MOVEMENT_V1.statusMultipliers[s.definitionId];if(value)modifiers.set(s.definitionId,value);}
  return MOVEMENT_V1.mode[mode]*agility*[...modifiers.values()].reduce((a,b)=>a*b,1);
 }
+
+/** Advisory static feasibility only. Undefined means a time window must be checked at actual traversal. */
+export function staticAccessRule(c:Character,r:AccessRule,time:number):boolean|undefined{
+ if(r.type==='time')return undefined;
+ if(r.type==='not'){const value=staticAccessRule(c,r.rule,time);return value===undefined?undefined:!value;}
+ if(r.type==='all'||r.type==='any'){const values=r.rules.map(x=>staticAccessRule(c,x,time));if(r.type==='all')return values.includes(false)?false:values.includes(undefined)?undefined:true;return values.includes(true)?true:values.includes(undefined)?undefined:false;}
+ return evaluateAccessRule(c,r,time);
+}
+export const staticAccessDenials=(c:Character,rules:AccessRule[],time:number)=>rules.filter(r=>staticAccessRule(c,r,time)===false).map(r=>r.description);
