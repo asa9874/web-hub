@@ -97,7 +97,7 @@ export function createNpcAiEngine(motivation:MotivationEngine,options:{seed?:str
   const joint=joints.find(j=>j.status==='active'&&[j.requesterId,j.targetId].includes(id));if(joint){if(emergency.length||duty.length)finishJoint(joint,'interrupted','긴급 상황 또는 의무 일정');else {s.status='performing';s.nextDecisionAt=Math.min(joint.endAt!,now()+R.decisionMinutes);return;}}
   if(!forcedId&&!emergency.length&&s.actionEndsAt!==undefined&&s.actionEndsAt>now()&&s.currentActionId&&current.status!=='failed'){
    const locked=!activityRegistry.get(current.activityId??'')?.interruptible;
-   const holding=now()<(s.actionStartedAt??now())+R.minHold;
+   const holding=now()<(s.actionStartedAt??now())+(R.minHoldByActivity[s.currentActivityId??'']??R.minHold);
    const margin=existing&&pool[0]&&pool[0].score<existing.score+R.switchMargin;
    if(locked||(!duty.length&&(holding||moving||margin))){s.status=moving?'traveling':'performing';s.nextDecisionAt=Math.min(s.actionEndsAt,now()+R.decisionMinutes);return;}
   }
