@@ -44,6 +44,8 @@
     "test:academy-npc-browser": "node scripts/test-academy-npc-browser.mjs",
     "test:academy-organizations": "node scripts/test-academy-organizations.mjs",
     "test:academy-organizations-browser": "node scripts/test-academy-organizations-browser.mjs",
+    "test:academy-time": "node scripts/test-academy-time.mjs",
+    "test:academy-time-browser": "node scripts/test-academy-time-browser.mjs",
     "test:academy-morality": "node scripts/test-academy-morality.mjs",
     "test:academy-morality-browser": "node scripts/test-academy-morality-browser.mjs",
     "test:academy-popup-browser": "node scripts/test-academy-popup-browser.mjs",

@@ -1,3 +1,4 @@
+import {calendarRegistry} from '../data/calendars';
 import {ORGANIZATION_TYPES} from '../data/social/config';
 import type {Issue} from '../types';
 import type {CharacterAffiliations,OrganizationDefinition} from '../types/organization';
@@ -7,7 +8,7 @@ import {POSITION_AFFILIATION_BINDINGS,ACADEMY_YEAR_POSITIONS} from '../data/orga
 import {positionRegistry} from './socialRules';
 export function validateOrganizations(entries:readonly OrganizationDefinition[]):Issue[]{
  const issues:Issue[]=[],registry=new Map<string,OrganizationDefinition>(),fail=(id:string,message:string)=>issues.push({id,message});
- for(const entry of entries){if(registry.has(entry.id))fail(entry.id,'조직 ID 중복');registry.set(entry.id,entry);if(!/^[a-z][a-z0-9-]*$/.test(entry.id)||!entry.name||!entry.description||!entry.lore||!entry.kind||!entry.purposes.length||!entry.features.length||!entry.admissionRules.length||!entry.departureRules.length)fail(entry.id,'조직 필수 설정 누락');if(!Number.isInteger(entry.impact)||entry.impact<0||entry.impact>1000)fail(entry.id,'조직 영향력 범위 오류');if(!Object.hasOwn(ORGANIZATION_TYPES,entry.type)||!['continental','national','regional','institution','unit'].includes(entry.scale))fail(entry.id,'조직 유형·규모 오류');if(!['public','restricted','secret'].includes(entry.visibility))fail(entry.id,'조직 공개 범위 오류');}
+ for(const entry of entries){if(entry.calendarId!==undefined&&!calendarRegistry.has(entry.calendarId))fail(entry.id,'공식 달력 참조 오류');if(registry.has(entry.id))fail(entry.id,'조직 ID 중복');registry.set(entry.id,entry);if(!/^[a-z][a-z0-9-]*$/.test(entry.id)||!entry.name||!entry.description||!entry.lore||!entry.kind||!entry.purposes.length||!entry.features.length||!entry.admissionRules.length||!entry.departureRules.length)fail(entry.id,'조직 필수 설정 누락');if(!Number.isInteger(entry.impact)||entry.impact<0||entry.impact>1000)fail(entry.id,'조직 영향력 범위 오류');if(!Object.hasOwn(ORGANIZATION_TYPES,entry.type)||!['continental','national','regional','institution','unit'].includes(entry.scale))fail(entry.id,'조직 유형·규모 오류');if(!['public','restricted','secret'].includes(entry.visibility))fail(entry.id,'조직 공개 범위 오류');}
  for(const entry of entries){if(entry.parentOrganizationId===entry.id)fail(entry.id,'조직 자기 참조');if(entry.parentOrganizationId&&!registry.has(entry.parentOrganizationId))fail(entry.id,'부모 조직 참조 오류');let current:OrganizationDefinition|undefined=entry;const seen=new Set<string>();while(current){if(seen.has(current.id)){fail(entry.id,'조직 계층 순환');break;}seen.add(current.id);current=current.parentOrganizationId?registry.get(current.parentOrganizationId):undefined;}}
  return issues;
 }

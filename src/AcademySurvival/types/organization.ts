@@ -1,7 +1,8 @@
+import type {CalendarId} from './calendar';
 import type {OrganizationType} from './social';
 export type OrganizationVisibility='public'|'restricted'|'secret';
 export interface OrganizationDefinition {
- id:string;name:string;parentOrganizationId?:string;type:OrganizationType;kind:string;description:string;lore:string;
+ id:string;name:string;calendarId?:CalendarId;parentOrganizationId?:string;type:OrganizationType;kind:string;description:string;lore:string;
  impact:number;scale:'continental'|'national'|'regional'|'institution'|'unit';visibility:OrganizationVisibility;
  purposes:string[];features:string[];admissionRules:string[];departureRules:string[];tags:string[];aliases?:string[];
 }

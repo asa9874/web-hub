@@ -17,7 +17,7 @@ try{
  console.log('Acquisition condition search and mobile 1000 input passed.');
  }
  if(!process.env.ACADEMY_SOCIAL_CASE){
- await page.goto(base+'?view=catalog&kind=position');await count('.ac-social-card',200);assert.equal(await page.locator('.ac-tabs button').count(),11);
+ await page.goto(base+'?view=catalog&kind=position');await count('.ac-social-card',200);assert.equal(await page.locator('.ac-tabs button').count(),12);
  await page.getByRole('navigation',{name:'직급·칭호 대분류'}).getByRole('button',{name:'아카데미·교육 30',exact:true}).click();await count('.ac-social-card',30);
  await page.getByLabel('직급 배타 그룹').selectOption('academic-year');await count('.ac-social-card',4);
  await popup.close();await page.getByRole('button',{name:'필터 초기화',exact:true}).click();await count('.ac-social-card',200);

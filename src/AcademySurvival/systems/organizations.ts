@@ -16,3 +16,5 @@ export function setPrimaryOrganization(identity:CharacterAffiliations,id:string)
 export function removeAffiliation(identity:CharacterAffiliations,id:string){return normalizeAffiliations({...identity,affiliations:identity.affiliations.filter(a=>a.organizationId!==id)});}
 export function visibleAffiliations(identity:CharacterAffiliations,developer=false){return identity.affiliations.filter(a=>developer||(a.visibility==='public'&&organizationPath(a.organizationId).every(o=>o.visibility!=='secret')));}
 export const organizationSearch=(entry:OrganizationDefinition,query:string)=>[entry.name,entry.description,entry.lore,entry.kind,entry.type,...entry.tags,...(entry.aliases??[])].join(' ').normalize('NFKC').toLocaleLowerCase().includes(query.normalize('NFKC').trim().toLocaleLowerCase());
+
+export function organizationCalendarId(id:string,registry:ReadonlyMap<string,OrganizationDefinition>=organizationRegistry){return [...organizationPath(id,registry)].reverse().find(o=>o.calendarId)?.calendarId;}

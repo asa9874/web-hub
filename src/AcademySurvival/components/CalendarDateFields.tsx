@@ -1,0 +1,7 @@
+import type {CalendarId,GameDateTime} from '../types/calendar';
+import {calendarDefinition} from '../systems/calendar';
+import {TIME_RULES} from '../data/calendars';
+export default function CalendarDateFields({prefix,calendarId,date,onChange}:{prefix:string;calendarId:CalendarId;date:GameDateTime;onChange:(date:GameDateTime)=>void}){
+ const calendar=calendarDefinition(calendarId);
+ return <div className="ac-date-fields"><label>연도<input aria-label={prefix+' 연도'} type="number" step={1} min={TIME_RULES.minImperialYear+calendar.yearOffset} max={TIME_RULES.maxImperialYear+calendar.yearOffset} value={date.year} onChange={e=>onChange({...date,year:Number(e.target.value)})}/></label><label>월<select aria-label={prefix+' 월'} value={date.month} onChange={e=>onChange({...date,month:Number(e.target.value)})}>{Array.from({length:calendar.monthsPerYear},(_,i)=><option key={i} value={i+1}>{i+1}월{calendar.monthNames?' · '+calendar.monthNames[i].name:''}</option>)}</select></label><label>일<input aria-label={prefix+' 일'} type="number" step={1} min={1} max={calendar.daysPerMonth} value={date.day} onChange={e=>onChange({...date,day:Number(e.target.value)})}/></label><label>시<input aria-label={prefix+' 시'} type="number" min={0} max={23} step={1} value={date.hour} onChange={e=>onChange({...date,hour:Number(e.target.value)})}/></label><label>분<input aria-label={prefix+' 분'} type="number" min={0} max={59} step={1} value={date.minute} onChange={e=>onChange({...date,minute:Number(e.target.value)})}/></label></div>;
+}
