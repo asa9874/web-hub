@@ -15,6 +15,7 @@ export interface GenerationGrant {kind:'position'|'title'|'status'|'affiliation'
 export interface BackgroundProfile {id:string;name:string;description:string;weight:number;audience:'student'|'adult'|'both';minYear?:number;specializations?:string[];growthTypes?:GrowthType[];preferences?:ImpactPreference[];grants:GenerationGrant[]}
 export interface NpcGenerationConfig {
  morality:MoralityGenerationConfig;
+ initialLocations:{student:string;adult:string};
  version:string;maxCount:number;maxAttempts:number;maxBatchAttempts:number;statMin:number;statMax:number;coreOffset:number;supportOffset:number;nonCoreOffset:number;noise:number;personalSpread:number;variantBonus:number;rareTalentChance:number;rareTalentBonus:number;rareRankChance:number;rareRankBonus:number;maxRank:RankLevel;
  years:Record<1|2|3|4,{average:[number,number];primary:[number,number];positionId:string;age:[number,number]}>;
  adult:{average:[number,number];primary:[number,number];age:[number,number]};
@@ -29,6 +30,7 @@ export interface NpcDiagnostic {level:'info'|'warning'|'error';code:string;messa
 export interface GeneratedNpcResult {character:Character;impact:CharacterImpactResult;success:boolean;targetMet:boolean;valid:boolean;attempts:number;index:number;seed:string;specializationId:string;growthType:GrowthType;primaryProficiencyId:string;variant:string;evidence:GenerationEvidence[];diagnostics:NpcDiagnostic[]}
 export interface BatchGenerationResult {request:NpcGenerationRequest;seed:string;version:string;results:GeneratedNpcResult[];diagnostics:NpcDiagnostic[]}
 export interface NpcGenerationContext {
+ locations:ReadonlyMap<string,{id:string}>;
  dispositions:ReadonlyMap<string,DispositionDefinition>;
  organizations:ReadonlyMap<string,OrganizationDefinition>;normalizeAffiliations:(character:{affiliations:CharacterAffiliation[];primaryOrganizationId?:string})=>{affiliations:CharacterAffiliation[];primaryOrganizationId?:string};
  config:NpcGenerationConfig;traits:readonly Trait[];gifts:readonly Gift[];proficiencies:ReadonlyMap<string,{id:string}>;positions:ReadonlyMap<string,PositionDefinition>;titles:ReadonlyMap<string,TitleDefinition>;reservedNames:ReadonlySet<string>;

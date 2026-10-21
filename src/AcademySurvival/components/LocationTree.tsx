@@ -1,0 +1,11 @@
+import {useState} from 'react';
+import {locationCatalog} from '../systems/locationRegistry';
+export default function LocationTree({selected,onSelect}:{selected:string;onSelect:(id:string)=>void}){
+ const [open,setOpen]=useState(new Set(['world','empire-land','imperial-capital','academy','demon-land'])),[query,setQuery]=useState('');
+ const matches=[...locationCatalog.nodes.values()].filter(l=>[l.name,l.description,l.type,...l.tags].join(' ').toLocaleLowerCase().includes(query.toLocaleLowerCase()));
+ const visible=query?new Set(matches.flatMap(l=>locationCatalog.getLocationPath(l.id).map(p=>p.id))):null;
+ const rows:{id:string;depth:number}[]=[],stack=[...[...locationCatalog.nodes.values()].filter(l=>!l.parentId).reverse().map(l=>({id:l.id,depth:0}))];
+ while(stack.length){const row=stack.pop()!;if(visible&&!visible.has(row.id))continue;rows.push(row);if(query||open.has(row.id))for(const child of locationCatalog.getLocationChildren(row.id).reverse())stack.push({id:child.id,depth:row.depth+1});}
+ const select=(id:string)=>{setOpen(old=>new Set([...old,...locationCatalog.getLocationAncestors(id).map(l=>l.id)]));onSelect(id);};
+ return <section className="ac-location-tree" aria-label="장소 계층"><input type="search" aria-label="장소 검색" placeholder="장소·설명·유형·태그 검색" value={query} onChange={e=>setQuery(e.target.value)}/><div className="ac-location-tools"><button onClick={()=>setOpen(new Set(locationCatalog.nodes.keys()))}>전체 펼치기</button><button onClick={()=>{setQuery('');setOpen(new Set());}}>전체 접기</button></div><nav aria-label="장소 트리">{rows.map(({id,depth})=>{const l=locationCatalog.getLocation(id),children=locationCatalog.getLocationChildren(id);return <div className="ac-location-node" key={id} style={{paddingInlineStart:depth*15}}>{children.length?<button className="ac-location-toggle" aria-label={`${l.name} ${query||open.has(id)?'접기':'펼치기'}`} aria-expanded={!!query||open.has(id)} onClick={()=>{setQuery('');setOpen(old=>{const next=new Set(old);if(next.has(id))next.delete(id);else next.add(id);return next;});}}>{query||open.has(id)?'▾':'▸'}</button>:<span className="ac-location-toggle">·</span>}<button aria-pressed={selected===id} onClick={()=>select(id)}>{l.name}{children.length>0&&<small> {children.length}</small>}</button></div>;})}</nav></section>;
+}

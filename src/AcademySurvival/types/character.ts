@@ -4,6 +4,7 @@ import type {CharacterSocialIdentity,RandomSocialSlot} from './social';
 import type {RandomContentSlot} from './slots';
 import type {CharacterKnowledge,RankLevel,StatId} from './knowledge';
 import type {StatusInstance} from './status';
+import type {CharacterLocationState,MovementMode} from './location';
 export type CharacterKind='player'|'random_npc'|'fixed_npc';
 export interface CharacterIdentity {
  name:string;englishName?:string;age:number;gender:string;species:string;origin:string;schoolYear:number;affiliation:string;title:string;
@@ -14,6 +15,8 @@ export interface CharacterIdentity {
 export interface CharacterRelationship {targetId:string;label:string;description:string;affinity:number|null}
 export interface Character extends Partial<CharacterMorality>,CharacterIdentity,CharacterKnowledge,CharacterSocialIdentity,CharacterAffiliations {
  id:string;templateId?:string;kind:CharacterKind;statuses:StatusInstance[];relationships:CharacterRelationship[];
+ // Legacy records may be unset; every active character must be registered with a valid location.
+ location?:CharacterLocationState;accessPermissions?:string[];accessTags?:string[];movementModes?:MovementMode[];
 }
 export type RandomAbilitySlot=RandomContentSlot<'trait'|'gift'>;
 export interface FixedCharacterTemplate {

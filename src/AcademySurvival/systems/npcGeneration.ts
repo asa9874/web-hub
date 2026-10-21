@@ -12,6 +12,8 @@ export class NpcGenerationError extends Error {diagnostics:NpcDiagnostic[];const
 const error=(code:string,message:string):NpcDiagnostic=>({level:'error',code,message});
 export function validateGenerationSetup(context:NpcGenerationContext):NpcDiagnostic[]{
  const c=context.config,issues:NpcDiagnostic[]=[...validateMoralityGenerationConfig(context.config.morality).map(message=>error('morality-config',message)),...validateDispositions([...context.dispositions.values()]).map(issue=>error('disposition-data',issue.id+': '+issue.message))],fail=(message:string)=>issues.push(error('profile',message));
+ for(const id of Object.values(c.initialLocations??{}))if(!context.locations.has(id))fail('생성 초기 위치 참조 오류: '+id);
+ if(!c.initialLocations?.student||!c.initialLocations?.adult)fail('생성 초기 위치 설정 누락');
  if(!c.version||!Number.isInteger(c.maxCount)||c.maxCount<1||c.maxCount>1000||!Number.isInteger(c.maxAttempts)||c.maxAttempts<1||c.maxAttempts>100||!Number.isInteger(c.maxBatchAttempts)||c.maxBatchAttempts<c.maxCount*c.maxAttempts)fail('수량·재시도 예산 오류');
  const probability=(n:number)=>Number.isFinite(n)&&n>=0&&n<=1;
  for(const rows of [c.traitCounts,c.giftCounts])if(!rows.length||rows.some(r=>!Number.isInteger(r.count)||r.count<0||r.count>5||!probability(r.probability))||Math.abs(rows.reduce((n,r)=>n+r.probability,0)-1)>1e-9)fail('특성·기프트 개수 분포 오류');
@@ -104,6 +106,7 @@ function candidate(request:NpcGenerationRequest,context:NpcGenerationContext,roo
  character.primaryPositionId=year?c.years[year as 1|2|3|4].positionId:character.positions[0]?.definitionId;character.primaryTitleId=character.titles[0]?.definitionId;
  if(growthType!=='ordinary'||rare)diagnostics.push({level:'info',code:'intentional-variation',message:growth.name+' 유형/희귀 재능에 따른 학년 평균 이탈은 의도된 편차입니다.'});
  for(const message of validateMoralityProfile(character,true,context.dispositions))diagnostics.push(error('morality-validation',message));
+ character.location={characterId:character.id,currentLocationId:year?c.initialLocations.student:c.initialLocations.adult,movement:null};
  for(const issue of context.validateCharacter(character))diagnostics.push(error('character-validation',issue.message));
  const impact=context.calculateImpact(character);for(const issue of impact.issues)diagnostics.push(error('impact-reference',issue.path+': '+issue.message));
  const valid=!diagnostics.some(d=>d.level==='error'),targetMet=distance(impact.impact,request.targetImpact)===0;

@@ -1,3 +1,4 @@
+import {locationCatalog} from './locationRegistry';
 import {dispositionRegistry} from './morality';
 import {organizationRegistry,normalizeAffiliations} from './organizations';
 import type {NpcGenerationContext} from '../types/npcGeneration';
@@ -12,4 +13,4 @@ import {slotPool} from './probability';
 import {calculateCharacterImpact} from './characterImpact';
 import {characterImpactCatalogs} from './characterImpactCatalogs';
 import {ACTIVE_CHARACTER_IMPACT_CONFIG} from '../data/characterImpactConfig';
-export const npcGenerationContext:NpcGenerationContext={dispositions:dispositionRegistry,organizations:organizationRegistry,normalizeAffiliations,config:NPC_GENERATION_V1,traits,gifts,proficiencies:proficiencyRegistry,positions:positionRegistry,titles:titleRegistry,reservedNames:new Set(fixedCharacters.map(t=>t.identity.name)),calculateImpact:c=>calculateCharacterImpact(c,characterImpactCatalogs,ACTIVE_CHARACTER_IMPACT_CONFIG),validateCharacter:c=>validateCharacters([c]),positionConflict,makeStatus:makeInstance,applyStatus,birthPool:slotPool};
+export const npcGenerationContext:NpcGenerationContext={locations:locationCatalog.nodes,dispositions:dispositionRegistry,organizations:organizationRegistry,normalizeAffiliations,config:NPC_GENERATION_V1,traits,gifts,proficiencies:proficiencyRegistry,positions:positionRegistry,titles:titleRegistry,reservedNames:new Set(fixedCharacters.map(t=>t.identity.name)),calculateImpact:c=>calculateCharacterImpact(c,characterImpactCatalogs,ACTIVE_CHARACTER_IMPACT_CONFIG),validateCharacter:c=>validateCharacters([c]),positionConflict,makeStatus:makeInstance,applyStatus,birthPool:slotPool};

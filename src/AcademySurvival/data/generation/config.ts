@@ -1,3 +1,4 @@
+import {INITIAL_LOCATIONS} from '../locations/config';
 import {MORALITY_GENERATION_V1} from '../dispositions/config';
 import type {NpcGenerationConfig} from '../../types/npcGeneration';
 import {PROBABILITY} from '../config';
@@ -9,8 +10,8 @@ export const ACADEMY_GROWTH_BANDS:NpcGenerationConfig['years']={
  4:{average:[60,75],primary:[4,5],positionId:'position-academy-year-four',age:[19,21]},
 };
 export const NPC_GENERATION_V1:NpcGenerationConfig={
- morality:MORALITY_GENERATION_V1,
- version:'npc-generation-v1.2',maxCount:100,maxAttempts:16,maxBatchAttempts:1600,statMin:0,statMax:250,coreOffset:12,supportOffset:2,nonCoreOffset:-10,noise:9,personalSpread:4,variantBonus:1,rareTalentChance:0.015,rareTalentBonus:20,rareRankChance:0.002,rareRankBonus:1,maxRank:9,
+ morality:MORALITY_GENERATION_V1,initialLocations:INITIAL_LOCATIONS,
+ version:'npc-generation-v1.3',maxCount:100,maxAttempts:16,maxBatchAttempts:1600,statMin:0,statMax:250,coreOffset:12,supportOffset:2,nonCoreOffset:-10,noise:9,personalSpread:4,variantBonus:1,rareTalentChance:0.015,rareTalentBonus:20,rareRankChance:0.002,rareRankBonus:1,maxRank:9,
  years:ACADEMY_GROWTH_BANDS,adult:{average:[40,65],primary:[2,4],age:[22,48]},
  growth:{ordinary:{name:'범재',weight:76,shift:0,coreBonus:0,rankShift:0,rareTraitBoost:1,unusualBonus:0},talented:{name:'수재',weight:14,shift:16,coreBonus:8,rankShift:1,rareTraitBoost:2,unusualBonus:0},genius:{name:'천재',weight:1,shift:45,coreBonus:18,rankShift:3,rareTraitBoost:5,unusualBonus:0},weak:{name:'둔재',weight:7,shift:-18,coreBonus:0,rankShift:-1,rareTraitBoost:0.4,unusualBonus:0},unusual:{name:'이단아',weight:2,shift:4,coreBonus:0,rankShift:0,rareTraitBoost:2,unusualBonus:45}},
  specializations:SPECIALIZATIONS,traitCounts:PROBABILITY.traitCounts.map(r=>({...r})),giftCounts:PROBABILITY.giftCounts.map(r=>({...r})),
