@@ -1,3 +1,4 @@
+import {validateMoralityProfile} from './morality';
 import {validateCharacterAffiliations} from './organizationValidation';
 import type {Condition,Entry,Issue} from '../types';
 import type {Character,CharacterIdentity,FixedCharacterTemplate} from '../types/character';
@@ -32,6 +33,7 @@ function abilityIssues(traitIds:string[],giftIds:string[],id:string){
 export function validateFixedCharacters(templates:FixedCharacterTemplate[]):Issue[]{
  const issues:Issue[]=[],ids=new Set<string>(),fail=(id:string,message:string)=>issues.push({id,message});
  for(const t of templates){
+  issues.push(...validateMoralityProfile(t.moralityProfile??{}).map(message=>({id:t.id,message})));
   issues.push(...validateSocialIdentity(t.social.fixed,t.id),...validateCharacterAffiliations({...t.affiliations,schoolYear:t.identity.schoolYear,positions:t.social.fixed.positions},t.id));
   for(const slot of t.social.randomSlots){
    if(!slot.id||!slot.description||slot.drawAt!=='campaign-start'||!slot.withoutReplacement||!['position','title'].includes(slot.kind)||!slot.candidates.length||!unique(slot.candidates.map(c=>c.entryId+'@'+(c.organizationId??''))))fail(t.id,'사회적 랜덤 슬롯 오류');
@@ -65,6 +67,7 @@ export function validateFixedCharacters(templates:FixedCharacterTemplate[]):Issu
 export function validateCharacters(characters:Character[],templates:FixedCharacterTemplate[]=[]):Issue[]{
  const issues:Issue[]=[],ids=new Set<string>(),fail=(id:string,message:string)=>issues.push({id,message});
  for(const c of characters){
+  issues.push(...validateMoralityProfile(c).map(message=>({id:c.id,message})));
   issues.push(...validateSocialIdentity(c,c.id),...validateCharacterAffiliations(c,c.id));
   if(!c.id||ids.has(c.id))fail(c.id,'캐릭터 ID 중복/누락');ids.add(c.id);issues.push(...identityIssues(c,c.id),...abilityIssues(c.traitIds,c.giftIds,c.id));
   if(!['player','random_npc','fixed_npc'].includes(c.kind))fail(c.id,'캐릭터 종류 오류');

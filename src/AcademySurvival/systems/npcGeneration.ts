@@ -1,3 +1,5 @@
+import {generateMorality,validateMoralityRequest,validateMoralityGenerationConfig} from './moralityGeneration';
+import {validateDispositions,validateMoralityProfile} from './morality';
 import type {Character} from '../types/character';
 import type {Context,Entry,Condition} from '../types';
 import type {StatId,RankLevel} from '../types/knowledge';
@@ -9,7 +11,7 @@ const flagsFor=(c:Condition):string[]=>c.kind==='flag'?[c.key]:c.kind==='all'?c.
 export class NpcGenerationError extends Error {diagnostics:NpcDiagnostic[];constructor(diagnostics:NpcDiagnostic[]){super(diagnostics.map(d=>d.message).join(' · '));this.name='NpcGenerationError';this.diagnostics=diagnostics;}}
 const error=(code:string,message:string):NpcDiagnostic=>({level:'error',code,message});
 export function validateGenerationSetup(context:NpcGenerationContext):NpcDiagnostic[]{
- const c=context.config,issues:NpcDiagnostic[]=[],fail=(message:string)=>issues.push(error('profile',message));
+ const c=context.config,issues:NpcDiagnostic[]=[...validateMoralityGenerationConfig(context.config.morality).map(message=>error('morality-config',message)),...validateDispositions([...context.dispositions.values()]).map(issue=>error('disposition-data',issue.id+': '+issue.message))],fail=(message:string)=>issues.push(error('profile',message));
  if(!c.version||!Number.isInteger(c.maxCount)||c.maxCount<1||c.maxCount>1000||!Number.isInteger(c.maxAttempts)||c.maxAttempts<1||c.maxAttempts>100||!Number.isInteger(c.maxBatchAttempts)||c.maxBatchAttempts<c.maxCount*c.maxAttempts)fail('수량·재시도 예산 오류');
  const probability=(n:number)=>Number.isFinite(n)&&n>=0&&n<=1;
  for(const rows of [c.traitCounts,c.giftCounts])if(!rows.length||rows.some(r=>!Number.isInteger(r.count)||r.count<0||r.count>5||!probability(r.probability))||Math.abs(rows.reduce((n,r)=>n+r.probability,0)-1)>1e-9)fail('특성·기프트 개수 분포 오류');
@@ -32,7 +34,7 @@ export function validateGenerationSetup(context:NpcGenerationContext):NpcDiagnos
  return issues;
 }
 function validateRequest(request:NpcGenerationRequest,context:NpcGenerationContext){
- const c=context.config,issues=validateGenerationSetup(context);
+ const c=context.config,issues=[...validateGenerationSetup(context),...validateMoralityRequest(request,context.dispositions).map(message=>error('morality-request',message))];
  if(!Number.isInteger(request.count)||request.count<1||request.count>c.maxCount)issues.push(error('request','생성 수량은1~'+c.maxCount+'의 정수여야 합니다.'));
  if(typeof request.academyStudent!=='boolean'||(request.academyYear!==undefined&&request.academyYear!=='random'&&![1,2,3,4].includes(request.academyYear)))issues.push(error('request','생도 여부/학년 조건 오류'));
  if(request.specializationId&&request.specializationId!=='random'&&!c.specializations.some(s=>s.id===request.specializationId))issues.push(error('request','알 수 없는 전공: '+request.specializationId));
@@ -63,6 +65,7 @@ function candidate(request:NpcGenerationRequest,context:NpcGenerationContext,roo
  if(!name)throw new NpcGenerationError([error('names','예약 이름을 제외한 이름 풀이 부족합니다.')]);
  const personality=identityPick(c.personalities),objective=identityPick(c.objectives),id='npc-'+seedHash(rootSeed).toString(16)+'-'+index;
  const character:Character={id,kind:'random_npc',name,age:identityInt(...band.age),gender:identityPick(c.genders),species:'인간',origin:'제국의 아카데미 권역',schoolYear:year,affiliation:year?'본교 아카데미':'도시 생활권',title:profile.name+' '+(year?'전공 생도':'기술 수련자'),introduction:'각자의 사정으로 '+profile.name+'의 길을 선택한 '+name+'.',summary:profile.name+' · '+variant.name+' 성향. '+personality,background:[],personality:[personality],values:['스스로 선택한 일의 결과를 책임지려 한다.'],weaknesses:growthType==='weak'?['동료의 속도와 자신을 비교하며 조급해지곤 한다.']:[],appearance:{description:'단정한 '+(year?'아카데미 교복':'일상복')+'에 손질한 개인 소지품을 챙겼다.',provisional:true},objective,tendencies:[{id:'specialization',label:'전공 · '+profile.name,description:variant.name+' 성향으로 자신의 주특기를 다듬는다.'},{id:'growth',label:'성장 유형 · '+growth.name,description:anomaly?anomaly+'에 비주력 재능이 드러난다.':'성장 유형은 현재 생성 분포이며 미래의 성장을 고정하지 않는다.'}],stats,proficiencyRanks,traitIds:[],giftIds:[],positions:[],titles:[],statuses:[],relationships:[],affiliations:[]};
+ Object.assign(character,generateMorality(request,!!year,character.age,seededRandom(seed+'/morality'),context.dispositions,c.morality));
  const diagnostics:NpcDiagnostic[]=[],evidence:GenerationEvidence[]=[],flags:string[]=[];
  const ctx=():Context=>({stats:{...stats,...Object.fromEntries(Object.entries(c.aliases).map(([key,id])=>[key,stats[id]])),...Object.fromEntries(profile.traitFamilies.map(f=>[f,stats[profile.core[0]]]))},flags:[...flags],tags:[profile.id,...profile.giftTags],traits:[...character.traitIds],gifts:[...character.giftIds]});
  const grant=(b:BackgroundProfile)=>{
@@ -100,6 +103,7 @@ function candidate(request:NpcGenerationRequest,context:NpcGenerationContext,roo
  Object.assign(character,context.normalizeAffiliations({affiliations:character.affiliations,primaryOrganizationId:year?(profile.organizationId??c.academyId):c.adultOrganizationId}));
  character.primaryPositionId=year?c.years[year as 1|2|3|4].positionId:character.positions[0]?.definitionId;character.primaryTitleId=character.titles[0]?.definitionId;
  if(growthType!=='ordinary'||rare)diagnostics.push({level:'info',code:'intentional-variation',message:growth.name+' 유형/희귀 재능에 따른 학년 평균 이탈은 의도된 편차입니다.'});
+ for(const message of validateMoralityProfile(character,true,context.dispositions))diagnostics.push(error('morality-validation',message));
  for(const issue of context.validateCharacter(character))diagnostics.push(error('character-validation',issue.message));
  const impact=context.calculateImpact(character);for(const issue of impact.issues)diagnostics.push(error('impact-reference',issue.path+': '+issue.message));
  const valid=!diagnostics.some(d=>d.level==='error'),targetMet=distance(impact.impact,request.targetImpact)===0;

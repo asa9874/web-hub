@@ -1,3 +1,4 @@
+import type {CharacterMorality} from './morality';
 import type {CharacterAffiliations} from './organization';
 import type {CharacterSocialIdentity,RandomSocialSlot} from './social';
 import type {RandomContentSlot} from './slots';
@@ -11,11 +12,12 @@ export interface CharacterIdentity {
  objective:string;tendencies:{id:string;label:string;description:string}[];
 }
 export interface CharacterRelationship {targetId:string;label:string;description:string;affinity:number|null}
-export interface Character extends CharacterIdentity,CharacterKnowledge,CharacterSocialIdentity,CharacterAffiliations {
+export interface Character extends Partial<CharacterMorality>,CharacterIdentity,CharacterKnowledge,CharacterSocialIdentity,CharacterAffiliations {
  id:string;templateId?:string;kind:CharacterKind;statuses:StatusInstance[];relationships:CharacterRelationship[];
 }
 export type RandomAbilitySlot=RandomContentSlot<'trait'|'gift'>;
 export interface FixedCharacterTemplate {
+ moralityProfile?:Partial<CharacterMorality>;
  affiliations:CharacterAffiliations;
  id:string;identity:CharacterIdentity;role:string;coreNotes:string[];
  stats:Record<StatId,{base:number;min:number;max:number}>;

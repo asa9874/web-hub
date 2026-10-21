@@ -1,3 +1,5 @@
+import {dispositionRegistry} from '../systems/morality';
+import {DispositionDetail} from './DispositionCatalog';
 import type {Context} from '../types';
 import {EMPTY_CONTEXT} from '../data/config';
 import {entries} from '../systems/registry';
@@ -15,9 +17,9 @@ import {FixedCharacterDetail} from './FixedCharacterCatalog';
 import DetailDialog from './DetailDialog';
 import '../AcademySurvival.css';
 
-export type CatalogEntryKind='trait'|'gift'|'stat'|'proficiency'|'status'|'character'|'position'|'title'|'organization';
+export type CatalogEntryKind='trait'|'gift'|'stat'|'proficiency'|'status'|'character'|'position'|'title'|'organization'|'disposition';
 export interface CatalogEntryReference {kind:CatalogEntryKind;id:string}
-const kinds:CatalogEntryKind[]=['trait','gift','stat','proficiency','status','character','position','title','organization'];
+const kinds:CatalogEntryKind[]=['trait','gift','stat','proficiency','status','character','position','title','organization','disposition'];
 export function catalogEntryReference(params:URLSearchParams):CatalogEntryReference|null{
  const kind=params.get('kind')??'trait',id=params.get('item');
  return id&&kinds.includes(kind as CatalogEntryKind)?{kind:kind as CatalogEntryKind,id}:null;
@@ -31,13 +33,14 @@ export default function CatalogEntryDialog({reference,debug=false,context=EMPTY_
  const social=[...positions,...titles].find(e=>e.id===id&&e.kind===kind);
  const organization=kind==='organization'?organizations.find(e=>e.id===id):undefined;
  const character=kind==='character'?fixedCharacters.find(e=>e.id===id):undefined;
- const title=entry?.name??knowledge?.name??status?.name??social?.name??organization?.name??character?.identity.name??'기록을 찾을 수 없습니다';
+ const disposition=kind==='disposition'?dispositionRegistry.get(id):undefined;
+ const title=disposition?.name??entry?.name??knowledge?.name??status?.name??social?.name??organization?.name??character?.identity.name??'기록을 찾을 수 없습니다';
  return <DetailDialog wide={kind==='character'} title={title} onClose={onClose}><div key={kind+'/'+id} onClickCapture={event=>{
   const link=(event.target as Element).closest<HTMLAnchorElement>('a[href]');
   if(!link||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey||event.button!==0)return;
   const url=new URL(link.href),next=catalogEntryReference(url.searchParams);
   if(url.origin===location.origin&&url.pathname===location.pathname&&next){event.preventDefault();event.stopPropagation();onNavigate(next);}
  }}>
-  {entry?<EntryDetail entry={entry} debug={debug} context={context} onSelect={next=>onNavigate({kind:next.startsWith('gift-')?'gift':'trait',id:next})}/>:knowledge?<KnowledgeEntryDetail selected={knowledge} debug={debug} onOpen={next=>onNavigate({kind:next.startsWith('gift-')?'gift':'trait',id:next})} onStat={next=>onNavigate({kind:'stat',id:next})}/>:status?<StatusDetail selected={status} debug={debug} select={navigate}/>:social?<SocialDetail selected={social} debug={debug} select={navigate}/>:organization?<OrganizationDetail selected={organization} debug={debug} select={navigate}/>:character?<FixedCharacterDetail selected={character} debug={debug}/>:<p role="alert" className="ac-empty">존재하지 않는 기록입니다. ({kind} / {id})</p>}
+  {disposition?<DispositionDetail definition={disposition} debug={debug} onSelect={navigate}/>:entry?<EntryDetail entry={entry} debug={debug} context={context} onSelect={next=>onNavigate({kind:next.startsWith('gift-')?'gift':'trait',id:next})}/>:knowledge?<KnowledgeEntryDetail selected={knowledge} debug={debug} onOpen={next=>onNavigate({kind:next.startsWith('gift-')?'gift':'trait',id:next})} onStat={next=>onNavigate({kind:'stat',id:next})}/>:status?<StatusDetail selected={status} debug={debug} select={navigate}/>:social?<SocialDetail selected={social} debug={debug} select={navigate}/>:organization?<OrganizationDetail selected={organization} debug={debug} select={navigate}/>:character?<FixedCharacterDetail selected={character} debug={debug}/>:<p role="alert" className="ac-empty">존재하지 않는 기록입니다. ({kind} / {id})</p>}
  </div></DetailDialog>;
 }

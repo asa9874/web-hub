@@ -1,0 +1,205 @@
+{
+  "seed": "academy-morality-v1-audit",
+  "generationVersion": "npc-generation-v1.2",
+  "moralityVersion": "morality-v1",
+  "categories": {
+    "ethics": 15,
+    "philosophy": 15,
+    "social": 15,
+    "motivation": 15,
+    "emotion": 15,
+    "order": 15,
+    "complex": 10
+  },
+  "samples": [
+    {
+      "name": "레온 벨른",
+      "year": 2,
+      "morality": 2,
+      "moralityGrade": "중립적",
+      "karma": 84,
+      "karmaGrade": "선량",
+      "dispositions": [
+        "종교적 헌신자"
+      ],
+      "impact": 133
+    },
+    {
+      "name": "소피 오르트",
+      "year": 2,
+      "morality": -8,
+      "moralityGrade": "중립적",
+      "karma": 16,
+      "karmaGrade": "중립",
+      "dispositions": [
+        "원칙주의자",
+        "관찰자"
+      ],
+      "impact": 213
+    },
+    {
+      "name": "소피 아셀",
+      "year": 1,
+      "morality": 37,
+      "moralityGrade": "이타적",
+      "karma": -40,
+      "karmaGrade": "중립",
+      "dispositions": [
+        "법치주의자",
+        "완벽주의자"
+      ],
+      "impact": 85
+    },
+    {
+      "name": "루카 마렌",
+      "year": 1,
+      "morality": 10,
+      "moralityGrade": "중립적",
+      "karma": -23,
+      "karmaGrade": "중립",
+      "dispositions": [
+        "질투심 많은 자"
+      ],
+      "impact": 102
+    },
+    {
+      "name": "루카 베르나",
+      "year": 3,
+      "morality": 3,
+      "moralityGrade": "중립적",
+      "karma": 12,
+      "karmaGrade": "중립",
+      "dispositions": [
+        "현실주의자",
+        "인정욕구형"
+      ],
+      "impact": 201
+    }
+  ],
+  "statistics": {
+    "total": 100,
+    "success": 100,
+    "failed": 0,
+    "averageMorality": 2.11,
+    "averageKarma": 0.28,
+    "moralityGrades": {
+      "중립적": 52,
+      "이타적": 27,
+      "이기적": 19,
+      "극단적 이기성": 1,
+      "강한 이타성": 1
+    },
+    "karmaGrades": {
+      "선량": 8,
+      "중립": 87,
+      "불량": 5
+    },
+    "dispositionCounts": {
+      "1": 63,
+      "2": 29,
+      "3": 8
+    },
+    "averageImpact": 175.45,
+    "targetAchievementRate": 1,
+    "averageRetries": 0
+  },
+  "frequentDispositions": [
+    {
+      "id": "disposition-doomsayer",
+      "name": "파멸주의자",
+      "count": 8
+    },
+    {
+      "id": "disposition-ambitious",
+      "name": "야심가",
+      "count": 4
+    },
+    {
+      "id": "disposition-careerist",
+      "name": "출세주의자",
+      "count": 4
+    },
+    {
+      "id": "disposition-greedy",
+      "name": "탐욕가",
+      "count": 4
+    },
+    {
+      "id": "disposition-manipulator",
+      "name": "조종자",
+      "count": 4
+    },
+    {
+      "id": "disposition-optimist",
+      "name": "낙관주의자",
+      "count": 4
+    },
+    {
+      "id": "disposition-perfectionist",
+      "name": "완벽주의자",
+      "count": 4
+    },
+    {
+      "id": "disposition-agitator",
+      "name": "선동가",
+      "count": 3
+    },
+    {
+      "id": "disposition-hedonist",
+      "name": "쾌락주의자",
+      "count": 3
+    },
+    {
+      "id": "disposition-hero-aspirant",
+      "name": "영웅지망생",
+      "count": 3
+    }
+  ],
+  "frequentCombinations": [
+    {
+      "ids": [
+        "disposition-greedy"
+      ],
+      "names": [
+        "탐욕가"
+      ],
+      "count": 4
+    },
+    {
+      "ids": [
+        "disposition-ambitious"
+      ],
+      "names": [
+        "야심가"
+      ],
+      "count": 2
+    },
+    {
+      "ids": [
+        "disposition-doomsayer"
+      ],
+      "names": [
+        "파멸주의자"
+      ],
+      "count": 2
+    },
+    {
+      "ids": [
+        "disposition-isolationist"
+      ],
+      "names": [
+        "고립주의자"
+      ],
+      "count": 2
+    },
+    {
+      "ids": [
+        "disposition-jealous"
+      ],
+      "names": [
+        "질투심 많은 자"
+      ],
+      "count": 2
+    }
+  ]
+}
