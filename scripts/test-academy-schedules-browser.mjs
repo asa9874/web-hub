@@ -5,7 +5,7 @@ await mkdir('.build-projects',{recursive:true});
 const browser=await chromium.launch({headless:true}),base=(process.env.ACADEMY_TEST_URL||'http://127.0.0.1:5178/web-hub')+'/games/academy-survival/';
 try{
  const p=await browser.newPage({viewport:{width:1480,height:1000}}),errors=[];p.setDefaultTimeout(15000);p.on('pageerror',e=>errors.push(e.message));
- await p.goto(base+'?view=catalog&kind=schedule');await p.getByRole('heading',{name:'NPC 일과표',exact:true}).waitFor();assert.equal(await p.locator('.ac-tabs button').count(),15);
+ await p.goto(base+'?view=catalog&kind=schedule');await p.getByRole('heading',{name:'NPC 일과표',exact:true}).waitFor();assert.equal(await p.locator('.ac-tabs button').count(),16);
  const original=await p.getByRole('button',{name:'현재 게임 날짜 상세',exact:true}).innerText();
  await p.getByRole('button',{name:'학생 평일 9개 일정',exact:true}).click();await p.getByRole('dialog',{name:'학생 평일',exact:true}).waitFor();await p.keyboard.press('Escape');
  await p.getByRole('button',{name:'테스트',exact:true}).click();await p.getByRole('heading',{name:'NPC 일과표 테스트',exact:true}).waitFor();

@@ -12,6 +12,7 @@ export interface TimelineParticipant {
  priority:number;
  nextEventTime:(current:number,limit:number)=>number|null;
  processAt:(minute:number)=>void;
+ beforeStep?:(from:number,to:number)=>void;
  beforeAdvance?:(from:number,to:number)=>void;
  onSeek?:(change:TimeChange)=>void;
 }
@@ -28,9 +29,9 @@ export function createGameClock(initial=DEFAULT_ABSOLUTE_MINUTE){
    if(reason==='advance'){
     let steps=0;
     while(true){let at=Infinity;for(const p of participants){const candidate=p.nextEventTime(current,next);if(candidate!==null){if(!Number.isSafeInteger(candidate)||candidate<current||candidate>next)throw new Error('예약 이벤트 시각 오류');at=Math.min(at,candidate);}}
-     if(!Number.isFinite(at))break;if(++steps>TIME_RULES.maxTimelineEvents)throw new Error('예약 이벤트 처리 한도 초과');processed=true;current=at;for(const p of participants)p.processAt(at);
+     if(!Number.isFinite(at))break;if(++steps>TIME_RULES.maxTimelineEvents)throw new Error('예약 이벤트 처리 한도 초과');processed=true;for(const p of participants)p.beforeStep?.(current,at);current=at;for(const p of participants)p.processAt(at);
     }
-    current=next;
+    if(current<next){for(const p of participants)p.beforeStep?.(current,next);current=next;for(const p of participants)p.processAt(next);}
    }else{current=next;const seek=timeChange(from,next,reason);if(seek.direction!=='unchanged')for(const p of participants)p.onSeek?.(seek);}
   }catch(error){listenerErrors.push(error);}
   finally{timelineProcessing=false;}

@@ -108,3 +108,7 @@ runtime.getSocialContext(id); // 친구·신뢰·지인 조회, AI 판단 없음
 
 
 최종 검증: `npm run build` 통과(TypeScript, Vite,38프로젝트,39OG페이지,181로컬 참조). 기존 `.animate-*` CSS 문법·큰 청크 경고가 남아 있다. 새 일정 파일 전체의 범위 한정 ESLint는 통과했다. 날짜 한정 동일-ID 대체와 지원 연도 끝의 주간 조회를 보완한 뒤 일과표 검사 및 TypeScript/Vite·산출물 검사를 다시 수행했다. 전체 게임 E2E와 기존 모든 도감 브라우저 스위트는 영향 범위를 넘어 반복하지 않았다.
+
+## 욕구·목표 연결
+
+`subscribeExecution`은 실제 수행 변경을 별도 엔진에 알린다. 욕구 효과를 일과표에 추가하지 않는다. `saveExecution/loadExecution`은 보류된 조기 이동·중단·이력·다음 예약을 포함해 이어 진행을 재현한다. [욕구·목표 계약](../motivations/README.md).

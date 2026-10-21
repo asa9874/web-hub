@@ -42,7 +42,7 @@ export function createLocationWorld({clock,characters,catalog=locationCatalog,al
    if(reasons.length){cancel(next.id,reasons.join(' / '),earliest);continue;}
    next.location!.currentLocationId=leg.to;m.nextLeg++;
    if(m.nextLeg===m.legs.length){next.location!.movement=null;emitActor('arrival',next.id);log('arrival',`${next.name} → ${catalog.getLocation(leg.to).name} 도착`,next.id,earliest);}
-   else {log('waypoint',`${next.name} → ${catalog.getLocation(leg.to).name} 경유`,next.id,earliest);const changed=checkLeg(next,m.nextLeg);if(changed.length)cancel(next.id,changed.join(' / '),earliest);}
+   else {emitActor('waypoint',next.id);log('waypoint',`${next.name} → ${catalog.getLocation(leg.to).name} 경유`,next.id,earliest);const changed=checkLeg(next,m.nextLeg);if(changed.length)cancel(next.id,changed.join(' / '),earliest);}
   }
  };
  const connect=()=>{if(!disconnect){const stopTimeline=clock.subscribeTimeline({priority:0,nextEventTime:(current,limit)=>{let next=Infinity;for(const c of actors.values()){const m=c.location!.movement;if(m)next=Math.min(next,m.legs[m.nextLeg].arrivalTime);}return next<=limit?Math.max(current,next):null;},processAt:advanceMovement,onSeek:change=>{for(const c of actors.values())cancel(c.id,'시간 직접 설정·불러오기: 남은 이동 취소',change.to);}});

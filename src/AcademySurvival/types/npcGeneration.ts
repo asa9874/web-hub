@@ -1,3 +1,4 @@
+import type {CharacterMotivationState} from './motivation';
 import type {CharacterSchedule} from './schedule';
 import type {RelationshipGenerationResult,RelationshipGenerationOptions} from './relationship';
 import type {MoralityGenerationRequest,MoralityGenerationConfig,DispositionDefinition} from './morality';
@@ -30,8 +31,9 @@ export interface NpcGenerationConfig {
 export interface GenerationEvidence {id:string;description:string;grants:GenerationGrant[];flags:string[]}
 export interface NpcDiagnostic {level:'info'|'warning'|'error';code:string;message:string}
 export interface GeneratedNpcResult {character:Character;impact:CharacterImpactResult;success:boolean;targetMet:boolean;valid:boolean;attempts:number;index:number;seed:string;specializationId:string;growthType:GrowthType;primaryProficiencyId:string;variant:string;evidence:GenerationEvidence[];diagnostics:NpcDiagnostic[]}
-export interface BatchGenerationResult {schedules:CharacterSchedule[];relationships:RelationshipGenerationResult;request:NpcGenerationRequest;seed:string;version:string;results:GeneratedNpcResult[];diagnostics:NpcDiagnostic[]}
+export interface BatchGenerationResult {motivations:CharacterMotivationState[];schedules:CharacterSchedule[];relationships:RelationshipGenerationResult;request:NpcGenerationRequest;seed:string;version:string;results:GeneratedNpcResult[];diagnostics:NpcDiagnostic[]}
 export interface NpcGenerationContext {
+ motivationTime?:number;
  relationshipCharacters?:readonly Character[];relationshipOptions?:RelationshipGenerationOptions;
  locations:ReadonlyMap<string,{id:string}>;
  dispositions:ReadonlyMap<string,DispositionDefinition>;

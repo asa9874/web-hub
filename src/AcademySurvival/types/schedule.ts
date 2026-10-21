@@ -11,3 +11,5 @@ export interface ScheduleIntent {characterId:string;occurrenceId:string;entryId:
 export interface ActivityExecution {characterId:string;occurrenceId?:string;entryId?:string;activityId?:string;targetLocationId?:string;status:ActivityExecutionStatus;plannedStartTime?:number;plannedEndTime?:number;actualStartTime?:number;actualEndTime?:number;expectedDepartureTime?:number;arrivalTime?:number;lateMinutes:number;absent:boolean;reason?:string;resumes:number}
 export type ScheduleLogType='selection'|'start'|'complete'|'departure'|'arrival'|'late'|'absent'|'failure'|'interrupt'|'resume'|'temporary'|'cancel'|'seek';
 export interface ScheduleLog {id:number;at:number;characterId?:string;type:ScheduleLogType;important:boolean;message:string}
+
+export interface ScheduleRuntimeSave {version:'schedule-runtime-v1';absoluteMinute:number;epoch:number;plans:CharacterSchedule[];history:[string,ActivityExecution[]][];current:ActivityExecution[];reserved:[string,string][];paused:[string,string[]][];resumePending:string[];wakes:{id:string;at:number}[];counters:{completed:number;failed:number;late:number;absent:number;interrupted:number;resumed:number;processedEvents:number}}

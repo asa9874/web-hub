@@ -1,3 +1,6 @@
+import {generateCharacterMotivation} from './motivationRules';
+import {createRelationshipGraph} from './relationships';
+import {DEFAULT_ABSOLUTE_MINUTE} from './calendar';
 import {generateScheduleForCharacter} from './schedulePlanning';
 import {generateInitialRelationships} from './relationshipGeneration';
 import {generateMorality,validateMoralityRequest,validateMoralityGenerationConfig} from './moralityGeneration';
@@ -127,7 +130,9 @@ export function generateNpcs(request:NpcGenerationRequest,context:NpcGenerationC
  }
  const relationships=generateInitialRelationships([...(context.relationshipCharacters??[]),...results.filter(r=>r.valid).map(r=>r.character)],{...context.relationshipOptions,seed:context.relationshipOptions?.seed??rootSeed+'/relationships'});
  const schedules=results.filter(r=>r.valid).map(r=>generateScheduleForCharacter(r.character,{seed:rootSeed+'/schedules'}));
- return {schedules,relationships,request:{...request,seed:rootSeed,...(request.targetImpact?{targetImpact:{...request.targetImpact}}:{})},seed:rootSeed,version:context.config.version,results,diagnostics:[]};
+ const graph=createRelationshipGraph([...(context.relationshipCharacters??[]),...results.filter(r=>r.valid).map(r=>r.character)].map(c=>c.id),relationships.records);
+ const motivations=results.filter(r=>r.valid).map(r=>generateCharacterMotivation(r.character,context.motivationTime??DEFAULT_ABSOLUTE_MINUTE,rootSeed+'/motivations',graph));
+ return {motivations,schedules,relationships,request:{...request,seed:rootSeed,...(request.targetImpact?{targetImpact:{...request.targetImpact}}:{})},seed:rootSeed,version:context.config.version,results,diagnostics:[]};
 }
 export function generateNpc(request:Omit<NpcGenerationRequest,'count'>,context:NpcGenerationContext){return generateNpcs({...request,count:1},context).results[0];}
 

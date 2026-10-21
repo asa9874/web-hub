@@ -184,3 +184,8 @@ npm run test:academy-social-browser
 설정집 **NPC 일과표 → 테스트** (`?view=schedule-tester`).16활동·13템플릿, 실제 이동과 공통 세계 시계 기반 예약 조정, 학사·주말·교대조, 지각/미수행/중단/재개, 샌드박스100명7일을 지원한다. [구조·API·파일·실측 결과](data/schedules/README.md), [원시 검증 결과](data/schedules/verification.json).
 
 장소는 마법 훈련장·경비 초소·행정실·교직원 숙소·마계 식당/숙소를 포함해42개/33연결, 직급은 아카데미 경비병을 추가해201개다. 기존 세계의 시계나 고정 캐릭터를 테스트 결과로 덮어쓰지 않는다.
+
+
+## NPC 욕구·목표 v1
+
+설정집 **욕구·목표 → 테스트**. 욕구10종·목표55종, 정밀 구간 누적·민감도·긴급도, 실제 조건과 표시 진행도 분리, 행동 후보와 비공개 정보,100명 샌드박스/JSON 저장·복원을 지원한다. 행동 AI는 아직 실행하지 않는다. [구현 구조·API·검증 기록](data/motivations/README.md), [실측 통계](data/motivations/verification.json).
