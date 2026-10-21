@@ -1,0 +1,31 @@
+import assert from 'node:assert/strict';
+import {chromium} from 'playwright';
+import {mkdir} from 'node:fs/promises';
+await mkdir('.build-projects',{recursive:true});
+const browser=await chromium.launch({headless:true}),base=(process.env.ACADEMY_TEST_URL||'http://127.0.0.1:5178/web-hub')+'/games/academy-survival/';
+try{
+ const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];page.setDefaultTimeout(12000);page.on('pageerror',e=>errors.push(e.message));
+ const count=async(selector,n)=>page.waitForFunction(({selector,n})=>document.querySelectorAll(selector).length===n,{selector,n});
+ const close=async()=>{await page.getByRole('button',{name:'상세 닫기',exact:true}).click();await page.getByRole('dialog').waitFor({state:'detached'});};
+ await page.goto(base+'?view=catalog&kind=disposition');await count('.ac-status-card',100);assert.equal(await page.locator('.ac-tabs button').count(),16);
+ await page.getByRole('navigation',{name:'성향 대분류'}).getByRole('button',{name:'도덕·윤리 15',exact:true}).click();await count('.ac-status-card',15);
+ await page.getByLabel('성향 행동 태그',{exact:true}).selectOption('help');assert((await page.locator('.ac-status-card').count())<15);await page.getByRole('button',{name:'필터 초기화',exact:true}).click();
+ await page.getByLabel('성향 검색',{exact:true}).fill('비껴없는');await count('.ac-status-card',0);await page.getByLabel('성향 검색',{exact:true}).fill('무표정');await count('.ac-status-card',1);
+ await page.getByLabel('성향 검색',{exact:true}).fill('냉혈한');await count('.ac-status-card',1);await page.locator('.ac-status-card').click();await page.getByRole('dialog').getByRole('heading',{name:'냉혈한',exact:true}).waitFor();
+ await page.getByRole('dialog').getByRole('button',{name:'이타주의자 ↗',exact:true}).click();await page.getByRole('dialog').getByRole('heading',{name:'이타주의자',exact:true}).waitFor();await page.reload();await page.getByRole('dialog').getByRole('heading',{name:'이타주의자',exact:true}).waitFor();await close();
+ await page.goto(base+'?view=catalog&kind=character&item=fixed-serena');assert((await page.locator('.ac-character-morality').innerText()).includes('성향 미설정'));assert((await page.getByTestId('character-impact').innerText()).startsWith('726'));await close();
+ await page.goto(base+'?view=catalog&kind=numbers');await page.getByRole('heading',{name:'도덕 · 카르마 · 성향',exact:true}).waitFor();assert.equal(await page.locator('.ac-morality-grade-table>div').count(),14);
+ await page.goto(base+'?view=npc-generator');await page.getByLabel('생성 수량',{exact:true}).selectOption('1');
+ await page.getByLabel('도덕 범위 지정',{exact:true}).check();await page.getByLabel('생성 도덕 최소',{exact:true}).fill('70');await page.getByLabel('생성 도덕 최대',{exact:true}).fill('80');
+ await page.getByLabel('카르마 범위 지정',{exact:true}).check();await page.getByLabel('생성 카르마 최소',{exact:true}).fill('-550');await page.getByLabel('생성 카르마 최대',{exact:true}).fill('-500');
+ await page.getByLabel('생성 성향 개수',{exact:true}).selectOption('3');await page.getByLabel('포함할 성향',{exact:true}).selectOption(['disposition-altruist','disposition-coldblood']);
+ const generate=async n=>{const before=Number(await page.locator('.ac-npc-generator').getAttribute('data-completed'));await page.getByRole('button',{name:'NPC 생성',exact:true}).click();await page.waitForFunction(last=>Number(document.querySelector('.ac-npc-generator')?.getAttribute('data-completed'))>last,before);await count('.ac-npc-table tbody tr',n);};
+ const record=async()=>JSON.parse(await page.locator('.ac-character-debug pre').textContent());
+ await generate(1);const one=await record();assert(one.morality>=70&&one.morality<=80);assert(one.karma>=-550&&one.karma<=-500);assert(one.dispositionIds.includes('disposition-altruist'));assert.equal(one.dispositionIds.length,3);
+ await page.locator('.ac-character-morality').getByRole('link',{name:'이타주의자 ↗',exact:true}).click();await page.getByRole('dialog').getByRole('heading',{name:'이타주의자',exact:true}).waitFor();assert.equal(new URL(page.url()).searchParams.get('view'),'npc-generator');await close();assert.deepEqual(await record(),one);
+ await page.getByLabel('생성 수량',{exact:true}).selectOption('100');await generate(100);assert.deepEqual(await record(),one);assert((await page.locator('.ac-npc-statistics').innerText()).includes('평균 도덕'));assert((await page.locator('.ac-npc-distributions').innerText()).includes('성향 조합 빈도'));assert.equal(await page.getByRole('columnheader',{name:'도덕',exact:true}).count(),1);assert.equal(await page.getByRole('columnheader',{name:'카르마',exact:true}).count(),1);
+ await page.getByLabel('포함할 성향',{exact:true}).selectOption(['disposition-optimist','disposition-pessimist']);await page.getByRole('button',{name:'NPC 생성',exact:true}).click();await page.getByRole('alert').filter({hasText:'성향 충돌'}).waitFor();await count('.ac-npc-table tbody tr',100);
+ await page.setViewportSize({width:390,height:844});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));await page.screenshot({path:'.build-projects/academy-morality-generator-mobile.png'});
+ await page.goto(base+'?view=catalog&kind=disposition&item=disposition-ruthless-judge&debug=1');await page.getByRole('dialog').getByRole('heading',{name:'무자비한 심판자',exact:true}).waitFor();assert(await page.getByRole('dialog').evaluate(el=>el.scrollWidth<=el.clientWidth+1));await page.screenshot({path:'.build-projects/academy-disposition-mobile.png'});
+ assert.deepEqual(errors,[]);console.log('Morality UI passed: 100 entries/7 categories, text/tag filters, shared popup links/reload, legacy Serena726, shared14 grade bands, worker1/100 constrained generation, forced dispositions, real statistics, preserved results, conflict diagnostics and 390px layout.');
+}finally{await browser.close();}

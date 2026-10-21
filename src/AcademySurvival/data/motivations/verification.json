@@ -1,0 +1,64 @@
+{
+  "seed": "needs-audit",
+  "start": {
+    "year": 427,
+    "month": 3,
+    "day": 1,
+    "hour": 6,
+    "minute": 0
+  },
+  "elapsedMinutes": 10080,
+  "statistics": {
+    "total": 100,
+    "averages": {
+      "hunger": 46.56,
+      "fatigue": 0,
+      "sleepiness": 0,
+      "social": 100,
+      "recreation": 100,
+      "growth": 14.72,
+      "safety": 0,
+      "recognition": 23.24,
+      "autonomy": 0,
+      "curiosity": 30.82
+    },
+    "criticalNpcs": 100,
+    "active": 369,
+    "completed": 132,
+    "failed": 0,
+    "horizons": {
+      "short": 202,
+      "medium": 150,
+      "long": 149
+    },
+    "categories": {
+      "성장": 132,
+      "개인적 행복": 44,
+      "전투": 12,
+      "조직·충성": 17,
+      "비밀·탐구": 31,
+      "생존·안전": 31,
+      "권력·명예": 99,
+      "탐험": 44,
+      "학업": 58,
+      "경제": 15,
+      "사회적 관계": 10,
+      "복수·갈등": 8
+    },
+    "candidateActivities": {
+      "breakfast": 100,
+      "lunch": 100,
+      "dinner": 100,
+      "rest": 315,
+      "sleep": 200,
+      "free_time": 247,
+      "reading": 243,
+      "sword_training": 238,
+      "magic_training": 167,
+      "self_study": 315,
+      "attend_class": 121,
+      "office_work": 30,
+      "patrol": 52
+    }
+  }
+}

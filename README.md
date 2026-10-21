@@ -70,3 +70,17 @@ npm run dev -- --host 127.0.0.1 --port 5173
 마녀의 극장 대화에 실제 무대 카메라와 인형 동작 연출을 추가했습니다. 테스트 위치의 연출 리허설/말풍선 NPC/동작 보기에서 체험합니다. 주인공·NPC 7명의32자세와 생성 프롬프트도 포함합니다. [데이터 작성·이어받기](src/ForgottenWitch/codex/DIALOGUE-DIRECTION.md), 검증은 `npm run test:witch-direction`입니다.
 Chapter 01 개발 빌드는 오프닝 뒤 6지역/자유 순서3에피소드/직접 조작하는 공연/꽃 선물과 배웅으로 이어집니다. 브라우저 진행 저장, 챕터 재플레이, 지역 직접 진입을 지원합니다. [Chapter 01 인수인계](src/ForgottenWitch/codex/CHAPTER-01.md), 검증은 npm run test:witch-chapter입니다.
 NEON TRADER: /web-hub/games/neon-trader/ — 30일 가상 거래·빚 상환 캠페인. 구현/실행/검증/에셋 프롬프트는 src/NeonTrader/README.md에 정리했다.
+
+아카데미에서 살아남기: `/web-hub/games/academy-survival/` — 특성 405개·기프트 403개·능력치 7종·숙련도 49종·상태 150종·고정 등장인물 세레나·직급200종·칭호200종의 설정집. 요소 영향력은0~1,000 메타데이터로 통일했다. 능력치·숙련도 설명 560개, 상태 단계 설명 38개와 공통 캐릭터 상태창을 포함한다. [데이터 구조·확률·효과 계약·검증 및 이어받기](src/AcademySurvival/README.md). 본게임은 아직 구현하지 않았다.
+
+
+아카데미 설정집 상단에 개발용 **NPC 생성 테스트**를 추가했습니다. 시드 기반7전공/5성장 유형/4학년의 NPC를1~100명 생성하고 공통 상태창·영향력v1·실제 통계를 확인합니다. 결과는 게임 저장에 추가하지 않습니다. 자세한 API와 재현 표본은 `src/AcademySurvival/data/generation/README.md`를 참고하세요.
+
+
+아카데미 설정집의 **소속** 도감은 제국·마계2개 루트의33개 정식 조직을 제공합니다. 펼치기·검색·조직 상세, 공통 캐릭터의 복수/대표/비밀 가입, 직급·학적 검사와 NPC 생성기를 연결했습니다. 전체 트리와 기존 조직 범위 호환 정책은 `src/AcademySurvival/data/organizations/README.md`에 정리했습니다.
+
+설정집 상세는 공통 팝업으로 표시하고, 특성·기프트는 설명 없는 작은 카드로 탐색합니다. 조직은 연결선이 있는 트리 카드로 펼쳐 볼 수 있습니다. 인게임 재사용 방법은 [상세 팝업 API](src/AcademySurvival/components/CATALOG_POPUPS.md)를 참고하세요.
+
+아카데미 설정집에 **성향100종·도덕·카르마**를 추가했습니다. 새 성향 도감, 공통 인물 상태창, NPC 생성 조건·실제 통계, 수치 체계에서 확인할 수 있습니다. 기존 인물의 성향은 미설정이며 영향력 계산식은 유지합니다. [데이터와 API 인계](src/AcademySurvival/data/dispositions/README.md).
+
+아카데미에 **공식 제국력·심연력과 공통 시간 엔진**을 추가했습니다. 상단 날짜, 설정집 시간·달력, 양방향 환산기, 게임 시계와 분리된 시간 진행 테스트기를 제공합니다. [공식 설정과 시간·저장·일정 API](src/AcademySurvival/data/calendars/README.md).

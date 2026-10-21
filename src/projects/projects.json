@@ -397,6 +397,17 @@
     }
   },
   {
+    "id": "academy-survival",
+    "title": "아카데미에서 살아남기",
+    "description": "특성·기프트·상태·고정 인물과 직급·칭호를 기록한 판타지 아카데미 설정집. 재능과 사회적 위치, 행적이 남긴 이름을 살펴보세요.",
+    "category": "game",
+    "path": "/games/academy-survival/",
+    "thumbnail": "/web-hub/og/academy-survival.png",
+    "ogImage": "og/academy-survival.png",
+    "ogPublicSource": "academy-survival/cover.svg",
+    "type": "react"
+  },
+  {
     "id": "neon-trader",
     "title": "NEON TRADER — 오늘도 청산당했습니다!",
     "description": "허당 트레이더 니아와 30일 가상 코인 캠페인. 시장을 읽고, 빚 1억을 갚으세요.",

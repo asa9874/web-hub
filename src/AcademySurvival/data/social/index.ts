@@ -1,0 +1,33 @@
+import {royaltyPositions} from './positionsRoyalty';
+import {academyPositions} from './positionsAcademy';
+import {militaryPositions} from './positionsMilitary';
+import {clergyPositions} from './positionsClergy';
+import {researchPositions} from './positionsResearch';
+import {commercePositions} from './positionsCommerce';
+import {legalPositions} from './positionsLegal';
+import {worldPositions} from './positionsWorld';
+import {learningTitles} from './titlesLearning';
+import {battleTitles} from './titlesBattle';
+import {researchTitles} from './titlesResearch';
+import {heroicTitles} from './titlesHeroic';
+import {infamyTitles} from './titlesInfamy';
+import {relationTitles} from './titlesRelations';
+import {eccentricTitles} from './titlesEccentric';
+import {legendTitles} from './titlesLegend';
+export const positions=[...royaltyPositions,...academyPositions,...militaryPositions,...clergyPositions,...researchPositions,...commercePositions,...legalPositions,...worldPositions];
+export const titles=[...learningTitles,...battleTitles,...researchTitles,...heroicTitles,...infamyTitles,...relationTitles,...eccentricTitles,...legendTitles];
+// Relations describe possibilities, never automatic promotion or loss.
+const transition=(from:string,to:string|null,kind:typeof positions[number]['changes'][number]['kind'],description:string)=>{
+ const p=positions.find(p=>p.id==='position-'+from);if(p)p.changes.push({to:to?'position-'+to:null,kind,rule:{condition:{kind:'flag',key:`position-${from}-${kind}`},description}});
+};
+transition('academy-year-one','academy-year-two','promotion','이수·진급 심사 통과 후 동일 기관 학적 교체');
+transition('academy-year-two','academy-year-three','promotion','선수 과정과 진급 요건 충족');
+transition('academy-year-three','academy-year-four','promotion','현장 과정 평가와 최종 학년 등록');
+transition('academy-year-four','graduate','graduation','졸업 심사 완료 후 재학 학년 종료');
+transition('knight-squire','knight','appointment','서임 심사와 본인의 수락');
+transition('knight','senior-knight','promotion','경력 심사와 교육 보직 임명');
+transition('crown-heir','emperor','appointment','승계 절차 완료와 기존 계승 직위 종료');
+transition('royal-heir','king','appointment','왕위 승계의 적법한 승인');
+transition('serious-prisoner',null,'sentence-end','형 집행 종료를 법원이 확인');
+transition('student-president',null,'retirement','임기 종료와 집행 권한 인계');
+transition('hero',null,'revocation','공인 철회 또는 자발적 임무 반환의 승인');

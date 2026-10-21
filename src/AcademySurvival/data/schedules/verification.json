@@ -1,0 +1,156 @@
+{
+  "students": {
+    "count": 100,
+    "counters": {
+      "completed": 3440,
+      "failed": 0,
+      "late": 2245,
+      "absent": 0,
+      "interrupted": 2760,
+      "resumed": 0,
+      "processedEvents": 21310
+    },
+    "statistics": {
+      "total": 100,
+      "traveling": 0,
+      "classes": 0,
+      "meals": 0,
+      "training": 0,
+      "sleeping": 100,
+      "resting": 0,
+      "working": 0,
+      "failedNpcs": 0,
+      "classLate": 0,
+      "completed": 3440,
+      "failed": 0,
+      "late": 2245,
+      "absent": 0,
+      "interrupted": 2760,
+      "resumed": 0,
+      "processedEvents": 21310
+    },
+    "moving": 0,
+    "stationary": 100
+  },
+  "mixed": {
+    "statistics": {
+      "total": 100,
+      "traveling": 7,
+      "classes": 0,
+      "meals": 8,
+      "training": 0,
+      "sleeping": 84,
+      "resting": 1,
+      "working": 0,
+      "failedNpcs": 0,
+      "classLate": 0,
+      "completed": 4527,
+      "failed": 0,
+      "late": 2233,
+      "absent": 0,
+      "interrupted": 1805,
+      "resumed": 0,
+      "processedEvents": 21741
+    },
+    "samples": [
+      {
+        "name": "메이 실베르",
+        "role": "student",
+        "location": "academy-dorm",
+        "activity": {
+          "characterId": "npc-46b2c5ee-0",
+          "occurrenceId": "sleep@153426",
+          "entryId": "sleep",
+          "activityId": "sleep",
+          "targetLocationId": "academy-dorm",
+          "status": "active",
+          "plannedStartTime": 220934818,
+          "plannedEndTime": 220935358,
+          "lateMinutes": 0,
+          "absent": false,
+          "resumes": 0,
+          "arrivalTime": 220934818,
+          "actualStartTime": 220934818
+        }
+      },
+      {
+        "name": "카인 리델",
+        "role": "professor",
+        "location": "academy-staff-residence",
+        "activity": {
+          "characterId": "npc-47b2c781-0",
+          "occurrenceId": "sleep@153426",
+          "entryId": "sleep",
+          "activityId": "sleep",
+          "targetLocationId": "academy-staff-residence",
+          "status": "active",
+          "plannedStartTime": 220934814,
+          "plannedEndTime": 220935354,
+          "lateMinutes": 0,
+          "absent": false,
+          "resumes": 0,
+          "arrivalTime": 220934814,
+          "actualStartTime": 220934814
+        }
+      },
+      {
+        "name": "아린 위르",
+        "role": "guard",
+        "location": "academy-staff-residence",
+        "activity": {
+          "characterId": "npc-44b2c2c8-0",
+          "occurrenceId": "sleep@153426",
+          "entryId": "sleep",
+          "activityId": "sleep",
+          "targetLocationId": "academy-staff-residence",
+          "status": "active",
+          "plannedStartTime": 220934767,
+          "plannedEndTime": 220935247,
+          "lateMinutes": 0,
+          "absent": false,
+          "resumes": 0,
+          "actualStartTime": 220934767
+        }
+      },
+      {
+        "name": "로웬 브렌",
+        "role": "staff",
+        "location": "academy-staff-residence",
+        "activity": {
+          "characterId": "npc-45b2c45b-0",
+          "occurrenceId": "sleep@153426",
+          "entryId": "sleep",
+          "activityId": "sleep",
+          "targetLocationId": "academy-staff-residence",
+          "status": "active",
+          "plannedStartTime": 220934822,
+          "plannedEndTime": 220935362,
+          "lateMinutes": 0,
+          "absent": false,
+          "resumes": 0,
+          "arrivalTime": 220934822,
+          "actualStartTime": 220934822
+        }
+      },
+      {
+        "name": "다나 로웰",
+        "role": "demon-worker",
+        "location": "demon-residence",
+        "activity": {
+          "characterId": "npc-4ab2cc3a-0",
+          "occurrenceId": "sleep@153426",
+          "entryId": "sleep",
+          "activityId": "sleep",
+          "targetLocationId": "demon-residence",
+          "status": "active",
+          "plannedStartTime": 220934759,
+          "plannedEndTime": 220935269,
+          "lateMinutes": 0,
+          "absent": false,
+          "resumes": 0,
+          "actualStartTime": 220934759
+        }
+      }
+    ]
+  }
+}

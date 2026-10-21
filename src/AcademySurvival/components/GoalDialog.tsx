@@ -1,0 +1,7 @@
+import type {CharacterGoalState} from '../types/motivation';
+import {goalRegistry} from '../data/motivations';
+import {formatGameDate,formatGameTime} from '../systems/calendar';
+import {activityRegistry} from '../data/schedules';
+import {goalConditionText,horizonNames,goalStatusNames} from '../systems/motivationPresentation';
+import DetailDialog from './DetailDialog';
+export default function GoalDialog({id,instance,onClose,debug=false}:{id:string;instance?:CharacterGoalState;onClose:()=>void;debug?:boolean}){const g=goalRegistry.get(id);if(!g)return null;return <DetailDialog title={g.name} onClose={onClose}><article className="ac-goal-detail"><p>{g.description}</p><p>{g.category} · {horizonNames[g.horizon]} · 기본 우선순위 {g.basePriority}</p>{instance&&<p>{goalStatusNames[instance.status]} · 우선순위 {instance.priority} · 진행도 {instance.progress}%{instance.reason?' · '+instance.reason:''}</p>}{instance?.deadlineAt!==undefined&&<p>기한: {formatGameDate(instance.deadlineAt)} {formatGameTime(instance.deadlineAt)}</p>}<h3>실제 달성 조건</h3><ul>{g.completionConditions.map((c,i)=><li key={i}>{goalConditionText(c)}</li>)}</ul><p>표시 진행도100%만으로 완료되지 않습니다. 외부 조건은 명시적인 실제 사건 결과가 필요합니다.</p><p>관련 활동: {g.suggestedActivities.map(a=>activityRegistry.get(a)?.name).join(', ')}</p><p>공개 범위 기본값: {g.visibility} · {g.deadlinePolicy==='day-end'?'생성 당일 자정까지':g.deadlineMinutes?`기한 ${g.deadlineMinutes}분`:'기한 없음'}</p>{debug&&<pre>{JSON.stringify({definition:g,instance},null,2)}</pre>}</article></DetailDialog>;}
