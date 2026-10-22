@@ -21,4 +21,5 @@ export const interactions:InteractionDefinition[]=[
  d('avoid','회피','conflict','가까운 곳에 있는 상대와 부딪치지 않도록 거리를 둔다. 상대의 동의는 요구하지 않는다.',5,'avoid_contact',['meet','rest','socialize'],'avoid',['avoided'],100,['disposition-cautious'],false),
  d('compete','경쟁','competition','같은 기준으로 실력을 겨루고 차이를 확인한다.',30,'sparring',['train'],'contest',['actor_win','target_win','draw'],55,['disposition-competitor']),
 ];
+for(const [id,name] of Object.entries({share_information:'정보 공유',pass_rumor:'소문 전달',share_secret:'비밀 전달',ask_information:'정보 질문',verify_information:'정보 확인 요청'}))interactions.push(d(id,name,'social','보유한 정보를 대화로 전달하거나 확인을 청한다. 실제 전달 여부는 신뢰와 정보 공개 규칙으로 따로 판정한다.',15,'conversation',['meet','socialize'],'information',['conversation_completed'],70,['disposition-socialite']));
 export const interactionRegistry=new Map(interactions.map(d=>[d.id,d]));

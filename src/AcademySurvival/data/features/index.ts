@@ -87,10 +87,25 @@ export const featureNotes:SystemFeatureNote[]=[
  item('interaction-ai','기존 AI 연결','공통 후보와 실제 상호작용 엔진에 위임한다. 중복 공동 활동·보상을 생성하지 않는다.','systems/npcAi.ts','test-academy-interactions.mjs'),
  item('interaction-save','결정론·저장·실패 대기','동일 시드·작은/큰 시간 진행·실행 중 저장 복원·상호 쿨다운.','systems/aiSandbox.ts','test-academy-interactions.mjs'),
  item('interaction-tester','도감·팝업·테스트','준비·요청·수락/거절·결과·효과·로그·대량 생성·JSON·모바일.','components/InteractionCatalog.tsx','test-academy-interactions-browser.mjs')],['복잡한 대화','약속 및 만남 예약','다자간 상호작용','관계별 대화 맥락'],['집단 갈등','조직 간 사회적 상호작용','복잡한 협상','정치적 관계']),
+ system('memory','NPC 기억·정보','NPC 시뮬레이션','사실·경험·믿음을 분리하고 실제 정보 대화와 자기 기억을 AI 판단에 연결한다.',['time','interactions','action-outcomes','relationships','morality'],[
+ item('memory-facts','세계 사실과 믿음 분리','원본 사건·구조화 주장·소유자 기억을 독립 저장한다.','systems/npcMemory.ts','test-academy-memory.mjs','needs_verification'),
+ item('memory-generation','실제 경험·목격 기억','당시 참여자·같은 장소·이동·수면·공개 범위·주의를 검사한다.','systems/npcMemory.ts','test-academy-memory.mjs','needs_verification'),
+ item('memory-salience','개인별 중요도','사건·관계·성향·목표로 중요도를, 사건 결과로 감정 강도를 정한다.','systems/npcMemory.ts','test-academy-memory.mjs','needs_verification'),
+ item('memory-decay','망각·회상','고정 시간 기준 선명도/확신도 감소·회상 강화·내용 불변.','systems/npcMemory.ts','test-academy-memory.mjs','needs_verification'),
+ item('memory-search','인물·장소·주제·활동 인덱스','관련 기억만 검색하고 일반 AI 판단에서 전체 세계 기억을 훑지 않는다.','systems/npcMemory.ts','test-academy-memory.mjs','needs_verification'),
+ item('memory-claims','구조화 주장·모순','동일 주제에 서로 다른 주장·확신도를 보존한다.','types/memory.ts','test-academy-memory.mjs','needs_verification'),
+ item('memory-lineage','출처 계보','직접·목격·전해 들음·추론 및 전달 인물/시각을 보존한다.','types/memory.ts','test-academy-memory.mjs','needs_verification'),
+ item('memory-share','완료 대화의 실제 전달','5종 정보 대화가 완료됐을 때 보유 정보·공유 판단을 적용한다.','systems/interactions.ts','test-academy-memory.mjs','needs_verification'),
+ item('memory-rumor','제한적 시드 왜곡','승자·심각도·시각·확신도만 변하며 원본 사건은 보존한다.','systems/npcMemory.ts','test-academy-memory.mjs','needs_verification'),
+ item('memory-trust','정보 신뢰 판정','관계·계보·성향·직접 기억 모순으로 확신도를 평가한다.','systems/npcMemory.ts','test-academy-memory.mjs','needs_verification'),
+ item('memory-secret','비밀 공개 범위','공개·제한·개인 비밀. 실제 보유자만 알고 일반 UI는 내부 정보를 숨긴다.','components/CharacterMemoryPanel.tsx','test-academy-memory.mjs','needs_verification'),
+ item('memory-ai','기억 기반 효용 보정','자기 지식·현재 인지 범위 안에서 후보 점수를 제한 보정한다.','systems/npcAi.ts','test-academy-memory.mjs','needs_verification'),
+ item('memory-persistence','보존·저장·중복 방지','인물별 한도·중요 기억 우선·사건 키·출처·시드·통합 스냅샷 검증.','systems/aiSandbox.ts','test-academy-memory.mjs','needs_verification'),
+ item('memory-tester','기억·정보 도감과 샌드박스','생성·직접/목격/소문·가정 기억·전달/거절·왜곡·회상/망각·AI 점수·시간·복원.','components/MemoryTester.tsx','test-academy-memory-browser.mjs','needs_verification')],['인물에 대한 인상·평판','기억의 감정적 편향','소문 확산 경로 시각화','거짓말과 의도적 정보 조작','정보 검증 행동 확장','약속 기억'],['장기 경험 기반 성격 변화','집단 기억','조직 단위 정보망','정치적 정보전','비밀 거래','복잡한 추론 및 장기 계획']),
  system('feature-notes','설정집 기능 노트','기반 시스템','코드 근거·검증 범위·부분/미구현·의존성·제안을 분리한다.',['archive'],[
  item('notes-registry','타입 안전 레지스트리·상태 집계','기능 항목에서 시스템 상태를 계산하고 검색·분류·검증 상태로 필터한다.','data/features/index.ts','test-academy-features.mjs','needs_verification')],['검사 결과 수집 자동화'],['버전 간 기능 비교']),
 ];
-const currentChecks=new Set(['test-academy-interactions.mjs','test-academy-interactions-browser.mjs','test-academy-ai.mjs','test-academy-ai-browser.mjs','test-academy-features.mjs','test-academy-character.mjs','test-academy-locations.mjs','test-academy-time.mjs','test-academy-schedules.mjs','test-academy-motivations.mjs']);
+const currentChecks=new Set(['test-academy-memory.mjs','test-academy-memory-browser.mjs','test-academy-interactions.mjs','test-academy-interactions-browser.mjs','test-academy-ai.mjs','test-academy-ai-browser.mjs','test-academy-features.mjs','test-academy-character.mjs','test-academy-locations.mjs','test-academy-time.mjs','test-academy-schedules.mjs','test-academy-motivations.mjs']);
 for(const note of featureNotes)for(const feature of note.versions[0].items)if(feature.evidencePaths.some(path=>currentChecks.has(path.split('/').at(-1)!))&&['implemented','needs_verification'].includes(feature.status)){feature.status='implemented';feature.verificationStatus='passed';feature.verificationScope='current';feature.notes=['이번 변경 범위의 해당 단위 검사 또는 핵심 UI 검사 통과. 전체 게임 E2E 통과를 뜻하지 않는다.'];}
 export function systemStatus(note:SystemFeatureNote):FeatureStatus {const items=note.versions.find(v=>v.version===note.currentVersion)?.items??[];if(!items.length)return 'not_implemented';if(items.every(i=>i.status==='implemented'&&i.verificationStatus==='passed'))return 'implemented';if(items.every(i=>i.status==='not_implemented'))return 'not_implemented';if(items.some(i=>i.status==='partial'||i.status==='not_implemented'))return 'partial';return 'needs_verification';}
 export const featureStatusNames:Record<FeatureStatus,string>={implemented:'구현 완료',partial:'부분 구현',not_implemented:'미구현',planned:'계획',needs_verification:'검증 필요'};

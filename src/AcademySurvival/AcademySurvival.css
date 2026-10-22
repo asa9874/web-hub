@@ -190,3 +190,5 @@
 .ac-interaction-details{padding:20px 24px;font-size:14px;line-height:1.7}
 .ac-interaction-details>p+p{margin-top:14px}.ac-interaction-details dl{display:grid;grid-template-columns:100px minmax(0,1fr);gap:10px 16px;margin:20px 0;padding:16px;background:#14171d;border:1px solid #30343c;border-radius:6px}.ac-interaction-details dt{color:#c1aa78;font-size:12px}.ac-interaction-details dd{margin:0}
 @media(max-width:600px){.ac-interaction-details{padding:16px}.ac-interaction-details dl{grid-template-columns:72px minmax(0,1fr);padding:10px;gap:10px}}
+
+.ac-memory-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px;margin:16px 0}.ac-memory-grid button{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:6px;background:#15171b;border:1px solid #34363b;border-radius:5px;padding:12px;overflow-wrap:anywhere}.ac-memory-grid small{color:#a8adb6;font-size:11px}.ac-memory-grid span{font-size:12px}.ac-interaction-tester input{max-width:100%}@media(max-width:600px){.ac-memory-grid{grid-template-columns:1fr}.ac-interaction-tester pre{max-width:100%}}
