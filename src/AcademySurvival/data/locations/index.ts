@@ -1,3 +1,5 @@
+import {dailyLifeLocations,dailyLifeConnections} from '../dailyLife';
+import {seedLoreLocations} from '../worldLore/seeds';
 import type {AccessRule,LocationDefinition,LocationConnection,LocationType} from '../../types/location';
 const time=(start:string,end:string):AccessRule=>({type:'time',start,end,description:`${start} 이상 ${end} 미만 입장 가능`});
 const permit=(id:string,description:string):AccessRule=>({type:'permission',permissionId:id,description});
@@ -5,11 +7,12 @@ const professor:AccessRule={type:'any',description:'본교 교수 신분 또는 
 const council:AccessRule={type:'any',description:'학생회 소속 또는 집무실 출입 허가 필요',rules:[{type:'organization',organizationIds:['academy-council'],description:'학생회 소속'},permit('council-office','학생회 집무실 출입 허가')]};
 const loc=(id:string,name:string,parentId:string|null,type:LocationType,description:string,organizationId?:string,accessRules:AccessRule[]=[],activityTags:string[]=[]):LocationDefinition=>({id,name,parentId,type,description,organizationId,accessRules,activityTags,tags:[type],dangerLevel:0});
 export const locations:LocationDefinition[]=[
+ ...dailyLifeLocations,
  loc('world','세계',null,'world','제국과 마계가 각자의 질서로 살아가는 세계. 공간의 포함 관계는 통행로의 존재를 뜻하지 않는다.'),
  {...loc('empire-land','제국','world','nation','대륙 중심에 자리한 제국. 황실의 법과 지방의 관습 사이로 수많은 삶이 이어진다.','empire'),calendarId:'imperial'},
  loc('imperial-capital','제국 수도','empire-land','city','황궁의 첨탑과 시장의 차양이 한 하늘 아래 겹쳐지는 수도.'),
  loc('capital-palace','황궁','imperial-capital','facility','의전과 경호가 겹겹이 둘러선 제국 정치의 중심.','imperial-palace',[permit('palace-entry','황궁 출입 허가 필요')]),
- loc('capital-market','중앙시장','imperial-capital','district','상인들의 호객과 생도들의 흥정이 뒤섞이는 생활의 거리.',undefined,[],['trade','socialize']),
+ loc('capital-market','중앙시장','imperial-capital','district','상인들의 호객과 생도들의 흥정이 뒤섞이는 생활의 거리.',undefined,[],['trade','socialize','rift-observe']),
  loc('academy','왕립 아카데미','imperial-capital','facility','제국의 후원을 받으면서도 학문의 자율성을 지키려는 교육 기관.','academy-main'),
  loc('academy-gate','정문','academy','outdoor','학기마다 새로운 이름이 통과하는 철문.','academy-main'),
  loc('academy-plaza','중앙광장','academy','outdoor','종소리를 듣고 각자의 수업으로 흩어지는 교정의 중심.','academy-main',[],['meet','rest']),
@@ -46,8 +49,10 @@ export const locations:LocationDefinition[]=[
 ];
 const addedActivityTags:Record<string,string[]>={'academy-dorm':['sleep','rest'],'academy-room-305':['sleep','rest'],'academy-room-306':['sleep','rest'],'academy-room-205':['sleep','rest'],'academy-class-1-1':['classroom'],'academy-class-2-1':['classroom'],'academy-class-3-1':['classroom'],'academy-class-4-1':['classroom'],'academy-professor-office':['research','administration'],'academy-plaza':['patrol'],'academy-gate':['patrol'],'academy-arena':['patrol'],'abyss-library':['read'],'demon-office':['administration'],'demon-gate':['patrol','guard','rest']};
 for(const l of locations)l.activityTags=[...new Set([...l.activityTags,...(addedActivityTags[l.id]??[])])];
-const edge=(from:string,to:string,minutes:number):LocationConnection=>({id:`path-${from}-${to}`,fromLocationId:from,toLocationId:to,distanceMeters:minutes*70,baseTravelMinutes:minutes,terrainType:'normal',allowedModes:['walk','run'],bidirectional:true,accessRules:[]});
+locations.splice(0,locations.length,...seedLoreLocations(locations));
+const edge=(from:string,to:string,minutes:number):LocationConnection=>({id:`path-${from}-${to}`,fromLocationId:from,toLocationId:to,distanceMeters:minutes*70,baseTravelMinutes:minutes,terrainType:'normal',travelKind:'road',allowedModes:['walk','run'],bidirectional:true,accessRules:[]});
 export const locationConnections:LocationConnection[]=[
+ ...dailyLifeConnections,
  edge('academy-plaza','academy-magic-training',5),edge('academy-gate','academy-guard-post',1),edge('academy-plaza','academy-admin-office',3),edge('academy-gate','academy-staff-residence',3),edge('demon-gate','demon-dining',3),edge('demon-gate','demon-residence',4),
  edge('capital-market','academy-gate',15),edge('capital-market','capital-palace',20),edge('academy-gate','academy-plaza',3),edge('academy-plaza','academy-class-building',2),edge('academy-class-building','academy-corridor',1),
  ...[1,2,3,4].map(y=>edge('academy-corridor',`academy-class-${y}-1`,1)),edge('academy-corridor','academy-professor-office',1),
@@ -55,3 +60,5 @@ export const locationConnections:LocationConnection[]=[
  edge('academy-student-hall','academy-council-office',1),edge('academy-dorm','academy-dorm-men',1),edge('academy-dorm','academy-dorm-women',1),edge('academy-dorm-men','academy-dorm-floor-3',2),edge('academy-dorm-floor-3','academy-room-305',1),edge('academy-dorm-floor-3','academy-room-306',1),edge('academy-dorm-women','academy-room-205',1),
  ...(['demon-audience','demon-office','demon-training','abyss-library']).map(id=>edge('demon-gate',id,5)),
 ];
+
+for(const [id,tags] of [['academy-plaza',['garden','craft','game']],['academy-library',['write']]] as const){const l=locations.find(l=>l.id===id)!;l.activityTags=[...new Set([...l.activityTags,...tags])];}

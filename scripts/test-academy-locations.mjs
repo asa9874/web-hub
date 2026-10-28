@@ -8,9 +8,9 @@ const at=(h,min=0,day=1)=>m.toAbsoluteMinute({year:427,month:3,day,hour:h,minute
 const original=m.createInitialLocationCharacters(),player=original[0];
 assert.deepEqual(m.validateCharacters(original,m.fixedCharacters),[]);
 const c=structuredClone(player);
-assert.equal(m.getLocationFullName('academy-class-3-1'),'세계 > 제국 > 제국 수도 > 왕립 아카데미 > 교사동 > 3학년 1반 교실');
-assert.equal(m.getLocationDepth('academy-room-305'),7);
-assert.equal(m.getLocationChildren('world').length,2);
+assert.equal(m.getLocationFullName('academy-class-3-1'),'세계 > 에르디아 > 아스텔 제국 > 제국 수도권 > 아르벤 학술도시 > 왕립 아카데미 > 교사동 > 3학년 1반 교실');
+assert.equal(m.getLocationDepth('academy-room-305'),9);
+assert.equal(m.getLocationChildren('world').length,3);
 assert(m.getLocationDescendants('academy').some(l=>l.id==='academy-room-305'));
 assert.throws(()=>m.getLocation('missing'));
 const node=(id,parentId=null,accessRules=[])=>({id,name:id,parentId,type:'room',description:'test '+id,tags:[],activityTags:[],dangerLevel:0,accessRules});

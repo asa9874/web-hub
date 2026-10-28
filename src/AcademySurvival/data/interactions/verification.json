@@ -1,0 +1,112 @@
+{
+  "seed": "interaction-week",
+  "minutes": 10080,
+  "count": 100,
+  "interactions": {
+    "requests": 1406,
+    "accepted": 687,
+    "rejected": 719,
+    "completed": 641,
+    "interrupted": 44,
+    "failed": 0,
+    "byType": {
+      "encourage": 138,
+      "casual_chat": 143,
+      "offer_help": 133,
+      "reconcile": 150,
+      "study_together": 2,
+      "request_help": 151,
+      "praise": 124,
+      "friendly_chat": 125,
+      "apologize": 123,
+      "serious_talk": 135,
+      "comfort": 140,
+      "train_together": 27,
+      "compete": 8,
+      "sparring": 7
+    },
+    "active": 2,
+    "activeParticipants": 4,
+    "retained": 1000
+  },
+  "effects": {
+    "applied": 9518,
+    "failed": 0,
+    "relationshipChanges": 1380,
+    "proficiencyChanges": 33,
+    "proficiencyXpGrants": 1178,
+    "statXpGrants": 1659,
+    "statChanges": 100,
+    "goalCompleted": 93,
+    "events": 45748,
+    "retainedEvents": 5000,
+    "retainedOutcomes": 1500,
+    "ledger": 9518
+  },
+  "needs": {
+    "total": 100,
+    "averages": {
+      "hunger": 61.31,
+      "fatigue": 13.73,
+      "sleepiness": 60.33,
+      "social": 88.12,
+      "recreation": 99.03,
+      "growth": 22.85,
+      "safety": 0,
+      "recognition": 19.95,
+      "autonomy": 29.04,
+      "curiosity": 8.66
+    },
+    "criticalNpcs": 98,
+    "active": 328,
+    "completed": 93,
+    "failed": 72,
+    "horizons": {
+      "short": 201,
+      "medium": 142,
+      "long": 150
+    },
+    "categories": {
+      "성장": 120,
+      "권력·명예": 79,
+      "복수·갈등": 14,
+      "개인적 행복": 54,
+      "탐험": 36,
+      "사회적 관계": 29,
+      "비밀·탐구": 32,
+      "학업": 60,
+      "생존·안전": 35,
+      "조직·충성": 13,
+      "전투": 9,
+      "경제": 12
+    },
+    "candidateActivities": {
+      "breakfast": 100,
+      "lunch": 100,
+      "dinner": 100,
+      "rest": 312,
+      "sleep": 200,
+      "free_time": 264,
+      "reading": 229,
+      "sword_training": 198,
+      "magic_training": 166,
+      "self_study": 329,
+      "attend_class": 123,
+      "patrol": 39,
+      "office_work": 27
+    }
+  },
+  "changedCharacters": 99,
+  "cohort": "왕립 아카데미 3학년 검술 전공 범재 100명. 이름·성향·특성·기프트·인맥·목표·개인차는 생성 규칙으로 결정.",
+  "checks": [
+    "100명 유효 위치 및 이동 정합성",
+    "활성 공동 활동 중복 참여 없음",
+    "욕구 0~100 정수",
+    "숙련도 0~9",
+    "세계 시간 정확히 10080분 증가",
+    "요청/수락/거절/완료/중단/진행중 집계 일치",
+    "목표 완료 수와 GoalCompleted 누적 사건 수 일치",
+    "실제 능력치/숙련도 변화",
+    "효과 적용 실패 0"
+  ]
+}

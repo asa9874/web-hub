@@ -1,3 +1,5 @@
+import {culturalProfileIssues} from './cultureLife';
+import {characterWorldIdentityIssues} from './worldIdentity';
 import {characterLocationIssues} from './locationWorld';
 import {validateMoralityProfile} from './morality';
 import {validateCharacterAffiliations} from './organizationValidation';
@@ -69,6 +71,7 @@ export function validateCharacters(characters:Character[],templates:FixedCharact
  const issues:Issue[]=[],ids=new Set<string>(),fail=(id:string,message:string)=>issues.push({id,message});
  for(const c of characters){
   if(c.location)issues.push(...characterLocationIssues(c).map(message=>({id:c.id,message})));
+  issues.push(...[...characterWorldIdentityIssues(c.worldIdentity),...culturalProfileIssues(c.culturalProfile)].map(message=>({id:c.id,message})));
   issues.push(...validateMoralityProfile(c).map(message=>({id:c.id,message})));
   issues.push(...validateSocialIdentity(c,c.id),...validateCharacterAffiliations(c,c.id));
   if(!c.id||ids.has(c.id))fail(c.id,'캐릭터 ID 중복/누락');ids.add(c.id);issues.push(...identityIssues(c,c.id),...abilityIssues(c.traitIds,c.giftIds,c.id));

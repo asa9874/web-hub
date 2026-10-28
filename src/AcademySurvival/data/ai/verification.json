@@ -1,0 +1,94 @@
+{
+  "seed": "ai-week",
+  "minutes": 10080,
+  "ai": {
+    "total": 100,
+    "traveling": 93,
+    "performing": 7,
+    "waiting": 0,
+    "decisions": 99191,
+    "deviations": 5000,
+    "recentFailures": 324,
+    "jointActive": 0,
+    "jointCompleted": 289,
+    "jointRejected": 173
+  },
+  "needs": {
+    "total": 100,
+    "averages": {
+      "hunger": 64.64,
+      "fatigue": 23.71,
+      "sleepiness": 84.95,
+      "social": 88.37,
+      "recreation": 99.42,
+      "growth": 14.16,
+      "safety": 0,
+      "recognition": 23.6,
+      "autonomy": 37.34,
+      "curiosity": 9.8
+    },
+    "criticalNpcs": 100,
+    "active": 353,
+    "completed": 119,
+    "failed": 19,
+    "horizons": {
+      "short": 194,
+      "medium": 151,
+      "long": 146
+    },
+    "categories": {
+      "성장": 127,
+      "권력·명예": 104,
+      "학업": 59,
+      "생존·안전": 36,
+      "탐험": 27,
+      "조직·충성": 12,
+      "전투": 8,
+      "개인적 행복": 48,
+      "경제": 10,
+      "복수·갈등": 17,
+      "사회적 관계": 29,
+      "비밀·탐구": 14
+    },
+    "candidateActivities": {
+      "breakfast": 100,
+      "lunch": 100,
+      "dinner": 100,
+      "rest": 315,
+      "sleep": 200,
+      "free_time": 259,
+      "reading": 220,
+      "sword_training": 239,
+      "magic_training": 169,
+      "self_study": 308,
+      "attend_class": 119,
+      "patrol": 53,
+      "office_work": 22
+    }
+  },
+  "schedules": {
+    "total": 100,
+    "traveling": 93,
+    "classes": 0,
+    "meals": 1,
+    "training": 0,
+    "sleeping": 6,
+    "resting": 0,
+    "working": 0,
+    "failedNpcs": 1,
+    "classLate": 7,
+    "completed": 10141,
+    "failed": 1,
+    "late": 6556,
+    "absent": 0,
+    "interrupted": 10140,
+    "resumed": 5378,
+    "processedEvents": 50970
+  },
+  "notes": [
+    "AI 시드 ai-week, 3학년 검술 생도 100명, 제국력427년3월1일16:00부터10080분.",
+    "이탈은 인물별 최근50개, 실패는 최근16개, 공동 활동은 최근500건의 보유 기록 집계. 누적 전체 횟수와 구분한다.",
+    "93명 이동 중은 마지막 시각 스냅샷이며 전 기간 이동 비율이 아니다.",
+    "수면·오락·사회 욕구가 높은 초기 밸런스이며 결과를 임의 회복하지 않았다."
+  ]
+}

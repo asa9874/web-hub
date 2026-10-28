@@ -1,0 +1,19 @@
+import {useDice} from './DicePresentation';
+import {executeCombatDice,isDiceCombatChoice} from '../systems/dicePresentation';
+import {useEventScene} from './eventSceneHooks';
+import {useEffect,useRef,useState} from 'react';
+import type {PlaySession} from '../systems/playSession';
+import {characterArt} from '../data/characterArt';
+import {locationBackgrounds} from '../data/locationBackgrounds';
+import {combatTechniques} from '../data/combat';
+
+export default function VisualCombat({session}:{session:PlaySession}){
+ const dice=useDice();
+ const presentation=useEventScene();
+ const dialog=useRef<HTMLDialogElement>(null),[category,setCategory]=useState('physical'),[error,setError]=useState(''),engine=session.world.runtime.ai.getCombat()!,battle=engine.getActive(session.playerId),world=session.world.runtime.world;
+ useEffect(()=>{const el=dialog.current;el?.showModal();return()=>el?.close();},[]);
+ if(!battle)return null;
+ const candidates=engine.getCandidates(battle.id,session.playerId),player=battle.fighters.find(f=>f.characterId===session.playerId)!,busy=session.isAdvancing();
+ const run=(fn:()=>Promise<void>)=>{setError('');const id=battle.id;void (async()=>{await fn();const settled=engine.getBattle(id);if(settled.status==='active')return;await presentation?.present({title:settled.outcome==='victory'?(settled.winningTeam===player.team?'승리 · 마지막 공방':'패배 · 다음을 향해'):settled.outcome==='draw'?'무승부':'전투 중단',kind:'result',background:locationBackgrounds[battle.locationId],message:settled.logs.slice(-3).map(l=>l.message).join('\n')});})().catch(e=>setError(String(e)));};
+ return <dialog ref={dialog} className="avn-dialog avn-combat" aria-label="비주얼 턴제 전투" onCancel={e=>e.preventDefault()}><div className="avn-scene" style={{backgroundImage:`url("${locationBackgrounds[battle.locationId]?.src??''}")`}}><header><span>{battle.mode==='sparring'?'SPARRING':'BATTLE'}</span><h2>{battle.round+1}번째 공방</h2><button disabled={busy} onClick={()=>run(()=>session.resolveCombat())}>자동 전투 →</button></header><div className="avn-duelists">{battle.fighters.map(f=>{const c=world.getCharacterReadSnapshot(f.characterId),r=engine.getResources(c.id);return <figure key={c.id} data-side={f.team===player.team?'ally':'enemy'} data-defeated={f.status!=='active'}><img src={characterArt(c,f.status==='active'?'serious':'worried')} alt={c.name} onError={e=>{e.currentTarget.style.opacity='0';}}/><figcaption><strong>{c.name}</strong>{[{label:'체력',value:battle.mode==='sparring'?f.vitality:r.hp,max:battle.mode==='sparring'?f.maxVitality:r.maxHP},{label:'기력',value:r.sp,max:r.maxSP},{label:'마력',value:r.mp,max:r.maxMP}].map(v=><label key={v.label}>{v.label}<meter min="0" max={Math.max(1,v.max)} value={v.value}/><b>{v.value}</b></label>)}</figcaption></figure>;})}</div><div className="avn-combat-console"><div className="avn-combat-log" role="log">{battle.logs.slice(-3).map((l,i)=><p key={i}>{l.message}</p>)}{!battle.logs.length&&<p>상대의 움직임을 살피며, 자세를 가다듬습니다.</p>}</div><nav aria-label="전투 행동 분류">{[['physical','검술'],['magic','마법'],['defensive','방어'],['utility','전술']].map(([id,name])=><button key={id} aria-pressed={category===id} onClick={()=>setCategory(id)}>{name}</button>)}</nav><div className="avn-combat-techniques">{candidates.filter(c=>combatTechniques.find(t=>t.id===c.choice.techniqueId)?.category===category).sort((a,b)=>Number(b.available)-Number(a.available)).map((c,i)=><button key={i} disabled={busy||!c.available} title={c.reasons.join(' · ')||c.description} onClick={()=>run(()=>dice&&isDiceCombatChoice(c.choice)?dice.perform({title:c.name,important:battle.important||battle.mode==='real'||battle.round===0,manual:true,execute:()=>executeCombatDice(session,c.choice)}):session.combatTurn(c.choice))}><strong>{c.name}</strong><small>{c.available?`기력 ${c.sp} · 마력 ${c.mp}`:c.reasons[0]}</small></button>)}</div>{error&&<p role="alert">{error}</p>}</div></div></dialog>;
+}

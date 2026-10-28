@@ -1,3 +1,4 @@
+import type {GiftCodex,GiftPower} from './giftCodex';
 import type {ImpactMetadata} from './impact';
 export type Rarity = 'common' | 'uncommon' | 'rare' | 'epic' | 'legendary';
 export type Category = 'martial' | 'magic' | 'body' | 'mind' | 'intellect' | 'social' | 'personality' | 'special';
@@ -26,7 +27,7 @@ export interface ContentBase {
   birth: { eligible: boolean; weight: number; condition?: Condition; excludes: string[] };
 }
 export interface Trait extends ContentBase { kind: 'trait'; category: Category; family: string; tier: number; acquisitions: Acquisition[]; evolutions: Evolution[]; exclusiveGroup?: string }
-export interface Gift extends ContentBase { kind: 'gift'; category: GiftCategory; activation: string }
+export interface Gift extends ContentBase {codex?:GiftCodex;power?:GiftPower; kind: 'gift'; category: GiftCategory; activation: string }
 export type Entry = Trait | Gift;
 export interface SpecialRule {
   id: string; trigger: string; operation: 'reveal' | 'prevent' | 'create' | 'transform' | 'transfer' | 'bind' | 'remember' | 'conceal' | 'repeat' | 'move' | 'delay' | 'guarantee';

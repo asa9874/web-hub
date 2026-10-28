@@ -1,0 +1,524 @@
+{
+  "version": "performance-diagnostic-v1.1",
+  "createdAt": "2026-10-23T09:45:31.053Z",
+  "head": "6a2df8d7a8b60fbd1e01f42a828fb19391cbbb1f",
+  "bundleSha256": "eed424a4da3f26c8d27cc835eb866b9a8def4c63003dba47989286f895b2f54a",
+  "environment": {
+    "node": "v22.18.0",
+    "platform": "win32",
+    "arch": "x64",
+    "osRelease": "10.0.26200",
+    "cpu": "Intel(R) Core(TM) Ultra 7 258V",
+    "logicalCpus": 8
+  },
+  "scope": "Node headless fresh-world engine advance only. No DOM/render/save/setup timing. Full AI, schedule, movement, motivation, relationships, interactions, effects, memory, world events enabled. No 8h/day/week or intervention performance claims.",
+  "goals": {
+    "hour": {
+      "targetMs": 300,
+      "warningAboveMs": 1000
+    },
+    "eightHours": {
+      "targetMs": 1000,
+      "warningAboveMs": 2000
+    },
+    "day": {
+      "targetMs": 2000,
+      "warningAboveMs": 5000
+    },
+    "week": {
+      "priorityTargetMs": 3000,
+      "challengeMs": 1000,
+      "warningAboveMs": 5000
+    }
+  },
+  "minutes": 60,
+  "metrics": [
+    {
+      "scenario": "classes",
+      "samples": 2,
+      "meanMs": 1363.89915,
+      "slowestMs": 1388.092,
+      "oneHourTargetMs": 300,
+      "oneHourWarningExceeded": true,
+      "name": "수업 주간의 오전 수업 구간",
+      "start": {
+        "year": 427,
+        "month": 3,
+        "day": 1,
+        "hour": 8,
+        "minute": 20
+      },
+      "sampleMs": [
+        1388.092,
+        1339.7062999999998
+      ],
+      "preparedInteractionRequests": 0,
+      "aiDecisions": 525,
+      "scheduleEvents": 300,
+      "scheduleCompleted": 0,
+      "interactionCompleted": 0,
+      "domainEvents": 100,
+      "newWorldEvents": 0,
+      "newMemories": 0,
+      "relationshipEffects": 0,
+      "relationshipPairs": {
+        "before": 760,
+        "after": 760,
+        "addedPairs": 0,
+        "changedPairs": 0,
+        "absoluteEmotionChange": 0
+      },
+      "reads": {
+        "getCharacters": 8,
+        "getCharacter": 44947,
+        "getCharacterIdsAtLocation": 2075,
+        "getCharacterLocation": 24275,
+        "findRoute": 6088
+      },
+      "profile": {
+        "sampledMs": 1402.944,
+        "topFunctions": [
+          {
+            "name": "structuredClone @ node:internal/worker/js_transferable",
+            "selfMs": 885.722,
+            "percent": 63.1
+          },
+          {
+            "name": "canEnterLocation @ src/AcademySurvival/systems/locationAccess.ts",
+            "selfMs": 59.351,
+            "percent": 4.2
+          },
+          {
+            "name": "(garbage collector) @ (garbage collector)",
+            "selfMs": 50.997,
+            "percent": 3.6
+          },
+          {
+            "name": "post @ node:inspector",
+            "selfMs": 42.818,
+            "percent": 3.1
+          },
+          {
+            "name": "structuredClone @ structuredClone",
+            "selfMs": 39.766,
+            "percent": 2.8
+          },
+          {
+            "name": "candidates @ src/AcademySurvival/systems/npcAi.ts",
+            "selfMs": 39.503,
+            "percent": 2.8
+          }
+        ],
+        "cloneOrigins": [
+          {
+            "name": "getCharacter",
+            "selfMs": 668.572,
+            "percent": 47.7
+          },
+          {
+            "name": "getCharacterNeeds",
+            "selfMs": 86.986,
+            "percent": 6.2
+          },
+          {
+            "name": "getCharacterLocation",
+            "selfMs": 70.957,
+            "percent": 5.1
+          },
+          {
+            "name": "getCurrentActivity",
+            "selfMs": 43.552,
+            "percent": 3.1
+          },
+          {
+            "name": "getCharacterPlan",
+            "selfMs": 26.93,
+            "percent": 1.9
+          },
+          {
+            "name": "getCharacters",
+            "selfMs": 9.442,
+            "percent": 0.7
+          }
+        ]
+      }
+    },
+    {
+      "scenario": "social",
+      "samples": 2,
+      "meanMs": 2577.4358,
+      "slowestMs": 3195.5409,
+      "oneHourTargetMs": 300,
+      "oneHourWarningExceeded": true,
+      "name": "교류가 많은 주간의 자유시간 구간",
+      "start": {
+        "year": 427,
+        "month": 3,
+        "day": 1,
+        "hour": 19
+      },
+      "sampleMs": [
+        3195.5409,
+        1959.3307
+      ],
+      "preparedInteractionRequests": 20,
+      "aiDecisions": 481,
+      "scheduleEvents": 296,
+      "scheduleCompleted": 71,
+      "interactionCompleted": 18,
+      "domainEvents": 415,
+      "newWorldEvents": 0,
+      "newMemories": 607,
+      "relationshipEffects": 36,
+      "relationshipPairs": {
+        "before": 848,
+        "after": 848,
+        "addedPairs": 0,
+        "changedPairs": 18,
+        "absoluteEmotionChange": 36
+      },
+      "reads": {
+        "getCharacters": 25,
+        "getCharacter": 53417,
+        "getCharacterIdsAtLocation": 1923,
+        "getCharacterLocation": 3872,
+        "findRoute": 5800
+      },
+      "profile": {
+        "sampledMs": 2304.998,
+        "topFunctions": [
+          {
+            "name": "structuredClone @ node:internal/worker/js_transferable",
+            "selfMs": 1258.87,
+            "percent": 54.6
+          },
+          {
+            "name": "structuredClone @ structuredClone",
+            "selfMs": 112.336,
+            "percent": 4.9
+          },
+          {
+            "name": "(garbage collector) @ (garbage collector)",
+            "selfMs": 99.105,
+            "percent": 4.3
+          },
+          {
+            "name": "save @ src/AcademySurvival/systems/motivationEngine.ts",
+            "selfMs": 97.679,
+            "percent": 4.2
+          },
+          {
+            "name": "post @ node:inspector",
+            "selfMs": 52.441,
+            "percent": 2.3
+          },
+          {
+            "name": "findRoute @ src/AcademySurvival/systems/locationRouting.ts",
+            "selfMs": 49.75,
+            "percent": 2.2
+          }
+        ],
+        "cloneOrigins": [
+          {
+            "name": "getCharacter",
+            "selfMs": 877.596,
+            "percent": 38.1
+          },
+          {
+            "name": "(anonymous)",
+            "selfMs": 73.468,
+            "percent": 3.2
+          },
+          {
+            "name": "getCurrentActivity",
+            "selfMs": 69.486,
+            "percent": 3
+          },
+          {
+            "name": "getCharacterNeeds",
+            "selfMs": 60.791,
+            "percent": 2.6
+          },
+          {
+            "name": "getCharacterPlan",
+            "selfMs": 53.198,
+            "percent": 2.3
+          },
+          {
+            "name": "records",
+            "selfMs": 51.559,
+            "percent": 2.2
+          }
+        ]
+      }
+    },
+    {
+      "scenario": "exams",
+      "samples": 2,
+      "meanMs": 2467.81585,
+      "slowestMs": 2583.0541,
+      "oneHourTargetMs": 300,
+      "oneHourWarningExceeded": true,
+      "name": "시험 월 일정 안내 구간 (실제 시험·행사 실행은 아님)",
+      "start": {
+        "year": 427,
+        "month": 5,
+        "day": 1,
+        "hour": 7,
+        "minute": 59
+      },
+      "sampleMs": [
+        2583.0541,
+        2352.5776
+      ],
+      "preparedInteractionRequests": 0,
+      "aiDecisions": 668,
+      "scheduleEvents": 502,
+      "scheduleCompleted": 15,
+      "interactionCompleted": 0,
+      "domainEvents": 315,
+      "newWorldEvents": 1,
+      "newMemories": 72,
+      "relationshipEffects": 0,
+      "relationshipPairs": {
+        "before": 760,
+        "after": 760,
+        "addedPairs": 0,
+        "changedPairs": 0,
+        "absoluteEmotionChange": 0
+      },
+      "reads": {
+        "getCharacters": 11,
+        "getCharacter": 50982,
+        "getCharacterIdsAtLocation": 2184,
+        "getCharacterLocation": 10167,
+        "findRoute": 7718
+      },
+      "profile": {
+        "sampledMs": 2312.448,
+        "topFunctions": [
+          {
+            "name": "structuredClone @ node:internal/worker/js_transferable",
+            "selfMs": 1410.964,
+            "percent": 61
+          },
+          {
+            "name": "structuredClone @ structuredClone",
+            "selfMs": 70.427,
+            "percent": 3
+          },
+          {
+            "name": "findRoute @ src/AcademySurvival/systems/locationRouting.ts",
+            "selfMs": 61.332,
+            "percent": 2.7
+          },
+          {
+            "name": "(garbage collector) @ (garbage collector)",
+            "selfMs": 59.602,
+            "percent": 2.6
+          },
+          {
+            "name": "candidates @ src/AcademySurvival/systems/npcAi.ts",
+            "selfMs": 55.371,
+            "percent": 2.4
+          },
+          {
+            "name": "getLocationPath2 @ src/AcademySurvival/systems/locationRegistry.ts",
+            "selfMs": 41.084,
+            "percent": 1.8
+          }
+        ],
+        "cloneOrigins": [
+          {
+            "name": "getCharacter",
+            "selfMs": 1039.18,
+            "percent": 44.9
+          },
+          {
+            "name": "getCharacterNeeds",
+            "selfMs": 91.45,
+            "percent": 4
+          },
+          {
+            "name": "getCharacterPlan",
+            "selfMs": 88.448,
+            "percent": 3.8
+          },
+          {
+            "name": "getActiveGoals",
+            "selfMs": 73.212,
+            "percent": 3.2
+          },
+          {
+            "name": "getCurrentActivity",
+            "selfMs": 59.745,
+            "percent": 2.6
+          },
+          {
+            "name": "getCharacterLocation",
+            "selfMs": 29.942,
+            "percent": 1.3
+          }
+        ]
+      }
+    },
+    {
+      "scenario": "events",
+      "samples": 2,
+      "meanMs": 1617.84765,
+      "slowestMs": 1653.8658999999998,
+      "oneHourTargetMs": 300,
+      "oneHourWarningExceeded": true,
+      "name": "세계 이벤트가 활성화된 훈련 구간",
+      "start": {
+        "year": 427,
+        "month": 3,
+        "day": 1,
+        "hour": 16
+      },
+      "sampleMs": [
+        1581.8294,
+        1653.8658999999998
+      ],
+      "preparedInteractionRequests": 0,
+      "aiDecisions": 456,
+      "scheduleEvents": 151,
+      "scheduleCompleted": 11,
+      "interactionCompleted": 0,
+      "domainEvents": 161,
+      "newWorldEvents": 1,
+      "newMemories": 69,
+      "relationshipEffects": 0,
+      "relationshipPairs": {
+        "before": 760,
+        "after": 760,
+        "addedPairs": 0,
+        "changedPairs": 0,
+        "absoluteEmotionChange": 0
+      },
+      "reads": {
+        "getCharacters": 10,
+        "getCharacter": 35007,
+        "getCharacterIdsAtLocation": 1856,
+        "getCharacterLocation": 5089,
+        "findRoute": 5739
+      },
+      "profile": {
+        "sampledMs": 1694.066,
+        "topFunctions": [
+          {
+            "name": "structuredClone @ node:internal/worker/js_transferable",
+            "selfMs": 975.593,
+            "percent": 57.6
+          },
+          {
+            "name": "structuredClone @ structuredClone",
+            "selfMs": 75.828,
+            "percent": 4.5
+          },
+          {
+            "name": "(garbage collector) @ (garbage collector)",
+            "selfMs": 41.943,
+            "percent": 2.5
+          },
+          {
+            "name": "post @ node:inspector",
+            "selfMs": 40.697,
+            "percent": 2.4
+          },
+          {
+            "name": "canEnterLocation @ src/AcademySurvival/systems/locationAccess.ts",
+            "selfMs": 33.795,
+            "percent": 2
+          },
+          {
+            "name": "findRoute @ src/AcademySurvival/systems/locationRouting.ts",
+            "selfMs": 33.354,
+            "percent": 2
+          }
+        ],
+        "cloneOrigins": [
+          {
+            "name": "getCharacter",
+            "selfMs": 639.201,
+            "percent": 37.7
+          },
+          {
+            "name": "getCharacterNeeds",
+            "selfMs": 113.619,
+            "percent": 6.7
+          },
+          {
+            "name": "getActiveGoals",
+            "selfMs": 110.336,
+            "percent": 6.5
+          },
+          {
+            "name": "getCharacterPlan",
+            "selfMs": 61.858,
+            "percent": 3.7
+          },
+          {
+            "name": "getCurrentActivity",
+            "selfMs": 59.091,
+            "percent": 3.5
+          },
+          {
+            "name": "getCharacters",
+            "selfMs": 17.645,
+            "percent": 1
+          }
+        ]
+      }
+    }
+  ],
+  "browser": {
+    "browser": "156.0.8078.4",
+    "headless": true,
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "scenario": "classes; same initial 100-NPC full-engine snapshot as Node fixture",
+    "scope": "Existing sandbox UI click through completion/next animation frame; includes Playwright click overhead. Not a released campaign or weekly benchmark.",
+    "samples": [
+      {
+        "run": 1,
+        "elapsedMs": 2581.1209,
+        "actualMinutes": 60,
+        "aiCount": 100,
+        "decisions": 525,
+        "worldEvents": 0,
+        "memories": 0
+      },
+      {
+        "run": 2,
+        "elapsedMs": 2510.438299999998,
+        "actualMinutes": 60,
+        "aiCount": 100,
+        "decisions": 525,
+        "worldEvents": 0,
+        "memories": 0
+      }
+    ],
+    "meanMs": 2545.779599999999,
+    "slowestMs": 2581.1209
+  },
+  "notMeasured": [
+    "8 hours",
+    "1 day",
+    "7 days",
+    "player choice interruption",
+    "aged saves",
+    "actual exam/festival execution"
+  ],
+  "checks": {
+    "all100Ai": true,
+    "counterReproducibility": true,
+    "validLocations": true,
+    "eventGraphDiagnostics": true,
+    "memoryDiagnostics": true,
+    "fullStateEquality": false
+  },
+  "gameEngineChanged": false
+}

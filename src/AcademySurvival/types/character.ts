@@ -1,3 +1,6 @@
+import type {CulturalProfile} from './culture';
+import type {CharacterWorldIdentity} from './worldLore';
+import type {NpcAiEngine} from '../systems/npcAi';
 import type {MotivationEngine} from '../systems/motivationEngine';
 import type {CharacterMotivationState} from './motivation';
 import type {NpcScheduleEngine} from '../systems/npcSchedules';
@@ -19,9 +22,9 @@ export interface CharacterIdentity {
 }
 export interface CharacterRelationship {targetId:string;label:string;description:string;affinity:number|null}
 export interface Character extends Partial<CharacterMorality>,CharacterIdentity,CharacterKnowledge,CharacterSocialIdentity,CharacterAffiliations {
- id:string;templateId?:string;kind:CharacterKind;statuses:StatusInstance[];relationships:CharacterRelationship[];
+ skillBook?:import('./skill').CharacterSkillBook;worldIdentity?:CharacterWorldIdentity;culturalProfile?:CulturalProfile;id:string;templateId?:string;kind:CharacterKind;statuses:StatusInstance[];relationships:CharacterRelationship[];
  // Legacy records may be unset; every active character must be registered with a valid location.
- classId?:string;specializationId?:string;
+ classId?:string;specializationId?:string;generationGrowthType?:'ordinary'|'talented'|'genius'|'weak'|'unusual';
  location?:CharacterLocationState;accessPermissions?:string[];accessTags?:string[];movementModes?:MovementMode[];
 }
 export type RandomAbilitySlot=RandomContentSlot<'trait'|'gift'>;
@@ -40,4 +43,4 @@ export interface FixedCharacterTemplate {
  contentMappings:{requested:string;actualId:string;reason:string}[];
 }
 // The panel's discriminant prevents unresolved slots being passed off as a real campaign character.
-export type CharacterPanelProps=({mode:'template';template:FixedCharacterTemplate}|{mode:'actual';character:Character})&{motivationEngine?:MotivationEngine|null;motivation?:CharacterMotivationState;scheduleEngine?:NpcScheduleEngine|null;schedule?:CharacterSchedule;relationshipGraph?:RelationshipGraph;relationshipCharacters?:readonly Character[];onInspectCharacter?:(id:string)=>void;debug?:boolean;density?:'comfortable'|'compact';onSocialChange?:(social:CharacterSocialIdentity)=>void};
+export type CharacterPanelProps=({mode:'template';template:FixedCharacterTemplate}|{mode:'actual';character:Character})&{aiEngine?:NpcAiEngine|null;motivationEngine?:MotivationEngine|null;motivation?:CharacterMotivationState;scheduleEngine?:NpcScheduleEngine|null;schedule?:CharacterSchedule;relationshipGraph?:RelationshipGraph;relationshipCharacters?:readonly Character[];onInspectCharacter?:(id:string)=>void;debug?:boolean;density?:'comfortable'|'compact';onSocialChange?:(social:CharacterSocialIdentity)=>void};

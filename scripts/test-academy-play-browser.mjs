@@ -1,0 +1,35 @@
+import assert from 'node:assert/strict';
+import {chromium} from 'playwright';
+import {mkdir} from 'node:fs/promises';
+await mkdir('test-results/academy-play',{recursive:true});const browser=await chromium.launch({headless:true});
+try{
+ const page=await browser.newPage({viewport:{width:1360,height:950}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto((process.env.ACADEMY_TEST_URL??'http://127.0.0.1:5192/web-hub')+'/games/academy-survival/');
+ await page.getByText('세계·출신 배경 설정',{exact:true}).click();await page.getByLabel('플레이 시드',{exact:true}).fill('play-browser');await page.getByLabel('플레이 NPC 수',{exact:true}).fill('3');
+ await page.getByText('기존 관찰 모드',{exact:true}).click();await page.getByRole('button',{name:'새 관찰 플레이 시작',exact:true}).click();await page.getByLabel('플레이 현재 시각',{exact:true}).waitFor();
+ assert.match((await page.getByLabel('플레이 현재 시각',{exact:true}).innerText()).replace(/\s+/g,' '),/427년 3월 1일.*08:00/);
+ await page.getByRole('button',{name:'내 캐릭터 상세',exact:true}).click();assert.equal(await page.getByRole('dialog').locator('[data-character-id="preview-player"]').count(),1);await page.keyboard.press('Escape');
+ await page.getByRole('button',{name:'장소·이동',exact:true}).click();await page.getByRole('button',{name:'마계',exact:true}).click();await page.locator('[data-location="demon-gate"]').focus();await page.locator('[data-location="demon-gate"]').press('Enter');assert(await page.getByRole('button',{name:'이동하기 · 도착까지 진행',exact:true}).isDisabled());await page.getByRole('button',{name:'현재 상황',exact:true}).click();await page.getByRole('heading',{name:'중앙광장',exact:true}).waitFor();
+ await page.getByRole('button',{name:'+1시간',exact:true}).click();await page.waitForFunction(()=>document.querySelector('[aria-label="플레이 진행 결과"]')?.textContent?.startsWith('60/60분'));
+ await page.getByRole('button',{name:'장소·이동',exact:true}).click();await page.locator('[data-location="academy-class-1-1"]').focus();await page.locator('[data-location="academy-class-1-1"]').press('Enter');await page.getByRole('button',{name:'이동하기 · 도착까지 진행',exact:true}).click();
+ await page.waitForFunction(()=>!document.querySelector('.ac-play-grid>aside')?.textContent?.includes('이동 중 →'));
+ await page.getByRole('button',{name:'주변 인물',exact:true}).click();const cards=page.locator('.ac-play-cards button');assert(await cards.count()>0,'real classroom occupants');
+ await cards.first().click();assert.equal(await page.getByRole('dialog').locator('[aria-label="공통 캐릭터 상태창"]').count(),1,'NPC uses the shared character panel');assert.equal(await page.getByRole('dialog').locator('.ac-character-stats dl>div').count(),7);await page.keyboard.press('Escape');
+ await page.getByRole('button',{name:'+6시간',exact:true}).click();await page.waitForFunction(()=>document.querySelector('[aria-label="플레이 진행 결과"]')?.textContent?.startsWith('360/360분'));
+ await page.getByRole('button',{name:'나의 사건 기록',exact:true}).click();assert.match(await page.locator('.ac-play').innerText(),/도착|이동/);await page.screenshot({path:'test-results/academy-play/records-desktop.png',fullPage:true});
+ await page.getByRole('button',{name:'저장·이어하기',exact:true}).click();await page.getByRole('button',{name:'슬롯 1 저장',exact:true}).click();await page.getByText('슬롯 1에 저장했습니다.',{exact:true}).waitFor();
+ const savedDate=await page.getByLabel('플레이 현재 시각',{exact:true}).innerText();await page.getByRole('button',{name:'+10분',exact:true}).click();await page.waitForFunction(()=>document.querySelector('[aria-label="플레이 진행 결과"]')?.textContent?.startsWith('10/10분'));
+ await page.getByRole('button',{name:'슬롯 1 불러오기',exact:true}).click();await page.waitForFunction(d=>document.querySelector('[aria-label="플레이 현재 시각"]')?.innerText===d,savedDate);
+ await page.reload();await page.getByRole('button',{name:'슬롯 1 이어하기',exact:true}).click();await page.waitForFunction(d=>document.querySelector('[aria-label="플레이 현재 시각"]')?.innerText===d,savedDate);
+ await page.getByRole('button',{name:'나의 사건 기록',exact:true}).click();assert.match(await page.locator('.ac-play').innerText(),/교실 도착/,'observed journal survives a browser reload');
+ await page.getByRole('button',{name:'설정집',exact:true}).click();await page.getByRole('heading',{name:'공개 설정집',exact:true}).waitFor();assert.equal(await page.getByRole('button',{name:'시간 진행 테스트',exact:true}).count(),0);
+ await page.getByRole('button',{name:'날짜 환산',exact:true}).click();assert.equal(await page.getByLabel('플레이 현재 시각',{exact:true}).innerText(),savedDate,'reference read never advances time');
+ await page.getByText('개발 자료·도구',{exact:true}).click();await page.getByRole('button',{name:'전체 개발 설정집',exact:true}).click();assert((await page.getByRole('button',{name:'현재 게임 날짜 상세',exact:true}).innerText()).includes(savedDate.match(/\d{2}:\d{2}/)[0]));
+ await page.getByRole('button',{name:'플레이로 돌아가기',exact:true}).click();assert.equal(await page.getByLabel('플레이 현재 시각',{exact:true}).innerText(),savedDate);
+ await page.getByRole('button',{name:'설정집',exact:true}).click();await page.getByText('개발 자료·도구',{exact:true}).click();await page.getByRole('button',{name:'개발 시뮬레이터 열기',exact:true}).click();await page.getByRole('heading',{name:'세계 시뮬레이션 · 관찰·통제',exact:true}).waitFor();
+ await page.getByLabel('이동 목적지',{exact:true}).selectOption('demon-gate');await page.getByRole('button',{name:'개발자 강제 배치',exact:true}).click();await page.getByRole('button',{name:'+1분',exact:true}).click();await page.getByText('1분 진행',{exact:true}).waitFor();await page.getByRole('button',{name:'닫기',exact:true}).click();await page.getByRole('button',{name:'플레이로 돌아가기',exact:true}).click();
+ assert.equal(await page.getByLabel('플레이 현재 시각',{exact:true}).innerText(),savedDate,'developer sandbox never changes the active game');assert.match(await page.locator('.ac-play-grid>aside').innerText(),/1학년 1반 교실/);
+ await page.getByRole('button',{name:'현재 상황',exact:true}).click();await page.setViewportSize({width:390,height:844});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));await page.screenshot({path:'test-results/academy-play/mobile.png',fullPage:true});
+ assert.equal(await page.getByRole('alert').count(),0);assert.deepEqual(errors,[]);
+ console.log('Gameplay UI passed: title/new session, real 1h+6h progression, movement, shared NPC popup, records, save/load/reload, public reference, shared catalog clock, mobile and no page errors.');
+}finally{await browser.close();}

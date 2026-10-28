@@ -9,7 +9,7 @@ assert.deepEqual(validationIssues,[]);
 assert(traits.length>=100&&gifts.length>=100);
 assert.equal(m.expansionTraits.length,m.EXPANSION_BATCH.traits);
 assert.equal(m.expansionGifts.length,m.EXPANSION_BATCH.gifts);
-assert.equal(traits.length,104+300+1);assert.equal(gifts.length,100+300+3);
+assert.equal(traits.length,104+300+1+14);assert.equal(gifts.length,100+300+3+14+200);
 assert.equal(new Set(m.entries.map(e=>e.lore)).size,m.entries.length,'Every literary description is individually authored');
 const effectTargets=new Set();const collect=e=>{if(e.effects)e.effects.forEach(collect);if(e.target)effectTargets.add(e.target);};m.entries.forEach(collect);
 assert([...effectTargets].every(target=>m.TARGET_NAMES[target]),'All ordinary targets have readable labels');

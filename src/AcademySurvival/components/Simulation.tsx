@@ -1,0 +1,85 @@
+import RiftCrisisPanel from './RiftCrisisPanel';
+import CombatPanel from './CombatPanel';
+import AcademyGroupsPanel from './AcademyGroupsPanel';
+import DailyLifePanel from './DailyLifePanel';
+import CultureSimulationPanel from './CulturePanels';
+import WorldLoreCatalog from './WorldLoreCatalog';
+import ConversationPanel from './ConversationPanel';
+import AcademicPanel from './AcademicPanel';
+import SimulationPlayerControls from './SimulationPlayerControls';
+import {usePlaySession} from './playSessionHooks';
+import {createPlayerCharacter} from '../systems/playerLife';
+import {useEffect,useRef,useState,useSyncExternalStore} from 'react';
+import {useAiEngine} from './aiHooks';
+import {snapshotAi} from '../systems/aiSandbox';
+import {createWorldSimulation} from '../systems/worldSimulation';
+import type {WorldSimulation} from '../systems/worldSimulation';
+import type {WorldCommand,WorldSimulationSave} from '../types/worldSimulation';
+import {formatGameDate,formatGameTime,toImperialDate,toAbsoluteMinute,DEFAULT_ABSOLUTE_MINUTE} from '../systems/calendar';
+import type {SimulationTier} from '../types/simulation';
+import DetailDialog from './DetailDialog';
+import CharacterStatusPanel from './CharacterStatusPanel';
+import CalendarDateFields from './CalendarDateFields';
+import WorldSimulationPanels from './WorldSimulationPanels';
+import './Simulation.css';
+
+export default function Simulation({onClose}:{onClose:()=>void}){
+ const play=usePlaySession(),[initialLife]=useState(()=>play.session?.life?.save());
+ const live=useAiEngine(),[initial]=useState(()=>snapshotAi(live,live.interactions!.graph));
+ const [sessionVersion,setSessionVersion]=useState(0);
+ const [controller,setController]=useState(()=>createWorldSimulation({initial}));
+ const sandbox=controller.runtime,{world,ai,graph,schedule}=sandbox,lod=sandbox.simulation!;
+ useSyncExternalStore(controller.subscribe,controller.getSnapshot,controller.getSnapshot);
+ const [seed,setSeed]=useState('world-demo-v1'),[name,setName]=useState('관찰 세계'),[customCount,setCustomCount]=useState(10),[startDate,setStartDate]=useState(toImperialDate(DEFAULT_ABSOLUTE_MINUTE)),[targetDate,setTargetDate]=useState(toImperialDate(DEFAULT_ABSOLUTE_MINUTE+60));
+ const [selected,setSelected]=useState(''),[destination,setDestination]=useState('academy-plaza'),[query,setQuery]=useState(''),[error,setError]=useState(''),[busy,setBusy]=useState(false),[progress,setProgress]=useState(''),[detail,setDetail]=useState(false),[inspected,setInspected]=useState(''),[speed,setSpeed]=useState(1),[loadJson,setLoadJson]=useState('');
+ const active=useRef<WorldSimulation|null>(controller),cancel=useRef(false),round=useRef(0);
+ useEffect(()=>{active.current=controller;cancel.current=false;const release=controller.retain();return()=>{cancel.current=true;if(active.current===controller)active.current=null;release();};},[controller]);
+ const replaceController=(next:WorldSimulation)=>{controller.pause();setController(next);setSessionVersion(n=>n+1);setDetail(false);setSelected('');setError('');};
+ const run=(fn:()=>void)=>{try{fn();setError('');}catch(e){setError(String(e instanceof Error?e.message:e));}};
+ const send=(command:WorldCommand)=>{const record=controller.command(command);if(!record.accepted)throw Error(record.result);return record;};
+ const all=world.getCharacters(),player=all.find(c=>c.kind==='player'),npcs=all.filter(c=>c.kind!=='player');
+ const id=npcs.some(c=>c.id===selected)?selected:npcs[0]?.id,character=id?world.getCharacter(id):undefined,state=id?lod.getActor(id):undefined,counts=lod.getStatistics().counts;
+ const add=(count:10|50|100)=>run(()=>{const r=send({type:'spawn',count,seed:seed+'/'+round.current++});setSelected(r.result.split(',')[0]);});
+ async function advance(minutes:number){
+  if(!Number.isSafeInteger(minutes)||minutes<0){setError('현재 이후 시각만 진행할 수 있습니다.');return;}
+  controller.pause();const request=controller.command({type:'time_request',minutes});if(!request.accepted){setError(request.result);return;}setBusy(true);cancel.current=false;let left=minutes,yieldAt=performance.now(),publishAt=yieldAt,stepSize=1;
+  try{while(left>0&&active.current===controller&&!cancel.current){const step=Math.min(left,stepSize),start=performance.now();const result=controller.advance(step,false);left-=result.elapsedMinutes;if(result.elapsedMinutes<step){cancel.current=true;break;}const elapsed=performance.now()-start;stepSize=Math.max(1,Math.min(60,Math.round(step*Math.min(2,12/Math.max(.1,elapsed)))));if(performance.now()-publishAt>=250){controller.publish();setProgress((minutes-left)+' / '+minutes+'분');publishAt=performance.now();}if(performance.now()-yieldAt>=24){await new Promise<void>(resolve=>requestAnimationFrame(()=>resolve()));yieldAt=performance.now();}}
+   if(active.current===controller){setProgress((minutes-left)+'분 진행'+(left?' · 중지':''));setError('');}
+  }catch(e){if(active.current===controller)setError(String(e instanceof Error?e.message:e));}finally{if(active.current===controller){setBusy(false);controller.finishTimeRequest(request.id);controller.publish();}}
+ }
+ useEffect(()=>{let closed=false,frame=0,last=0,debt=0,stepSize=1,published=0;const tick=(at:number)=>{if(closed)return;const dt=last?Math.max(0,(at-last)/1000):0;last=at;if(controller.isPlaying()){debt+=dt*speed;const start=performance.now();try{while(debt>=1&&performance.now()-start<16){const step=Math.min(Math.floor(debt),stepSize),before=performance.now();const result=controller.advance(step,false);debt-=result.elapsedMinutes;if(result.elapsedMinutes<step){controller.pause();break;}stepSize=Math.max(1,Math.min(60,Math.round(step*Math.min(2,12/Math.max(.1,performance.now()-before)))));}if(at-published>=250){controller.publish();published=at;}}catch(e){controller.pause();setError(String(e instanceof Error?e.message:e));}}else debt=0;frame=requestAnimationFrame(tick);};frame=requestAnimationFrame(tick);return()=>{closed=true;cancelAnimationFrame(frame);};},[controller,speed]);
+ const move=(actor:string,force=false)=>run(()=>{send({type:force?'force_place':'move',characterId:actor,locationId:destination});});
+ const resident=()=>run(()=>{const region=lod.getRegions().find(r=>r.id===destination);if(!region||region.totalPopulation===undefined)throw Error('먼저 선택 장소의 인구 집계를 지정하세요.');send({type:'resident',regionId:destination,slot:'resident-'+(Object.keys(region.residents).length+1)});});
+ const detailCharacter=world.hasCharacter(inspected)?world.getCharacter(inspected):character;
+ const inspect=(who:string)=>{controller.pause();setInspected(who);if(world.getCharacterReadSnapshot(who).kind!=='player')setSelected(who);setDetail(true);};
+ return <section className="ac-simulation">
+  <header className="ac-location-heading"><div><h1>세계 시뮬레이션 · 관찰·통제</h1><p>개발 샌드박스 · 실제 상태의 복제본 · 종료 시 폐기</p></div><button disabled={busy} onClick={()=>{controller.pause();replaceController(createWorldSimulation({initial})); round.current=0; setSelected(''); setError('');}}>초기화</button><button onClick={onClose}>닫기</button></header>
+  <button disabled={busy} onClick={()=>run(()=>replaceController(createWorldSimulation({name:'고정 학생 15인 테스트',seed,count:25,enableFixedStudents:true,enableAcademics:true})))}>고정 학생 15인·랜덤 학생 새 세계</button><button disabled={busy} onClick={()=>run(()=>replaceController(createWorldSimulation({name:'플레이어 생활 테스트',seed,count:10,playerCharacter:createPlayerCharacter(seed,{name:'테스트 생도',gender:'미설정',focus:'balanced'})})))}>플레이어 포함 새 세계</button><button disabled={busy} onClick={()=>run(()=>replaceController(createWorldSimulation({name:'학사 테스트',seed,count:10,enableAcademics:true,playerCharacter:createPlayerCharacter(seed,{name:'학사 생도',gender:'미설정',focus:'balanced'})})))}>학사 세계 생성</button><details><summary>세계관·외부 지역 탐색</summary><WorldLoreCatalog engine={ai}/></details><details><summary>기숙사·생활 관찰</summary><DailyLifePanel engine={ai.getDailyLife()} characterId={id} debug onInspect={inspect} onCommand={send}/></details><details><summary>전투·판정 관찰과 실험</summary><CombatPanel key={'combat-'+sessionVersion} engine={ai.getCombat()} viewerId={id} debug onInspect={inspect} onCommand={send} onAdvance={n=>{controller.advance(n);controller.publish();}} onMutation={fn=>{controller.pause();cancel.current=true;fn();controller.publish();}}/></details><details><summary>동아리·학생회 운영 관찰</summary><AcademyGroupsPanel engine={ai.getGroups()} characterId={id} debug onInspect={inspect} onCommand={send} onMutation={fn=>{controller.pause();cancel.current=true;fn();controller.publish();}}/></details><CultureSimulationPanel engine={ai} onCommand={c=>{const result=controller.command(c);if(!result.accepted)throw Error(result.result);}}/><ConversationPanel key={'conversation-'+sessionVersion} interactions={sandbox.interactions} viewerId={player?.id} debug onRequest={(a,b,p)=>{const result=controller.command({type:'conversation',characterId:a,targetId:b,proposal:p});if(!result.accepted)throw Error(result.result);}} onChoose={(id,p)=>{if(!player)throw Error('플레이어 없음');const result=controller.command({type:'conversation_choice',characterId:player.id,conversationId:id,choice:p});if(!result.accepted)throw Error(result.result);}} onMutation={fn=>{controller.pause();cancel.current=true;fn();controller.publish();}}/><AcademicPanel onOfficialInitialize={()=>send({type:'official_events_initialize'})} officialEngine={ai.getAcademyEvents()} key={'academic-'+sessionVersion} engine={ai.getAcademics()} characterId={player?.id} debug onInspect={inspect} onMutation={fn=>{controller.pause();cancel.current=true;fn();controller.publish();}}/><RiftCrisisPanel engine={ai.getRiftCrisis()} debug onInitialize={()=>send({type:'rift_initialize'})} onChronology={()=>send({type:'rift_chronology'})} onPolicy={(siteId,policy)=>send({type:'rift_policy',siteId,policy})}/><SimulationPlayerControls key={sessionVersion} controller={controller} initial={sessionVersion===0?initialLife:undefined}/><p aria-label="시뮬레이션 현재 시각">{formatGameDate(world.clock.getSnapshot())} {formatGameTime(world.clock.getSnapshot())} · 플레이어: {player?world.catalog.getLocation(player.location!.currentLocationId).name:'없음'}</p>
+  <p>세계: {controller.name} · 시드 {controller.seed} · {controller.isPlaying()?'재생 중':'일시정지'}</p>
+  <div className="ac-world-time-controls"><button disabled={busy} onClick={()=>run(()=>{send({type:'play'});})}>재생</button><button onClick={()=>{cancel.current=true;send({type:'pause'});}}>일시정지</button><select aria-label="세계 배속" value={speed} onChange={e=>setSpeed(Number(e.target.value))}>{[1,10,60,360].map(n=><option key={n} value={n}>{n}배속</option>)}</select><button disabled={busy||controller.isPlaying()} onClick={()=>run(()=>controller.advanceToNext())}>다음 예약까지</button><span>1배속 = 실제1초당 세계1분 · UI 최대4회/초 갱신</span></div>
+  <details><summary>새 세계 설정·저장 불러오기</summary><fieldset disabled={busy||controller.isPlaying()}><legend>현재 세계는 교체되고 실제 게임은 유지됩니다.</legend><label>세계 이름<input value={name} onChange={e=>setName(e.target.value)}/></label><label>사용자 지정 NPC 수<input aria-label="사용자 지정 NPC 수" type="number" min="1" max="100" value={customCount} onChange={e=>setCustomCount(Number(e.target.value))}/></label><CalendarDateFields prefix="세계 시작" calendarId="imperial" date={startDate} onChange={setStartDate}/><button onClick={()=>run(()=>{replaceController(createWorldSimulation({name,seed,count:customCount,absoluteMinute:toAbsoluteMinute(startDate),startLocationId:destination}));round.current=0;setSelected('');})}>새 세계 생성</button><textarea aria-label="불러올 세계 JSON" value={loadJson} onChange={e=>setLoadJson(e.target.value)}/><button onClick={()=>run(()=>replaceController(createWorldSimulation({initial:JSON.parse(loadJson) as WorldSimulationSave})))}>세계 JSON 불러오기</button></fieldset></details>
+  <details><summary>지정 시각까지 진행</summary><CalendarDateFields prefix="진행 목표" calendarId="imperial" date={targetDate} onChange={setTargetDate}/><button disabled={busy||controller.isPlaying()} onClick={()=>run(()=>{void advance(toAbsoluteMinute(targetDate)-world.clock.getSnapshot());})}>지정 시각까지 진행</button></details>
+  <p role="status">{counts.map((n,i)=>`LOD ${i}: ${n}명`).join(' · ')} · 생성된 NPC {npcs.length}명 · 집계 인구 {lod.getStatistics().population.toLocaleString()}명</p>
+  <p className="ac-note">0 정밀 AI / 1 원거리 일과 + 간략 판단 / 2 중요 일정·목표 중심 / 3 일반 자율 판단 휴면. 이동·공동 활동·사건 참여자는 보호됩니다. 인구 집계는 실제 장소 인원과 별개입니다.</p>
+  <fieldset disabled={busy||controller.isPlaying()}><legend>세계 조작</legend><label>시드 <input value={seed} onChange={e=>setSeed(e.target.value)}/></label>{([10,50,100] as const).map(n=><button key={n} onClick={()=>add(n)}>NPC {n}명 추가</button>)}
+   <button onClick={()=>run(()=>send({type:'lod_enabled',enabled:!lod.save().enabled}))}>{lod.save().enabled?'전체 정밀 정책으로 비교':'LOD 정책으로 복귀'}</button>
+   <label>장소 <select aria-label="이동 목적지" value={destination} onChange={e=>setDestination(e.target.value)}>{[...world.catalog.nodes.values()].map(p=><option key={p.id} value={p.id}>{world.catalog.getLocationFullName(p.id)}</option>)}</select></label>
+   {player&&<><button onClick={()=>move(player.id)}>플레이어 정상 이동</button><button onClick={()=>move(player.id,true)}>개발자 강제 배치</button></>}
+   <button onClick={()=>run(()=>send({type:'population',locationId:destination,total:10000}))}>선택 장소 인구 10,000명 집계</button><button onClick={resident}>주민 1명 개별화</button>
+   {([1,10,60,360,480,1440,10080] as const).map(n=><button key={n} onClick={()=>void advance(n)}>+{n===1?'1분':n===10?'10분':n===60?'1시간':n===360?'6시간':n===480?'8시간':n===1440?'1일':'7일'}</button>)}
+  </fieldset>
+  {busy&&<button onClick={()=>{cancel.current=true;}}>진행 중지</button>}<span aria-live="polite">{progress}</span>{error&&<p role="alert">{error}</p>}
+  <div className="ac-sim-columns"><aside><label>NPC 검색 <input value={query} onChange={e=>setQuery(e.target.value)}/></label><div className="ac-sim-npcs">{npcs.filter(c=>c.name.includes(query)).map(c=><button key={c.id} aria-pressed={c.id===id} onClick={()=>setSelected(c.id)}><b>{c.name}</b><small>LOD {lod.getTier(c.id)} · {world.catalog.getLocation(c.location!.currentLocationId).name}{c.location!.movement?' · 이동 중':''}</small></button>)}</div></aside>
+   <section><WorldSimulationPanels key={sessionVersion} controller={controller} id={id} locationId={destination} onLocation={setDestination} onCharacter={inspect} disabled={busy||controller.isPlaying()}/><details><summary>LOD·지역 활성 관찰</summary>{character&&state?<><h2>{character.name}</h2><p>LOD {state.tier} · {state.importance} · {state.persistent?'영속':'비영속'} · {state.reason}</p><p>현재 위치: {world.catalog.getLocationFullName(character.location!.currentLocationId)}</p><p>활동: {schedule.getCurrentActivity(character.id).activityId??'대기'} · 마지막 정밀 갱신 {state.lastDetailedAt===undefined?'없음':formatGameTime(state.lastDetailedAt)} · 간략 갱신 {state.lastCoarseAt===undefined?'없음':formatGameTime(state.lastCoarseAt)}</p>
+    <fieldset disabled={busy}><legend>NPC 개발 명령</legend><label>정밀도 <select aria-label="NPC 정밀도" value={state.forcedTier??'auto'} onChange={e=>run(()=>send({type:'lod',characterId:character.id,tier:e.target.value==='auto'?undefined:Number(e.target.value) as SimulationTier}))}><option value="auto">자동</option>{[0,1,2,3].map(t=><option key={t} value={t}>LOD {t}</option>)}</select></label><button onClick={()=>move(character.id)}>선택 NPC 정상 이동</button><button onClick={()=>run(()=>send({type:'importance',characterId:character.id}))}>주요 인물로 보존</button><button onClick={()=>setDetail(true)}>인물 상세</button></fieldset>
+   </>:<p>등록된 NPC가 없습니다.</p>}
+   <h2>지역 활성 상태</h2>{lod.getRegions().map(r=><div key={r.id}><b>{r.name}</b> · {r.active?'정밀 활성':'간략·휴면'} · 주민 {r.individualPopulation}/{r.totalPopulation??'미설정'} <button disabled={busy} onClick={()=>run(()=>send({type:'region',regionId:r.id,active:true}))}>활성화</button><button disabled={busy} onClick={()=>run(()=>send({type:'region',regionId:r.id,active:false}))}>자동 반경으로 복귀</button></div>)}
+   <p>예정·진행 사건: {sandbox.worldEvents?.getStatistics().active??0} · 실제 이동 중: {world.getTravelers().length}</p>
+   <h2>최근 전환</h2><div className="ac-sim-log">{lod.getTransitions().slice(-60).reverse().map((t,i)=><p key={i}>{formatGameTime(t.at)} · {world.getCharacterReadSnapshot(t.characterId).name}: {t.from} → {t.to} · {t.reason}</p>)}</div>
+   <h2>개발 명령</h2><div className="ac-sim-log">{lod.getCommands().slice(-20).reverse().map((c,i)=><p key={i}>{formatGameTime(c.at)} · {c.subjectId} · {c.message}</p>)}</div>
+   <h2>현재 장소 인원</h2>{[...world.catalog.nodes.values()].map(p=>({p,n:world.getLocationPopulation(p.id).direct})).filter(r=>r.n).map(({p,n})=><p key={p.id}>{p.name}: {n}명</p>)}
+  </details></section></div>
+  <p className="ac-note">성적·진급·졸업·조직 선거, 정식 전투, 복잡한 사건별 플레이어 분기는 후속 범위입니다. 플레이어 생활 어댑터가 연결된 경우 인지한 중요 사건과 직접 요청에서 중단합니다. LOD가 이를 생성하거나 성공으로 간주하지 않습니다.</p>
+  {detail&&detailCharacter&&<DetailDialog title={detailCharacter.name} wide onClose={()=>setDetail(false)}><CharacterStatusPanel mode="actual" character={detailCharacter} onInspectCharacter={inspect} aiEngine={ai} scheduleEngine={schedule} motivationEngine={sandbox.motivation} relationshipGraph={graph} relationshipCharacters={all} debug density="compact"/></DetailDialog>}
+ </section>;
+}

@@ -5,7 +5,7 @@ await mkdir('.build-projects',{recursive:true});
 const browser=await chromium.launch({headless:true}),base=(process.env.ACADEMY_TEST_URL||'http://127.0.0.1:5178/web-hub')+'/games/academy-survival/';
 try{
  const p=await browser.newPage({viewport:{width:1500,height:1000}}),errors=[];p.setDefaultTimeout(15000);p.on('pageerror',e=>errors.push(e.message));
- await p.goto(base+'?view=catalog&kind=relationship');await p.getByRole('heading',{name:'인간관계',exact:true}).first().waitFor();assert.equal(await p.locator('.ac-tabs button').count(),16);assert.equal(await p.locator('.ac-relationship-type-grid button').count(),50);
+ await p.goto(base+'?view=catalog&kind=relationship');await p.getByRole('heading',{name:'인간관계',exact:true}).first().waitFor();assert.equal(await p.locator('.ac-tabs button').count(),22);assert.equal(await p.locator('.ac-relationship-type-grid button').count(),50);
  const initialClock=await p.getByRole('button',{name:'현재 게임 날짜 상세',exact:true}).innerText();assert((await p.locator('.ac-relationship-panel').innerText()).includes('표시할 관계 없음'));
  await p.getByRole('button',{name:'부모 가족·혈연 · 역방향 필수',exact:true}).click();await p.getByRole('dialog',{name:'부모',exact:true}).waitFor();assert((await p.getByRole('dialog').innerText()).includes('감정은 역방향으로 복사하지 않습니다'));await p.keyboard.press('Escape');
  await p.getByRole('button',{name:'테스트',exact:true}).click();await p.getByRole('heading',{name:'인간관계 시뮬레이션 테스트',exact:true}).waitFor();

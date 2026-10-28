@@ -7,7 +7,7 @@
 | 파일 | 역할 |
 | --- | --- |
 | `types/schedule.ts` | 활동·조건·일정·템플릿·개인 계획·의도·실행·로그 타입 |
-| `data/schedules/index.ts` | 16개 활동, 13개 역할별 템플릿, 버전/우선순위/처리 제한 |
+| `data/schedules/index.ts` | 22개 활동, 13개 역할별 템플릿, 버전/우선순위/처리 제한 |
 | `systems/schedulePlanning.ts` | 실제 직급·소속으로 역할 판정, 시드 계획 생성, 학사·요일 선택, 날짜별 의도 및 충돌 정렬 |
 | `systems/npcSchedules.ts` | 실행 조정기, 예약 큐, 이동 요청, 도착 후 활동, 중단·재개·취소, 집계·로그 |
 | `systems/gameTime.ts` | 공통 시계의 시간순 예약 참가자 API |
@@ -112,3 +112,5 @@ runtime.getSocialContext(id); // 친구·신뢰·지인 조회, AI 판단 없음
 ## 욕구·목표 연결
 
 `subscribeExecution`은 실제 수행 변경을 별도 엔진에 알린다. 욕구 효과를 일과표에 추가하지 않는다. `saveExecution/loadExecution`은 보류된 조기 이동·중단·이력·다음 예약을 포함해 이어 진행을 재현한다. [욕구·목표 계약](../motivations/README.md).
+
+상호작용 v1 이후: conversation/study_together/sparring/train_together/avoid_contact/idle_wait를 공통 활동 카탈로그로 관리한다. idle_wait는 개발자 준비에도 사용하는 실제 대기 활동으로 완료 보상은 없다. 단일 실행 조정기가 승인한 자율 의도는 중단 불가 기존 활동이 없을 때 동일 우선순위 임시 계획보다 우선한다. 의무 일정 정책은 요청/AI에서 먼저 검사한다.

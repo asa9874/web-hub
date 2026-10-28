@@ -1,0 +1,4 @@
+import {CharacterCulturePanel} from './CulturePanels';
+import type {Character} from '../types/character';
+import {describeWorldIdentity} from '../systems/worldIdentity';
+export default function WorldIdentityPanel({character}:{character:Character}){const p=describeWorldIdentity(character.worldIdentity);return <section aria-label="세계관 출신 배경"><h3>종족·출신·시민권</h3>{p?<><p>{p.race} · {p.subrace} / 출생·출신 {p.polity} &gt; {p.origin}</p><p>문화권: {p.cultures.join(' · ')||'미설정'} · 시민권: {p.citizenships.join(' · ')||'미설정'}</p>{p.lifespan&&<p>종족 일반 수명 참고 {p.lifespan.min}~{p.lifespan.max}{p.lifespan.upperOpen?' 이상':''}년. 개인 수명·성인 연령·사망 시각을 뜻하지 않습니다.</p>}<p>현재 위치·거주지·조직 소속은 출신지 및 시민권과 별도로 관리합니다.</p></>:<p>기존 종족 표기: {character.species} · 출신: {character.origin}. 구조화된 배경은 미설정이며 임의 확정하지 않았습니다.</p>}<CharacterCulturePanel character={character}/></section>;}

@@ -1,3 +1,6 @@
+import {newGiftCodex} from '../data/giftCodex';
+import {reviewLegacyGift} from '../data/giftCodex/legacy';
+import {studentSignatureTraits,studentSignatureGifts} from '../data/characters/studentAbilities';
 import { traits as rawTraits } from '../data/traits';
 import { gifts as rawGifts } from '../data/gifts';
 import { expansionTraits, expansionGifts } from '../data/expansion';
@@ -10,7 +13,7 @@ import type { Entry, Gift, Trait } from '../types';
 function prepare<T extends Entry>(entry:T):T {
  return {...entry,system:entry.effects.map(effectText).join(' · '),eventIds:events.filter(event=>event.tags.some(tag=>entry.eventTags.includes(tag))).map(event=>event.id)};
 }
-export const traits:Trait[]=[...rawTraits,...expansionTraits,...characterTraits].map(prepare),gifts:Gift[]=[...rawGifts,...expansionGifts,...characterGifts].map(prepare);
+export const traits:Trait[]=[...rawTraits,...expansionTraits,...characterTraits,...studentSignatureTraits].map(prepare),gifts:Gift[]=[...[...rawGifts,...expansionGifts,...characterGifts,...studentSignatureGifts].map(g=>reviewLegacyGift(g,specialRules)),...newGiftCodex].map(prepare);
 export const traitRegistry=new Map(traits.map(t=>[t.id,t]));
 export const giftRegistry=new Map(gifts.map(g=>[g.id,g]));
 export const entries:Entry[]=[...traits,...gifts];

@@ -1,0 +1,17 @@
+import {useState} from 'react';
+import {interactions} from '../data/interactions';
+import {ACTIVITY_PROFILES,ACTION_RULES} from '../data/actionEffects/config';
+import {activityRegistry} from '../data/schedules';
+import DetailDialog from './DetailDialog';
+const categoryNames={social:'교류',cooperation:'협력',competition:'경쟁',conflict:'갈등'};
+const outcomeNames:Record<string,string>={pleasant:'즐거운 대화',ordinary:'무난한 결과',awkward:'어색한 분위기',unpleasant:'불쾌한 대화',empathy:'공감',trust:'신뢰 형성',disagreement:'의견 차이',deterioration:'관계 악화',helpful:'서로 도움',unsuccessful:'협력 불발',actor_win:'행위자 승리',target_win:'상대 승리',draw:'무승부',defused:'갈등 완화',intimidated:'위압',avoided:'접촉 회피'};
+export default function InteractionCatalog({effects=false,onTest}:{effects?:boolean;onTest:()=>void}){
+ const [query,setQuery]=useState(''),[selected,setSelected]=useState('');
+ const entry=interactions.find(d=>d.id===selected),profile=ACTIVITY_PROFILES[selected];
+ return <section><header className="ac-location-heading"><div><h2>{effects?'행동 결과·효과':'NPC 상호작용'}</h2><p>{effects?'검증 → 미리보기 → 원자적 적용 → 결과 ID 기록. 시간 기반 욕구 효과와 완료 보상을 구분합니다.':'같은 장소에서 제안·수락·공동 활동·결과를 공유합니다. 상대의 감정과 의사는 독립적입니다.'}</p></div><button onClick={onTest}>테스트</button></header>
+ <label>검색<input aria-label="상호작용 효과 검색" value={query} onChange={e=>setQuery(e.target.value)}/></label>
+ {effects?<><p>지원 효과: 욕구 변화 · 능력치 XP · 숙련도 XP · 관계 변화 · 목표 진행도 · 상태 적용/제거 · 카르마 · 도덕 · 등록된 전용 처리기.</p><p>자원은 실제 시스템이 없어 적용 오류로 반환합니다. 진행도 100은 달성 증거를 대신하지 않습니다.</p><p>성장 규칙 {ACTION_RULES.version}은 임시 런타임 규칙입니다. 도감의 미확정 XP 임계값과 별개입니다. 관계는 방향별·지표별 하루 절대 변화량 {ACTION_RULES.dailyRelationshipLimit}까지 적용합니다.</p><div className="ac-interaction-grid">{Object.entries(ACTIVITY_PROFILES).filter(([id,p])=>(activityRegistry.get(id)?.name+p.description).includes(query)).map(([id,p])=><button key={id} onClick={()=>setSelected(id)}><b>{activityRegistry.get(id)?.name??id}</b><small>{p.statXp?'성장 보상':'완료 시 추가 회복 없음'}</small></button>)}</div><p>결과 중복 키 보존 {ACTION_RULES.retentionDays}일 · 최대 {ACTION_RULES.maxLedger}개. 보존 구간 이전의 새 결과는 거부합니다. 도메인 사건은 관측 기록이며 사건 자동 발동 엔진이 아닙니다.</p></>:<div className="ac-interaction-grid">{interactions.filter(d=>(d.name+d.description+d.category).includes(query)).map(d=><button key={d.id} onClick={()=>setSelected(d.id)}><b>{d.name}</b><small>{categoryNames[d.category]} · {d.baseDurationMinutes}분</small></button>)}</div>}
+ {selected&&<DetailDialog title={effects?activityRegistry.get(selected)?.name??selected:entry?.name??selected} onClose={()=>setSelected('')}><div className="ac-interaction-details">
+ {effects&&profile?<><p>{profile.description}</p><p>시간당 기본 XP: {profile.stat??'능력치 없음'} {profile.statXp} / {profile.proficiency??'보유 주 숙련 분야'} {profile.proficiencyXp}</p><p>실제 완료 시간, 피로, 성장 유형, 관련 능력치, 성향과 구별된 학습 특성, 환경, 동료 지도, 시드 편차를 적용합니다. 높은 경지일수록 숙련 XP 획득량은 감소합니다.</p><p>중단된 활동에 전체 완료 보상을 지급하지 않습니다. 식사·수면·휴식의 욕구 회복은 실제 수행 시간에만 기존 욕구 엔진에서 처리합니다.</p></>:entry&&<><p>{entry.description}</p><dl><dt>조건</dt><dd>같은 장소 · 정지 상태 · 양쪽 실행 가능 · 중요한 일정/근무/수면 중 참여 불가</dd><dt>장소 태그</dt><dd>{entry.requiredPlaceTags.join(' / ')}</dd><dt>수락</dt><dd>기본 {entry.acceptance.base} + 상대의 방향성 감정·욕구·성향·최근 빈도. 거절 자체는 관계를 낮추지 않습니다.</dd><dt>활동</dt><dd>{activityRegistry.get(entry.requiredActivityId)?.name} · {entry.baseDurationMinutes}분</dd><dt>결과</dt><dd>{entry.outcomeTypes.map(t=>outcomeNames[t]??t).join(' / ')}</dd><dt>재시도 대기</dt><dd>{entry.retryMinutes}분</dd></dl><p>공부·훈련·간이 대련은 실제 완료 후 성장과 양방향의 서로 다른 관계 변화를 적용합니다. 대련은 능력·숙련·피로 기반 간이 승패이며 전투·부상 엔진이 아닙니다. 회피는 일방적 비접촉 행동입니다.</p></>}
+ </div></DetailDialog>}</section>;
+}

@@ -1,0 +1,41 @@
+import type {WorldEventDefinition} from '../../types/worldEvent';
+/** Each signal is emitted only after its actual location/activity/interaction evidence. */
+export const LIFE_SIGNALS=[
+ ['homecoming','거주지 귀환','실제 이동을 마치고 자신의 거주지에 도착했다.'],
+ ['sleep','자기 방에서 취침','배정된 방에 도착해 실제 수면 활동을 시작했다.'],
+ ['wake','기상','실제 수면 수행을 마치거나 중단한 뒤 깨어났다.'],
+ ['late-wake','늦은 기상','오전9시 이후 실제 수면 활동을 끝냈다.'],
+ ['breakfast','아침 식사','취식 장소에서 실제 아침 식사를 수행했다.'],
+ ['late-breakfast','늦은 아침 식사','오전9시 이후 실제 아침 식사를 마쳤다.'],
+ ['room-rest','방에서 휴식','자신의 거주 공간에서 실제 휴식 시간을 보냈다.'],
+ ['lounge-rest','휴게실에서 휴식','공용 휴게실에서 실제 휴식 시간을 보냈다.'],
+ ['room-study','방에서 복습','자신의 방에서 실제 개인 공부를 수행했다.'],
+ ['night-reading','늦은 밤 독서','21시 이후 자신의 방에서 독서한 경험이다.'],
+ ['clean','방 정리 완료','자신의 방에서 정리 활동을 실제 수행했다.'],
+ ['laundry','세탁 완료','세탁실에서 실제 세탁 활동을 마쳤다.'],
+ ['hygiene','생활 준비','위생 시설에서 실제 준비 활동을 마쳤다.'],
+ ['letter','편지 작성','실제 편지 작성 활동을 마쳤다. 배달이나 회신을 뜻하지 않는다.'],
+ ['walk','정원 산책','실제 정원에서 산책 시간을 보냈다.'],
+ ['first-roommate','룸메이트와 첫 교류','같은 방 입주자와 실제 대화를 처음 완료했다.'],
+ ['morning-greeting','룸메이트 아침 인사','05~09시에 실제 룸메이트와 대화를 마쳤다.'],
+ ['evening-chat','잠들기 전 대화','20시 이후 실제 룸메이트와 대화를 마쳤다.'],
+ ['roommate-study','룸메이트 공동 공부','같은 방 입주자와 실제 공동 공부를 완료했다.'],
+ ['shared-study','공동 학습 완료','학습 장소에서 수락한 상대와 공동 공부를 마쳤다.'],
+ ['shared-meal','함께한 식사','같은 취식 장소에서 상대가 수락한 공동 식사를 완료했다.'],
+ ['lounge-chat','휴게실 만남','공용 휴게실에서 실제 공동 대화를 완료했다.'],
+ ['counsel','친구의 고민 상담','같은 생활 공간에서 실제 진지한 대화나 위로를 마쳤다.'],
+ ['reconcile','룸메이트 화해 시도','같은 방 입주자와 실제 화해 대화를 마쳤다. 용서를 보장하지 않는다.'],
+ ['quiet-request','야간 소음 조정','실제 야간의 소음 활동을 인지한 룸메이트가 조용히 해 달라는 대화를 마쳤다.'],
+ ['tidy-request','정리 분담 논의','실제 정리 경험과 선호 차이를 근거로 룸메이트와 정리 요청 대화를 마쳤다.'],
+ ['hobby','일상 취미 활동','실제 취미 활동을 마쳤다. 재료나 아이템을 생성하지 않는다.'],
+ ['hobby-discovery','새로운 생활 취향','공동 활동을 반복해 작은 개인 행동 선호가 바뀌었다.'],
+] as const;
+export const lifeSignalRegistry=new Map<string,{id:string;name:string;description:string}>(LIFE_SIGNALS.map(([id,name,description])=>[id,{id,name,description}]));
+export const dailyLifeWorldEvents:WorldEventDefinition[]=LIFE_SIGNALS.map(([id,name,description])=>({
+ id:'daily-'+id,name,description,category:'daily',tags:['daily-life',id],scale:'personal',importance:['quiet-request','tidy-request','reconcile','first-roommate','hobby-discovery'].includes(id)?45:20,
+ triggerRules:[{id:'actual-life-evidence',type:'emergent',probability:1,domainTypes:['DailyLifeExperienced'],domainDefinitionIds:['daily-'+id],conditions:[]}],
+ participantRules:{count:1,conditions:[{type:'fact',eventType:'DailyLifeExperienced',outcome:id}]},
+ stages:[{id:'record',name:'실제 생활 결과 확인',durationMinutes:1,timeoutMinutes:5,entryConditions:[],completionConditions:[],failureConditions:[],effects:[],nextStageIds:[]}],
+ outcomeRules:[{id:'experienced',name:'실제 수행 경험 기록',conditions:[],weight:1,effects:[]}],followUpRules:[],cooldownMinutes:60,participantCooldownMinutes:1440,maxOccurrences:10000,visibility:'private',
+ limitations:['전용 생활 관찰자가 실제 도메인 사건으로만 활성화한다. 실제 활동/상호작용 효과는 원래 공통 엔진이 한 번 적용하며 여기서 중복 보상하지 않는다.'],
+}));

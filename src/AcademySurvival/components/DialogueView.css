@@ -1,0 +1,13 @@
+.ac-dialogue-utterance { margin: 12px 0; padding: 12px 14px; border-left: 2px solid #707b92; background: #151a23; border-radius: 0 8px 8px 0; overflow-wrap: anywhere; }
+.ac-dialogue-utterance header { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.ac-dialogue-utterance small { color: #adb8c8; font-size: .7rem; }
+.ac-dialogue-utterance blockquote { margin: 7px 0 0; padding: 0; border: 0; font-size: .95rem; line-height: 1.7; }
+.ac-dialogue-utterance .ac-dialogue-gesture { margin: 6px 0; color: #a5abba; font-size: .75rem; font-style: italic; }
+.ac-dialogue-utterance[data-emotion=worried],.ac-dialogue-utterance[data-emotion=hurt] { border-color: #cb997f; }
+.ac-dialogue-utterance[data-emotion=warm],.ac-dialogue-utterance[data-emotion=proud] { border-color: #c7b47f; }
+.ac-dialogue-feed { min-width: 0; }
+.ac-dialogue-feed details { margin: 7px 0; }
+.ac-dialogue-feed summary { cursor: pointer; font-size: .82rem; color: #c7cddd; }
+.ac-dialogue-address { color: #d8c498; }
+.ac-dialogue-debug { overflow-wrap: anywhere; font-size: .8rem; }
+@media (prefers-reduced-motion: no-preference) { .ac-dialogue-utterance { animation: ac-dialogue-in .16s ease-out; } @keyframes ac-dialogue-in { from { opacity: .6; transform: translateY(3px); } to { opacity: 1; transform: none; } } }

@@ -1,0 +1,157 @@
+{
+  "version": "culture-life-v1",
+  "checkedAt": "2026-10-24",
+  "catalog": {
+    "cultures": 14,
+    "archetypes": 28,
+    "practices": 24,
+    "campusEvents": 24,
+    "food": 18,
+    "clothing": 12,
+    "hobby": 18,
+    "gift": 18
+  },
+  "checks": {
+    "contracts": "passed",
+    "preparedEvents": {
+      "completed": 23,
+      "failedWithExpectedConsentHandling": 1
+    },
+    "realActivity": "passed",
+    "personalGifts": "passed",
+    "newHabitAdoption": "passed: controlled 3 NPC repeated actual exchanges",
+    "mixedGeneration": "passed",
+    "saveAndLegacy": "passed",
+    "minuteStepEquivalence": "passed",
+    "browser": "passed: detailed lore, mixed worker, shared activity/time/memory, command log, cooldown, 390px, sandbox isolation",
+    "related": [
+      "NPC generation",
+      "character",
+      "location",
+      "world lore",
+      "conversations",
+      "world events",
+      "interactions/effects",
+      "memory",
+      "AI focused (AI_SKIP_BATCH=1)",
+      "feature registry:38/304",
+      "validation infrastructure:61"
+    ],
+    "allCulturesHaveFourContentKinds": "passed",
+    "autonomousGiftProposals": "passed",
+    "types": "passed",
+    "newSourceLint": "passed",
+    "build": "passed: 38 project entries and 185 local references; existing CSS/large-chunk warnings remain"
+  },
+  "shortDiagnostic": {
+    "environment": "Node.js v22.18.0 / Windows / single cold morning hour, engine only, no parallel benchmark",
+    "npcCount": 100,
+    "policy": "all-detail (LOD disabled, AI enabled)",
+    "lodCounts": [
+      100,
+      0,
+      0,
+      0
+    ],
+    "minutes": 60,
+    "creationSeconds": 4.049318299999999,
+    "seconds": 3.0843344000000017,
+    "ai": {
+      "total": 100,
+      "traveling": 3,
+      "performing": 97,
+      "waiting": 0,
+      "decisions": 901,
+      "deviations": 16,
+      "recentFailures": 0,
+      "jointActive": 0,
+      "jointCompleted": 0,
+      "jointRejected": 0
+    },
+    "events": {
+      "created": 0,
+      "completed": 0,
+      "failed": 0,
+      "cancelled": 0,
+      "expired": 0,
+      "blocked": 0,
+      "limited": 0,
+      "archived": 0,
+      "byCategory": {
+        "daily": 0,
+        "relationship": 0,
+        "academy": 0,
+        "combat": 0,
+        "health": 0,
+        "organization": 0,
+        "economy": 0,
+        "exploration": 0,
+        "rumor": 0,
+        "environment": 0,
+        "personal_story": 0,
+        "world": 0
+      },
+      "byStatus": {
+        "scheduled": 0,
+        "pending": 0,
+        "active": 0,
+        "completed": 0,
+        "failed": 0,
+        "cancelled": 0,
+        "expired": 0
+      },
+      "retained": 0,
+      "relations": 0,
+      "jobs": 36,
+      "processed": 68,
+      "active": 0
+    },
+    "memory": {
+      "errors": 0,
+      "generated": 39,
+      "direct": 21,
+      "witnessed": 18,
+      "heard": 0,
+      "inferred": 0,
+      "shared": 0,
+      "withheld": 0,
+      "distorted": 0,
+      "evicted": 0,
+      "importantEvicted": 0,
+      "recalls": 0,
+      "forgotten": 0,
+      "memories": 39,
+      "claims": 21,
+      "facts": 21,
+      "processed": 21,
+      "deliveries": 0,
+      "active": 39,
+      "faded": 0,
+      "forgottenRetained": 0,
+      "maxPerCharacter": 3
+    }
+  },
+  "warnings": [
+    "100 NPC full-detail one-hour single measurement exceeds 1 second warning; goal 0.3 seconds unfulfilled",
+    "Existing CSS selector and large chunk build warnings"
+  ],
+  "notRun": [
+    "100 NPC 30/360 days",
+    "10-year stability",
+    "weekly performance",
+    "whole browser regression"
+  ],
+  "limits": [
+    "No real inventory or ownership transfer",
+    "No letter delivery or instant home visit",
+    "No canonical festival dates",
+    "No culture assimilation, language grammar, ancestry or national economy"
+  ],
+  "evidence": [
+    "scripts/test-academy-culture.mjs",
+    "scripts/test-academy-culture-browser.mjs",
+    "test-results/academy-culture/report.json",
+    "test-results/academy-culture/browser.json",
+    "test-results/academy-culture-*.log"
+  ]
+}

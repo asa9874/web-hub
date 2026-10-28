@@ -1,0 +1,23 @@
+{
+  "version": "world-lore-v1",
+  "checkedAt": "2026-10-24",
+  "scope": "Static world lore, identity generation, legacy/new save integration, focused UI",
+  "checks": {
+    "worldLoreContracts": "passed",
+    "generationCases": 8,
+    "npcGeneration": "passed",
+    "character": "passed",
+    "organizations": "passed",
+    "locations": "passed",
+    "featureRegistry": "passed: 37 systems, 292 versioned items",
+    "validationInfrastructure": "passed: 59 registered checks",
+    "types": "passed",
+    "newSourceLint": "passed",
+    "browser": "passed: catalogs, 390px, worker generation, player/save, sandbox isolation",
+    "build": "passed: 38 project entries, 185 local references"
+  },
+  "buildWarnings": ["Existing CSS animate-* selector warnings", "Large JavaScript chunks"],
+  "notRun": ["Full browser regression", "30-day/360-day/10-year simulation", "100 NPC runtime performance benchmark"],
+  "limitations": ["Static diplomacy only", "Unconfigured long-distance routes", "No national AI/economy/war", "No aging or death mechanics", "Provisional settlement names and unset population/climate/language/religion"],
+  "evidence": ["scripts/test-academy-world-lore.mjs", "scripts/test-academy-world-lore-browser.mjs", "test-results/academy-world-lore/contracts.json", "test-results/academy-world-lore/browser.json", "test-results/academy-world-lore-*.log"]
+}

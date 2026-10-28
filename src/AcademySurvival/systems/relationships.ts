@@ -1,3 +1,4 @@
+import {deferDomainNotification} from './domainTransaction';
 import type {RelationshipRecord,RelationshipInput,RelationshipChanges,RelationshipMetric,RelationshipTypeDefinition,RelationshipLog} from '../types/relationship';
 import {relationshipTypes} from '../data/relationships';
 import {RELATIONSHIP_METRICS,RELATIONSHIP_V1,RELATIONSHIP_CATEGORIES} from '../data/relationships/config';
@@ -18,7 +19,7 @@ export function createRelationshipGraph(characterIds:Iterable<string>,initial:re
  const put=(r:RelationshipRecord)=>{const row=index.get(r.sourceCharacterId)??new Map();row.set(r.targetCharacterId,r);index.set(r.sourceCharacterId,row);const set=incoming.get(r.targetCharacterId)??new Set();set.add(r.sourceCharacterId);incoming.set(r.targetCharacterId,set);};
  const drop=(a:string,b:string)=>{index.get(a)?.delete(b);if(!index.get(a)?.size)index.delete(a);incoming.get(b)?.delete(a);if(!incoming.get(b)?.size)incoming.delete(b);};
  initial.forEach(r=>put(structuredClone(r)));
- const notify=()=>{revision++;for(const fn of listeners)fn();};
+ const notify=()=>deferDomainNotification(()=>{revision++;for(const fn of listeners)fn();});
  const log=(action:string,message:string,a?:string,b?:string)=>{const at=options.now?.();if(at!==undefined)assertAbsoluteMinute(at);logs.push({id:++sequence,at,action,message,sourceCharacterId:a,targetCharacterId:b});if(logs.length>RELATIONSHIP_V1.maxLogs)logs.splice(0,logs.length-RELATIONSHIP_V1.maxLogs);};
  const make=(data:RelationshipInput):RelationshipRecord=>{const at=options.now?.();return {...emptyRelationshipEmotions(),relationshipTypeIds:[],familiarity:'known',visibility:'public',origin:'manual',...(at!==undefined?{createdAt:at,updatedAt:at}:{}),...structuredClone(data)};};
  const assertRecord=(r:RelationshipRecord)=>{const issues=relationshipRecordIssues(r,ids,types);if(issues.length)throw new Error(issues.join(' / '));};

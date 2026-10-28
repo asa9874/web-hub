@@ -1,3 +1,4 @@
+import {seedLoreOrganizations} from '../worldLore/seeds';
 import type {OrganizationDefinition,OrganizationVisibility} from '../../types/organization';
 import type {OrganizationType} from '../../types/social';
 const o=(id:string,name:string,parent:string|undefined,type:OrganizationType,kind:string,impact:number,description:string,lore:string,purpose:string,feature:string,admission:string,departure:string,visibility:OrganizationVisibility='public',scale:OrganizationDefinition['scale']='institution',aliases:string[]=[]):OrganizationDefinition=>({id,name,parentOrganizationId:parent,type,kind,impact,description,lore,purposes:[purpose],features:[feature],admissionRules:[admission],departureRules:[departure],tags:[type,visibility],visibility,scale,aliases});
@@ -36,3 +37,5 @@ export const organizationDefinitions:OrganizationDefinition[]=[
  o('central-tower','중앙 마탑','imperial-magic-ministry','tower','기존 연구기관',620,'기존 연구원 프로필이 사용하는 중앙 마탑.','기존 직급의 연구 소속 ID를 보존한 기관이다. 제국 마법부의 학술 체계에 참여하되 국립 연구소와는 인사와 연구 계약을 구분한다.','독립 과제 수행과 연구자 양성','국립 연구소와 다른 연구 계약','채용·수학 심사와 과제 배정','계약·수학 종료'),
  o('river-town','강가 정착지','empire','settlement','자치 공동체',160,'강가의 생활·협동 활동을 함께 운영하는 등록 공동체.','이곳에 산다는 사실만으로 구성원이 되는 것은 아니다. 가입 의사를 밝히고 공동체 운영 규약을 받아들인 사람들을 별도 명부에 기록한다.','생활 협동과 지역 자치','거주와 공동체 가입을 구별','자발적 가입과 공동체 등록','자발적 탈퇴와 공동 책임 정산','public','regional'),
 ];
+
+organizationDefinitions.splice(0,organizationDefinitions.length,...seedLoreOrganizations(organizationDefinitions));

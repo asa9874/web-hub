@@ -1,0 +1,416 @@
+{
+  "version": "performance-optimization-v1",
+  "createdAt": "2026-10-23T10:18:32.966Z",
+  "environment": {
+    "node": "v22.18.0",
+    "platform": "win32",
+    "arch": "x64",
+    "osRelease": "10.0.26200",
+    "cpu": "Intel(R) Core(TM) Ultra 7 258V",
+    "logicalCpus": 8
+  },
+  "npcCount": 100,
+  "allAiEnabled": true,
+  "scope": "Fresh-world engine samples. 60 minutes x 2 per scenario before/after; one 8-hour class scenario before/after. Existing sandbox UI x 2 at 60 minutes with same optimized engine, before/after display scheduling.",
+  "beforeBundleSha256": "eed424a4da3f26c8d27cc835eb866b9a8def4c63003dba47989286f895b2f54a",
+  "afterBundleSha256": "08483c99abe30f8db03fd8b941f94f231d3364081e0e402365347ab92a03648e",
+  "comparisons": [
+    {
+      "scenario": "classes",
+      "beforeMeanMs": 1374.62365,
+      "afterMeanMs": 621.3433,
+      "beforeSlowestMs": 1383.6174,
+      "afterSlowestMs": 623.4973000000001,
+      "reductionPercent": 54.8,
+      "stateSha256": "f3c8ed0c9222fa5b20e084d67a7c2abf60d18cf0f6ad0c7deeb2373baee8b4c5",
+      "afterSampleMs": [
+        619.1893,
+        623.4973000000001
+      ],
+      "readsBefore": {
+        "getCharacters": 8,
+        "getCharacter": 44947,
+        "getCharacterIdsAtLocation": 2075,
+        "getCharacterLocation": 24275,
+        "findRoute": 6088
+      },
+      "readsAfter": {
+        "getCharacters": 8,
+        "getCharacterReadSnapshot": 67997,
+        "getCharacterIdsAtLocation": 2075,
+        "getCharacter": 400,
+        "getCharacterLocation": 825,
+        "findRoute": 6088
+      },
+      "aiDecisions": 525,
+      "worldEvents": 0,
+      "memories": 0,
+      "relationshipChanges": 0
+    },
+    {
+      "scenario": "social",
+      "beforeMeanMs": 2038.5604500000002,
+      "afterMeanMs": 1154.75175,
+      "beforeSlowestMs": 2040.0775000000003,
+      "afterSlowestMs": 1174.4106,
+      "reductionPercent": 43.4,
+      "stateSha256": "050b19559c3c72ccbfd41f069dbfc02125c354f2ad07024adfd708b012656b28",
+      "afterSampleMs": [
+        1174.4106,
+        1135.0929
+      ],
+      "readsBefore": {
+        "getCharacters": 25,
+        "getCharacter": 53417,
+        "getCharacterIdsAtLocation": 1923,
+        "getCharacterLocation": 3872,
+        "findRoute": 5800
+      },
+      "readsAfter": {
+        "getCharacters": 25,
+        "getCharacterReadSnapshot": 55500,
+        "getCharacterIdsAtLocation": 1923,
+        "getCharacter": 1051,
+        "getCharacterLocation": 738,
+        "findRoute": 5800
+      },
+      "aiDecisions": 481,
+      "worldEvents": 0,
+      "memories": 607,
+      "relationshipChanges": 36
+    },
+    {
+      "scenario": "exams",
+      "beforeMeanMs": 1842.0924499999996,
+      "afterMeanMs": 946.7240999999999,
+      "beforeSlowestMs": 1862.6267999999998,
+      "afterSlowestMs": 950.4137,
+      "reductionPercent": 48.6,
+      "stateSha256": "79924653eb2b262d6c917ea03936a2fe3e9fadf5cc2e89b00cf9c9c461de97cc",
+      "afterSampleMs": [
+        950.4137,
+        943.0345
+      ],
+      "readsBefore": {
+        "getCharacters": 11,
+        "getCharacter": 50982,
+        "getCharacterIdsAtLocation": 2184,
+        "getCharacterLocation": 10167,
+        "findRoute": 7718
+      },
+      "readsAfter": {
+        "getCharacters": 11,
+        "getCharacterReadSnapshot": 59121,
+        "getCharacterIdsAtLocation": 2184,
+        "getCharacter": 880,
+        "getCharacterLocation": 1148,
+        "findRoute": 7718
+      },
+      "aiDecisions": 668,
+      "worldEvents": 1,
+      "memories": 72,
+      "relationshipChanges": 0
+    },
+    {
+      "scenario": "events",
+      "beforeMeanMs": 1390.5254000000002,
+      "afterMeanMs": 799.1865499999999,
+      "beforeSlowestMs": 1422.0837000000001,
+      "afterSlowestMs": 803.2808999999999,
+      "reductionPercent": 42.5,
+      "stateSha256": "70390b2e19ad9ade9bcf0027e0bc59c54b9a39eabeced32aa63a9209da95658b",
+      "afterSampleMs": [
+        803.2808999999999,
+        795.0922
+      ],
+      "readsBefore": {
+        "getCharacters": 10,
+        "getCharacter": 35007,
+        "getCharacterIdsAtLocation": 1856,
+        "getCharacterLocation": 5089,
+        "findRoute": 5739
+      },
+      "readsAfter": {
+        "getCharacters": 10,
+        "getCharacterReadSnapshot": 39175,
+        "getCharacterIdsAtLocation": 1856,
+        "getCharacter": 357,
+        "getCharacterLocation": 564,
+        "findRoute": 5739
+      },
+      "aiDecisions": 456,
+      "worldEvents": 1,
+      "memories": 69,
+      "relationshipChanges": 0
+    }
+  ],
+  "eightHours": [
+    {
+      "name": "수업 주간의 오전 수업 구간",
+      "elapsedMs": 5248.125800000001,
+      "stateSha256": "66811c8ec8513536ab54656588af849a0bf4f583c0d1bbd1ee1a2f96de1900f0",
+      "actualMinutes": 480,
+      "decisions": 4461,
+      "worldEvents": 2,
+      "memories": 348
+    },
+    {
+      "name": "수업 주간의 오전 수업 구간",
+      "elapsedMs": 10199.8458,
+      "stateSha256": "66811c8ec8513536ab54656588af849a0bf4f583c0d1bbd1ee1a2f96de1900f0",
+      "actualMinutes": 480,
+      "decisions": 4461,
+      "worldEvents": 2,
+      "memories": 348
+    }
+  ],
+  "ui": {
+    "browser": "156.0.8078.4",
+    "beforeMeanMs": 1534.5173,
+    "afterMeanMs": 643.9780500000002,
+    "beforeSlowestMs": 1580.5402000000004,
+    "afterSlowestMs": 689.7510000000002,
+    "afterSampleMs": [
+      689.7510000000002,
+      598.2051000000001
+    ],
+    "stateSha256": "3e9a678f5ee2bfd892468a41836bd92b8d84c0088765aac5a5241321b0f5b7e7"
+  },
+  "equivalence": {
+    "exactBeforeAfter": true,
+    "minuteBulk": [
+      {
+        "scenario": "classes",
+        "hash": "f3c8ed0c9222fa5b20e084d67a7c2abf60d18cf0f6ad0c7deeb2373baee8b4c5",
+        "minuteMs": 635.5072
+      },
+      {
+        "scenario": "social",
+        "hash": "050b19559c3c72ccbfd41f069dbfc02125c354f2ad07024adfd708b012656b28",
+        "minuteMs": 1141.9157
+      },
+      {
+        "scenario": "exams",
+        "hash": "79924653eb2b262d6c917ea03936a2fe3e9fadf5cc2e89b00cf9c9c461de97cc",
+        "minuteMs": 975.7068
+      },
+      {
+        "scenario": "events",
+        "hash": "70390b2e19ad9ade9bcf0027e0bc59c54b9a39eabeced32aa63a9209da95658b",
+        "minuteMs": 761.1596
+      }
+    ]
+  },
+  "remainingProfile": {
+    "sampledMs": 1274.216,
+    "functions": [
+      {
+        "name": "structuredClone @ node:internal/worker/js_transferable",
+        "selfMs": 500.815,
+        "percent": 39.3
+      },
+      {
+        "name": "save @ src/AcademySurvival/systems/motivationEngine.ts",
+        "selfMs": 82.455,
+        "percent": 6.5
+      },
+      {
+        "name": "structuredClone @ structuredClone",
+        "selfMs": 58.16,
+        "percent": 4.6
+      },
+      {
+        "name": "(garbage collector) @ (garbage collector)",
+        "selfMs": 47.802,
+        "percent": 3.8
+      },
+      {
+        "name": "canEnterLocation @ src/AcademySurvival/systems/locationAccess.ts",
+        "selfMs": 42.94,
+        "percent": 3.4
+      },
+      {
+        "name": "candidates @ src/AcademySurvival/systems/npcAi.ts",
+        "selfMs": 41.568,
+        "percent": 3.3
+      },
+      {
+        "name": "post @ node:inspector",
+        "selfMs": 38.203,
+        "percent": 3
+      },
+      {
+        "name": "findRoute @ src/AcademySurvival/systems/locationRouting.ts",
+        "selfMs": 27.749,
+        "percent": 2.2
+      },
+      {
+        "name": "getLocationPath2 @ src/AcademySurvival/systems/locationRegistry.ts",
+        "selfMs": 25.532,
+        "percent": 2
+      },
+      {
+        "name": "(anonymous) @ src/AcademySurvival/systems/locationAccess.ts",
+        "selfMs": 22.006,
+        "percent": 1.7
+      },
+      {
+        "name": "check3 @ src/AcademySurvival/systems/interactions.ts",
+        "selfMs": 20.471,
+        "percent": 1.6
+      },
+      {
+        "name": "(anonymous) @ src/AcademySurvival/systems/locationRouting.ts",
+        "selfMs": 18.833,
+        "percent": 1.5
+      },
+      {
+        "name": "(anonymous) @ src/AcademySurvival/systems/motivationEngine.ts",
+        "selfMs": 17.925,
+        "percent": 1.4
+      },
+      {
+        "name": "window @ src/AcademySurvival/systems/npcSchedules.ts",
+        "selfMs": 14.361,
+        "percent": 1.1
+      },
+      {
+        "name": "add @ src/AcademySurvival/systems/npcAi.ts",
+        "selfMs": 14.098,
+        "percent": 1.1
+      },
+      {
+        "name": "dispatch @ dispatch",
+        "selfMs": 13.566,
+        "percent": 1.1
+      },
+      {
+        "name": "intent @ src/AcademySurvival/systems/motivationEngine.ts",
+        "selfMs": 13.297,
+        "percent": 1
+      },
+      {
+        "name": "(anonymous) @ src/AcademySurvival/systems/npcMemory.ts",
+        "selfMs": 12.177,
+        "percent": 1
+      }
+    ],
+    "sources": [
+      {
+        "name": "node:internal/worker/js_transferable",
+        "selfMs": 500.815,
+        "percent": 39.3
+      },
+      {
+        "name": "src/AcademySurvival/systems/motivationEngine.ts",
+        "selfMs": 166.417,
+        "percent": 13.1
+      },
+      {
+        "name": "src/AcademySurvival/systems/npcAi.ts",
+        "selfMs": 80.734,
+        "percent": 6.3
+      },
+      {
+        "name": "src/AcademySurvival/systems/locationAccess.ts",
+        "selfMs": 73.872,
+        "percent": 5.8
+      },
+      {
+        "name": "structuredClone",
+        "selfMs": 58.16,
+        "percent": 4.6
+      },
+      {
+        "name": "src/AcademySurvival/systems/npcMemory.ts",
+        "selfMs": 50.153,
+        "percent": 3.9
+      },
+      {
+        "name": "src/AcademySurvival/systems/locationRouting.ts",
+        "selfMs": 49.797,
+        "percent": 3.9
+      },
+      {
+        "name": "(garbage collector)",
+        "selfMs": 47.802,
+        "percent": 3.8
+      },
+      {
+        "name": "src/AcademySurvival/systems/interactions.ts",
+        "selfMs": 41.928,
+        "percent": 3.3
+      },
+      {
+        "name": "node:inspector",
+        "selfMs": 38.203,
+        "percent": 3
+      },
+      {
+        "name": "src/AcademySurvival/systems/npcSchedules.ts",
+        "selfMs": 36.889,
+        "percent": 2.9
+      },
+      {
+        "name": "src/AcademySurvival/systems/relationships.ts",
+        "selfMs": 32.637,
+        "percent": 2.6
+      },
+      {
+        "name": "src/AcademySurvival/systems/locationRegistry.ts",
+        "selfMs": 27.181,
+        "percent": 2.1
+      },
+      {
+        "name": "src/AcademySurvival/systems/actionEffects.ts",
+        "selfMs": 17.834,
+        "percent": 1.4
+      },
+      {
+        "name": "dispatch",
+        "selfMs": 13.566,
+        "percent": 1.1
+      },
+      {
+        "name": "src/AcademySurvival/systems/motivationRules.ts",
+        "selfMs": 10.709,
+        "percent": 0.8
+      },
+      {
+        "name": "src/AcademySurvival/systems/worldEvents.ts",
+        "selfMs": 7.239,
+        "percent": 0.6
+      },
+      {
+        "name": "src/AcademySurvival/systems/locationWorld.ts",
+        "selfMs": 5.918,
+        "percent": 0.5
+      }
+    ]
+  },
+  "verification": {
+    "immutableCacheContract": "passed",
+    "locationRegression": "passed",
+    "memoryRegression": "passed",
+    "interactionsEffectsRegression": "passed",
+    "aiFocused": "passed_batch_skipped",
+    "worldEventContracts": "passed",
+    "scopedBrowser": "passed",
+    "typeAndBuild": "passed: full TypeScript, changed-source ESLint, root Vite production build, dist validation"
+  },
+  "notMeasured": [
+    "1 day",
+    "7 days",
+    "9/30 day repeats",
+    "aged saves",
+    "player choice interruption"
+  ],
+  "targetsMet": false,
+  "build": {
+    "appBuildSeconds": 24.88,
+    "projectEntries": 38,
+    "localReferences": 181,
+    "otherProjectBundlesRebuilt": false,
+    "existingChunkSizeWarning": true
+  }
+}

@@ -1,0 +1,8 @@
+import type {CourseSection} from '../types/academic';
+import {courseRegistry} from '../data/academic';
+import {formatGameTime} from '../systems/calendar';
+import {courseColor} from '../systems/academicPresentation';
+export default function AcademicTimetable({sections,onSelect}:{sections:CourseSection[];onSelect:(id:string)=>void}){
+ const start=Math.min(420,...sections.map(s=>Math.floor(s.start/60)*60)),end=Math.max(1260,...sections.map(s=>Math.ceil(s.end/60)*60)),height=(end-start)/60*52;
+ return <section className="ac-timetable" aria-label="주간 학사 시간표"><header><h3>내 시간표</h3><span>월요일–일요일 · 강의를 누르면 상세 안내</span></header><div className="ac-timetable-scroll" tabIndex={0}><div className="ac-timetable-board" style={{minHeight:height+38}}><div className="ac-timetable-days"><span>시간</span>{['월','화','수','목','금','토','일'].map(d=><strong key={d}>{d}</strong>)}</div><div className="ac-timetable-body" style={{height}}><div className="ac-timetable-hours">{Array.from({length:(end-start)/60+1},(_,i)=><time key={i} style={{top:i*52}}>{formatGameTime(start+i*60)}</time>)}</div>{Array.from({length:7},(_,day)=><div className="ac-timetable-day" key={day}>{sections.filter(s=>s.weekday===day).map(s=>{const c=courseRegistry.get(s.courseId)!;return <button key={s.id} style={{top:(s.start-start)/60*52,height:Math.max(32,(s.end-s.start)/60*52-3),borderColor:courseColor(c),background:courseColor(c)+'26'}} onClick={()=>onSelect(s.id)} title={`${c.name} · ${formatGameTime(s.start)}–${formatGameTime(s.end)}`}><strong>{c.name}</strong><small>{formatGameTime(s.start)}–{formatGameTime(s.end)}</small></button>;})}</div>)}</div></div></div>{!sections.length&&<p className="ac-empty-state">아직 확정된 강의가 없습니다. 개설 강의에서 신청 결과를 확인하세요.</p>}</section>;
+}

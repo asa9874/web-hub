@@ -1,0 +1,149 @@
+{
+  "tool": "built-in image_gen",
+  "expressions": [
+    "neutral",
+    "happy",
+    "serious",
+    "worried"
+  ],
+  "files": [
+    {
+      "key": "serena",
+      "source": "C:\\Users\\pjkpj\\.codex\\generated_images\\01a12fa4-dddc-7751-8caf-46ea06cba017\\exec-2bd52e65-a12c-4c3d-b813-b7598dc316ef.png"
+    },
+    {
+      "key": "adelia",
+      "source": "C:\\Users\\pjkpj\\.codex\\generated_images\\01a12fa4-dddc-7751-8caf-46ea06cba017\\exec-3fabe734-66c3-4733-99ef-f7c1eba3833d.png"
+    },
+    {
+      "key": "lumiel",
+      "source": "C:\\Users\\pjkpj\\.codex\\generated_images\\01a12fa4-dddc-7751-8caf-46ea06cba017\\exec-f5aed726-8e56-41da-898b-3f5667f75e32.png"
+    },
+    {
+      "key": "lisette",
+      "source": "C:\\Users\\pjkpj\\.codex\\generated_images\\01a12fa4-dddc-7751-8caf-46ea06cba017\\exec-1f73c282-8b8f-4c2f-9f37-e53d55d67a31.png"
+    },
+    {
+      "key": "nia",
+      "source": "C:\\Users\\pjkpj\\.codex\\generated_images\\01a12fa4-dddc-7751-8caf-46ea06cba017\\exec-9f6fb0e3-4801-4953-80b8-7df626eea99b.png"
+    },
+    {
+      "key": "camilla",
+      "source": "C:\\Users\\pjkpj\\.codex\\generated_images\\01a12fa4-dddc-7751-8caf-46ea06cba017\\exec-54ae62ac-4bfb-49bb-9b7a-4ed23496a5d2.png"
+    },
+    {
+      "key": "miel",
+      "source": "C:\\Users\\pjkpj\\.codex\\generated_images\\01a12fa4-dddc-7751-8caf-46ea06cba017\\exec-c54179a8-d4b7-437e-ad38-5d916abed8ef.png"
+    },
+    {
+      "key": "estelle",
+      "source": "C:\\Users\\pjkpj\\.codex\\generated_images\\01a12fa4-dddc-7751-8caf-46ea06cba017\\exec-dbe1eea8-400c-4d7a-9235-a3479d6ed039.png"
+    },
+    {
+      "key": "fiona",
+      "source": "C:\\Users\\pjkpj\\.codex\\generated_images\\01a12fa4-dddc-7751-8caf-46ea06cba017\\exec-f5ef52ac-1489-4e05-8676-b59e50b0e98e.png"
+    },
+    {
+      "key": "noel",
+      "source": "C:\\Users\\pjkpj\\.codex\\generated_images\\01a12fa4-dddc-7751-8caf-46ea06cba017\\exec-403229c0-5023-408d-8cec-c92e929c79c0.png"
+    },
+    {
+      "key": "brina",
+      "source": "C:\\Users\\pjkpj\\.codex\\generated_images\\01a12fa4-dddc-7751-8caf-46ea06cba017\\exec-246836a3-7837-49e8-ad57-f4817445c79c.png"
+    },
+    {
+      "key": "elisia",
+      "source": "C:\\Users\\pjkpj\\.codex\\generated_images\\01a12fa4-dddc-7751-8caf-46ea06cba017\\exec-20914f4b-2ee7-413a-a6d8-1517d3d2198e.png"
+    },
+    {
+      "key": "thea",
+      "source": "C:\\Users\\pjkpj\\.codex\\generated_images\\01a12fa4-dddc-7751-8caf-46ea06cba017\\exec-bd5875b7-b229-4d44-af85-98096c1901a5.png"
+    },
+    {
+      "key": "violetta",
+      "source": "C:\\Users\\pjkpj\\.codex\\generated_images\\01a12fa4-dddc-7751-8caf-46ea06cba017\\exec-71ef78a3-e259-478d-91b6-eff7f026c164.png"
+    },
+    {
+      "key": "iris",
+      "source": "C:\\Users\\pjkpj\\.codex\\generated_images\\01a12fa4-dddc-7751-8caf-46ea06cba017\\exec-06babce6-9cef-454f-abad-ee8bb8bdedfa.png"
+    },
+    {
+      "key": "mob-male",
+      "source": "C:\\Users\\pjkpj\\.codex\\generated_images\\01a12fa4-dddc-7751-8caf-46ea06cba017\\exec-31ceaca4-3507-47f7-b32e-68677545adde.png"
+    },
+    {
+      "key": "mob-female",
+      "source": "C:\\Users\\pjkpj\\.codex\\generated_images\\01a12fa4-dddc-7751-8caf-46ea06cba017\\exec-632e2b0c-de7d-407b-bc7b-acef3cad9dfd.png"
+    }
+  ],
+  "prompts": [
+    {
+      "key": "serena",
+      "prompt": "Production game sprite atlas for Serena, 17-year-old heroine student: long silver-white hair, clear luminous pale blue eyes, kind noble expression, modest natural build. Clean detailed anime fantasy visual novel illustration, restrained flat color cel shading, crisp fine outlines, nonsexual academy uniform: navy high collar double-breasted jacket, ivory shirt, burgundy narrow ribbon, antique gold piping and tiny diamond academy badge, charcoal pleated knee-length skirt, opaque black tights and brown boots. ONE SINGLE character expression sprite sheet, 4 evenly spaced columns, 1 row on transparent background. Four identical full-body standing poses and scale, each centered in its equal-width cell, complete head and boots, generous transparent gutters. Left to right ONLY facial expression changes: neutral attentive, warm smile, serious determined, worried sad. No words, labels, frames, props, shadows or scenery. Character identity, hair, uniform and body position remain identical across four expressions. All four figures full length. Transparent alpha."
+    },
+    {
+      "key": "adelia",
+      "prompt": "Production game sprite atlas for Adelia, human female student, neatly groomed red hair, confident aristocratic bearing. Age-appropriate academy teenager, nonsexual. Consistent detailed anime fantasy visual novel illustration with crisp fine outlines and restrained flat color cel shading. Identical academy uniform shared by all cast: navy high collar double-breasted jacket, ivory shirt, burgundy narrow ribbon, charcoal pleated knee-length skirt and opaque black tights, antique gold piping and tiny diamond academy badge, brown boots. ONE SINGLE character expression sprite sheet: FOUR equally wide cells in ONE horizontal row, transparent alpha background. Four IDENTICAL FULL-BODY standing figures, completely visible from hair to boots, same pose/proportions/clothes and scale across cells. Generous transparent gaps, no overlap, no cropping. Left to right facial expressions only: neutral attentive; warm smiling; serious determined; worried sad. No writing, labels, frames, shadows, scenery or extra characters. Preserve characteristic race features; same uniform design, no weapons. Game-ready 4-frame standing atlas."
+    },
+    {
+      "key": "lumiel",
+      "prompt": "Production game sprite atlas for Lumiel, elf female student, long pale green hair, pointed elf ears, sleepy eyes, relaxed bearing. Age-appropriate academy teenager, nonsexual. Consistent detailed anime fantasy visual novel illustration with crisp fine outlines and restrained flat color cel shading. Identical academy uniform shared by all cast: navy high collar double-breasted jacket, ivory shirt, burgundy narrow ribbon, charcoal pleated knee-length skirt and opaque black tights, antique gold piping and tiny diamond academy badge, brown boots. ONE SINGLE character expression sprite sheet: FOUR equally wide cells in ONE horizontal row, transparent alpha background. Four IDENTICAL FULL-BODY standing figures, completely visible from hair to boots, same pose/proportions/clothes and scale across cells. Generous transparent gaps, no overlap, no cropping. Left to right facial expressions only: neutral attentive; warm smiling; serious determined; worried sad. No writing, labels, frames, shadows, scenery or extra characters. Preserve characteristic race features; same uniform design, no weapons. Game-ready 4-frame standing atlas."
+    },
+    {
+      "key": "lisette",
+      "prompt": "Production game sprite atlas for Lisette, demonkin female student, purple hair, two small horns, mischievous confident eyes. Age-appropriate academy teenager, nonsexual. Consistent detailed anime fantasy visual novel illustration with crisp fine outlines and restrained flat color cel shading. Identical academy uniform shared by all cast: navy high collar double-breasted jacket, ivory shirt, burgundy narrow ribbon, charcoal pleated knee-length skirt and opaque black tights, antique gold piping and tiny diamond academy badge, brown boots. ONE SINGLE character expression sprite sheet: FOUR equally wide cells in ONE horizontal row, transparent alpha background. Four IDENTICAL FULL-BODY standing figures, completely visible from hair to boots, same pose/proportions/clothes and scale across cells. Generous transparent gaps, no overlap, no cropping. Left to right facial expressions only: neutral attentive; warm smiling; serious determined; worried sad. No writing, labels, frames, shadows, scenery or extra characters. Preserve characteristic race features; same uniform design, no weapons. Game-ready 4-frame standing atlas."
+    },
+    {
+      "key": "nia",
+      "prompt": "Production game sprite atlas for Nia, cat beastkin female student, orange hair, visible feline ears and tail, athletic lively bearing. Age-appropriate academy teenager, nonsexual. Consistent detailed anime fantasy visual novel illustration with crisp fine outlines and restrained flat color cel shading. Identical academy uniform shared by all cast: navy high collar double-breasted jacket, ivory shirt, burgundy narrow ribbon, charcoal pleated knee-length skirt and opaque black tights, antique gold piping and tiny diamond academy badge, brown boots. ONE SINGLE character expression sprite sheet: FOUR equally wide cells in ONE horizontal row, transparent alpha background. Four IDENTICAL FULL-BODY standing figures, completely visible from hair to boots, same pose/proportions/clothes and scale across cells. Generous transparent gaps, no overlap, no cropping. Left to right facial expressions only: neutral attentive; warm smiling; serious determined; worried sad. No writing, labels, frames, shadows, scenery or extra characters. Preserve characteristic race features; same uniform design, no weapons. Game-ready 4-frame standing atlas."
+    },
+    {
+      "key": "camilla",
+      "prompt": "Production game sprite atlas for Camilla, human female senior student, dark blue neat ponytail, dignified knightly bearing. Age-appropriate academy teenager, nonsexual. Consistent detailed anime fantasy visual novel illustration with crisp fine outlines and restrained flat color cel shading. Identical academy uniform shared by all cast: navy high collar double-breasted jacket, ivory shirt, burgundy narrow ribbon, charcoal pleated knee-length skirt and opaque black tights, antique gold piping and tiny diamond academy badge, brown boots. ONE SINGLE character expression sprite sheet: FOUR equally wide cells in ONE horizontal row, transparent alpha background. Four IDENTICAL FULL-BODY standing figures, completely visible from hair to boots, same pose/proportions/clothes and scale across cells. Generous transparent gaps, no overlap, no cropping. Left to right facial expressions only: neutral attentive; warm smiling; serious determined; worried sad. No writing, labels, frames, shadows, scenery or extra characters. Preserve characteristic race features; same uniform design, no weapons. Game-ready 4-frame standing atlas."
+    },
+    {
+      "key": "miel",
+      "prompt": "Production game sprite atlas for Miel, human female student, pink hair, small distinctive colorful hairpin, cheerful sociable bearing. Age-appropriate academy teenager, nonsexual. Consistent detailed anime fantasy visual novel illustration with crisp fine outlines and restrained flat color cel shading. Identical academy uniform shared by all cast: navy high collar double-breasted jacket, ivory shirt, burgundy narrow ribbon, charcoal pleated knee-length skirt and opaque black tights, antique gold piping and tiny diamond academy badge, brown boots. ONE SINGLE character expression sprite sheet: FOUR equally wide cells in ONE horizontal row, transparent alpha background. Four IDENTICAL FULL-BODY standing figures, completely visible from hair to boots, same pose/proportions/clothes and scale across cells. Generous transparent gaps, no overlap, no cropping. Left to right facial expressions only: neutral attentive; warm smiling; serious determined; worried sad. No writing, labels, frames, shadows, scenery or extra characters. Preserve characteristic race features; same uniform design, no weapons. Game-ready 4-frame standing atlas."
+    },
+    {
+      "key": "estelle",
+      "prompt": "Production game sprite atlas for Estelle, human female senior student, neat long near-black purple hair, poised calm smile. Age-appropriate academy teenager, nonsexual. Consistent detailed anime fantasy visual novel illustration with crisp fine outlines and restrained flat color cel shading. Identical academy uniform shared by all cast: navy high collar double-breasted jacket, ivory shirt, burgundy narrow ribbon, charcoal pleated knee-length skirt and opaque black tights, antique gold piping and tiny diamond academy badge, brown boots. ONE SINGLE character expression sprite sheet: FOUR equally wide cells in ONE horizontal row, transparent alpha background. Four IDENTICAL FULL-BODY standing figures, completely visible from hair to boots, same pose/proportions/clothes and scale across cells. Generous transparent gaps, no overlap, no cropping. Left to right facial expressions only: neutral attentive; warm smiling; serious determined; worried sad. No writing, labels, frames, shadows, scenery or extra characters. Preserve characteristic race features; same uniform design, no weapons. Game-ready 4-frame standing atlas."
+    },
+    {
+      "key": "fiona",
+      "prompt": "Production game sprite atlas for Fiona, human female student, chestnut brown hair, round spectacles, reserved scholarly bearing. Age-appropriate academy teenager, nonsexual. Consistent detailed anime fantasy visual novel illustration with crisp fine outlines and restrained flat color cel shading. Identical academy uniform shared by all cast: navy high collar double-breasted jacket, ivory shirt, burgundy narrow ribbon, charcoal pleated knee-length skirt and opaque black tights, antique gold piping and tiny diamond academy badge, brown boots. ONE SINGLE character expression sprite sheet: FOUR equally wide cells in ONE horizontal row, transparent alpha background. Four IDENTICAL FULL-BODY standing figures, completely visible from hair to boots, same pose/proportions/clothes and scale across cells. Generous transparent gaps, no overlap, no cropping. Left to right facial expressions only: neutral attentive; warm smiling; serious determined; worried sad. No writing, labels, frames, shadows, scenery or extra characters. Preserve characteristic race features; same uniform design, no weapons. Game-ready 4-frame standing atlas."
+    },
+    {
+      "key": "noel",
+      "prompt": "Production game sprite atlas for Noel, human female student, long black hair, calm cool eyes, restrained reserved bearing. Age-appropriate academy teenager, nonsexual. Consistent detailed anime fantasy visual novel illustration with crisp fine outlines and restrained flat color cel shading. Identical academy uniform shared by all cast: navy high collar double-breasted jacket, ivory shirt, burgundy narrow ribbon, charcoal pleated knee-length skirt and opaque black tights, antique gold piping and tiny diamond academy badge, brown boots. ONE SINGLE character expression sprite sheet: FOUR equally wide cells in ONE horizontal row, transparent alpha background. Four IDENTICAL FULL-BODY standing figures, completely visible from hair to boots, same pose/proportions/clothes and scale across cells. Generous transparent gaps, no overlap, no cropping. Left to right facial expressions only: neutral attentive; warm smiling; serious determined; worried sad. No writing, labels, frames, shadows, scenery or extra characters. Preserve characteristic race features; same uniform design, no weapons. Game-ready 4-frame standing atlas."
+    },
+    {
+      "key": "brina",
+      "prompt": "Production game sprite atlas for Brina, dwarf female student, blonde light brown hair, work goggles resting above forehead, short sturdy energetic build. Age-appropriate academy teenager, nonsexual. Consistent detailed anime fantasy visual novel illustration with crisp fine outlines and restrained flat color cel shading. Identical academy uniform shared by all cast: navy high collar double-breasted jacket, ivory shirt, burgundy narrow ribbon, charcoal pleated knee-length skirt and opaque black tights, antique gold piping and tiny diamond academy badge, brown boots. ONE SINGLE character expression sprite sheet: FOUR equally wide cells in ONE horizontal row, transparent alpha background. Four IDENTICAL FULL-BODY standing figures, completely visible from hair to boots, same pose/proportions/clothes and scale across cells. Generous transparent gaps, no overlap, no cropping. Left to right facial expressions only: neutral attentive; warm smiling; serious determined; worried sad. No writing, labels, frames, shadows, scenery or extra characters. Preserve characteristic race features; same uniform design, no weapons. Game-ready 4-frame standing atlas."
+    },
+    {
+      "key": "elisia",
+      "prompt": "Production game sprite atlas for Elisia, human female senior student, light platinum blonde hair, gentle kind eyes, composed bearing. Age-appropriate academy teenager, nonsexual. Consistent detailed anime fantasy visual novel illustration with crisp fine outlines and restrained flat color cel shading. Identical academy uniform shared by all cast: navy high collar double-breasted jacket, ivory shirt, burgundy narrow ribbon, charcoal pleated knee-length skirt and opaque black tights, antique gold piping and tiny diamond academy badge, brown boots. ONE SINGLE character expression sprite sheet: FOUR equally wide cells in ONE horizontal row, transparent alpha background. Four IDENTICAL FULL-BODY standing figures, completely visible from hair to boots, same pose/proportions/clothes and scale across cells. Generous transparent gaps, no overlap, no cropping. Left to right facial expressions only: neutral attentive; warm smiling; serious determined; worried sad. No writing, labels, frames, shadows, scenery or extra characters. Preserve characteristic race features; same uniform design, no weapons. Game-ready 4-frame standing atlas."
+    },
+    {
+      "key": "thea",
+      "prompt": "Production game sprite atlas for Thea, human female student, green hair, lightweight explorer belt pouch, lively adventurous stance. Age-appropriate academy teenager, nonsexual. Consistent detailed anime fantasy visual novel illustration with crisp fine outlines and restrained flat color cel shading. Identical academy uniform shared by all cast: navy high collar double-breasted jacket, ivory shirt, burgundy narrow ribbon, charcoal pleated knee-length skirt and opaque black tights, antique gold piping and tiny diamond academy badge, brown boots. ONE SINGLE character expression sprite sheet: FOUR equally wide cells in ONE horizontal row, transparent alpha background. Four IDENTICAL FULL-BODY standing figures, completely visible from hair to boots, same pose/proportions/clothes and scale across cells. Generous transparent gaps, no overlap, no cropping. Left to right facial expressions only: neutral attentive; warm smiling; serious determined; worried sad. No writing, labels, frames, shadows, scenery or extra characters. Preserve characteristic race features; same uniform design, no weapons. Game-ready 4-frame standing atlas."
+    },
+    {
+      "key": "violetta",
+      "prompt": "Production game sprite atlas for Violetta, human female student, elegant reddish brown styled hair, refined small hair accessory, proud aristocratic bearing. Age-appropriate academy teenager, nonsexual. Consistent detailed anime fantasy visual novel illustration with crisp fine outlines and restrained flat color cel shading. Identical academy uniform shared by all cast: navy high collar double-breasted jacket, ivory shirt, burgundy narrow ribbon, charcoal pleated knee-length skirt and opaque black tights, antique gold piping and tiny diamond academy badge, brown boots. ONE SINGLE character expression sprite sheet: FOUR equally wide cells in ONE horizontal row, transparent alpha background. Four IDENTICAL FULL-BODY standing figures, completely visible from hair to boots, same pose/proportions/clothes and scale across cells. Generous transparent gaps, no overlap, no cropping. Left to right facial expressions only: neutral attentive; warm smiling; serious determined; worried sad. No writing, labels, frames, shadows, scenery or extra characters. Preserve characteristic race features; same uniform design, no weapons. Game-ready 4-frame standing atlas."
+    },
+    {
+      "key": "iris",
+      "prompt": "Production game sprite atlas for Iris, demonkin female student, dark red hair, small understated horns, shy averted eyes. Age-appropriate academy teenager, nonsexual. Consistent detailed anime fantasy visual novel illustration with crisp fine outlines and restrained flat color cel shading. Identical academy uniform shared by all cast: navy high collar double-breasted jacket, ivory shirt, burgundy narrow ribbon, charcoal pleated knee-length skirt and opaque black tights, antique gold piping and tiny diamond academy badge, brown boots. ONE SINGLE character expression sprite sheet: FOUR equally wide cells in ONE horizontal row, transparent alpha background. Four IDENTICAL FULL-BODY standing figures, completely visible from hair to boots, same pose/proportions/clothes and scale across cells. Generous transparent gaps, no overlap, no cropping. Left to right facial expressions only: neutral attentive; warm smiling; serious determined; worried sad. No writing, labels, frames, shadows, scenery or extra characters. Preserve characteristic race features; same uniform design, no weapons. Game-ready 4-frame standing atlas."
+    },
+    {
+      "key": "mob-male",
+      "prompt": "Production game sprite atlas for ordinary anonymous male academy student, dark brown messy bangs covering BOTH eyes entirely in deep hair shadow, normal build, no distinctive accessories, eyes stay obscured for every expression. Age-appropriate academy teenager, nonsexual. Consistent detailed anime fantasy visual novel illustration with crisp fine outlines and restrained flat color cel shading. Identical academy uniform shared by all cast: navy high collar double-breasted jacket, ivory shirt, burgundy narrow ribbon, charcoal trousers, antique gold piping and tiny diamond academy badge, brown boots. ONE SINGLE character expression sprite sheet: FOUR equally wide cells in ONE horizontal row, transparent alpha background. Four IDENTICAL FULL-BODY standing figures, completely visible from hair to boots, same pose/proportions/clothes and scale across cells. Generous transparent gaps, no overlap, no cropping. Left to right facial expressions only: neutral attentive; warm smiling; serious determined; worried sad. No writing, labels, frames, shadows, scenery or extra characters. Preserve characteristic race features; same uniform design, no weapons. Game-ready 4-frame standing atlas."
+    },
+    {
+      "key": "mob-female",
+      "prompt": "Production game sprite atlas for ordinary anonymous female academy student, dark brown bangs covering BOTH eyes entirely in deep hair shadow, normal build, no distinctive accessories, eyes stay obscured for every expression. Age-appropriate academy teenager, nonsexual. Consistent detailed anime fantasy visual novel illustration with crisp fine outlines and restrained flat color cel shading. Identical academy uniform shared by all cast: navy high collar double-breasted jacket, ivory shirt, burgundy narrow ribbon, charcoal pleated knee-length skirt and opaque black tights, antique gold piping and tiny diamond academy badge, brown boots. ONE SINGLE character expression sprite sheet: FOUR equally wide cells in ONE horizontal row, transparent alpha background. Four IDENTICAL FULL-BODY standing figures, completely visible from hair to boots, same pose/proportions/clothes and scale across cells. Generous transparent gaps, no overlap, no cropping. Left to right facial expressions only: neutral attentive; warm smiling; serious determined; worried sad. No writing, labels, frames, shadows, scenery or extra characters. Preserve characteristic race features; same uniform design, no weapons. Game-ready 4-frame standing atlas."
+    }
+  ]
+}
