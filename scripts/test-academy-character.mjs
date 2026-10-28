@@ -23,14 +23,16 @@ const base={...structuredClone(t.identity),...structuredClone(t.social.fixed),..
 assert.deepEqual(m.validateCharacters([base],[t]),[]);
 const render=props=>renderToStaticMarkup(React.createElement(MemoryRouter,null,React.createElement(m.Panel,props)));
 const preview=render({mode:'template',template:t});assert(preview.includes('미확정 슬롯'));assert(!preview.includes(already.name),'template must not disclose a random result');
-const actual=render({mode:'actual',character:base});assert(!actual.includes('미확정 슬롯'));assert(actual.includes(already.name));assert(actual.includes('현재 특별한 상태 없음'));
+const actual=render({mode:'actual',character:base});assert(!actual.includes('미확정 슬롯'));assert(actual.includes('스킬 계보'));
+// Actual UI opens the strongest family; inspect the owned random skill in its own family.
+const focused=render({mode:'actual',character:{...base,proficiencyRanks:{...base.proficiencyRanks,['proficiency-'+already.family]:9}}});assert(focused.includes(already.name),'owned legacy skill remains visible in the matching skill family');assert(actual.includes('현재 특별한 상태 없음'));
 for(const kind of ['player','random_npc','fixed_npc']){
  const c={...base,id:'same-'+kind,kind};assert.deepEqual(m.validateCharacters([c],[t]),[]);
  const output=render({mode:'actual',character:c});assert(output.includes('112'));assert(output.includes('S · 초인'));assert(output.includes('성검의 응답'));
  assert.deepEqual(m.resolveEffects(m.ownedEntries(c),{...ctx,tags:['danger'],flags:[]}),m.resolveEffects(m.ownedEntries(base),{...ctx,tags:['danger'],flags:[]}));
 }
 const empty={...base,id:'empty-player',kind:'player',templateId:undefined,positions:[],titles:[],primaryPositionId:undefined,primaryTitleId:undefined,affiliations:[],primaryOrganizationId:undefined,schoolYear:0,traitIds:[],giftIds:[],proficiencyRanks:{}};
-assert.deepEqual(m.validateCharacters([empty]),[]);const emptyHtml=render({mode:'actual',character:empty});for(const text of ['보유 특성 없음','보유 기프트 없음','등록된 숙련도 없음','등록된 관계 없음'])assert(emptyHtml.includes(text));
+assert.deepEqual(m.validateCharacters([empty]),[]);const emptyHtml=render({mode:'actual',character:empty});for(const text of ['스킬 계보','보유 기프트 없음','이 분야의 경험이 아직 없습니다','등록된 관계 없음'])assert(emptyHtml.includes(text));
 const high={...empty,stats:{...empty.stats,MAG:250},traitIds:t.fixedTraitIds,giftIds:t.fixedGiftIds};assert.deepEqual(m.validateCharacters([high]),[],'no kind-specific caps');assert(render({mode:'actual',character:high}).includes('EX · 규격 외'));
 const injured={...empty,statuses:[m.makeInstance('status-fracture','test-fracture','broken','left-arm')]};assert.deepEqual(m.validateCharacters([injured]),[]);const injuryHtml=render({mode:'actual',character:injured});assert(injuryHtml.includes('왼팔'));assert(injuryHtml.includes('전위 골절'));assert(injuryHtml.includes('kind=status'));
 const sad={...empty,traitIds:['trait-diligence-morning','trait-laziness-pillow']};assert(m.validateCharacters([sad]).some(i=>i.message.includes('충돌')));
