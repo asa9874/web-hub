@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';
+import {build} from 'esbuild';
+import {mkdir,stat,writeFile} from 'node:fs/promises';
+import {createElement} from 'react';
+import {renderToStaticMarkup} from 'react-dom/server';
+const directory='test-results/academy-ui-polish';await mkdir(directory,{recursive:true});
+await build({stdin:{contents:"export * from './src/AcademySurvival/systems/spatialMapPresentation';export * from './src/AcademySurvival/systems/locationRegistry';export * from './src/AcademySurvival/data/itemArt';export * from './src/AcademySurvival/data/items';export {default as ItemArt} from './src/AcademySurvival/components/ItemArt';",resolveDir:process.cwd()},bundle:true,jsx:'automatic',platform:'node',format:'esm',external:['react','react-dom'],define:{'import.meta.env.BASE_URL':'"/web-hub/"'},outfile:directory+'/ui-assets-model.mjs'});
+const m=await import('../'+directory+'/ui-assets-model.mjs');
+assert.equal(m.itemArtRegistry.size,m.items.length);assert.equal(m.items.length,100);
+const cells=new Set();for(const item of m.items){const art=m.itemArtRegistry.get(item.id);assert(art);const cell=`${art.atlas}/${art.row}/${art.column}`;assert(!cells.has(cell));cells.add(cell);assert(art.atlas>=0&&art.atlas<4&&art.row>=0&&art.row<5&&art.column>=0&&art.column<5);}
+const unknown=renderToStaticMarkup(createElement(m.ItemArt,{}));assert(!unknown.includes('items-atlas'),'unidentified items must not reveal a sprite URL');assert(unknown.includes('is-unknown'));
+const known=renderToStaticMarkup(createElement(m.ItemArt,{definitionId:'item-wood-sword'}));assert(known.includes('/web-hub/academy/items/items-atlas-v1-0.webp'));
+const before=JSON.stringify([...m.locationCatalog.edges.values()]),campus=m.createSpatialMap(m.locationCatalog,'academy');assert(campus.points.length>5&&campus.points.length<40);
+assert.equal(campus.project('academy-class-1-1').id,'academy-class-building');assert.equal(campus.project('academy-life-room-101').id,'academy-dorm');assert(!campus.project('demon-audience'));
+const building=m.createSpatialMap(m.locationCatalog,'academy','academy-class-building');assert(building.points.some(p=>p.id==='academy-class-1-1'));
+const floor=m.createSpatialMap(m.locationCatalog,'academy','academy-life-floor-1');assert(floor.points.some(p=>p.id==='academy-life-room-101'));assert(floor.points.some(p=>p.id==='academy-life-lounge'));
+assert.deepEqual(m.createSpatialMap(m.locationCatalog,'academy').points,campus.points,'campus positions do not shift according to current player location or graph distance');
+assert.equal(JSON.stringify([...m.locationCatalog.edges.values()]),before,'presentation must not mutate real travel connections');
+const assets=await Promise.all([...Array.from({length:4},(_,i)=>`public/academy/items/items-atlas-v1-${i}.webp`),'public/academy/maps/campus-v1.webp'].map(async path=>({path,bytes:(await stat(path)).size})));
+const result={itemDefinitions:100,uniqueSpriteCells:cells.size,campusLandmarks:campus.points.length,assets,totalBytes:assets.reduce((sum,a)=>sum+a.bytes,0),checks:['identified vs unknown art','all catalog items mapped to unique cells','stable spatial positions','room/floor navigation','unchanged travel graph']};await writeFile(directory+'/assets-check.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result));

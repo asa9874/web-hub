@@ -5,7 +5,7 @@ await mkdir('.build-projects',{recursive:true});
 const browser=await chromium.launch({headless:true}),base=(process.env.ACADEMY_TEST_URL||'http://127.0.0.1:5178/web-hub')+'/games/academy-survival/';
 try{
  const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];page.setDefaultTimeout(12000);page.on('pageerror',e=>errors.push(e.message));
- await page.goto(base+'?view=catalog&kind=calendar');await page.getByRole('heading',{name:'시간·달력',exact:true}).waitFor();assert.equal(await page.locator('.ac-tabs button').count(),21);
+ await page.goto(base+'?view=catalog&kind=calendar');await page.getByRole('heading',{name:'시간·달력',exact:true}).waitFor();assert.equal(await page.locator('.ac-tabs button').count(),22);
  const bar=page.getByRole('button',{name:'현재 게임 날짜 상세',exact:true}),initial=await bar.innerText();assert(initial.includes('제국력 427년 3월 1일 (월)'));assert(initial.includes('오전 08:00 · 봄 · 1학기'));
  await bar.click();await page.getByRole('dialog').locator('.ac-time-readout').waitFor();assert((await page.getByRole('dialog').innerText()).includes('심연력 3127년 혈월 25일'));await page.keyboard.press('Escape');await page.getByRole('dialog').waitFor({state:'detached'});
  const conversion=page.getByLabel('환산 결과',{exact:true});assert((await conversion.innerText()).includes('심연력 3127년 혈월 25일'));

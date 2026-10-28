@@ -1,0 +1,31 @@
+import assert from 'node:assert/strict';
+import {chromium} from 'playwright';
+import {readFile,writeFile,mkdir} from 'node:fs/promises';
+const dir='test-results/academy-ui-experience';await mkdir(dir,{recursive:true});
+const fixture=JSON.parse(await readFile(dir+'/request-save.json','utf8')),meta=JSON.parse(await readFile(dir+'/fixture.json','utf8'));
+const browser=await chromium.launch({headless:true});
+try{
+ const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ const url=(process.env.ACADEMY_TEST_URL??'http://127.0.0.1:5193/web-hub')+'/games/academy-survival/';
+ await page.goto(url);assert.equal(await page.getByLabel('플레이어 이름',{exact:true}).inputValue(),'아렌');
+ await page.getByText('세계·출신 배경 설정',{exact:true}).click();await page.getByLabel('플레이 NPC 수',{exact:true}).fill('3');await page.screenshot({path:dir+'/setup.png'});
+ await page.getByRole('button',{name:'새 생활 시작',exact:true}).click();await page.getByLabel('플레이 현재 시각',{exact:true}).waitFor();assert.equal(await page.getByRole('button',{name:'수동 조작',exact:true}).count(),0);
+ await page.locator('.ac-scene-backdrop img').waitFor();assert(await page.locator('.ac-scene-backdrop img').evaluate(img=>img.complete&&img.naturalWidth>0));
+ const playUrl=page.url(),clock=await page.getByLabel('플레이 현재 시각',{exact:true}).innerText();
+ await page.getByRole('button',{name:'내 캐릭터 상세',exact:true}).click();await page.getByRole('dialog').locator('a[href*="kind=stat"]').first().click();assert.equal(await page.getByRole('dialog').count(),2);assert.equal(page.url(),playUrl);
+ await page.keyboard.press('Escape');assert.equal(await page.getByRole('dialog').count(),1);assert(await page.getByRole('dialog').getByLabel('공통 캐릭터 상태창',{exact:true}).count());await page.keyboard.press('Escape');
+ assert.equal(await page.getByLabel('플레이 현재 시각',{exact:true}).innerText(),clock);
+ await page.getByText('생활 방침 편집',{exact:true}).click();assert.equal(await page.getByLabel('방침 학업',{exact:true}).getAttribute('type'),'range');await page.getByLabel('방침 학업',{exact:true}).fill('70');
+ const weights=await page.locator('input[type=range][aria-label^="방침"]').evaluateAll(inputs=>inputs.map(i=>Number(i.value)));assert.equal(weights.reduce((a,b)=>a+b,0),100);assert.equal(weights[0],70);await page.getByRole('button',{name:'생활 방침 적용',exact:true}).click();
+ const choices=page.getByRole('group',{name:'플레이어 활동',exact:true});assert.equal(await choices.getByRole('button').count(),8);assert.equal(await page.locator('select[aria-label="플레이어 활동"]').count(),0);await choices.getByRole('button',{name:'독서',exact:true}).click();assert.equal(await choices.getByRole('button',{name:'독서',exact:true}).getAttribute('aria-pressed'),'true');
+ await page.getByText('생활 방침 편집',{exact:true}).click();await page.screenshot({path:dir+'/desktop.png'});
+ const loadFixture=async()=>{await page.evaluate(save=>localStorage.setItem('web-hub.academy.play.v0.5.slot.1',JSON.stringify(save)),fixture);await page.reload();await page.getByRole('button',{name:'슬롯 1 이어하기',exact:true}).click();await page.getByLabel('플레이어 응답',{exact:true}).waitFor();};
+ await loadFixture();const response=page.getByLabel('플레이어 응답',{exact:true});assert.match(await response.innerText(),new RegExp(meta.npcName));assert.match(await response.innerText(),/함께 훈련/);assert.doesNotMatch(await response.innerText(),/train_together/);assert.equal(await page.locator('.ac-play-actions .ac-attention-heading').count(),0);await page.screenshot({path:dir+'/request.png'});
+ await page.keyboard.press('Escape');assert.equal(await page.getByRole('dialog').count(),0);await page.getByRole('button',{name:'응답 1',exact:true}).click();await response.waitFor();await page.getByRole('button',{name:'함께 하기',exact:true}).click();await response.waitFor({state:'detached'});assert.match(await page.getByLabel('플레이어 생활·행동',{exact:true}).innerText(),/함께 훈련/);
+ await loadFixture();await page.getByRole('button',{name:'정중히 거절',exact:true}).click();await response.waitFor({state:'detached'});
+ await page.getByRole('navigation',{name:'플레이 메뉴',exact:true}).getByRole('button',{name:'주변 인물',exact:true}).click();await page.locator('.ac-play-cards button').filter({hasText:meta.npcName}).click();const panel=page.getByRole('dialog').getByLabel('공통 캐릭터 상태창',{exact:true});assert.equal(await panel.getAttribute('data-character-id'),meta.npcId);await panel.getByRole('heading',{name:'기본 능력치',exact:true}).waitFor();assert.equal(await panel.locator('.ac-character-stats dl>div').count(),7);
+ const npcUrl=page.url();await panel.locator('a[href*="kind=proficiency"]').first().click();assert.equal(await page.getByRole('dialog').count(),2);assert.equal(page.url(),npcUrl);await page.keyboard.press('Escape');await page.screenshot({path:dir+'/character.png'});await page.keyboard.press('Escape');
+ await page.getByRole('navigation',{name:'플레이 메뉴',exact:true}).getByRole('button',{name:'현재 상황',exact:true}).click();const row=page.locator('.ac-record-row').first();await row.waitFor();assert.equal(await row.getAttribute('open'),null);assert(await row.getAttribute('data-tone'));await row.locator('summary').click();assert.notEqual(await row.getAttribute('open'),null);assert(await row.locator('.ac-record-detail').isVisible());
+ for(const [width,height] of [[1440,1000],[390,844],[320,568],[844,390]]){await page.setViewportSize({width,height});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1&&document.documentElement.scrollHeight<=innerHeight+1));if(width===390)await page.screenshot({path:dir+'/mobile.png'});}
+ assert.deepEqual(errors,[]);await writeFile(dir+'/browser.json',JSON.stringify({passed:true,checks:['default name and setup','real generated background','nested catalog modal without navigation/time change','404 slider allocations covered in contracts','8 action buttons','localized incoming request, reopen, accept and decline','shared NPC panel, 7 stats and nested proficiency','single-line expandable classified records','desktop/mobile viewport'],pageErrors:errors},null,2));console.log('Experience browser passed: setup, background, nested popups, sliders, action grid, real incoming request accept/decline, unified NPC detail, classified records and responsive viewport.');
+}finally{await browser.close();}

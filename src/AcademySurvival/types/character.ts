@@ -1,3 +1,5 @@
+import type {CulturalProfile} from './culture';
+import type {CharacterWorldIdentity} from './worldLore';
 import type {NpcAiEngine} from '../systems/npcAi';
 import type {MotivationEngine} from '../systems/motivationEngine';
 import type {CharacterMotivationState} from './motivation';
@@ -20,7 +22,7 @@ export interface CharacterIdentity {
 }
 export interface CharacterRelationship {targetId:string;label:string;description:string;affinity:number|null}
 export interface Character extends Partial<CharacterMorality>,CharacterIdentity,CharacterKnowledge,CharacterSocialIdentity,CharacterAffiliations {
- id:string;templateId?:string;kind:CharacterKind;statuses:StatusInstance[];relationships:CharacterRelationship[];
+ skillBook?:import('./skill').CharacterSkillBook;worldIdentity?:CharacterWorldIdentity;culturalProfile?:CulturalProfile;id:string;templateId?:string;kind:CharacterKind;statuses:StatusInstance[];relationships:CharacterRelationship[];
  // Legacy records may be unset; every active character must be registered with a valid location.
  classId?:string;specializationId?:string;generationGrowthType?:'ordinary'|'talented'|'genius'|'weak'|'unusual';
  location?:CharacterLocationState;accessPermissions?:string[];accessTags?:string[];movementModes?:MovementMode[];

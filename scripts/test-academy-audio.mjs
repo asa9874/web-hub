@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+import {build} from 'esbuild';
+import {mkdir} from 'node:fs/promises';
+const dir='test-results/academy-audio';await mkdir(dir,{recursive:true});
+await build({entryPoints:['src/AcademySurvival/systems/gameAudio.ts'],bundle:true,platform:'node',format:'esm',outfile:dir+'/engine.mjs'});
+const {createGameAudio,readAudioSettings,soundScore}=await import('../'+dir+'/engine.mjs');
+assert.equal(readAudioSettings('bad').volume,.45);assert.equal(readAudioSettings('{"volume":2}').volume,1);assert.equal(readAudioSettings('{"volume":-1}').volume,0);assert.equal(readAudioSettings('{"muted":"false"}').muted,false);
+const cues=['click','select','page','event','growth','gift','dice','success','failure'];
+assert.equal(new Set(cues.map(c=>JSON.stringify(soundScore(c)))).size,9);
+for(const c of cues)for(const n of soundScore(c)){assert(n.frequency>0&&n.frequency<20000);assert(n.duration>0&&n.duration<=1);assert(n.gain>0&&n.gain<.2);assert(n.at+n.duration<1.5);}
+assert.notDeepEqual(soundScore('click',0),soundScore('click',1));
+let built=0,stopped=0,closed=0;const sources=[];
+const param=()=>({value:0,setTargetAtTime(){},setValueAtTime(){},linearRampToValueAtTime(){},exponentialRampToValueAtTime(){}});
+const context={state:'running',currentTime:0,sampleRate:44100,destination:{},createGain:()=>({gain:param(),connect(){},disconnect(){}}),createOscillator(){const s={frequency:param(),connect(){},disconnect(){},started:false,start(){this.started=true;},stop(){assert(this.started,'Web Audio sources must start before stop');stopped++;},onended:null};sources.push(s);return s;},createBuffer:(_c,n)=>({getChannelData:()=>new Float32Array(n)}),createBufferSource(){const s={connect(){},disconnect(){},started:false,start(){this.started=true;},stop(){assert(this.started,'Web Audio sources must start before stop');stopped++;},onended:null};sources.push(s);return s;},resume:async()=>{},suspend:async()=>{context.state='suspended';},close:async()=>{closed++;}};
+const a=createGameAudio(()=>{built++;return context;});assert.equal(built,0);assert.equal(a.play('gift'),false);a.unlock();assert.equal(built,1);a.unlock();assert.equal(built,1);
+assert(a.play('click'));assert(!a.play('click'));assert(a.play('gift'),'semantic cue must not be lost behind the activating click');
+for(const s of sources)s.onended?.();context.currentTime=1;
+a.update({volume:.5,muted:false,detail:'essential'});for(const c of ['click','page','select','dice'])assert(!a.play(c));assert(a.play('growth'));
+a.update({volume:.5,muted:true,detail:'full'});assert(!a.play('event'));assert(stopped>0);a.suspend();a.dispose();assert.equal(closed,1);a.unlock();assert.equal(built,1);
+const unsupported=createGameAudio(()=>undefined);unsupported.unlock();assert(!unsupported.play('event'));unsupported.dispose();
+const blocked=createGameAudio(()=>{throw Error('blocked');});assert.doesNotThrow(()=>blocked.unlock());
+console.log('PASS: 9 distinct scores, bounded envelopes/variants, lazy gesture context, muted/essential/zero limits, throttle, semantic priority, cleanup, unsupported browser fallback. No world engine/RNG imports.');

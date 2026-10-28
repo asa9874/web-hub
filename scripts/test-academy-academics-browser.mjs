@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';
+import {chromium} from 'playwright';
+import {mkdir} from 'node:fs/promises';
+await mkdir('test-results/academy-academics',{recursive:true});
+const browser=await chromium.launch({headless:true});
+try{
+ const page=await browser.newPage({viewport:{width:1360,height:1000}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto((process.env.ACADEMY_TEST_URL??'http://127.0.0.1:5192/web-hub')+'/games/academy-survival/');
+ await page.getByText('세계·출신 배경 설정',{exact:true}).click();await page.getByLabel('플레이 시드',{exact:true}).fill('academic-contract');await page.getByLabel('플레이 NPC 수',{exact:true}).fill('10');await page.getByLabel('플레이어 이름',{exact:true}).fill('다인');await page.getByRole('button',{name:'새 생활 시작',exact:true}).click();
+ await page.getByRole('button',{name:'학사',exact:true}).click();const panel=page.getByLabel('학사 관리',{exact:true});await panel.getByRole('heading',{name:'학사·수업·수강신청',exact:true}).waitFor();assert.match(await panel.innerText(),/과목86종/);
+ await panel.getByRole('button',{name:'과목 카탈로그',exact:true}).click();await panel.getByLabel('과목 검색',{exact:true}).fill('기초 검 자세');await panel.getByRole('button',{name:/기초 검 자세/}).click();assert.match(await page.getByRole('dialog').innerText(),/안전|자세/);await page.keyboard.press('Escape');
+ await panel.getByRole('button',{name:'개인 시간표',exact:true}).click();assert(await panel.locator('.ac-timetable-day button').count()>0,'real confirmed courses');
+ await page.getByRole('button',{name:'+1시간',exact:true}).click();await page.waitForFunction(()=>document.querySelector('.ac-play-heading [role="status"]')?.textContent==='선택 대기');const actualTime=await page.getByLabel('플레이 현재 시각',{exact:true}).innerText();
+ await page.getByRole('button',{name:'저장·이어하기',exact:true}).click();await page.getByRole('button',{name:'슬롯 1 저장',exact:true}).click();await page.getByText('슬롯 1에 저장했습니다.',{exact:true}).waitFor();await page.reload();await page.getByRole('button',{name:'슬롯 1 이어하기',exact:true}).click();assert.equal(await page.getByLabel('플레이 현재 시각',{exact:true}).innerText(),actualTime);
+ await page.getByRole('button',{name:'학사',exact:true}).click();await page.getByLabel('학사 관리',{exact:true}).getByRole('button',{name:'개인 시간표',exact:true}).click();assert(await page.getByLabel('학사 관리',{exact:true}).locator('.ac-timetable-day button').count()>0,'curriculum restored');
+ await page.getByRole('button',{name:'설정집',exact:true}).click();await page.getByText('개발 자료·도구',{exact:true}).click();await page.getByRole('button',{name:'개발 시뮬레이터 열기',exact:true}).click();const sandbox=page.getByLabel('학사 관리',{exact:true});await sandbox.getByRole('button',{name:'수강신청 기간 열기',exact:true}).click();await sandbox.getByRole('button',{name:'개설 강의·신청',exact:true}).click();const apply=sandbox.getByRole('button',{name:'신청·순위 변경',exact:true});let chosen;for(const b of await apply.all())if(await b.isEnabled()){chosen=b;break;}assert(chosen);await chosen.click();await sandbox.getByRole('button',{name:'학사 개요',exact:true}).click();await sandbox.getByRole('button',{name:'수강신청 마감·선발',exact:true}).click();assert.equal(await sandbox.locator('[role="alert"]').count(),0);
+ await page.getByRole('button',{name:'닫기',exact:true}).click();await page.getByRole('button',{name:'플레이로 돌아가기',exact:true}).click();assert.equal(await page.getByLabel('플레이 현재 시각',{exact:true}).innerText(),actualTime,'sandbox cannot change actual clock');await page.getByRole('button',{name:'학사',exact:true}).click();assert.match(await page.getByLabel('학사 관리',{exact:true}).innerText(),/신청 마감/);
+ await page.screenshot({path:'test-results/academy-academics/desktop.png',fullPage:true});await page.setViewportSize({width:390,height:844});await page.screenshot({path:'test-results/academy-academics/mobile.png',fullPage:true});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),'mobile overflow');assert.deepEqual(errors,[]);
+ console.log('Academic browser passed: actual new-game offerings, 86-course search/popup, timetable, real hour, save/reload, sandbox registration/selection and isolation, mobile and no page errors.');
+}finally{await browser.close();}

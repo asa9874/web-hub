@@ -11,6 +11,8 @@ a.world.advanceTime(360);for(let i=0;i<360;i++)b.world.advanceTime(1);assert.dee
 console.log('Six-hour whole versus minute-step AI state, physical world and needs are identical.');
 // Candidate inspection never executes and cannot expose a remote friend's location.
 a=sim(2);a.graph.replaceRecords([]);id=a.chars[0].id;const target=a.chars[1].id;a.graph.createRelationship({sourceCharacterId:id,targetCharacterId:target,relationshipTypeIds:['relation-friend'],affection:70,trust:60,intimacy:50,respect:20,fear:0,familiarity:'known',visibility:'private'});a.world.forcePlace([id],'academy-plaza');a.world.forcePlace([target],'academy-library');assert(!a.ai.getCandidates(id).some(c=>c.targetCharacterId===target));const before=a.world.snapshot();a.ai.getCandidates(id);assert.deepEqual(a.world.snapshot(),before);
+// Public debug reads preserve the existing editable-copy contract.
+const editablePerception=a.ai.getPerception(id);editablePerception.character.stats.STR++;editablePerception.near.push({id:'not-an-actor'});assert.deepEqual(a.world.snapshot(),before);assert(!a.ai.getPerception(id).near.some(c=>c.id==='not-an-actor'),'public perception remains an editable isolated copy');
 // Closed library excluded at estimated arrival and after close.
 a=sim(1,'closed',m.toAbsoluteMinute({year:427,month:3,day:1,hour:21,minute:58}));id=a.chars[0].id;a.world.forcePlace([id],'academy-plaza');const library=a.ai.getCandidates(id).filter(c=>c.targetLocationId==='academy-library');assert(library.length&&library.every(c=>!c.feasible));
 // Mandatory classes are protected unless a real emergency overrides them.

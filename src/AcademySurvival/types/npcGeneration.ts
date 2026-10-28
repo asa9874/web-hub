@@ -1,3 +1,4 @@
+import type {WorldIdentityRequest} from './worldLore';
 import type {CharacterMotivationState} from './motivation';
 import type {CharacterSchedule} from './schedule';
 import type {RelationshipGenerationResult,RelationshipGenerationOptions} from './relationship';
@@ -11,7 +12,7 @@ import type {StatusInstance} from './status';
 import type {CharacterImpactResult} from './characterImpact';
 export type GrowthType='ordinary'|'talented'|'genius'|'weak'|'unusual';
 export type ImpactPreference='balanced'|'combat'|'social';
-export interface NpcGenerationRequest extends MoralityGenerationRequest {count:number;seed?:string;academyStudent:boolean;academyYear?:1|2|3|4|'random';specializationId?:string;growthType?:GrowthType|'random';targetImpact?:{min:number;max:number};impactPreference?:ImpactPreference;startIndex?:number}
+export interface NpcGenerationRequest extends MoralityGenerationRequest {worldIdentity?:WorldIdentityRequest;count:number;seed?:string;academyStudent:boolean;academyYear?:1|2|3|4|'random';specializationId?:string;growthType?:GrowthType|'random';targetImpact?:{min:number;max:number};impactPreference?:ImpactPreference;startIndex?:number}
 export interface SpecializationProfile {id:string;name:string;weight:number;organizationId?:string;core:StatId[];support:StatId[];primary:string[];secondary:string[];traitFamilies:string[];giftTags:string[];variants:{name:string;stat:StatId;bonus:number}[]}
 export interface GrowthProfile {name:string;weight:number;shift:number;coreBonus:number;rankShift:number;rareTraitBoost:number;unusualBonus:number}
 export interface GenerationGrant {kind:'position'|'title'|'status'|'affiliation';id:string;organizationId?:string;stageId?:string;visibility?:'public'|'secret'}

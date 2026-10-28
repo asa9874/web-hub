@@ -1,0 +1,45 @@
+import type {ConversationIntent,MeetingKind} from '../../types/conversation';
+export const CONVERSATION_RULES={attemptCooldown:20,pairCooldown:60,dailyLimit:10,historyLimit:600,daysRetained:90,meetingLimit:100,meetingGrace:10,maxTurns:6};
+export const conversationIntents:Record<ConversationIntent,{name:string;topic:string;minutes:number;important?:boolean;line:string;reply:string}>={
+ greet:{name:'인사',topic:'일상',minutes:2,line:'안녕하세요. 잠깐 인사하고 싶었어요.',reply:'안녕하세요. 만나서 반가워요.'},
+ check_in:{name:'안부 묻기',topic:'일상',minutes:5,line:'오늘은 어떻게 지내고 있어요?',reply:'제 이야기를 물어봐 줘서 고마워요.'},
+ small_talk:{name:'잡담',topic:'일상',minutes:8,line:'잠깐 쉬면서 이야기 나눌까요?',reply:'잠깐이라면 괜찮아요.'},
+ question:{name:'질문',topic:'학업',minutes:10,line:'함께 생각해 보고 싶은 질문이 있어요.',reply:'제가 아는 범위에서 이야기해 볼게요.'},
+ answer:{name:'답변',topic:'정보',minutes:5,line:'제 생각을 말씀드릴게요.',reply:'그런 관점도 있겠네요.'},
+ praise:{name:'칭찬',topic:'관계',minutes:5,line:'제가 기억하는 그 일은 좋게 생각하고 있어요.',reply:'그렇게 봐 주셨군요.'},
+ thank:{name:'감사',topic:'관계',minutes:4,line:'그때 일에 대해 고맙다는 말을 하고 싶었어요.',reply:'기억해 주셔서 고마워요.'},
+ encourage:{name:'격려',topic:'개인',minutes:6,line:'서두르지 않아도 괜찮아요. 응원할게요.',reply:'말씀은 고맙게 받을게요.'},
+ comfort:{name:'위로',topic:'개인',minutes:12,line:'그 일이 마음에 남아 있다면 들어 드릴게요.',reply:'이야기를 들어 주셔서 고마워요.'},
+ advice:{name:'조언',topic:'교수·학생',minutes:15,line:'이 주제는 차근차근 같이 살펴보면 좋겠어요.',reply:'생각해 볼게요.'},
+ share_information:{name:'정보 전달',topic:'정보',minutes:10,line:'제가 알고 있는 소식이 있어요. 출처와 함께 전할게요.',reply:'직접 본 일인지도 함께 들려주세요.'},
+ pass_rumor:{name:'소문 공유',topic:'정보',minutes:10,line:'전해 들은 이야기예요. 확인된 사실이라고 단정하진 않을게요.',reply:'출처를 생각해서 판단할게요.'},
+ boast:{name:'자랑',topic:'개인',minutes:5,line:'제게 있었던 일을 한번 들어 주실래요?',reply:'그 일이 본인에게 의미가 있나 보네요.'},
+ declare_rival:{name:'경쟁 선언',topic:'경쟁',minutes:8,line:'같은 수업에서 서로의 실력을 겨뤄 보고 싶어요.',reply:'어떤 경쟁이 될지 생각해 볼게요.'},
+ challenge:{name:'공식 대련 제안',topic:'훈련',minutes:5,important:true,line:'정해진 시간과 장소에서 대련을 제안해요.',reply:'일정과 조건을 보고 결정할게요.'},
+ apologize:{name:'사과',topic:'관계',minutes:10,line:'그 일에 대해 제 몫의 책임을 인정하고 사과할게요.',reply:'말씀은 들었어요. 마음을 정할 시간이 필요할 수도 있어요.'},
+ complain:{name:'불만 표현',topic:'학업',minutes:8,line:'이 수업에 관해 아쉬운 점을 이야기하고 싶어요.',reply:'어떤 점인지 들어 볼게요.'},
+ rebut:{name:'반박',topic:'관계',minutes:6,line:'그 의견에는 다른 생각이 있어요.',reply:'서로 생각이 다를 수 있겠네요.'},
+ request_help:{name:'도움 요청',topic:'협력',minutes:10,line:'혼자 생각하기 어려워서 도움을 구하고 싶어요.',reply:'제가 할 수 있는 범위부터 이야기해 봐요.'},
+ offer_help:{name:'도움 제안',topic:'협력',minutes:10,line:'원한다면 함께 생각해 볼게요.',reply:'제안해 주셔서 고마워요.'},
+ propose_commitment:{name:'약속 제안',topic:'협력',minutes:5,important:true,line:'다음에 시간을 정해서 함께 활동할까요?',reply:'실제로 만날 수 있는 일정인지 확인해 볼게요.'},
+ accept_commitment:{name:'약속 수락',topic:'협력',minutes:3,line:'그 약속에 참석하겠어요.',reply:'정해진 장소에서 만나요.'},
+ reject_commitment:{name:'약속 거절',topic:'협력',minutes:3,line:'이번 약속은 함께하기 어려워요.',reply:'알겠어요. 억지로 정하지 않을게요.'},
+ reconcile:{name:'화해 시도',topic:'관계',minutes:15,line:'갈등을 계속하기보다 서로 이야기해 보고 싶어요.',reply:'지금 느끼는 생각부터 이야기해 봐요.'},
+ goodbye:{name:'대화 종료',topic:'일상',minutes:1,line:'이야기는 여기까지 할게요. 다음에 만나요.',reply:'네, 다음에 만나요.'},
+ confess:{name:'고백',topic:'중요 관계',minutes:15,important:true,line:'당신과 연인으로 지내고 싶어요. 당신의 뜻을 듣고 싶어요.',reply:'제 마음도 솔직하게 말씀드릴게요.'},
+ end_relationship:{name:'관계 정리',topic:'중요 관계',minutes:15,important:true,line:'우리의 교제를 끝내고 싶어요.',reply:'그 뜻을 듣고 제 생각도 전할게요.'},
+ research_proposal:{name:'연구 제안',topic:'교수·학생',minutes:15,important:true,line:'함께 공부할 시간을 정해 연구 주제를 논의하고 싶어요.',reply:'가능한 일정인지 보고 결정할게요.'},
+};
+export const meetingKinds:Record<MeetingKind,{name:string;interactionId:string;duration:number}>={study:{name:'공동 공부',interactionId:'study_together',duration:60},training:{name:'공동 훈련',interactionId:'train_together',duration:60},sparring:{name:'대련',interactionId:'sparring',duration:30},consultation:{name:'개인 상담',interactionId:'serious_talk',duration:40},meal:{name:'식사',interactionId:'meal_together',duration:30},meeting:{name:'만남',interactionId:'casual_chat',duration:20}};
+// Discrete semantic results only; time-based social/fatigue rates remain in the needs engine.
+export const conversationProfiles:Partial<Record<ConversationIntent,{affection?:number;trust?:number;intimacy?:number;respect?:number;need?:'recognition'|'safety'|'curiosity';recipient?:'actor'|'target';relief?:number}>>={
+ greet:{intimacy:1},check_in:{affection:2,trust:1,intimacy:1},small_talk:{affection:2,intimacy:2},
+ question:{respect:1,need:'curiosity',recipient:'actor',relief:2},answer:{trust:1,respect:1},
+ praise:{affection:2,respect:1,need:'recognition',relief:4},thank:{affection:1,trust:2},
+ encourage:{affection:2,need:'recognition',relief:2},comfort:{trust:2,need:'safety',relief:3},
+ advice:{trust:1,respect:2,need:'curiosity',relief:3},boast:{respect:1,need:'recognition',recipient:'actor',relief:2},
+ declare_rival:{respect:3,intimacy:1},challenge:{respect:2},apologize:{affection:1,trust:2},
+ complain:{intimacy:1},rebut:{respect:1},request_help:{trust:1},offer_help:{trust:2,need:'safety',relief:2},
+ propose_commitment:{trust:1},accept_commitment:{trust:1},reject_commitment:{},reconcile:{affection:2,trust:2},
+ goodbye:{},confess:{affection:3,intimacy:2},end_relationship:{},research_proposal:{respect:2,trust:1},
+};

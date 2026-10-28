@@ -4,7 +4,7 @@ const browser=await chromium.launch({headless:true});
 const base=(process.env.ACADEMY_TEST_URL||'http://127.0.0.1:5181/web-hub')+'/games/academy-survival/';
 try{
  const p=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];p.on('pageerror',e=>errors.push(e.message));
- await p.goto(base+'?view=catalog&kind=interaction');await p.getByRole('heading',{name:'NPC 상호작용',exact:true,level:2}).waitFor();assert.equal(await p.locator('.ac-tabs button').count(),21);assert.equal(await p.locator('.ac-interaction-grid button').count(),23);
+ await p.goto(base+'?view=catalog&kind=interaction');await p.getByRole('heading',{name:'NPC 상호작용',exact:true,level:2}).waitFor();assert.equal(await p.locator('.ac-tabs button').count(),24);assert.equal(await p.locator('.ac-interaction-grid button').count(),24);
  await p.getByRole('button',{name:'친목 대화',exact:false}).click();await p.getByRole('dialog').waitFor();assert((await p.getByRole('dialog').innerText()).includes('수락'));await p.keyboard.press('Escape');
  const source=await p.getByRole('button',{name:'현재 게임 날짜 상세',exact:true}).innerText();await p.getByRole('button',{name:'테스트',exact:true}).click();await p.getByRole('heading',{name:'NPC 상호작용 테스트',exact:true}).waitFor();
  await p.getByRole('button',{name:'NPC 10명 생성',exact:true}).click();assert.equal(await p.getByLabel('상호작용 행위자').locator('option').count(),11);
@@ -19,5 +19,5 @@ try{
  await p.getByText('전체 샌드박스 JSON 저장·복원',{exact:true}).click();await p.getByRole('button',{name:'JSON 저장',exact:true}).click();const saved=JSON.parse(await p.getByLabel('상호작용 저장 JSON').inputValue());assert(saved.outcomes.applied.length>0);assert(saved.interactions.instances.length>0);await p.getByRole('button',{name:'JSON 불러오기',exact:true}).click();assert.equal(await p.locator('[role=alert]').count(),0,await p.locator('[role=alert]').allTextContents());
  await p.setViewportSize({width:390,height:844});assert(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));await p.getByRole('button',{name:'초기화',exact:true}).click();assert.equal(await p.getByLabel('상호작용 행위자').locator('option').count(),1);await p.getByRole('button',{name:'닫기',exact:true}).click();assert.equal(await p.getByRole('button',{name:'현재 게임 날짜 상세',exact:true}).innerText(),source);
  await p.goto(base+'?view=catalog&kind=outcome');await p.getByRole('heading',{name:'행동 결과·효과',exact:true,level:2}).waitFor();await p.getByRole('button',{name:'테스트',exact:true}).click();await p.getByRole('heading',{name:'행동 결과·효과 테스트',exact:true}).waitFor();assert.deepEqual(errors,[]);
- console.log('Interaction/effects UI: 21 tabs, 23 compact cards, popup, requests, shared states, actual/duplicate/failed effects, character growth, JSON, mobile, reset, both test entries and source-world isolation passed.');
+ console.log('Interaction/effects UI: 22 tabs, 23 compact cards, popup, requests, shared states, actual/duplicate/failed effects, character growth, JSON, mobile, reset, both test entries and source-world isolation passed.');
 }finally{await browser.close();}

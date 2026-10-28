@@ -1,3 +1,4 @@
+import {checkDefinitions} from './checks';
 import type { Category, GiftCategory, Rarity } from '../types';
 import {EXPANSION_LABELS} from './expansionLabels';
 import {impactGrade} from '../systems/impact';
@@ -29,6 +30,8 @@ export const EFFECT_BALANCE = { statScale:1, checkScoreScale:1, percentagePointS
 export const EMPTY_CONTEXT = { stats: {}, flags: [], tags: [], traits: [], gifts: [] };
 export const impactLabel = (n:number) => impactGrade(n)?.name??'평가 오류';
 export const TARGET_NAMES: Record<string,string> = {
+ ...Object.fromEntries(checkDefinitions.map(c=>[c.id,c.name])),
+ unarmed:'격투',rhetoric:'수사학',administration:'행정',alchemy:'연금술',tracking:'추적',detection:'탐지',
  'mana-control':'마력 제어','holy-magic':'신성마법','despair-resistance':'절망 저항','ally-morale-recovery':'동료 사기 회복 기여',
  ...EXPANSION_LABELS,
  strength:'근력', endurance:'지구력', perception:'지각', recovery:'회복', mana:'마력', will:'의지', focus:'집중', charisma:'매력', intellect:'지성', stress:'스트레스', health:'건강',

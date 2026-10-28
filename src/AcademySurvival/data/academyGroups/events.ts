@@ -1,0 +1,6 @@
+import type {WorldEventDefinition} from '../../types/worldEvent';
+import {GROUP_SIGNALS} from './index';
+/** State transitions are evidence; these records never grant the activity reward again. */
+export const academyGroupWorldEvents:WorldEventDefinition[]=GROUP_SIGNALS.map(([id,name])=>({id:'group-'+id,name,description:'학내 집단 운영의 실제 상태 전이: '+name,category:'organization',tags:['academy-group',id],scale:'organization',importance:['election','inaugurated','dissolved','registered'].includes(id)?60:30,
+ triggerRules:[{id:'actual-group-transition',type:'emergent',probability:1,domainTypes:['AcademyGroupChanged'],domainDefinitionIds:['group-'+id],conditions:[]}],participantRules:{count:1,conditions:[{type:'fact',eventType:'AcademyGroupChanged',outcome:id}]},
+ stages:[{id:'record',name:'실제 조직 상태 전이 확인',durationMinutes:1,timeoutMinutes:5,entryConditions:[],completionConditions:[],failureConditions:[],effects:[],nextStageIds:[]}],outcomeRules:[{id:'recorded',name:'운영 결과 기록',conditions:[],weight:1,effects:[]}],followUpRules:[],cooldownMinutes:60,participantCooldownMinutes:1440,maxOccurrences:10000,visibility:'private',limitations:['참여자에게만 알려지는 실제 조직 상태 전이. 세계 이벤트 완료로 가입·선거·개인 보상을 다시 적용하지 않는다.'] }));

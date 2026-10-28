@@ -1,3 +1,5 @@
+import {generateCulturalProfile} from './cultureLife';
+import {generateWorldIdentity,describeWorldIdentity,worldIdentityRequestIssues} from './worldIdentity';
 import {generateCharacterMotivation} from './motivationRules';
 import {createRelationshipGraph} from './relationships';
 import {DEFAULT_ABSOLUTE_MINUTE} from './calendar';
@@ -41,7 +43,7 @@ export function validateGenerationSetup(context:NpcGenerationContext):NpcDiagnos
  return issues;
 }
 function validateRequest(request:NpcGenerationRequest,context:NpcGenerationContext){
- const c=context.config,issues=[...validateGenerationSetup(context),...validateMoralityRequest(request,context.dispositions).map(message=>error('morality-request',message))];
+ const c=context.config,issues=[...validateGenerationSetup(context),...worldIdentityRequestIssues(request.worldIdentity??{}).map(message=>error('world-identity-request',message)),...validateMoralityRequest(request,context.dispositions).map(message=>error('morality-request',message))];
  if(!Number.isInteger(request.count)||request.count<1||request.count>c.maxCount)issues.push(error('request','생성 수량은1~'+c.maxCount+'의 정수여야 합니다.'));
  if(typeof request.academyStudent!=='boolean'||(request.academyYear!==undefined&&request.academyYear!=='random'&&![1,2,3,4].includes(request.academyYear)))issues.push(error('request','생도 여부/학년 조건 오류'));
  if(request.specializationId&&request.specializationId!=='random'&&!c.specializations.some(s=>s.id===request.specializationId))issues.push(error('request','알 수 없는 전공: '+request.specializationId));
@@ -71,7 +73,9 @@ function candidate(request:NpcGenerationRequest,context:NpcGenerationContext,roo
  const names=c.names.given.flatMap(given=>c.names.family.map(family=>given+' '+family)).filter(name=>!context.reservedNames.has(name)),offset=seedHash(rootSeed+'/names')%names.length;let stride=seedHash(rootSeed+'/name-stride')%names.length||1;while(gcd(stride,names.length)!==1)stride++;const name=names[(offset+index*stride)%names.length];
  if(!name)throw new NpcGenerationError([error('names','예약 이름을 제외한 이름 풀이 부족합니다.')]);
  const personality=identityPick(c.personalities),objective=identityPick(c.objectives),id='npc-'+seedHash(rootSeed).toString(16)+'-'+index;
- const character:Character={id,kind:'random_npc',generationGrowthType:growthType,specializationId:profile.id,name,age:identityInt(...band.age),gender:identityPick(c.genders),species:'인간',origin:'제국의 아카데미 권역',schoolYear:year,affiliation:year?'본교 아카데미':'도시 생활권',title:profile.name+' '+(year?'전공 생도':'기술 수련자'),introduction:'각자의 사정으로 '+profile.name+'의 길을 선택한 '+name+'.',summary:profile.name+' · '+variant.name+' 성향. '+personality,background:[],personality:[personality],values:['스스로 선택한 일의 결과를 책임지려 한다.'],weaknesses:growthType==='weak'?['동료의 속도와 자신을 비교하며 조급해지곤 한다.']:[],appearance:{description:'단정한 '+(year?'아카데미 교복':'일상복')+'에 손질한 개인 소지품을 챙겼다.',provisional:true},objective,tendencies:[{id:'specialization',label:'전공 · '+profile.name,description:variant.name+' 성향으로 자신의 주특기를 다듬는다.'},{id:'growth',label:'성장 유형 · '+growth.name,description:anomaly?anomaly+'에 비주력 재능이 드러난다.':'성장 유형은 현재 생성 분포이며 미래의 성장을 고정하지 않는다.'}],stats,proficiencyRanks,traitIds:[],giftIds:[],positions:[],titles:[],statuses:[],relationships:[],affiliations:[]};
+ const worldIdentity=generateWorldIdentity(seed,request.worldIdentity),worldDescription=describeWorldIdentity(worldIdentity)!;
+ const character:Character={worldIdentity,id,kind:'random_npc',generationGrowthType:growthType,specializationId:profile.id,name,age:identityInt(...band.age),gender:identityPick(c.genders),species:worldDescription.race!,origin:worldDescription.polity+' · '+worldDescription.origin,schoolYear:year,affiliation:year?'본교 아카데미':'도시 생활권',title:profile.name+' '+(year?'전공 생도':'기술 수련자'),introduction:'각자의 사정으로 '+profile.name+'의 길을 선택한 '+name+'.',summary:profile.name+' · '+variant.name+' 성향. '+personality,background:[],personality:[personality],values:['스스로 선택한 일의 결과를 책임지려 한다.'],weaknesses:growthType==='weak'?['동료의 속도와 자신을 비교하며 조급해지곤 한다.']:[],appearance:{description:'단정한 '+(year?'아카데미 교복':'일상복')+'에 손질한 개인 소지품을 챙겼다.',provisional:true},objective,tendencies:[{id:'specialization',label:'전공 · '+profile.name,description:variant.name+' 성향으로 자신의 주특기를 다듬는다.'},{id:'growth',label:'성장 유형 · '+growth.name,description:anomaly?anomaly+'에 비주력 재능이 드러난다.':'성장 유형은 현재 생성 분포이며 미래의 성장을 고정하지 않는다.'}],stats,proficiencyRanks,traitIds:[],giftIds:[],positions:[],titles:[],statuses:[],relationships:[],affiliations:[]};
+ character.culturalProfile=generateCulturalProfile(character,seed);
  Object.assign(character,generateMorality(request,!!year,character.age,seededRandom(seed+'/morality'),context.dispositions,c.morality));
  const diagnostics:NpcDiagnostic[]=[],evidence:GenerationEvidence[]=[],flags:string[]=[];
  const ctx=():Context=>({stats:{...stats,...Object.fromEntries(Object.entries(c.aliases).map(([key,id])=>[key,stats[id]])),...Object.fromEntries(profile.traitFamilies.map(f=>[f,stats[profile.core[0]]]))},flags:[...flags],tags:[profile.id,...profile.giftTags],traits:[...character.traitIds],gifts:[...character.giftIds]});

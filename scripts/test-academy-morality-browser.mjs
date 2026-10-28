@@ -7,7 +7,7 @@ try{
  const page=await browser.newPage({viewport:{width:1440,height:1000}}),errors=[];page.setDefaultTimeout(12000);page.on('pageerror',e=>errors.push(e.message));
  const count=async(selector,n)=>page.waitForFunction(({selector,n})=>document.querySelectorAll(selector).length===n,{selector,n});
  const close=async()=>{await page.getByRole('button',{name:'상세 닫기',exact:true}).click();await page.getByRole('dialog').waitFor({state:'detached'});};
- await page.goto(base+'?view=catalog&kind=disposition');await count('.ac-status-card',100);assert.equal(await page.locator('.ac-tabs button').count(),21);
+ await page.goto(base+'?view=catalog&kind=disposition');await count('.ac-status-card',100);assert.equal(await page.locator('.ac-tabs button').count(),22);
  await page.getByRole('navigation',{name:'성향 대분류'}).getByRole('button',{name:'도덕·윤리 15',exact:true}).click();await count('.ac-status-card',15);
  await page.getByLabel('성향 행동 태그',{exact:true}).selectOption('help');assert((await page.locator('.ac-status-card').count())<15);await page.getByRole('button',{name:'필터 초기화',exact:true}).click();
  await page.getByLabel('성향 검색',{exact:true}).fill('비껴없는');await count('.ac-status-card',0);await page.getByLabel('성향 검색',{exact:true}).fill('무표정');await count('.ac-status-card',1);

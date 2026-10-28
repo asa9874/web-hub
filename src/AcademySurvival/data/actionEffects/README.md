@@ -9,9 +9,10 @@
 - `resolveActionOutcome(characterId,activityId,minutes,sourceId,target?,targetId?)`: 완료 성장 효과 목록 생성. 이 API만 호출해서 보상이 지급되지는 않는다.
 - `previewActionEffects(outcome)` / `validateActionEffects(outcome)`: 실제 원본을 변경하지 않고 변경 전/후·오류 계산.
 - `applyActionEffects(outcome)`: `applied | already_applied | failed`, 변경 목록과 진단을 반환한다.
+- 아이템 연동의 선택적 두 번째 인자 `{commit,rollback}`는 검증 완료 뒤 같은 동기 트랜잭션에서 소유권 원장을 반영/복구한다. 이미 적용된 결과에는 다시 호출하지 않는다. `setActivityItemBonus`는 실제 완료 활동 계산에서 휴대 교재/도구의 제한적 보조만 읽는다. 전용 효과 핸들러에 임의 부작용을 넣는 기능이 아니다.
 - `getGrowth`, `getActionOutcome`, `getCharacterActionHistory`, `getHistory`, `getEvents`, `getStatistics`, `registerCustomHandler`, `recordDomainEvent`, `save/load/connect`.
 
-욕구 변화, 능력치 XP, 숙련도 XP, 방향성 관계, 표시 목표 진행도, 상태 적용/제거, 카르마/도덕, 등록된 순수 전용 처리기를 지원한다. 실제 자원 시스템이 없어 resource_delta는 명시적 미지원이다. 전용 처리기는 타입 안전 효과 목록을 반환하고 깊이/개수 제한을 적용한다. 조건은 필요 수치·상태·장소와 AND/OR/NOT. 알 수 없는 대상·정의·타입·조건은 실패한다.
+욕구 변화, 능력치 XP, 숙련도 XP, 방향성 관계, 표시 목표 진행도, 상태 적용/제거, 카르마/도덕, 등록된 순수 전용 처리기를 지원한다. resource_delta는 전투 자원 어댑터가 연결된 세계에서HP/SP/MP의 정수 변화만 지원한다. 미연결 세계에서는 명시적으로 거부한다. 미리보기는 무변경, 적용은 자원/다른 효과를 함께 커밋·롤백한다. 전용 처리기는 타입 안전 효과 목록을 반환하고 깊이/개수 제한을 적용한다. 조건은 필요 수치·상태·장소와 AND/OR/NOT. 알 수 없는 대상·정의·타입·조건은 실패한다.
 
 효과는 임시 사본에서 계산·검증한 뒤 커밋한다. `domainTransaction`이 위치/관계/욕구 구독자 알림을 커밋 뒤로 미룬다. 커밋 중 오류면 관련 세계·관계·내면·성장·원장을 복구한다. 구독자의 **커밋 후** 오류는 observer 진단으로 반환하며 이미 반영된 결과를 재실행하지 않는다. 전용 처리기는 외부 부작용을 만들지 않는 순수 함수여야 한다. 트랜잭션은 동기식이며 중첩/async 사용을 허용하지 않는다.
 

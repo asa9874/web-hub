@@ -1,3 +1,4 @@
+import WorldIdentityControls from './WorldIdentityControls';
 import {createRelationshipGraph,relationshipStatistics} from '../systems/relationships';
 import {locationCatalog} from '../systems/locationRegistry';
 import {MORALITY_LIMITS,KARMA_LIMITS} from '../data/dispositions/config';
@@ -23,7 +24,7 @@ export default function NpcGenerator(){
  const stats=batch?npcStatistics(batch):null,current=batch?.results[selected],nameFor=(id:string)=>id==='random'?'랜덤':config.specializations.find(p=>p.id===id)?.name??id;
  return <section className="ac-npc-generator" aria-label="NPC 생성 테스트기" data-completed={completed}><header><p className="ac-kicker">DEVELOPER / {config.version}</p><h2>NPC 생성 테스트기</h2><p>생성 결과는 이 화면의 임시 데이터입니다. 게임 저장·고정 등장인물 데이터에 등록하지 않습니다.</p></header>
  <form className="ac-npc-controls" onSubmit={event=>{event.preventDefault();generate();}}>
- <label>생성 수량<select aria-label="생성 수량" value={request.count} onChange={e=>patch({count:Number(e.target.value)})}>{[1,10,50,100].map(n=><option key={n} value={n}>{n}명</option>)}</select></label>
+ <WorldIdentityControls value={request.worldIdentity} onChange={worldIdentity=>patch({worldIdentity})}/><label>생성 수량<select aria-label="생성 수량" value={request.count} onChange={e=>patch({count:Number(e.target.value)})}>{[1,10,50,100].map(n=><option key={n} value={n}>{n}명</option>)}</select></label>
  <label className="ac-npc-check"><input type="checkbox" checked={request.academyStudent} onChange={e=>patch({academyStudent:e.target.checked})}/>아카데미 생도</label>
  <label>학년<select aria-label="생성 학년" disabled={!request.academyStudent} value={request.academyYear} onChange={e=>patch({academyYear:e.target.value==='random'?'random':Number(e.target.value) as 1|2|3|4})}><option value="random">랜덤</option>{[1,2,3,4].map(n=><option key={n} value={n}>{n}학년</option>)}</select></label>
  <label>전공<select aria-label="생성 전공" value={request.specializationId} onChange={e=>patch({specializationId:e.target.value})}><option value="random">랜덤</option>{config.specializations.map(p=><option key={p.id} value={p.id}>{p.name}</option>)}</select></label>

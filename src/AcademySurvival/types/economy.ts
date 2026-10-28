@@ -1,0 +1,7 @@
+import type {NpcAiEngine} from '../systems/npcAi';
+export type EconomicBackground='wealthy'|'comfortable'|'ordinary'|'hardship'|'unsupported';
+export interface MoneyEntry {id:string;at:number;amount:number;kind:'purchase'|'sale'|'allowance'|'scholarship'|'work';reason:string;sourceId:string}
+export interface EconomyAccount {characterId:string;background:EconomicBackground;balance:number;received:number;spent:number;recent:MoneyEntry[];meritThrough:string}
+export interface StudentWork {id:string;characterId:string;jobId:string;entryId:string;startedAt:number;endsAt:number;worked:number;status:'active'|'completed'|'cancelled';reason?:string}
+export interface EconomySave {version:'economy-v1';seed:string;absoluteMinute:number;serial:number;nextMonthly:number;accounts:EconomyAccount[];shopCash:Record<string,number>;work:StudentWork[]}
+export interface EconomyEngine {ai:NpcAiEngine;save:()=>EconomySave;connect:()=>()=>void;disconnect:()=>void;subscribe:(f:()=>void)=>()=>void;getSnapshot:()=>number;getAccount:(id:string)=>EconomyAccount;setInitialBackground:(id:string,background:EconomicBackground)=>void;hasBasicSupport:(id:string)=>boolean;getWork:()=>StudentWork[];workReasons:(id:string,jobId:string)=>string[];beginWork:(id:string,jobId:string,entryId:string)=>void;trade:(id:string,shopId:string,itemId:string,buy:boolean,quantity?:number)=>void;getStock:(shopId:string)=>import('./item').ItemInstance[];diagnose:()=>string[]}

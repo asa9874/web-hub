@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-25",
+  "scope": "FAST/INTEGRATION + bounded engine smoke + focused UI; not long-term campaign validation",
+  "rooms": 104,
+  "beds": 184,
+  "eventDefinitions": 28,
+  "passed": [
+    "residence/bed/access/roommate contracts",
+    "real activity and shared study",
+    "seed and 60-minute step equivalence",
+    "legacy/JSON save/load",
+    "10 NPC day vs hourly",
+    "100 NPC full AI hour invariants and zero memory diagnostics",
+    "locations",
+    "read snapshots",
+    "world events",
+    "world simulation",
+    "memory/privacy/static-render",
+    "player life",
+    "play session",
+    "focused daily-life browser/mobile/isolation",
+    "feature registry",
+    "typescript/build",
+    "eslint"
+  ],
+  "smoke": [
+    {
+      "npcCount": 10,
+      "minutes": 1440,
+      "wallMs": 5988,
+      "decisions": null,
+      "lifeLogs": 68,
+      "saveBytes": 1152035,
+      "performanceWarning": null,
+      "memoryErrors": 0
+    },
+    {
+      "npcCount": 100,
+      "minutes": 60,
+      "wallMs": 1468,
+      "decisions": 712,
+      "lifeLogs": 120,
+      "saveBytes": 1889193,
+      "performanceWarning": true,
+      "memoryErrors": 0
+    }
+  ],
+  "notRun": [
+    "30-day stress",
+    "360-day stress",
+    "7-day 100-NPC performance",
+    "exhaustive every-event branch coverage",
+    "full browser regression"
+  ],
+  "limits": [
+    "100-NPC hour exceeds 1-second warning threshold",
+    "single-run engine timing, not average or UI response"
+  ]
+}

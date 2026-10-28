@@ -1,0 +1,10 @@
+.ac-story-network{margin-block:20px;padding:16px;border:1px solid #788f89;border-radius:4px}
+.ac-story-network select{display:block;max-width:100%;margin-top:8px}
+.ac-story-network-graph{overflow:auto;max-height:420px;margin-block:16px;background:#152426;color:#bdb08f;padding:8px}
+.ac-story-network-graph svg{width:790px;min-width:790px;display:block}
+.ac-story-network-graph rect{fill:#233739;stroke:#708a83}
+.ac-story-network-graph .is-selected{stroke:#e1c184;stroke-width:3px}
+.ac-story-network-graph text{fill:#e5e3d8;font-size:13px}
+.ac-story-network-graph [role=button]{cursor:pointer;outline-offset:3px}
+.ac-story-network article{border-top:1px solid #738780;padding:10px 0}
+.ac-story-network pre,.ac-story-network code{white-space:pre-wrap;overflow-wrap:anywhere}

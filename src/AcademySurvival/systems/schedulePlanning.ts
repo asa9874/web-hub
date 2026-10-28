@@ -49,7 +49,7 @@ export function getCharacterSchedule(c:Character,plan:CharacterSchedule,minute:n
   const activity=activityRegistry.get(activityId)!;let target=e.targetLocationId??(e.binding?plan.bindings[e.binding]:undefined)??activity.defaultLocations.find(id=>{const l=locationCatalog.nodes.get(id);return l&&activity.requiredPlaceTags.some(tag=>l.activityTags.includes(tag));});
   if((e.binding==='home')&&!plan.bindings.home&&!e.targetLocationId)target=undefined;
   const place=target?locationCatalog.nodes.get(target):undefined,error=!target?'목적지를 찾을 수 없습니다.':!place?'목적지 ID가 없습니다.':!activity.requiredPlaceTags.some(tag=>place.activityTags.includes(tag))?'활동에 맞는 장소 태그가 없습니다.':undefined;
-  return {characterId:c.id,occurrenceId:`${e.id}@${day}`,entryId:e.id,activityId,targetLocationId:target,priority:e.priority,mandatory:e.mandatory,interruptible:e.interruptible,plannedStartTime:Math.max(0,start),plannedEndTime:Math.min(MAX_ABSOLUTE_MINUTE,end),temporary,name:e.name,destinationError:error};
+  return {characterId:c.id,occurrenceId:`${e.id}@${day}${plan.residenceRevision&&['home','leisure'].includes(e.binding??'')?'/residence/'+plan.residenceRevision:''}`,entryId:e.id,activityId,targetLocationId:target,priority:e.priority,mandatory:e.mandatory,interruptible:e.interruptible,plannedStartTime:Math.max(0,start),plannedEndTime:Math.min(MAX_ABSOLUTE_MINUTE,end),temporary,name:e.name,destinationError:error};
  }).sort((a,b)=>a.plannedStartTime-b.plannedStartTime||a.entryId.localeCompare(b.entryId));
 }
 export function resolveScheduleConflicts(entries:readonly ScheduleIntent[]){return [...entries].sort((a,b)=>b.priority-a.priority||Number(b.mandatory)-Number(a.mandatory)||a.plannedStartTime-b.plannedStartTime||a.entryId.localeCompare(b.entryId));}

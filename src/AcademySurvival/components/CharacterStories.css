@@ -1,0 +1,6 @@
+.ac-personal-stories { min-width: 0; overflow-wrap: anywhere; }
+.ac-personal-stories article { margin-block: 12px; padding-block: 12px; border-top: 1px solid #3b414c; }
+.ac-personal-stories h4 { margin-block: 0 6px; }
+.ac-personal-stories li { margin-block: 6px; font-size: .85rem; }
+.ac-fixed-roster button { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; text-align: left; }
+.ac-fixed-roster small { font-size: .72rem; opacity: .7; }

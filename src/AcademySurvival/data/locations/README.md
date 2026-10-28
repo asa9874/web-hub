@@ -22,6 +22,12 @@
 | `components/LocationTester.tsx` | 독립 시계·캐릭터 복제본을 사용하는 샌드박스 |
 | `components/LocationCharacterDialog.tsx` | 공통 캐릭터 상태창 및 도감 참조를 임시 상태를 잃지 않고 왕복 |
 
+## 엔진의 읽기 스냅샷
+
+`getCharacterReadSnapshot(id)`는 인물 변경 전까지 재사용하는 깊게 동결된 분리 스냅샷이다. 읽기에만 사용한다. 이동·경유·도착·취소·배치·등록·인물 변경은 지연된 도메인 관찰자 알림보다 먼저 캐시를 무효화하며, 이전 스냅샷은 과거 값으로 남는다. 캐시는 저장하지 않는다.
+
+`getCharacter/getCharacters/getCharacterLocation`의 기존 편집 가능한 복사 계약은 유지한다. 로컬 수정·편집·효과의 트랜잭션 백업은 해당 API를 사용한다. 내부 원본을 외부로 노출하거나 상태 변경 없이 공유 스냅샷을 수정하지 않는다. `npm run test:academy-read-snapshots`는 중첩 격리·커밋/롤백·인물별 무효화·이동 경계를 검사한다. 실측은 `docs/academy/PERFORMANCE_OPTIMIZATION_V1.md` 참고.
+
 ## 계층과 그래프
 
 `createLocationCatalog(definitions, connections)`가 중복/자기 부모/미존재 부모/순환, 조직·달력·직급·특성 참조와 경로 수치를 거부한다. 조회는 임의 깊이를 지원한다. 정적 카탈로그 변경은 전체 재검증·교체로 한다. 자식을 가진 부모 삭제는 `canDelete`가 거부한다. 실제 삭제 기능은 없다. 캐릭터/이동 연결 참조를 이전하지 않은 장소 삭제도 허용해서는 안 된다.
